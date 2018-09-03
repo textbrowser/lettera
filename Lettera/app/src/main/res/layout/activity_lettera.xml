@@ -30,6 +30,17 @@
             android:layout_weight="0" />
 
         <Button
+            android:id="@+id/download_button"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/download" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <Button
             android:id="@+id/settings_button"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="48dp"
@@ -56,6 +67,7 @@
         android:orientation="vertical"
         android:paddingEnd="15dp"
         android:paddingStart="15dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
