@@ -56,7 +56,8 @@
             android:id="@+id/messaging_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/messaging" />
+            android:background="@drawable/messaging"
+            android:visibility="gone" />
 
     </LinearLayout>
 
