@@ -30,6 +30,19 @@
             android:layout_weight="0" />
 
         <Button
+            android:id="@+id/contacts_button"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/contacts" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/listDivider" />
+
+        <Button
             android:id="@+id/download_button"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="48dp"
