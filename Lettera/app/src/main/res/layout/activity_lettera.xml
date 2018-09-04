@@ -36,11 +36,10 @@
             android:layout_height="48dp"
             android:background="@drawable/contacts" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/listDivider" />
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0" />
 
         <Button
             android:id="@+id/download_button"
@@ -50,8 +49,9 @@
             android:background="@drawable/download" />
 
         <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/settings_button"
@@ -61,16 +61,14 @@
             android:background="@drawable/settings" />
 
         <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/messaging_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/messaging"
-            android:visibility="gone" />
+            android:background="@drawable/messaging" />
 
     </LinearLayout>
 
