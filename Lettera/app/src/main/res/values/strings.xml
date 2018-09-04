@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Lettera</string>
-    <string name="messaging">Messaging</string>
+    <string name="network">Network</string>
+    <string name="inbound_server">Inbound Server</string>
+    <string name="port">Port</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="password">Password</string>
+    <string name="outbound_server">Outbound Server</string>
 </resources>

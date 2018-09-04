@@ -49,6 +49,16 @@
             android:background="@drawable/download" />
 
         <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/messaging_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/messaging" />
+
+        <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -59,16 +69,6 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/settings" />
-
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/messaging_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/messaging" />
 
     </LinearLayout>
 
@@ -102,14 +102,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/messaging"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/messaging_view"
