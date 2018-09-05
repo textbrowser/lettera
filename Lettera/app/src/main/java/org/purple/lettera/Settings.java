@@ -34,7 +34,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 public class Settings
 {
@@ -42,6 +44,44 @@ public class Settings
     private Dialog m_dialog = null;
     private View m_parent = null;
     private View m_view = null;
+
+    private void prepare_listeners()
+    {
+	Button button = null;
+
+	button = (Button) m_view.findViewById(R.id.close_button);
+
+	if(!button.hasOnClickListeners())
+	    button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    m_dialog.dismiss();
+		}
+	    });
+    }
+
+    private void prepare_widgets()
+    {
+	ArrayAdapter<String> array_adapter;
+	Spinner spinner = null;
+	String array[] = null;
+
+	array = new String[] {"Default"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
+	spinner.setAdapter(array_adapter);
+	array = new String[] {"(Empty)"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById(R.id.accounts_spinner);
+	spinner.setAdapter(array_adapter);
+	m_view.findViewById(R.id.delete_account_button).setEnabled(false);
+    }
 
     public Settings(Context context, View parent)
     {
@@ -72,6 +112,10 @@ public class Settings
 		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    WindowManager.LayoutParams layout_params =
 		new WindowManager.LayoutParams();
+
+	    layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+	    layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
+
 	    float density = m_context.getResources().getDisplayMetrics().
 		density;
 
@@ -83,29 +127,21 @@ public class Settings
 				      (int) (15 * density));
 
 	    /*
-	    ** Prepare listeners.
+	    ** Prepare things.
 	    */
 
-	    Button button = null;
+	    prepare_listeners();
+	    prepare_widgets();
 
-	    button = (Button) m_view.findViewById(R.id.close_button);
-	    button.setOnClickListener(new View.OnClickListener()
-	    {
-		public void onClick(View view)
-		{
-		    if(((Activity) m_context).isFinishing())
-			return;
+	    /*
+	    ** The cute dialog.
+	    */
 
-		    m_dialog.dismiss();
-		}
-	    });
 	    m_dialog.setCancelable(false);
 	    m_dialog.setContentView(m_view);
 	    m_dialog.setTitle("Settings");
 	    m_dialog.show();
-	    layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-	    layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
-	    m_dialog.getWindow().setAttributes(layout_params);
+	    m_dialog.getWindow().setAttributes(layout_params); // After show().
 	}
 	catch(Exception exception)
 	{
