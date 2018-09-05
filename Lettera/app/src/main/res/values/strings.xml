@@ -18,4 +18,5 @@
     <string name="encryption_key">Encryption Key</string>
     <string name="signature_key">Signature Key</string>
     <string name="generate">Generate</string>
+    <string name="sha_512_digest">SHA-512 Digest</string>
 </resources>
