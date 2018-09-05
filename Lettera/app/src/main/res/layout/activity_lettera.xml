@@ -23,7 +23,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/compose" />
+            android:background="@drawable/default_compose" />
 
         <Space
             android:layout_width="5dp"
@@ -35,7 +35,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/contacts" />
+            android:background="@drawable/default_contacts" />
 
         <Space
             android:layout_width="5dp"
@@ -47,7 +47,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/download" />
+            android:background="@drawable/default_download" />
 
         <Space
             android:layout_width="5dp"
@@ -57,7 +57,7 @@
             android:id="@+id/messaging_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/messaging" />
+            android:background="@drawable/default_messaging" />
 
         <Space
             android:layout_width="0dp"
@@ -69,7 +69,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/settings" />
+            android:background="@drawable/default_settings" />
 
     </LinearLayout>
 

@@ -34,7 +34,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="0"
-                    android:background="@drawable/display" />
+                    android:background="@drawable/default_display" />
 
                 <Space
                     android:layout_width="5dp"
@@ -46,7 +46,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="0"
-                    android:background="@drawable/network" />
+                    android:background="@drawable/default_network" />
 
                 <Space
                     android:layout_width="5dp"
@@ -58,7 +58,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="0"
-                    android:background="@drawable/privacy" />
+                    android:background="@drawable/default_privacy" />
 
                 <Space
                     android:layout_width="wrap_content"
