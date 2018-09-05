@@ -73,10 +73,22 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
+		    m_view.findViewById(R.id.display_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.display_pressed));
 		    m_view.findViewById(R.id.display_layout).setVisibility
 			(View.VISIBLE);
+		    m_view.findViewById(R.id.network_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.network));
 		    m_view.findViewById(R.id.network_layout).setVisibility
 			(View.GONE);
+		    m_view.findViewById(R.id.privacy_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.privacy));
 		    m_view.findViewById(R.id.privacy_layout).setVisibility
 			(View.GONE);
 		}
@@ -92,10 +104,22 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
+		    m_view.findViewById(R.id.display_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.display));
 		    m_view.findViewById(R.id.display_layout).setVisibility
 			(View.GONE);
+		    m_view.findViewById(R.id.network_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.network_pressed));
 		    m_view.findViewById(R.id.network_layout).setVisibility
 			(View.VISIBLE);
+		    m_view.findViewById(R.id.privacy_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.privacy));
 		    m_view.findViewById(R.id.privacy_layout).setVisibility
 			(View.GONE);
 		}
@@ -111,10 +135,22 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
+		    m_view.findViewById(R.id.display_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.display));
 		    m_view.findViewById(R.id.display_layout).setVisibility
 			(View.GONE);
+		    m_view.findViewById(R.id.network_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.network));
 		    m_view.findViewById(R.id.network_layout).setVisibility
 			(View.GONE);
+		    m_view.findViewById(R.id.privacy_button).
+			setBackgroundDrawable
+			(m_context.getResources().
+			 getDrawable(R.drawable.privacy_pressed));
 		    m_view.findViewById(R.id.privacy_layout).setVisibility
 			(View.VISIBLE);
 		}
@@ -127,6 +163,8 @@ public class Settings
 	** Set Display as the primary section.
 	*/
 
+	m_view.findViewById(R.id.display_button).setBackgroundDrawable
+	    (m_context.getResources().getDrawable(R.drawable.display_pressed));
 	m_view.findViewById(R.id.network_layout).setVisibility(View.GONE);
 	m_view.findViewById(R.id.privacy_layout).setVisibility(View.GONE);
 
