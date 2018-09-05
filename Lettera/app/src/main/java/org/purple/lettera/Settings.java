@@ -267,13 +267,13 @@ public class Settings
 	    WindowManager.LayoutParams layout_params =
 		new WindowManager.LayoutParams();
 
+	    layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
 	    layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 	    layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
 
 	    float density = m_context.getResources().getDisplayMetrics().
 		density;
 
-	    m_dialog = new Dialog(m_context);
 	    m_view = inflater.inflate(R.layout.settings, null);
 	    m_view.setPaddingRelative((int) (15 * density),
 				      (int) (15 * density),
@@ -291,6 +291,7 @@ public class Settings
 	    ** The cute dialog.
 	    */
 
+	    m_dialog = new Dialog(m_context);
 	    m_dialog.setCancelable(false);
 	    m_dialog.setContentView(m_view);
 	    m_dialog.setTitle("Settings");
