@@ -19,50 +19,55 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/color_theme"
-                android:textSize="25sp" />
-
-            <Spinner
-                android:id="@+id/color_theme_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/network"
-                android:textSize="25sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/accounts"
-                android:textSize="20sp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Spinner
-                    android:id="@+id/accounts_spinner"
+                <Space
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
                 <Button
-                    android:id="@+id/delete_account_button"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/display_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_weight="0"
-                    android:text="@string/delete" />
+                    android:background="@drawable/display" />
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0" />
+
+                <Button
+                    android:id="@+id/network_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/network" />
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0" />
+
+                <Button
+                    android:id="@+id/privacy_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/privacy" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/display_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -70,67 +75,19 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/inbound_imap_server"
-                    android:textSize="20sp" />
+                    android:text="@string/color_theme"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
-                <LinearLayout
+                <Spinner
+                    android:id="@+id/color_theme_spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content" />
 
-                    <EditText
-                        android:id="@+id/inbound_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/address"
-                        android:inputType="textPersonName"
-                        android:nextFocusDown="@id/inbound_port" />
-
-                    <EditText
-                        android:id="@+id/inbound_port"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:ems="10"
-                        android:hint="@string/port"
-                        android:inputType="number" />
-
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/inbound_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/e_mail"
-                    android:inputType="textEmailAddress" />
-
-                <EditText
-                    android:id="@+id/inbound_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/password"
-                    android:inputType="textPassword" />
-
-                <CheckBox
-                    android:id="@+id/delete_on_server_checkbox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/delete_on_server" />
-
-                <Button
-                    android:id="@+id/test_inbound_button"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/test" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/network_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -138,7 +95,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/outbound_smtp_server"
+                    android:text="@string/network"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/accounts"
                     android:textSize="20sp" />
 
                 <LinearLayout
@@ -146,121 +110,230 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/outbound_address"
-                        android:layout_width="match_parent"
+                    <Spinner
+                        android:id="@+id/accounts_spinner"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/address"
-                        android:inputType="textPersonName"
-                        android:nextFocusDown="@id/outbound_port" />
+                        android:layout_weight="1" />
 
-                    <EditText
-                        android:id="@+id/outbound_port"
+                    <Button
+                        android:id="@+id/delete_account_button"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
+                        android:text="@string/delete" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/inbound_imap_server"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/inbound_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="@string/address"
+                            android:inputType="textPersonName"
+                            android:nextFocusDown="@id/inbound_port" />
+
+                        <EditText
+                            android:id="@+id/inbound_port"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:ems="10"
+                            android:hint="@string/port"
+                            android:inputType="number" />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/inbound_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:ems="10"
-                        android:hint="@string/port"
-                        android:inputType="number" />
+                        android:hint="@string/e_mail"
+                        android:inputType="textEmailAddress" />
+
+                    <EditText
+                        android:id="@+id/inbound_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/password"
+                        android:inputType="textPassword" />
+
+                    <CheckBox
+                        android:id="@+id/delete_on_server_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delete_on_server" />
+
+                    <Button
+                        android:id="@+id/test_inbound_button"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/test" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/outbound_smtp_server"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/outbound_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="@string/address"
+                            android:inputType="textPersonName"
+                            android:nextFocusDown="@id/outbound_port" />
+
+                        <EditText
+                            android:id="@+id/outbound_port"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:ems="10"
+                            android:hint="@string/port"
+                            android:inputType="number" />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/outbound_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="@string/e_mail"
+                        android:inputType="textEmailAddress" />
+
+                    <EditText
+                        android:id="@+id/outbound_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/password"
+                        android:inputType="textPassword" />
+
+                    <Button
+                        android:id="@+id/test_outbound_server"
+                        style="@style/Widget.AppCompat.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/test" />
 
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/outbound_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/e_mail"
-                    android:inputType="textEmailAddress" />
-
-                <EditText
-                    android:id="@+id/outbound_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/password"
-                    android:inputType="textPassword" />
-
-                <Button
-                    android:id="@+id/test_outbound_server"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/test" />
-
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/privacy"
-                android:textSize="25sp" />
-
             <LinearLayout
+                android:id="@+id/privacy_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.GridLayout
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:columnCount="2"
-                    app:rowCount="4">
+                    android:orientation="vertical">
 
-                    <TextView
+                    <android.support.v7.widget.GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:columnCount="2"
+                        app:rowCount="4">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:text="@string/encryption_key" />
+
+                        <Spinner
+                            android:id="@+id/encryption_key_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25" />
+
+                        <TextView
+                            android:id="@+id/encryption_key_digest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sha_512_digest" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25"
+                            android:text="@string/signature_key" />
+
+                        <Spinner
+                            android:id="@+id/signature_key_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.25" />
+
+                        <TextView
+                            android:id="@+id/signature_key_digest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sha_512_digest" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </android.support.v7.widget.GridLayout>
+
+                    <Button
+                        android:id="@+id/generate_keys_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.25"
-                        android:text="@string/encryption_key" />
+                        android:text="@string/generate" />
 
-                    <Spinner
-                        android:id="@+id/encryption_key_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.25" />
-
-                    <TextView
-                        android:id="@+id/encryption_key_digest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sha_512_digest" />
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.25"
-                        android:text="@string/signature_key" />
-
-                    <Spinner
-                        android:id="@+id/signature_key_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.25" />
-
-                    <TextView
-                        android:id="@+id/signature_key_digest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sha_512_digest" />
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </android.support.v7.widget.GridLayout>
-
-                <Button
-                    android:id="@+id/generate_keys_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/generate" />
-
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

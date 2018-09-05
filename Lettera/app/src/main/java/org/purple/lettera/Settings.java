@@ -62,10 +62,74 @@ public class Settings
 		    m_dialog.dismiss();
 		}
 	    });
+
+	button = (Button) m_view.findViewById(R.id.display_button);
+
+	if(!button.hasOnClickListeners())
+	    button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    m_view.findViewById(R.id.display_layout).setVisibility
+			(View.VISIBLE);
+		    m_view.findViewById(R.id.network_layout).setVisibility
+			(View.GONE);
+		    m_view.findViewById(R.id.privacy_layout).setVisibility
+			(View.GONE);
+		}
+	    });
+
+	button = (Button) m_view.findViewById(R.id.network_button);
+
+	if(!button.hasOnClickListeners())
+	    button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    m_view.findViewById(R.id.display_layout).setVisibility
+			(View.GONE);
+		    m_view.findViewById(R.id.network_layout).setVisibility
+			(View.VISIBLE);
+		    m_view.findViewById(R.id.privacy_layout).setVisibility
+			(View.GONE);
+		}
+	    });
+
+	button = (Button) m_view.findViewById(R.id.privacy_button);
+
+	if(!button.hasOnClickListeners())
+	    button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    m_view.findViewById(R.id.display_layout).setVisibility
+			(View.GONE);
+		    m_view.findViewById(R.id.network_layout).setVisibility
+			(View.GONE);
+		    m_view.findViewById(R.id.privacy_layout).setVisibility
+			(View.VISIBLE);
+		}
+	    });
     }
 
     private void prepare_widgets()
     {
+	/*
+	** Set Display as the primary section.
+	*/
+
+	m_view.findViewById(R.id.network_layout).setVisibility(View.GONE);
+	m_view.findViewById(R.id.privacy_layout).setVisibility(View.GONE);
+
 	ArrayAdapter<String> array_adapter;
 	Spinner spinner = null;
 	String array[] = null;
