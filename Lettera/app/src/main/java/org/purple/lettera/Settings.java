@@ -173,7 +173,7 @@ public class Settings
 	String array[] = null;
 
 	/*
-	** Network
+	** Display
 	*/
 
 	array = new String[] {"Default"};
@@ -181,6 +181,16 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
 	spinner.setAdapter(array_adapter);
+	array = new String[] {"Default"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById(R.id.icon_theme_spinner);
+	spinner.setAdapter(array_adapter);
+
+	/*
+	** Network
+	*/
+
 	array = new String[] {"(Empty)"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
