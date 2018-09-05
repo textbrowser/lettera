@@ -27,41 +27,64 @@
 
 package org.purple.lettera;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
-public class Lettera extends AppCompatActivity
+public abstract class Windows
 {
-    private void prepare_button_listeners()
+    public static void show_settings(final Context context, final View parent)
     {
-	Button button = null;
+	if(context == null || parent == null)
+	    return;
 
-	button = (Button) findViewById(R.id.settings_button);
-	button.setOnClickListener(new View.OnClickListener()
+	try
 	{
-	    public void onClick(View view)
+	    LayoutInflater inflater = (LayoutInflater) context.getSystemService
+		(Context.LAYOUT_INFLATER_SERVICE);
+	    View view = inflater.inflate(R.layout.settings, null);
+	    WindowManager.LayoutParams layout_params =
+		new WindowManager.LayoutParams();
+	    final Dialog dialog = new Dialog(context);
+	    float density = context.getResources().getDisplayMetrics().density;
+
+	    view.setPaddingRelative((int) (15 * density),
+				    (int) (15 * density),
+				    (int) (15 * density),
+				    (int) (15 * density));
+
+	    /*
+	    ** Prepare listeners.
+	    */
+
+	    Button button = null;
+
+	    button = (Button) view.findViewById(R.id.cancel_button);
+	    button.setOnClickListener(new View.OnClickListener()
 	    {
-		if(Lettera.this.isFinishing())
-		    return;
+		public void onClick(View view)
+		{
+		    if(((Activity) context).isFinishing())
+			return;
 
-		Windows.show_settings
-		    (Lettera.this, findViewById(R.id.main_layout));
-	    }
-        });
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lettera);
-
-	/*
-	** Prepare the rest.
-	*/
-
-	prepare_button_listeners();
+		    dialog.dismiss();
+		}
+	    });
+	    dialog.setCancelable(false);
+	    dialog.setContentView(view);
+	    dialog.setTitle("Settings");
+	    dialog.show();
+	    layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+	    layout_params.width = WindowManager.LayoutParams.FILL_PARENT;
+	    dialog.getWindow().setAttributes(layout_params);
+	}
+	catch(Exception exception)
+	{
+	}
     }
 }

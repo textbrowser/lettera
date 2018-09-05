@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Lettera</string>
     <string name="network">Network</string>
-    <string name="inbound_server">Inbound Server</string>
+    <string name="inbound_imap_server">Inbound IMAP Server</string>
     <string name="port">Port</string>
     <string name="e_mail">E-Mail</string>
     <string name="password">Password</string>
-    <string name="outbound_server">Outbound Server</string>
+    <string name="outbound_smtp_server">Outbound SMTP Server</string>
+    <string name="address">Address</string>
+    <string name="cancel">Cancel</string>
+    <string name="apply">Apply</string>
+    <string name="delete_on_server">Delete on Server</string>
+    <string name="test">Test</string>
 </resources>
