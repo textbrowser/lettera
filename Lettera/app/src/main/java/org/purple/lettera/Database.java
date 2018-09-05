@@ -29,8 +29,10 @@ package org.purple.lettera;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import java.util.ArrayList;
 
 public class Database extends SQLiteOpenHelper
 {
@@ -53,6 +55,40 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
+    public ArrayList<String> email_account_names()
+    {
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT email_account FROM email_accounts ORDER BY 1", null);
+
+	    if(cursor != null && cursor.moveToFirst())
+	    {
+		ArrayList<String> array_list = new ArrayList<> ();
+
+		while(!cursor.isAfterLast())
+		{
+		    array_list.add(cursor.getString(0));
+		    cursor.moveToNext();
+		}
+
+		return array_list;
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return null;
+    }
+
     public String save_email(ContentValues content_values)
     {
 	if(content_values == null || content_values.size() == 0)
@@ -64,7 +100,7 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    m_db.insert("email_accounts", null, content_values);
+	    m_db.insertOrThrow("email_accounts", null, content_values);
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)

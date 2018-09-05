@@ -40,6 +40,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
+import java.util.ArrayList;
 
 public class Settings
 {
@@ -54,20 +55,30 @@ public class Settings
 	try
 	{
 	    ContentValues content_values = new ContentValues();
+	    String string = "";
 
 	    content_values.put
 		("delete_on_server", ((CheckBox) m_view.
 				      findViewById(R.id.
 						   delete_on_server_checkbox)).
 		 isChecked() ? 1 : 0);
-	    content_values.put
-		("email_account", ((TextView) m_view.
-				   findViewById(R.id.inbound_email)).
-		 getText().toString());
-	    content_values.put
-		("in_address", ((TextView) m_view.
-				findViewById(R.id.inbound_address)).
-		 getText().toString());
+
+	    string = ((TextView) m_view.findViewById(R.id.inbound_email)).
+		getText().toString().trim();
+
+	    if(string.isEmpty())
+		content_values.putNull("email_account");
+	    else
+		content_values.put("email_account", string);
+
+	    string = ((TextView) m_view.findViewById(R.id.inbound_address)).
+		getText().toString().trim();
+
+	    if(string.isEmpty())
+		content_values.putNull("in_address");
+	    else
+		content_values.put("in_address", string);
+
 	    content_values.put
 		("in_password", ((TextView) m_view.
 				 findViewById(R.id.inbound_password)).
@@ -85,11 +96,11 @@ public class Settings
 			       findViewById(R.id.outbound_email)).
 		 getText().toString());
 	    content_values.put
-		("outbound_password", ((TextView) m_view.
+		("out_password", ((TextView) m_view.
 				       findViewById(R.id.outbound_password)).
 		 getText().toString());
 	    content_values.put
-		("outbound_port", ((TextView) m_view.
+		("out_port", ((TextView) m_view.
 				   findViewById(R.id.outbound_port)).
 		 getText().toString());
 
@@ -98,11 +109,40 @@ public class Settings
 	    if(!error.isEmpty())
 		Windows.show_error_dialog
 		    (m_context, "Failure (" + error + ")!");
+	    else
+		populate_accounts_spinner();
 	}
 	catch(Exception exception)
 	{
 	    Windows.show_error_dialog
 		(m_context, "Failure (" + exception.getMessage() + ")!");
+	}
+    }
+
+    private void populate_accounts_spinner()
+    {
+	try
+	{
+	    if(((Activity) m_context).isFinishing())
+		return;
+
+	    ArrayList<String> array_list = m_database.email_account_names();
+
+	    if(array_list == null || array_list.isEmpty())
+	    {
+		array_list = new ArrayList<> ();
+		array_list.add("(Empty)");
+	    }
+
+	    ArrayAdapter<String> array_adapter = new ArrayAdapter<>
+		(m_context, android.R.layout.simple_spinner_item, array_list);
+	    Spinner spinner = null;
+
+	    spinner = (Spinner) m_view.findViewById(R.id.accounts_spinner);
+	    spinner.setAdapter(array_adapter);
+	}
+	catch(Exception exception)
+	{
 	}
     }
 
@@ -149,21 +189,16 @@ public class Settings
 			return;
 
 		    m_view.findViewById(R.id.display_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_display_pressed));
+			setBackgroundResource
+			(R.drawable.default_display_pressed);
 		    m_view.findViewById(R.id.display_layout).setVisibility
 			(View.VISIBLE);
 		    m_view.findViewById(R.id.network_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_network));
+			setBackgroundResource(R.drawable.default_network);
 		    m_view.findViewById(R.id.network_layout).setVisibility
 			(View.GONE);
 		    m_view.findViewById(R.id.privacy_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_privacy));
+			setBackgroundResource(R.drawable.default_privacy);
 		    m_view.findViewById(R.id.privacy_layout).setVisibility
 			(View.GONE);
 		}
@@ -180,21 +215,16 @@ public class Settings
 			return;
 
 		    m_view.findViewById(R.id.display_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_display));
+			setBackgroundResource(R.drawable.default_display);
 		    m_view.findViewById(R.id.display_layout).setVisibility
 			(View.GONE);
 		    m_view.findViewById(R.id.network_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_network_pressed));
+			setBackgroundResource
+			(R.drawable.default_network_pressed);
 		    m_view.findViewById(R.id.network_layout).setVisibility
 			(View.VISIBLE);
 		    m_view.findViewById(R.id.privacy_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_privacy));
+			setBackgroundResource(R.drawable.default_privacy);
 		    m_view.findViewById(R.id.privacy_layout).setVisibility
 			(View.GONE);
 		}
@@ -211,21 +241,16 @@ public class Settings
 			return;
 
 		    m_view.findViewById(R.id.display_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_display));
+			setBackgroundResource(R.drawable.default_display);
 		    m_view.findViewById(R.id.display_layout).setVisibility
 			(View.GONE);
 		    m_view.findViewById(R.id.network_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_network));
+			setBackgroundResource(R.drawable.default_network);
 		    m_view.findViewById(R.id.network_layout).setVisibility
 			(View.GONE);
 		    m_view.findViewById(R.id.privacy_button).
-			setBackgroundDrawable
-			(m_context.getResources().
-			 getDrawable(R.drawable.default_privacy_pressed));
+			setBackgroundResource
+			(R.drawable.default_privacy_pressed);
 		    m_view.findViewById(R.id.privacy_layout).setVisibility
 			(View.VISIBLE);
 		}
@@ -238,9 +263,8 @@ public class Settings
 	** Set Display as the primary section.
 	*/
 
-	m_view.findViewById(R.id.display_button).setBackgroundDrawable
-	    (m_context.getResources().
-	     getDrawable(R.drawable.default_display_pressed));
+	m_view.findViewById(R.id.display_button).setBackgroundResource
+	    (R.drawable.default_display_pressed);
 	m_view.findViewById(R.id.network_layout).setVisibility(View.GONE);
 	m_view.findViewById(R.id.privacy_layout).setVisibility(View.GONE);
 
