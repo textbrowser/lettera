@@ -27,6 +27,7 @@
 
 package org.purple.lettera;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -50,6 +51,32 @@ public class Database extends SQLiteOpenHelper
 	{
 	    m_db = null;
 	}
+    }
+
+    public String save_email(ContentValues content_values)
+    {
+	if(content_values == null || content_values.size() == 0)
+	    return "empty container";
+	else if(m_db == null)
+	    return "m_db is null";
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    m_db.insert("email_accounts", null, content_values);
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	    return exception.getMessage();
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+
+	return "";
     }
 
     public static synchronized Database getInstance()
@@ -104,8 +131,8 @@ public class Database extends SQLiteOpenHelper
 	    "in_address TEXT NOT NULL, " +
 	    "in_password TEXT NOT NULL, " +
 	    "in_port INTEGER NOT NULL, " +
-	    "out_email TEXT NOT NULL, " +
 	    "out_address TEXT NOT NULL, " +
+	    "out_email TEXT NOT NULL, " +
 	    "out_password TEXT NOT NULL, " +
 	    "out_port INTEGER NOT NULL)";
 

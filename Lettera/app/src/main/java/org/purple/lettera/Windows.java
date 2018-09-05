@@ -27,46 +27,39 @@
 
 package org.purple.lettera;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 
-public class Lettera extends AppCompatActivity
+public abstract class Windows
 {
-    private Database m_database = null;
-    private Settings m_settings = null;
-
-    private void prepare_button_listeners()
+    public static void show_error_dialog(Context context, String error)
     {
-	Button button = null;
-
-	button = (Button) findViewById(R.id.settings_button);
-	button.setOnClickListener(new View.OnClickListener()
+	try
 	{
-	    public void onClick(View view)
-	    {
-		if(Lettera.this.isFinishing() || m_settings == null)
-		    return;
+	    if(((Activity) context).isFinishing())
+		return;
 
-		m_settings.show();
-	    }
-        });
-    }
+	    AlertDialog alert_dialog = new AlertDialog.Builder
+		(context).create();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-	m_database = Database.getInstance(getApplicationContext());
-        setContentView(R.layout.activity_lettera);
-
-	/*
-	** Prepare the rest.
-	*/
-
-	m_settings = new Settings
-	    (Lettera.this, findViewById(R.id.main_layout));
-	prepare_button_listeners();
+	    alert_dialog.setButton
+		(AlertDialog.BUTTON_NEUTRAL,
+		 "Dismiss",
+		 new DialogInterface.OnClickListener()
+		 {
+		     public void onClick(DialogInterface dialog, int which)
+		     {
+			 dialog.dismiss();
+		     }
+		 });
+	    alert_dialog.setMessage(error);
+	    alert_dialog.setTitle("Error");
+	    alert_dialog.show();
+	}
+	catch(Exception exception)
+	{
+	}
     }
 }

@@ -29,6 +29,7 @@ package org.purple.lettera;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,7 +37,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class Settings
 {
@@ -48,6 +51,59 @@ public class Settings
 
     private void apply_settings()
     {
+	try
+	{
+	    ContentValues content_values = new ContentValues();
+
+	    content_values.put
+		("delete_on_server", ((CheckBox) m_view.
+				      findViewById(R.id.
+						   delete_on_server_checkbox)).
+		 isChecked() ? 1 : 0);
+	    content_values.put
+		("email_account", ((TextView) m_view.
+				   findViewById(R.id.inbound_email)).
+		 getText().toString());
+	    content_values.put
+		("in_address", ((TextView) m_view.
+				findViewById(R.id.inbound_address)).
+		 getText().toString());
+	    content_values.put
+		("in_password", ((TextView) m_view.
+				 findViewById(R.id.inbound_password)).
+		 getText().toString());
+	    content_values.put
+		("in_port", ((TextView) m_view.
+			     findViewById(R.id.inbound_port)).
+		 getText().toString());
+	    content_values.put
+		("out_address", ((TextView) m_view.
+				 findViewById(R.id.outbound_address)).
+		 getText().toString());
+	    content_values.put
+		("out_email", ((TextView) m_view.
+			       findViewById(R.id.outbound_email)).
+		 getText().toString());
+	    content_values.put
+		("outbound_password", ((TextView) m_view.
+				       findViewById(R.id.outbound_password)).
+		 getText().toString());
+	    content_values.put
+		("outbound_port", ((TextView) m_view.
+				   findViewById(R.id.outbound_port)).
+		 getText().toString());
+
+	    String error = m_database.save_email(content_values).trim();
+
+	    if(!error.isEmpty())
+		Windows.show_error_dialog
+		    (m_context, "Failure (" + error + ")!");
+	}
+	catch(Exception exception)
+	{
+	    Windows.show_error_dialog
+		(m_context, "Failure (" + exception.getMessage() + ")!");
+	}
     }
 
     private void prepare_listeners()
