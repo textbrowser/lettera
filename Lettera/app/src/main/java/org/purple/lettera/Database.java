@@ -52,10 +52,62 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
+    public static synchronized Database getInstance()
+    {
+	return s_instance; // Should never be null.
+    }
+
+    public static synchronized Database getInstance(Context context)
+    {
+	if(s_instance == null)
+	    s_instance = new Database(context.getApplicationContext());
+
+	return s_instance;
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db)
+    {
+	try
+	{
+	    db.enableWriteAheadLogging();
+	}
+	catch(Exception exception)
+	{
+	}
+
+	try
+	{
+	    db.execSQL("PRAGMA secure_delete = True", null);
+	}
+	catch(Exception exception)
+	{
+	}
+
+	try
+	{
+	    db.setForeignKeyConstraintsEnabled(true);
+        }
+	catch(Exception exception)
+	{
+	}
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
 	String str = "";
+
+	str = "CREATE TABLE IF NOT EXISTS email_accounts (" +
+	    "delete_on_server INTEGER DEFAULT 0 NOT NULL, " +
+	    "email_account TEXT NOT NULL PRIMARY KEY, " +
+	    "in_address TEXT NOT NULL, " +
+	    "in_password TEXT NOT NULL, " +
+	    "in_port INTEGER NOT NULL, " +
+	    "out_email TEXT NOT NULL, " +
+	    "out_address TEXT NOT NULL, " +
+	    "out_password TEXT NOT NULL, " +
+	    "out_port INTEGER NOT NULL)";
 
 	try
 	{

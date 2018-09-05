@@ -34,7 +34,8 @@ import android.widget.Button;
 
 public class Lettera extends AppCompatActivity
 {
-    Settings m_settings = null;
+    private Settings m_settings = null;
+    private Database m_database = null;
 
     private void prepare_button_listeners()
     {
@@ -57,6 +58,7 @@ public class Lettera extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+	m_database = Database.getInstance(getApplicationContext());
         setContentView(R.layout.activity_lettera);
 
 	/*

@@ -44,6 +44,7 @@ public class Settings
     private Dialog m_dialog = null;
     private View m_parent = null;
     private View m_view = null;
+    private final Database m_database = Database.getInstance();
 
     private void apply_settings()
     {
