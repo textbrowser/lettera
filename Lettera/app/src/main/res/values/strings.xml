@@ -7,8 +7,11 @@
     <string name="password">Password</string>
     <string name="outbound_smtp_server">Outbound SMTP Server</string>
     <string name="address">Address</string>
-    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
     <string name="apply">Apply</string>
     <string name="delete_on_server">Delete on Server</string>
     <string name="test">Test</string>
+    <string name="delete">Delete</string>
+    <string name="accounts">Accounts</string>
+    <string name="color_theme">Color Theme</string>
 </resources>

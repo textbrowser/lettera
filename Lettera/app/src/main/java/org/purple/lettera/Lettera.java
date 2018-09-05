@@ -34,6 +34,8 @@ import android.widget.Button;
 
 public class Lettera extends AppCompatActivity
 {
+    Settings m_settings = null;
+
     private void prepare_button_listeners()
     {
 	Button button = null;
@@ -43,11 +45,10 @@ public class Lettera extends AppCompatActivity
 	{
 	    public void onClick(View view)
 	    {
-		if(Lettera.this.isFinishing())
+		if(Lettera.this.isFinishing() || m_settings == null)
 		    return;
 
-		Windows.show_settings
-		    (Lettera.this, findViewById(R.id.main_layout));
+		m_settings.show();
 	    }
         });
     }
@@ -62,6 +63,8 @@ public class Lettera extends AppCompatActivity
 	** Prepare the rest.
 	*/
 
+	m_settings = new Settings
+	    (Lettera.this, findViewById(R.id.main_layout));
 	prepare_button_listeners();
     }
 }

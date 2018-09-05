@@ -36,27 +36,51 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-public abstract class Windows
+public class Settings
 {
-    public static void show_settings(final Context context, final View parent)
+    private Context m_context = null;
+    private Dialog m_dialog = null;
+    private View m_parent = null;
+    private View m_view = null;
+
+    public Settings(Context context, View parent)
     {
-	if(context == null || parent == null)
+	m_context = context;
+	m_parent = parent;
+    }
+
+    public void show()
+    {
+	if(m_context == null || m_parent == null)
 	    return;
+	else if(m_dialog != null || m_view != null)
+	{
+	    try
+	    {
+		m_dialog.show();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    return;
+	}
 
 	try
 	{
-	    LayoutInflater inflater = (LayoutInflater) context.getSystemService
-		(Context.LAYOUT_INFLATER_SERVICE);
-	    View view = inflater.inflate(R.layout.settings, null);
+	    LayoutInflater inflater = (LayoutInflater) m_context.
+		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    WindowManager.LayoutParams layout_params =
 		new WindowManager.LayoutParams();
-	    final Dialog dialog = new Dialog(context);
-	    float density = context.getResources().getDisplayMetrics().density;
+	    float density = m_context.getResources().getDisplayMetrics().
+		density;
 
-	    view.setPaddingRelative((int) (15 * density),
-				    (int) (15 * density),
-				    (int) (15 * density),
-				    (int) (15 * density));
+	    m_dialog = new Dialog(m_context);
+	    m_view = inflater.inflate(R.layout.settings, null);
+	    m_view.setPaddingRelative((int) (15 * density),
+				      (int) (15 * density),
+				      (int) (15 * density),
+				      (int) (15 * density));
 
 	    /*
 	    ** Prepare listeners.
@@ -64,27 +88,29 @@ public abstract class Windows
 
 	    Button button = null;
 
-	    button = (Button) view.findViewById(R.id.cancel_button);
+	    button = (Button) m_view.findViewById(R.id.close_button);
 	    button.setOnClickListener(new View.OnClickListener()
 	    {
 		public void onClick(View view)
 		{
-		    if(((Activity) context).isFinishing())
+		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    dialog.dismiss();
+		    m_dialog.dismiss();
 		}
 	    });
-	    dialog.setCancelable(false);
-	    dialog.setContentView(view);
-	    dialog.setTitle("Settings");
-	    dialog.show();
+	    m_dialog.setCancelable(false);
+	    m_dialog.setContentView(m_view);
+	    m_dialog.setTitle("Settings");
+	    m_dialog.show();
 	    layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-	    layout_params.width = WindowManager.LayoutParams.FILL_PARENT;
-	    dialog.getWindow().setAttributes(layout_params);
+	    layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
+	    m_dialog.getWindow().setAttributes(layout_params);
 	}
 	catch(Exception exception)
 	{
+	    m_dialog = null;
+	    m_view = null;
 	}
     }
 }
