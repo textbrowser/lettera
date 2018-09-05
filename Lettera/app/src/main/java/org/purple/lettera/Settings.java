@@ -45,9 +45,27 @@ public class Settings
     private View m_parent = null;
     private View m_view = null;
 
+    private void apply_settings()
+    {
+    }
+
     private void prepare_listeners()
     {
 	Button button = null;
+
+	button = (Button) m_view.findViewById(R.id.apply_button);
+
+	if(!button.hasOnClickListeners())
+	    button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    apply_settings();
+		}
+	    });
 
 	button = (Button) m_view.findViewById(R.id.close_button);
 
