@@ -70,6 +70,10 @@ public class Settings
 	Spinner spinner = null;
 	String array[] = null;
 
+	/*
+	** Network
+	*/
+
 	array = new String[] {"Default"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
@@ -81,12 +85,31 @@ public class Settings
 	spinner = (Spinner) m_view.findViewById(R.id.accounts_spinner);
 	spinner.setAdapter(array_adapter);
 	m_view.findViewById(R.id.delete_account_button).setEnabled(false);
+
+	/*
+	** Privacy
+	*/
+
+	array = new String[] {"McEliece", "RSA"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById(R.id.encryption_key_spinner);
+	spinner.setAdapter(array_adapter);
+	array = new String[] {"RSA"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById(R.id.signature_key_spinner);
+	spinner.setAdapter(array_adapter);
     }
 
     public Settings(Context context, View parent)
     {
 	m_context = context;
 	m_parent = parent;
+    }
+
+    public void populate()
+    {
     }
 
     public void show()

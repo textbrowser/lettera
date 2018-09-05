@@ -14,4 +14,8 @@
     <string name="delete">Delete</string>
     <string name="accounts">Accounts</string>
     <string name="color_theme">Color Theme</string>
+    <string name="privacy">Privacy</string>
+    <string name="encryption_key">Encryption Key</string>
+    <string name="signature_key">Signature Key</string>
+    <string name="generate">Generate</string>
 </resources>
