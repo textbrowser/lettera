@@ -92,7 +92,10 @@ public class Settings
 		getText().toString().trim();
 
 	    if(string.isEmpty())
-		content_values.putNull("in_address");
+	    {
+		m_view.findViewById(R.id.inbound_address).requestFocus();
+		return;
+	    }
 	    else
 		content_values.put("in_address", string);
 
@@ -100,7 +103,10 @@ public class Settings
 		getText().toString().trim();
 
 	    if(string.isEmpty())
-		content_values.putNull("email_account");
+	    {
+		m_view.findViewById(R.id.inbound_email).requestFocus();
+		return;
+	    }
 	    else
 		content_values.put("email_account", string);
 

@@ -34,24 +34,34 @@ import android.widget.Button;
 
 public class Lettera extends AppCompatActivity
 {
+    private Button m_settings_button = null;
     private Database m_database = null;
     private Settings m_settings = null;
 
+    private void initialize_button_members()
+    {
+	m_settings_button = findViewById(R.id.settings_button);
+    }
+
     private void prepare_button_listeners()
     {
-	Button button = null;
-
-	button = (Button) findViewById(R.id.settings_button);
-	button.setOnClickListener(new View.OnClickListener()
+	try
 	{
-	    public void onClick(View view)
-	    {
-		if(Lettera.this.isFinishing() || m_settings == null)
-		    return;
+	    if(!m_settings_button.hasOnClickListeners())
+		m_settings_button.setOnClickListener(new View.OnClickListener()
+	        {
+		    public void onClick(View view)
+		    {
+			if(Lettera.this.isFinishing() || m_settings == null)
+			    return;
 
-		m_settings.show();
-	    }
-        });
+			m_settings.show();
+		    }
+		});
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     @Override
@@ -65,6 +75,7 @@ public class Lettera extends AppCompatActivity
 	** Prepare the rest.
 	*/
 
+	initialize_button_members();
 	m_settings = new Settings
 	    (Lettera.this, findViewById(R.id.main_layout));
 	prepare_button_listeners();
