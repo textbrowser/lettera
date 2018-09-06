@@ -31,6 +31,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +51,30 @@ public class Settings
     private View m_parent = null;
     private View m_view = null;
     private final Database m_database = Database.getInstance();
+    private final static InputFilter s_port_filter = new InputFilter()
+    {
+	public CharSequence filter(CharSequence source,
+				   int start,
+				   int end,
+				   Spanned dest,
+				   int dstart,
+				   int dend)
+	{
+	    try
+	    {
+		int port = Integer.parseInt
+		    (dest.toString() + source.toString());
+
+		if(port >= 0 && port <= 65535)
+		    return null;
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    return "";
+	}
+    };
 
     private void apply_settings()
     {
@@ -62,6 +88,13 @@ public class Settings
 				      findViewById(R.id.
 						   delete_on_server_checkbox)).
 		 isChecked() ? 1 : 0);
+	    string = ((TextView) m_view.findViewById(R.id.inbound_address)).
+		getText().toString().trim();
+
+	    if(string.isEmpty())
+		content_values.putNull("in_address");
+	    else
+		content_values.put("in_address", string);
 
 	    string = ((TextView) m_view.findViewById(R.id.inbound_email)).
 		getText().toString().trim();
@@ -70,14 +103,6 @@ public class Settings
 		content_values.putNull("email_account");
 	    else
 		content_values.put("email_account", string);
-
-	    string = ((TextView) m_view.findViewById(R.id.inbound_address)).
-		getText().toString().trim();
-
-	    if(string.isEmpty())
-		content_values.putNull("in_address");
-	    else
-		content_values.put("in_address", string);
 
 	    string = ((TextView) m_view.findViewById(R.id.inbound_password)).
 		getText().toString();
@@ -317,6 +342,10 @@ public class Settings
 	** Network
 	*/
 
+	((TextView) m_view.findViewById(R.id.inbound_port)).setFilters
+	    (new InputFilter[] {s_port_filter});
+	((TextView) m_view.findViewById(R.id.outbound_port)).setFilters
+	    (new InputFilter[] {s_port_filter});
 	array = new String[] {"(Empty)"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
