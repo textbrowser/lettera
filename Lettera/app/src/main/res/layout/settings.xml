@@ -216,7 +216,7 @@
                             android:ems="10"
                             android:hint="@string/port"
                             android:inputType="number"
-                            android:text="@string/_995" />
+                            android:text="@string/_993" />
 
                     </LinearLayout>
 

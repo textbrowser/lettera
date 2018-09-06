@@ -79,41 +79,69 @@ public class Settings
 	    else
 		content_values.put("in_address", string);
 
-	    content_values.put
-		("in_password", ((TextView) m_view.
-				 findViewById(R.id.inbound_password)).
-		 getText().toString());
-	    content_values.put
-		("in_port", ((TextView) m_view.
-			     findViewById(R.id.inbound_port)).
-		 getText().toString());
-	    content_values.put
-		("out_address", ((TextView) m_view.
-				 findViewById(R.id.outbound_address)).
-		 getText().toString());
-	    content_values.put
-		("out_email", ((TextView) m_view.
-			       findViewById(R.id.outbound_email)).
-		 getText().toString());
-	    content_values.put
-		("out_password", ((TextView) m_view.
-				       findViewById(R.id.outbound_password)).
-		 getText().toString());
-	    content_values.put
-		("out_port", ((TextView) m_view.
-				   findViewById(R.id.outbound_port)).
-		 getText().toString());
+	    string = ((TextView) m_view.findViewById(R.id.inbound_password)).
+		getText().toString();
+
+	    if(string.isEmpty())
+		content_values.putNull("in_password");
+	    else
+		content_values.put("in_password", string);
+
+	    string = ((TextView) m_view.findViewById(R.id.inbound_port)).
+		getText().toString().trim();
+
+	    if(string.isEmpty())
+		content_values.putNull("in_port");
+	    else
+		content_values.put("in_port", string);
+
+	    string = ((TextView) m_view.findViewById(R.id.outbound_email)).
+		getText().toString().trim();
+
+	    if(string.isEmpty())
+		content_values.putNull("out_email");
+	    else
+		content_values.put("out_email", string);
+
+	    string = ((TextView) m_view.findViewById(R.id.outbound_address)).
+		getText().toString().trim();
+
+	    if(string.isEmpty())
+		content_values.putNull("out_address");
+	    else
+		content_values.put("out_address", string);
+
+	    string = ((TextView) m_view.findViewById(R.id.outbound_password)).
+		getText().toString();
+
+	    if(string.isEmpty())
+		content_values.putNull("out_password");
+	    else
+		content_values.put("out_password", string);
+
+	    string = ((TextView) m_view.findViewById(R.id.outbound_port)).
+		getText().toString().trim();
+
+	    if(string.isEmpty())
+		content_values.putNull("out_port");
+	    else
+		content_values.put("out_port", string);
+
 
 	    String error = m_database.save_email(content_values).trim();
 
 	    if(!error.isEmpty())
+	    {
+		show_network_page();
 		Windows.show_error_dialog
 		    (m_context, "Failure (" + error + ")!");
+	    }
 	    else
 		populate_accounts_spinner();
 	}
 	catch(Exception exception)
 	{
+	    show_network_page();
 	    Windows.show_error_dialog
 		(m_context, "Failure (" + exception.getMessage() + ")!");
 	}
@@ -214,19 +242,7 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    m_view.findViewById(R.id.display_button).
-			setBackgroundResource(R.drawable.default_display);
-		    m_view.findViewById(R.id.display_layout).setVisibility
-			(View.GONE);
-		    m_view.findViewById(R.id.network_button).
-			setBackgroundResource
-			(R.drawable.default_network_pressed);
-		    m_view.findViewById(R.id.network_layout).setVisibility
-			(View.VISIBLE);
-		    m_view.findViewById(R.id.privacy_button).
-			setBackgroundResource(R.drawable.default_privacy);
-		    m_view.findViewById(R.id.privacy_layout).setVisibility
-			(View.GONE);
+		    show_network_page();
 		}
 	    });
 
@@ -312,6 +328,19 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	spinner = (Spinner) m_view.findViewById(R.id.signature_key_spinner);
 	spinner.setAdapter(array_adapter);
+    }
+
+    private void show_network_page()
+    {
+	m_view.findViewById(R.id.display_button).
+	    setBackgroundResource(R.drawable.default_display);
+	m_view.findViewById(R.id.display_layout).setVisibility(View.GONE);
+	m_view.findViewById(R.id.network_button).setBackgroundResource
+	    (R.drawable.default_network_pressed);
+	m_view.findViewById(R.id.network_layout).setVisibility(View.VISIBLE);
+	m_view.findViewById(R.id.privacy_button).
+	    setBackgroundResource(R.drawable.default_privacy);
+	m_view.findViewById(R.id.privacy_layout).setVisibility(View.GONE);
     }
 
     public Settings(Context context, View parent)
