@@ -351,15 +351,7 @@ public class Settings
 	    layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
 	    layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 	    layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-	    float density = m_context.getResources().getDisplayMetrics().
-		density;
-
 	    m_view = inflater.inflate(R.layout.settings, null);
-	    m_view.setPaddingRelative((int) (15 * density),
-				      (int) (15 * density),
-				      (int) (15 * density),
-				      (int) (15 * density));
 
 	    /*
 	    ** Prepare things.

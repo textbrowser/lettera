@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:layout_marginTop="5dp">
+    android:layout_marginBottom="5dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,7 +20,30 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="#E0E0E0"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/x_button"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/default_window_close" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <Space
@@ -70,6 +92,8 @@
                 android:id="@+id/display_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -121,6 +145,8 @@
                 android:id="@+id/network_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -174,9 +200,9 @@
 
                         <EditText
                             android:id="@+id/inbound_address"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="0.75"
                             android:ems="10"
                             android:hint="@string/address"
                             android:inputType="textPersonName"
@@ -184,12 +210,13 @@
 
                         <EditText
                             android:id="@+id/inbound_port"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0"
+                            android:layout_weight="0.25"
                             android:ems="10"
                             android:hint="@string/port"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:text="@string/_995" />
 
                     </LinearLayout>
 
@@ -242,9 +269,9 @@
 
                         <EditText
                             android:id="@+id/outbound_address"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="0.75"
                             android:ems="10"
                             android:hint="@string/address"
                             android:inputType="textPersonName"
@@ -252,12 +279,13 @@
 
                         <EditText
                             android:id="@+id/outbound_port"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0"
+                            android:layout_weight="0.25"
                             android:ems="10"
                             android:hint="@string/port"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:text="@string/_587" />
 
                     </LinearLayout>
 
@@ -293,6 +321,8 @@
                 android:id="@+id/privacy_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -370,6 +400,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
                 android:orientation="horizontal">
 
                 <Space
