@@ -147,6 +147,11 @@ public class Settings
 	}
     }
 
+    private void populate()
+    {
+	populate_accounts_spinner();
+    }
+
     private void populate_accounts_spinner()
     {
 	try
@@ -160,7 +165,12 @@ public class Settings
 	    {
 		array_list = new ArrayList<> ();
 		array_list.add("(Empty)");
+		m_view.findViewById
+		    (R.id.delete_account_button).setEnabled(false);
 	    }
+	    else
+		m_view.findViewById
+		    (R.id.delete_account_button).setEnabled(true);
 
 	    ArrayAdapter<String> array_adapter = new ArrayAdapter<>
 		(m_context, android.R.layout.simple_spinner_item, array_list);
@@ -349,10 +359,6 @@ public class Settings
 	m_parent = parent;
     }
 
-    public void populate()
-    {
-    }
-
     public void show()
     {
 	if(m_context == null || m_parent == null)
@@ -362,6 +368,7 @@ public class Settings
 	    try
 	    {
 		m_dialog.show();
+		populate();
 	    }
 	    catch(Exception exception)
 	    {
@@ -399,6 +406,7 @@ public class Settings
 	    m_dialog.setTitle("Settings");
 	    m_dialog.show();
 	    m_dialog.getWindow().setAttributes(layout_params); // After show().
+	    populate();
 	}
 	catch(Exception exception)
 	{
