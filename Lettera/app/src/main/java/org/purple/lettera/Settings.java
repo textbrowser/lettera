@@ -46,9 +46,29 @@ import java.util.ArrayList;
 
 public class Settings
 {
+    private Button m_apply_button = null;
+    private Button m_close_button = null;
+    private Button m_delete_account_button = null;
+    private Button m_display_button = null;
+    private Button m_network_button = null;
+    private Button m_privacy_button = null;
+    private Button m_x_button = null;
+    private CheckBox m_delete_on_server_checkbox = null;
     private Context m_context = null;
     private Dialog m_dialog = null;
+    private Spinner m_accounts_spinner = null;
+    private TextView m_inbound_address = null;
+    private TextView m_inbound_email = null;
+    private TextView m_inbound_password = null;
+    private TextView m_inbound_port = null;
+    private TextView m_outbound_address = null;
+    private TextView m_outbound_email = null;
+    private TextView m_outbound_password = null;
+    private TextView m_outbound_port = null;
+    private View m_display_layout = null;
+    private View m_network_layout = null;
     private View m_parent = null;
+    private View m_privacy_layout = null;
     private View m_view = null;
     private final Database m_database = Database.getInstance();
     private final static InputFilter s_port_filter = new InputFilter()
@@ -84,80 +104,87 @@ public class Settings
 	    String string = "";
 
 	    content_values.put
-		("delete_on_server", ((CheckBox) m_view.
-				      findViewById(R.id.
-						   delete_on_server_checkbox)).
-		 isChecked() ? 1 : 0);
-	    string = ((TextView) m_view.findViewById(R.id.inbound_address)).
-		getText().toString().trim();
+		("delete_on_server",
+		 m_delete_on_server_checkbox.isChecked() ? 1 : 0);
+	    string = m_inbound_address.getText().toString().trim();
 
 	    if(string.isEmpty())
 	    {
-		m_view.findViewById(R.id.inbound_address).requestFocus();
+		m_inbound_address.requestFocus();
 		return;
 	    }
 	    else
 		content_values.put("in_address", string);
 
-	    string = ((TextView) m_view.findViewById(R.id.inbound_email)).
-		getText().toString().trim();
+	    string = m_inbound_email.getText().toString().trim();
 
 	    if(string.isEmpty())
 	    {
-		m_view.findViewById(R.id.inbound_email).requestFocus();
+		m_inbound_email.requestFocus();
 		return;
 	    }
 	    else
 		content_values.put("email_account", string);
 
-	    string = ((TextView) m_view.findViewById(R.id.inbound_password)).
-		getText().toString();
+	    string = m_inbound_password.getText().toString();
 
 	    if(string.isEmpty())
-		content_values.putNull("in_password");
+	    {
+		m_inbound_password.requestFocus();
+		return;
+	    }
 	    else
 		content_values.put("in_password", string);
 
-	    string = ((TextView) m_view.findViewById(R.id.inbound_port)).
-		getText().toString().trim();
+	    string = m_inbound_port.getText().toString().trim();
 
 	    if(string.isEmpty())
-		content_values.putNull("in_port");
+	    {
+		m_inbound_port.requestFocus();
+		return;
+	    }
 	    else
 		content_values.put("in_port", string);
 
-	    string = ((TextView) m_view.findViewById(R.id.outbound_email)).
-		getText().toString().trim();
+	    string = m_outbound_address.getText().toString().trim();
 
 	    if(string.isEmpty())
-		content_values.putNull("out_email");
-	    else
-		content_values.put("out_email", string);
-
-	    string = ((TextView) m_view.findViewById(R.id.outbound_address)).
-		getText().toString().trim();
-
-	    if(string.isEmpty())
-		content_values.putNull("out_address");
+	    {
+		m_outbound_address.requestFocus();
+		return;
+	    }
 	    else
 		content_values.put("out_address", string);
 
-	    string = ((TextView) m_view.findViewById(R.id.outbound_password)).
-		getText().toString();
+	    string = m_outbound_email.getText().toString().trim();
 
 	    if(string.isEmpty())
-		content_values.putNull("out_password");
+	    {
+		m_outbound_email.requestFocus();
+		return;
+	    }
+	    else
+		content_values.put("email_account", string);
+
+	    string = m_outbound_password.getText().toString();
+
+	    if(string.isEmpty())
+	    {
+		m_outbound_password.requestFocus();
+		return;
+	    }
 	    else
 		content_values.put("out_password", string);
 
-	    string = ((TextView) m_view.findViewById(R.id.outbound_port)).
-		getText().toString().trim();
+	    string = m_outbound_port.getText().toString().trim();
 
 	    if(string.isEmpty())
-		content_values.putNull("out_port");
+	    {
+		m_outbound_port.requestFocus();
+		return;
+	    }
 	    else
 		content_values.put("out_port", string);
-
 
 	    String error = m_database.save_email(content_values).trim();
 
@@ -175,6 +202,49 @@ public class Settings
 	    show_network_page();
 	    Windows.show_error_dialog
 		(m_context, "Failure (" + exception.getMessage() + ")!");
+	}
+    }
+
+    private void initialize_widget_members()
+    {
+	try
+	{
+	    m_accounts_spinner = (Spinner) m_view.findViewById
+		(R.id.accounts_spinner);
+	    m_apply_button = (Button) m_view.findViewById(R.id.apply_button);
+	    m_close_button = (Button) m_view.findViewById(R.id.close_button);
+	    m_delete_account_button = m_view.findViewById
+		(R.id.delete_account_button);
+	    m_delete_on_server_checkbox = (CheckBox)
+		m_view.findViewById(R.id.delete_on_server_checkbox);
+	    m_display_button = (Button) m_view.findViewById
+		(R.id.display_button);
+	    m_display_layout = m_view.findViewById(R.id.display_layout);
+	    m_inbound_address = (TextView) m_view.findViewById
+		(R.id.inbound_address);
+	    m_inbound_email = (TextView) m_view.findViewById
+		(R.id.inbound_email);
+	    m_inbound_password = (TextView) m_view.findViewById
+		(R.id.inbound_password);
+	    m_inbound_port = (TextView) m_view.findViewById(R.id.inbound_port);
+	    m_network_button = (Button) m_view.findViewById
+		(R.id.network_button);
+	    m_outbound_address = (TextView) m_view.findViewById
+		(R.id.outbound_address);
+	    m_outbound_email = (TextView) m_view.findViewById
+		(R.id.outbound_email);
+	    m_outbound_password = (TextView) m_view.findViewById
+		(R.id.outbound_password);
+	    m_outbound_port = (TextView) m_view.findViewById
+		(R.id.outbound_port);
+	    m_network_layout = m_view.findViewById(R.id.network_layout);
+	    m_privacy_button = (Button) m_view.findViewById
+		(R.id.privacy_button);
+	    m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
+	    m_x_button = (Button) m_view.findViewById(R.id.x_button);
+	}
+	catch(Exception exception)
+	{
 	}
     }
 
@@ -196,19 +266,15 @@ public class Settings
 	    {
 		array_list = new ArrayList<> ();
 		array_list.add("(Empty)");
-		m_view.findViewById
-		    (R.id.delete_account_button).setEnabled(false);
+		m_delete_account_button.setEnabled(false);
 	    }
 	    else
-		m_view.findViewById
-		    (R.id.delete_account_button).setEnabled(true);
+		m_delete_account_button.setEnabled(true);
 
 	    ArrayAdapter<String> array_adapter = new ArrayAdapter<>
 		(m_context, android.R.layout.simple_spinner_item, array_list);
-	    Spinner spinner = null;
 
-	    spinner = (Spinner) m_view.findViewById(R.id.accounts_spinner);
-	    spinner.setAdapter(array_adapter);
+	    m_accounts_spinner.setAdapter(array_adapter);
 	}
 	catch(Exception exception)
 	{
@@ -217,101 +283,107 @@ public class Settings
 
     private void prepare_listeners()
     {
-	Button button = null;
+	try
+	{
+	    if(!m_apply_button.hasOnClickListeners())
+		m_apply_button.setOnClickListener(new View.OnClickListener()
+	        {
+		    public void onClick(View view)
+		    {
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-	button = (Button) m_view.findViewById(R.id.apply_button);
+			apply_settings();
+		    }
+		});
 
-	if(!button.hasOnClickListeners())
-	    button.setOnClickListener(new View.OnClickListener()
-	    {
-		public void onClick(View view)
+	    if(!m_close_button.hasOnClickListeners())
+		m_close_button.setOnClickListener(new View.OnClickListener()
 		{
-		    if(((Activity) m_context).isFinishing())
-			return;
+		    public void onClick(View view)
+		    {
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-		    apply_settings();
-		}
-	    });
+			m_dialog.dismiss();
+		    }
+		});
 
-	button = (Button) m_view.findViewById(R.id.close_button);
-
-	if(!button.hasOnClickListeners())
-	    button.setOnClickListener(new View.OnClickListener()
-	    {
-		public void onClick(View view)
+	    if(!m_display_button.hasOnClickListeners())
+		m_display_button.setOnClickListener(new View.OnClickListener()
 		{
-		    if(((Activity) m_context).isFinishing())
-			return;
+		    public void onClick(View view)
+		    {
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-		    m_dialog.dismiss();
-		}
-	    });
+			m_view.findViewById(R.id.display_button).
+			    setBackgroundResource
+			    (R.drawable.default_display_pressed);
+			m_view.findViewById(R.id.display_layout).setVisibility
+			    (View.VISIBLE);
+			m_view.findViewById(R.id.network_button).
+			    setBackgroundResource(R.drawable.default_network);
+			m_view.findViewById(R.id.network_layout).setVisibility
+			    (View.GONE);
+			m_view.findViewById(R.id.privacy_button).
+			    setBackgroundResource(R.drawable.default_privacy);
+			m_view.findViewById(R.id.privacy_layout).setVisibility
+			    (View.GONE);
+		    }
+		});
 
-	button = (Button) m_view.findViewById(R.id.display_button);
-
-	if(!button.hasOnClickListeners())
-	    button.setOnClickListener(new View.OnClickListener()
-	    {
-		public void onClick(View view)
+	    if(!m_network_button.hasOnClickListeners())
+		m_network_button.setOnClickListener(new View.OnClickListener()
 		{
-		    if(((Activity) m_context).isFinishing())
-			return;
+		    public void onClick(View view)
+		    {
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-		    m_view.findViewById(R.id.display_button).
-			setBackgroundResource
-			(R.drawable.default_display_pressed);
-		    m_view.findViewById(R.id.display_layout).setVisibility
-			(View.VISIBLE);
-		    m_view.findViewById(R.id.network_button).
-			setBackgroundResource(R.drawable.default_network);
-		    m_view.findViewById(R.id.network_layout).setVisibility
-			(View.GONE);
-		    m_view.findViewById(R.id.privacy_button).
-			setBackgroundResource(R.drawable.default_privacy);
-		    m_view.findViewById(R.id.privacy_layout).setVisibility
-			(View.GONE);
-		}
-	    });
+			show_network_page();
+		    }
+		});
 
-	button = (Button) m_view.findViewById(R.id.network_button);
-
-	if(!button.hasOnClickListeners())
-	    button.setOnClickListener(new View.OnClickListener()
-	    {
-		public void onClick(View view)
+	    if(!m_privacy_button.hasOnClickListeners())
+		m_privacy_button.setOnClickListener(new View.OnClickListener()
 		{
-		    if(((Activity) m_context).isFinishing())
-			return;
+		    public void onClick(View view)
+		    {
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-		    show_network_page();
-		}
-	    });
+			m_view.findViewById(R.id.display_button).
+			    setBackgroundResource(R.drawable.default_display);
+			m_view.findViewById(R.id.display_layout).setVisibility
+			    (View.GONE);
+			m_view.findViewById(R.id.network_button).
+			    setBackgroundResource(R.drawable.default_network);
+			m_view.findViewById(R.id.network_layout).setVisibility
+			    (View.GONE);
+			m_view.findViewById(R.id.privacy_button).
+			    setBackgroundResource
+			    (R.drawable.default_privacy_pressed);
+			m_view.findViewById(R.id.privacy_layout).setVisibility
+			    (View.VISIBLE);
+		    }
+		});
 
-	button = (Button) m_view.findViewById(R.id.privacy_button);
-
-	if(!button.hasOnClickListeners())
-	    button.setOnClickListener(new View.OnClickListener()
-	    {
-		public void onClick(View view)
+	    if(!m_x_button.hasOnClickListeners())
+		m_x_button.setOnClickListener(new View.OnClickListener()
 		{
-		    if(((Activity) m_context).isFinishing())
-			return;
+		    public void onClick(View view)
+		    {
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-		    m_view.findViewById(R.id.display_button).
-			setBackgroundResource(R.drawable.default_display);
-		    m_view.findViewById(R.id.display_layout).setVisibility
-			(View.GONE);
-		    m_view.findViewById(R.id.network_button).
-			setBackgroundResource(R.drawable.default_network);
-		    m_view.findViewById(R.id.network_layout).setVisibility
-			(View.GONE);
-		    m_view.findViewById(R.id.privacy_button).
-			setBackgroundResource
-			(R.drawable.default_privacy_pressed);
-		    m_view.findViewById(R.id.privacy_layout).setVisibility
-			(View.VISIBLE);
-		}
-	    });
+			m_dialog.dismiss();
+		    }
+		});
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     private void prepare_widgets()
@@ -377,15 +449,19 @@ public class Settings
 
     private void show_network_page()
     {
-	m_view.findViewById(R.id.display_button).
-	    setBackgroundResource(R.drawable.default_display);
-	m_view.findViewById(R.id.display_layout).setVisibility(View.GONE);
-	m_view.findViewById(R.id.network_button).setBackgroundResource
-	    (R.drawable.default_network_pressed);
-	m_view.findViewById(R.id.network_layout).setVisibility(View.VISIBLE);
-	m_view.findViewById(R.id.privacy_button).
-	    setBackgroundResource(R.drawable.default_privacy);
-	m_view.findViewById(R.id.privacy_layout).setVisibility(View.GONE);
+	try
+	{
+	    m_display_button.setBackgroundResource(R.drawable.default_display);
+	    m_display_layout.setVisibility(View.GONE);
+	    m_network_button.setBackgroundResource
+		(R.drawable.default_network_pressed);
+	    m_network_layout.setVisibility(View.VISIBLE);
+	    m_privacy_button.setBackgroundResource(R.drawable.default_privacy);
+	    m_privacy_layout.setVisibility(View.GONE);
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     public Settings(Context context, View parent)
@@ -428,6 +504,7 @@ public class Settings
 	    ** Prepare things.
 	    */
 
+	    initialize_widget_members();
 	    prepare_listeners();
 	    prepare_widgets();
 

@@ -38,7 +38,7 @@ public class Lettera extends AppCompatActivity
     private Database m_database = null;
     private Settings m_settings = null;
 
-    private void initialize_button_members()
+    private void initialize_widget_members()
     {
 	m_settings_button = findViewById(R.id.settings_button);
     }
@@ -75,7 +75,7 @@ public class Lettera extends AppCompatActivity
 	** Prepare the rest.
 	*/
 
-	initialize_button_members();
+	initialize_widget_members();
 	m_settings = new Settings
 	    (Lettera.this, findViewById(R.id.main_layout));
 	prepare_button_listeners();
