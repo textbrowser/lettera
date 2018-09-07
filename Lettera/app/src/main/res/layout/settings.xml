@@ -325,11 +325,6 @@
                 android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
-                <ProgressBar
-                    android:id="@+id/generate_keys_progress_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -400,6 +395,16 @@
                         android:text="@string/generate" />
 
                 </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/generate_keys_progress_bar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:max="0"
+                    android:progress="0" />
+
             </LinearLayout>
 
             <LinearLayout

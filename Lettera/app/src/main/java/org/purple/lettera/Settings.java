@@ -176,7 +176,7 @@ public class Settings
 		return;
 	    }
 	    else
-		content_values.put("email_account", string);
+		content_values.put("out_email", string);
 
 	    string = m_outbound_password.getText().toString();
 
@@ -269,6 +269,7 @@ public class Settings
     private void populate()
     {
 	populate_accounts_spinner();
+	populate_network();
     }
 
     private void populate_accounts_spinner()
@@ -293,6 +294,46 @@ public class Settings
 		(m_context, android.R.layout.simple_spinner_item, array_list);
 
 	    m_accounts_spinner.setAdapter(array_adapter);
+	}
+	catch(Exception exception)
+	{
+	}
+    }
+
+    private void populate_network()
+    {
+	try
+	{
+	    EmailElement email_element = m_database.email_element
+		(m_accounts_spinner.getSelectedItem().toString());
+
+	    if(email_element == null)
+	    {
+		m_delete_on_server_checkbox.setChecked(false);
+		m_inbound_address.setText("");
+		m_inbound_email.setText("");
+		m_inbound_password.setText("");
+		m_inbound_port.setText("993");
+		m_outbound_address.setText("");
+		m_outbound_email.setText("");
+		m_outbound_password.setText("");
+		m_outbound_port.setText("587");
+	    }
+	    else
+	    {
+		m_delete_on_server_checkbox.setChecked
+		    (email_element.m_delete_on_server);
+		m_inbound_address.setText(email_element.m_inbound_address);
+		m_inbound_email.setText(email_element.m_inbound_email);
+		m_inbound_password.setText(email_element.m_inbound_password);
+		m_inbound_port.setText
+		    (String.valueOf(email_element.m_inbound_port));
+		m_outbound_address.setText(email_element.m_outbound_address);
+		m_outbound_email.setText(email_element.m_outbound_email);
+		m_outbound_password.setText(email_element.m_outbound_password);
+		m_outbound_port.setText
+		    (String.valueOf(email_element.m_outbound_port));
+	    }
 	}
 	catch(Exception exception)
 	{
@@ -326,6 +367,17 @@ public class Settings
 			m_dialog.dismiss();
 		    }
 		});
+
+	    if(!m_delete_account_button.hasOnClickListeners())
+		m_delete_account_button.
+		    setOnClickListener(new View.OnClickListener()
+		    {
+			public void onClick(View view)
+			{
+			    if(((Activity) m_context).isFinishing())
+				return;
+			}
+		    });
 
 	    if(!m_display_button.hasOnClickListeners())
 		m_display_button.setOnClickListener(new View.OnClickListener()

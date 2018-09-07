@@ -35,6 +35,8 @@ public class EmailElement
     public String m_outbound_address = "";
     public String m_outbound_email = "";
     public String m_outbound_password = "";
+    public boolean m_delete_on_server = false;
     public int m_inbound_port = 1;
     public int m_outbound_port = 1;
+    public long m_oid = -1;
 }

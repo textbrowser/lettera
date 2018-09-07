@@ -89,6 +89,81 @@ public class Database extends SQLiteOpenHelper
 	return null;
     }
 
+    public EmailElement email_element(String account)
+    {
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT delete_on_server, " + // 0
+		 "email_account, " +           // 1
+		 "in_address, " +              // 2
+		 "in_password, " +             // 3
+		 "in_port, " +                 // 4
+		 "out_address, " +             // 5
+		 "out_email, " +               // 6
+		 "out_password, " +            // 7
+		 "out_port, " +                // 8
+		 "OID " +                      // 9
+		 "FROM email_accounts WHERE email_account = ?",
+		 new String[] {account});
+
+	    if(cursor != null && cursor.moveToFirst())
+	    {
+		EmailElement email_element = new EmailElement();
+
+		for(int i = 0; i < cursor.getColumnCount(); i++)
+		    switch(i)
+		    {
+		    case 0:
+			email_element.m_delete_on_server =
+			    cursor.getInt(i) == 0 ? false : true;
+			break;
+		    case 1:
+			email_element.m_inbound_email = cursor.getString(i);
+			break;
+		    case 2:
+			email_element.m_inbound_address = cursor.getString(i);
+			break;
+		    case 3:
+			email_element.m_inbound_password = cursor.getString(i);
+			break;
+		    case 4:
+			email_element.m_inbound_port = cursor.getInt(i);
+			break;
+		    case 5:
+			email_element.m_outbound_address = cursor.getString(i);
+			break;
+		    case 6:
+			email_element.m_outbound_email = cursor.getString(i);
+			break;
+		    case 7:
+			email_element.m_outbound_password = cursor.getString(i);
+			break;
+		    case 8:
+			email_element.m_outbound_port = cursor.getInt(i);
+			break;
+		    case 9:
+			email_element.m_oid = cursor.getLong(i);
+			break;
+		    }
+
+		return email_element;
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return null;
+    }
+
     public String save_email(ContentValues content_values)
     {
 	if(content_values == null || content_values.size() == 0)
