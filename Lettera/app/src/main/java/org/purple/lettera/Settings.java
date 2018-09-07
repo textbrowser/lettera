@@ -37,6 +37,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -214,7 +216,20 @@ public class Settings
 		    (m_context, "Failure (" + error + ")!");
 	    }
 	    else
+	    {
+		String selected_item = m_accounts_spinner.
+		    getSelectedItem().toString();
+		int selected_position = m_accounts_spinner.
+		    getSelectedItemPosition();
+
 		populate_accounts_spinner();
+
+		if(m_accounts_spinner.getItemAtPosition(selected_position).
+		   toString().equals(selected_item))
+		    m_accounts_spinner.setSelection(selected_position);
+		else
+		    populate_network();
+	    }
 	}
 	catch(Exception exception)
 	{
@@ -350,6 +365,24 @@ public class Settings
     {
 	try
 	{
+	    m_accounts_spinner.setOnItemSelectedListener
+		(new OnItemSelectedListener()
+		{
+		    @Override
+		    public void onItemSelected(AdapterView<?> parent,
+					       View view,
+					       int position,
+					       long id)
+		    {
+			populate_network();
+		    }
+
+		    @Override
+		    public void onNothingSelected(AdapterView<?> parent)
+		    {
+		    }
+		});
+
 	    if(!m_apply_button.hasOnClickListeners())
 		m_apply_button.setOnClickListener(new View.OnClickListener()
 	        {
@@ -454,19 +487,15 @@ public class Settings
 			if(((Activity) m_context).isFinishing())
 			    return;
 
-			m_view.findViewById(R.id.display_button).
-			    setBackgroundResource(R.drawable.default_display);
-			m_view.findViewById(R.id.display_layout).setVisibility
-			    (View.GONE);
-			m_view.findViewById(R.id.network_button).
-			    setBackgroundResource(R.drawable.default_network);
-			m_view.findViewById(R.id.network_layout).setVisibility
-			    (View.GONE);
-			m_view.findViewById(R.id.privacy_button).
-			    setBackgroundResource
+			m_display_button.setBackgroundResource
+			    (R.drawable.default_display);
+			m_display_layout.setVisibility(View.GONE);
+			m_network_button.setBackgroundResource
+			    (R.drawable.default_network);
+			m_network_layout.setVisibility(View.GONE);
+			m_privacy_button.setBackgroundResource
 			    (R.drawable.default_privacy_pressed);
-			m_view.findViewById(R.id.privacy_layout).setVisibility
-			    (View.VISIBLE);
+			m_privacy_layout.setVisibility(View.VISIBLE);
 		    }
 		});
 
@@ -493,10 +522,10 @@ public class Settings
 	** Set Display as the primary section.
 	*/
 
-	m_view.findViewById(R.id.display_button).setBackgroundResource
+	m_display_button.setBackgroundResource
 	    (R.drawable.default_display_pressed);
-	m_view.findViewById(R.id.network_layout).setVisibility(View.GONE);
-	m_view.findViewById(R.id.privacy_layout).setVisibility(View.GONE);
+	m_network_layout.setVisibility(View.GONE);
+	m_privacy_layout.setVisibility(View.GONE);
 
 	ArrayAdapter<String> array_adapter;
 	Spinner spinner = null;
