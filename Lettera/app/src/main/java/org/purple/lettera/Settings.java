@@ -85,7 +85,7 @@ public class Settings
 		int port = Integer.parseInt
 		    (dest.toString() + source.toString());
 
-		if(port >= 0 && port <= 65535)
+		if(port >= 1 && port <= 65535)
 		    return null;
 	    }
 	    catch(Exception exception)
@@ -111,6 +111,8 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_inbound_address.requestFocus();
+		m_inbound_address.setText("");
+		show_network_page();
 		return;
 	    }
 	    else
@@ -121,6 +123,8 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_inbound_email.requestFocus();
+		m_inbound_email.setText("");
+		show_network_page();
 		return;
 	    }
 	    else
@@ -131,6 +135,8 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_inbound_password.requestFocus();
+		m_inbound_password.setText("");
+		show_network_page();
 		return;
 	    }
 	    else
@@ -141,6 +147,7 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_inbound_port.requestFocus();
+		show_network_page();
 		return;
 	    }
 	    else
@@ -151,6 +158,8 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_outbound_address.requestFocus();
+		m_outbound_address.setText("");
+		show_network_page();
 		return;
 	    }
 	    else
@@ -161,6 +170,8 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_outbound_email.requestFocus();
+		m_outbound_email.setText("");
+		show_network_page();
 		return;
 	    }
 	    else
@@ -171,6 +182,8 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_outbound_password.requestFocus();
+		m_outbound_password.setText("");
+		show_network_page();
 		return;
 	    }
 	    else
@@ -181,6 +194,8 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_outbound_port.requestFocus();
+		m_outbound_port.setText("");
+		show_network_page();
 		return;
 	    }
 	    else
@@ -479,6 +494,7 @@ public class Settings
 	    try
 	    {
 		m_dialog.show();
+		m_inbound_address.requestFocus();
 		populate();
 	    }
 	    catch(Exception exception)
@@ -518,6 +534,7 @@ public class Settings
 	    m_dialog.setTitle("Settings");
 	    m_dialog.show();
 	    m_dialog.getWindow().setAttributes(layout_params); // After show().
+	    m_inbound_address.requestFocus();
 	    populate();
 	}
 	catch(Exception exception)
