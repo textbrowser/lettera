@@ -175,7 +175,27 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    m_db.insertOrThrow("email_accounts", null, content_values);
+	    m_db.execSQL
+		("REPLACE INTO email_accounts (" +
+		 "delete_on_server, " +
+		 "email_account, " +
+		 "in_address, " +
+		 "in_password, " +
+		 "in_port, " +
+		 "out_address, " +
+		 "out_email, " +
+		 "out_password, " +
+		 "out_port) VALUES " +
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		 new String[] {content_values.getAsString("delete_on_server"),
+			       content_values.getAsString("email_account"),
+			       content_values.getAsString("in_address"),
+			       content_values.getAsString("in_password"),
+			       content_values.getAsString("in_port"),
+			       content_values.getAsString("out_address"),
+			       content_values.getAsString("out_email"),
+			       content_values.getAsString("out_password"),
+			       content_values.getAsString("out_port")});
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
@@ -188,6 +208,35 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	return "";
+    }
+
+    public boolean delete_email_account(String account)
+    {
+	if(m_db == null)
+	    return false;
+
+	boolean ok = false;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    ok = m_db.delete
+		("email_accounts",
+		 "email_account = ?",
+		 new String[] {account}) > 0;
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	    ok = false;
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+
+	return ok;
     }
 
     public static synchronized Database getInstance()

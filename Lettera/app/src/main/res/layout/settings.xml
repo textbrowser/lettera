@@ -173,6 +173,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0" />
 
+                    <CheckBox
+                        android:id="@+id/delete_account_verify_check_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
                     <Button
                         android:id="@+id/delete_account_button"
                         style="@style/Widget.AppCompat.Button.Colored"

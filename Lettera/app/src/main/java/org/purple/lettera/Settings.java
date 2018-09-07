@@ -40,6 +40,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class Settings
     private Button m_privacy_button = null;
     private Button m_x_button = null;
     private CheckBox m_delete_on_server_checkbox = null;
+    private CheckBox m_delete_account_verify_check_box = null;
     private Context m_context = null;
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
@@ -106,7 +108,8 @@ public class Settings
 
 	    content_values.put
 		("delete_on_server",
-		 m_delete_on_server_checkbox.isChecked() ? 1 : 0);
+		 String.
+		 valueOf(m_delete_on_server_checkbox.isChecked() ? 1 : 0));
 	    string = m_inbound_address.getText().toString().trim();
 
 	    if(string.isEmpty())
@@ -229,8 +232,10 @@ public class Settings
 		(R.id.accounts_spinner);
 	    m_apply_button = (Button) m_view.findViewById(R.id.apply_button);
 	    m_close_button = (Button) m_view.findViewById(R.id.close_button);
-	    m_delete_account_button = m_view.findViewById
+	    m_delete_account_button = (Button) m_view.findViewById
 		(R.id.delete_account_button);
+	    m_delete_account_verify_check_box = (CheckBox)
+		m_view.findViewById(R.id.delete_account_verify_check_box);
 	    m_delete_on_server_checkbox = (CheckBox)
 		m_view.findViewById(R.id.delete_on_server_checkbox);
 	    m_display_button = (Button) m_view.findViewById
@@ -288,7 +293,8 @@ public class Settings
 		m_delete_account_button.setEnabled(false);
 	    }
 	    else
-		m_delete_account_button.setEnabled(true);
+		m_delete_account_button.setEnabled
+		    (m_delete_account_verify_check_box.isChecked());
 
 	    ArrayAdapter<String> array_adapter = new ArrayAdapter<>
 		(m_context, android.R.layout.simple_spinner_item, array_list);
@@ -376,8 +382,33 @@ public class Settings
 			{
 			    if(((Activity) m_context).isFinishing())
 				return;
+
+			    if(m_database.
+			       delete_email_account(m_accounts_spinner.
+						    getSelectedItem().
+						    toString()))
+			    {
+				m_delete_account_verify_check_box.setChecked
+				    (false);
+				populate_accounts_spinner();
+				populate_network();
+			    }
 			}
 		    });
+
+	    m_delete_account_verify_check_box.setOnCheckedChangeListener
+		(new CompoundButton.OnCheckedChangeListener()
+		{
+		    @Override
+		    public void onCheckedChanged
+			(CompoundButton buttonView, boolean isChecked)
+		    {
+			m_delete_account_button.setEnabled
+			    (isChecked &&
+			     !m_accounts_spinner.
+			     getSelectedItem().equals("(Empty)"));
+		    }
+		});
 
 	    if(!m_display_button.hasOnClickListeners())
 		m_display_button.setOnClickListener(new View.OnClickListener()
