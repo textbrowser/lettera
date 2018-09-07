@@ -325,6 +325,11 @@
                 android:layout_marginStart="15dp"
                 android:orientation="vertical">
 
+                <ProgressBar
+                    android:id="@+id/generate_keys_progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

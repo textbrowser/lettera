@@ -69,6 +69,7 @@ public class Settings
     private View m_network_layout = null;
     private View m_parent = null;
     private View m_privacy_layout = null;
+    private View m_generate_keys_progress_bar = null;
     private View m_view = null;
     private final Database m_database = Database.getInstance();
     private final static InputFilter s_port_filter = new InputFilter()
@@ -235,6 +236,8 @@ public class Settings
 	    m_display_button = (Button) m_view.findViewById
 		(R.id.display_button);
 	    m_display_layout = m_view.findViewById(R.id.display_layout);
+	    m_generate_keys_progress_bar = m_view.findViewById
+		(R.id.generate_keys_progress_bar);
 	    m_inbound_address = (TextView) m_view.findViewById
 		(R.id.inbound_address);
 	    m_inbound_email = (TextView) m_view.findViewById
