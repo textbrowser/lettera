@@ -55,6 +55,7 @@ public class Settings
     private Button m_display_button = null;
     private Button m_network_button = null;
     private Button m_privacy_button = null;
+    private Button m_test_inbound_button = null;
     private Button m_x_button = null;
     private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_delete_account_verify_check_box = null;
@@ -212,8 +213,8 @@ public class Settings
 	    if(!error.isEmpty())
 	    {
 		show_network_page();
-		Windows.show_error_dialog
-		    (m_context, "Failure (" + error + ")!");
+		Windows.show_dialog
+		    (m_context, "Failure (" + error + ")!", "Error");
 	    }
 	    else
 	    {
@@ -234,8 +235,10 @@ public class Settings
 	catch(Exception exception)
 	{
 	    show_network_page();
-	    Windows.show_error_dialog
-		(m_context, "Failure (" + exception.getMessage() + ")!");
+	    Windows.show_dialog
+		(m_context,
+		 "Failure (" + exception.getMessage() + ")!",
+		 "Error");
 	}
     }
 
@@ -279,6 +282,8 @@ public class Settings
 	    m_privacy_button = (Button) m_view.findViewById
 		(R.id.privacy_button);
 	    m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
+	    m_test_inbound_button = (Button) m_view.findViewById
+		(R.id.test_inbound_button);
 	    m_x_button = (Button) m_view.findViewById(R.id.x_button);
 	}
 	catch(Exception exception)
@@ -498,6 +503,17 @@ public class Settings
 			m_privacy_layout.setVisibility(View.VISIBLE);
 		    }
 		});
+
+	    if(!m_test_inbound_button.hasOnClickListeners())
+		m_test_inbound_button.
+		    setOnClickListener(new View.OnClickListener()
+		    {
+			public void onClick(View view)
+			{
+			    if(((Activity) m_context).isFinishing())
+				return;
+			}
+		    });
 
 	    if(!m_x_button.hasOnClickListeners())
 		m_x_button.setOnClickListener(new View.OnClickListener()

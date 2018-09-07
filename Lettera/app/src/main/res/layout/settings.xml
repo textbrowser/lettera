@@ -256,6 +256,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/test" />
+
+                    <ProgressBar
+                        android:id="@+id/test_inbound_network_progress_bar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -408,9 +415,7 @@
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    android:max="0"
-                    android:progress="0" />
+                    android:indeterminate="true" />
 
             </LinearLayout>
 

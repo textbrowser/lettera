@@ -34,7 +34,7 @@ import android.content.DialogInterface;
 
 public abstract class Windows
 {
-    public static void show_error_dialog(Context context, String error)
+    public static void show_dialog(Context context, String text, String title)
     {
 	try
 	{
@@ -54,8 +54,8 @@ public abstract class Windows
 			 dialog.dismiss();
 		     }
 		 });
-	    alert_dialog.setMessage(error);
-	    alert_dialog.setTitle("Error");
+	    alert_dialog.setMessage(text);
+	    alert_dialog.setTitle(title);
 	    alert_dialog.show();
 	}
 	catch(Exception exception)
