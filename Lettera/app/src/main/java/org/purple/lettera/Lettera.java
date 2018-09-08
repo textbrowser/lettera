@@ -28,6 +28,7 @@
 package org.purple.lettera;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -52,10 +53,16 @@ public class Lettera extends AppCompatActivity
 	        {
 		    public void onClick(View view)
 		    {
-			if(Lettera.this.isFinishing() || m_settings == null)
-			    return;
+			try
+			{
+			    if(Lettera.this.isFinishing() || m_settings == null)
+				return;
 
-			m_settings.show();
+			    m_settings.show();
+			}
+			catch(Exception exception)
+			{
+			}
 		    }
 		});
 	}
@@ -68,7 +75,15 @@ public class Lettera extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-	m_database = Database.getInstance(getApplicationContext());
+
+	/*
+	** JavaMail may open sockets on the main thread.
+	*/
+
+	StrictMode.ThreadPolicy policy = new
+	    StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+	StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_lettera);
 
 	/*
@@ -76,8 +91,8 @@ public class Lettera extends AppCompatActivity
 	*/
 
 	initialize_widget_members();
-	m_settings = new Settings
-	    (Lettera.this, findViewById(R.id.main_layout));
+	m_database = Database.getInstance(getApplicationContext());
+	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	prepare_button_listeners();
     }
 }

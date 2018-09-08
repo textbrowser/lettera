@@ -46,6 +46,9 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Properties;
+import javax.mail.Session;
+import javax.mail.Store;
 
 public class Settings
 {
@@ -379,7 +382,16 @@ public class Settings
 					       int position,
 					       long id)
 		    {
-			populate_network();
+			try
+			{
+			    if(((Activity) m_context).isFinishing())
+				return;
+
+			    populate_network();
+			}
+			catch(Exception exception)
+			{
+			}
 		    }
 
 		    @Override
@@ -393,10 +405,16 @@ public class Settings
 	        {
 		    public void onClick(View view)
 		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
+			try
+			{
+			    if(((Activity) m_context).isFinishing())
+				return;
 
-			apply_settings();
+			    apply_settings();
+			}
+			catch(Exception exception)
+			{
+			}
 		    }
 		});
 
@@ -405,10 +423,17 @@ public class Settings
 		{
 		    public void onClick(View view)
 		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
+			try
+			{
+			    if(((Activity) m_context).isFinishing())
+				return;
 
-			m_dialog.dismiss();
+			    if(m_dialog != null)
+				m_dialog.dismiss();
+			}
+			catch(Exception exception)
+			{
+			}
 		    }
 		});
 
@@ -512,6 +537,8 @@ public class Settings
 			{
 			    if(((Activity) m_context).isFinishing())
 				return;
+
+			    test_inbound_server();
 			}
 		    });
 
@@ -520,10 +547,17 @@ public class Settings
 		{
 		    public void onClick(View view)
 		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
+			try
+			{
+			    if(((Activity) m_context).isFinishing())
+				return;
 
-			m_dialog.dismiss();
+			    if(m_dialog != null)
+				m_dialog.dismiss();
+			}
+			catch(Exception exception)
+			{
+			}
 		    }
 		});
 	}
@@ -610,6 +644,45 @@ public class Settings
 	}
     }
 
+    private void test_inbound_server()
+    {
+	Store store = null;
+
+	try
+	{
+	    /*
+	    ** https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html
+	    */
+
+	    Properties properties = new Properties();
+
+	    properties.setProperty("mail.imaps.connectiontimeout", "10000");
+	    properties.setProperty("mail.imaps.ssl.enable", "true");
+	    properties.setProperty("mail.imaps.timeout", "10000");
+
+	    Session session = Session.getInstance(properties);
+
+	    store = session.getStore("imaps");
+	    store.connect
+		(m_inbound_address.getText().toString(),
+		 Integer.valueOf(m_inbound_port.getText().toString()),
+		 m_inbound_email.getText().toString(),
+		 m_inbound_password.getText().toString());
+	    Windows.show_dialog
+		(m_context, "Connected to IMAP server!", "Success");
+	}
+	catch(Exception exception)
+	{
+	    Windows.show_dialog
+		(m_context, "IMAP connection failure!", "Error");
+	}
+	finally
+	{
+	    if(store != null)
+		store.close();
+	}
+    }
+
     public Settings(Context context, View parent)
     {
 	m_context = context;
@@ -670,8 +743,6 @@ public class Settings
 	}
 	catch(Exception exception)
 	{
-	    m_dialog = null;
-	    m_view = null;
 	}
     }
 }
