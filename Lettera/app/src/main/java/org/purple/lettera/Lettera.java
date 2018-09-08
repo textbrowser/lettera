@@ -46,29 +46,18 @@ public class Lettera extends AppCompatActivity
 
     private void prepare_button_listeners()
     {
-	try
-	{
-	    if(!m_settings_button.hasOnClickListeners())
-		m_settings_button.setOnClickListener(new View.OnClickListener()
-	        {
-		    public void onClick(View view)
-		    {
-			try
-			{
-			    if(Lettera.this.isFinishing() || m_settings == null)
-				return;
+	if(m_settings_button != null && !m_settings_button.
+	                                 hasOnClickListeners())
+	    m_settings_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing() || m_settings == null)
+			return;
 
-			    m_settings.show();
-			}
-			catch(Exception exception)
-			{
-			}
-		    }
-		});
-	}
-	catch(Exception exception)
-	{
-	}
+		    m_settings.show();
+		}
+	    });
     }
 
     @Override

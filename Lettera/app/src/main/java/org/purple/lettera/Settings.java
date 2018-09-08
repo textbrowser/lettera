@@ -52,6 +52,86 @@ import javax.mail.Store;
 
 public class Settings
 {
+    private class IMAPTest implements Runnable
+    {
+	private Store m_store = null;
+	private String m_email = "";
+	private String m_host = "";
+	private String m_password = "";
+	private boolean m_error = true;
+	private int m_port = -1;
+
+	public IMAPTest(String email, String host, String password, String port)
+	{
+	    m_email = email;
+	    m_host = host;
+	    m_password = password;
+	    m_port = Integer.valueOf(port);
+	}
+
+	@Override
+	public void run()
+	{
+	    try
+	    {
+		/*
+		** https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html
+		*/
+
+		Properties properties = new Properties();
+
+		properties.setProperty("mail.imaps.connectiontimeout", "10000");
+		properties.setProperty("mail.imaps.ssl.enable", "true");
+		properties.setProperty("mail.imaps.timeout", "10000");
+
+		Session session = Session.getInstance(properties);
+
+		m_store = session.getStore("imaps");
+		m_store.connect(m_host, m_port, m_email, m_password);
+		m_error = false;
+	    }
+	    catch(Exception exception)
+	    {
+		m_error = true;
+	    }
+	    finally
+	    {
+		try
+		{
+		    if(m_store != null)
+			m_store.close();
+		}
+		catch(Exception exception)
+		{
+		}
+	    }
+
+	    try
+	    {
+		((Activity) m_context).runOnUiThread(new Runnable()
+		{
+		    @Override
+		    public void run()
+		    {
+			if(m_test_inbound_network_progress_bar != null)
+			    m_test_inbound_network_progress_bar.
+				setVisibility(View.GONE);
+
+			if(m_error)
+			    Windows.show_dialog
+				(m_context, "IMAP test failed!", "Error");
+			else
+			    Windows.show_dialog
+				(m_context, "IMAP test succeeded!", "Success");
+		    }
+		});
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	}
+    }
+
     private Button m_apply_button = null;
     private Button m_close_button = null;
     private Button m_delete_account_button = null;
@@ -78,6 +158,7 @@ public class Settings
     private View m_parent = null;
     private View m_privacy_layout = null;
     private View m_generate_keys_progress_bar = null;
+    private View m_test_inbound_network_progress_bar = null;
     private View m_view = null;
     private final Database m_database = Database.getInstance();
     private final static InputFilter s_port_filter = new InputFilter()
@@ -287,6 +368,8 @@ public class Settings
 	    m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
 	    m_test_inbound_button = (Button) m_view.findViewById
 		(R.id.test_inbound_button);
+	    m_test_inbound_network_progress_bar = m_view.findViewById
+		(R.id.test_inbound_network_progress_bar);
 	    m_x_button = (Button) m_view.findViewById(R.id.x_button);
 	}
 	catch(Exception exception)
@@ -302,6 +385,9 @@ public class Settings
 
     private void populate_accounts_spinner()
     {
+	if(m_context == null)
+	    return;
+
 	try
 	{
 	    if(((Activity) m_context).isFinishing())
@@ -371,6 +457,9 @@ public class Settings
 
     private void prepare_listeners()
     {
+	if(m_context == null)
+	    return;
+
 	try
 	{
 	    m_accounts_spinner.setOnItemSelectedListener
@@ -382,16 +471,10 @@ public class Settings
 					       int position,
 					       long id)
 		    {
-			try
-			{
-			    if(((Activity) m_context).isFinishing())
-				return;
+			if(((Activity) m_context).isFinishing())
+			    return;
 
 			    populate_network();
-			}
-			catch(Exception exception)
-			{
-			}
 		    }
 
 		    @Override
@@ -405,16 +488,10 @@ public class Settings
 	        {
 		    public void onClick(View view)
 		    {
-			try
-			{
-			    if(((Activity) m_context).isFinishing())
-				return;
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-			    apply_settings();
-			}
-			catch(Exception exception)
-			{
-			}
+			apply_settings();
 		    }
 		});
 
@@ -423,17 +500,11 @@ public class Settings
 		{
 		    public void onClick(View view)
 		    {
-			try
-			{
-			    if(((Activity) m_context).isFinishing())
-				return;
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-			    if(m_dialog != null)
-				m_dialog.dismiss();
-			}
-			catch(Exception exception)
-			{
-			}
+			if(m_dialog != null)
+			    m_dialog.dismiss();
 		    }
 		});
 
@@ -446,15 +517,21 @@ public class Settings
 			    if(((Activity) m_context).isFinishing())
 				return;
 
-			    if(m_database.
-			       delete_email_account(m_accounts_spinner.
-						    getSelectedItem().
-						    toString()))
+			    try
 			    {
-				m_delete_account_verify_check_box.setChecked
-				    (false);
-				populate_accounts_spinner();
-				populate_network();
+				if(m_database.
+				   delete_email_account(m_accounts_spinner.
+							getSelectedItem().
+							toString()))
+				{
+				    m_delete_account_verify_check_box.
+					setChecked(false);
+				    populate_accounts_spinner();
+				    populate_network();
+				}
+			    }
+			    catch(Exception exception)
+			    {
 			    }
 			}
 		    });
@@ -466,10 +543,16 @@ public class Settings
 		    public void onCheckedChanged
 			(CompoundButton buttonView, boolean isChecked)
 		    {
-			m_delete_account_button.setEnabled
-			    (isChecked &&
-			     !m_accounts_spinner.
-			     getSelectedItem().equals("(Empty)"));
+			try
+			{
+			    m_delete_account_button.setEnabled
+				(isChecked &&
+				 !m_accounts_spinner.
+				 getSelectedItem().equals("(Empty)"));
+			}
+			catch(Exception exception)
+			{
+			}
 		    }
 		});
 
@@ -547,17 +630,11 @@ public class Settings
 		{
 		    public void onClick(View view)
 		    {
-			try
-			{
-			    if(((Activity) m_context).isFinishing())
-				return;
+			if(((Activity) m_context).isFinishing())
+			    return;
 
-			    if(m_dialog != null)
-				m_dialog.dismiss();
-			}
-			catch(Exception exception)
-			{
-			}
+			if(m_dialog != null)
+			    m_dialog.dismiss();
 		    }
 		});
 	}
@@ -572,59 +649,66 @@ public class Settings
 	** Set Display as the primary section.
 	*/
 
-	m_display_button.setBackgroundResource
-	    (R.drawable.default_display_pressed);
-	m_network_layout.setVisibility(View.GONE);
-	m_privacy_layout.setVisibility(View.GONE);
+	try
+	{
+	    m_display_button.setBackgroundResource
+		(R.drawable.default_display_pressed);
+	    m_network_layout.setVisibility(View.GONE);
+	    m_privacy_layout.setVisibility(View.GONE);
 
-	ArrayAdapter<String> array_adapter;
-	Spinner spinner = null;
-	String array[] = null;
+	    ArrayAdapter<String> array_adapter;
+	    Spinner spinner = null;
+	    String array[] = null;
 
-	/*
-	** Display
-	*/
+	    /*
+	    ** Display
+	    */
 
-	array = new String[] {"Default"};
-	array_adapter = new ArrayAdapter<>
-	    (m_context, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
-	spinner.setAdapter(array_adapter);
-	array = new String[] {"Default"};
-	array_adapter = new ArrayAdapter<>
-	    (m_context, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById(R.id.icon_theme_spinner);
-	spinner.setAdapter(array_adapter);
+	    array = new String[] {"Default"};
+	    array_adapter = new ArrayAdapter<>
+		(m_context, android.R.layout.simple_spinner_item, array);
+	    spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
+	    spinner.setAdapter(array_adapter);
+	    array = new String[] {"Default"};
+	    array_adapter = new ArrayAdapter<>
+		(m_context, android.R.layout.simple_spinner_item, array);
+	    spinner = (Spinner) m_view.findViewById(R.id.icon_theme_spinner);
+	    spinner.setAdapter(array_adapter);
 
-	/*
-	** Network
-	*/
+	    /*
+	    ** Network
+	    */
 
-	((TextView) m_view.findViewById(R.id.inbound_port)).setFilters
-	    (new InputFilter[] {s_port_filter});
-	((TextView) m_view.findViewById(R.id.outbound_port)).setFilters
-	    (new InputFilter[] {s_port_filter});
-	array = new String[] {"(Empty)"};
-	array_adapter = new ArrayAdapter<>
-	    (m_context, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById(R.id.accounts_spinner);
-	spinner.setAdapter(array_adapter);
-	m_view.findViewById(R.id.delete_account_button).setEnabled(false);
+	    ((TextView) m_view.findViewById(R.id.inbound_port)).setFilters
+		(new InputFilter[] {s_port_filter});
+	    ((TextView) m_view.findViewById(R.id.outbound_port)).setFilters
+		(new InputFilter[] {s_port_filter});
+	    array = new String[] {"(Empty)"};
+	    array_adapter = new ArrayAdapter<>
+		(m_context, android.R.layout.simple_spinner_item, array);
+	    spinner = (Spinner) m_view.findViewById(R.id.accounts_spinner);
+	    spinner.setAdapter(array_adapter);
+	    m_view.findViewById(R.id.delete_account_button).setEnabled(false);
 
-	/*
-	** Privacy
-	*/
+	    /*
+	    ** Privacy
+	    */
 
-	array = new String[] {"McEliece", "RSA"};
-	array_adapter = new ArrayAdapter<>
-	    (m_context, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById(R.id.encryption_key_spinner);
-	spinner.setAdapter(array_adapter);
-	array = new String[] {"RSA"};
-	array_adapter = new ArrayAdapter<>
-	    (m_context, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById(R.id.signature_key_spinner);
-	spinner.setAdapter(array_adapter);
+	    array = new String[] {"McEliece", "RSA"};
+	    array_adapter = new ArrayAdapter<>
+		(m_context, android.R.layout.simple_spinner_item, array);
+	    spinner = (Spinner) m_view.findViewById
+		(R.id.encryption_key_spinner);
+	    spinner.setAdapter(array_adapter);
+	    array = new String[] {"RSA"};
+	    array_adapter = new ArrayAdapter<>
+		(m_context, android.R.layout.simple_spinner_item, array);
+	    spinner = (Spinner) m_view.findViewById(R.id.signature_key_spinner);
+	    spinner.setAdapter(array_adapter);
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     private void show_network_page()
@@ -646,40 +730,21 @@ public class Settings
 
     private void test_inbound_server()
     {
-	Store store = null;
+	if(m_test_inbound_network_progress_bar != null)
+	    m_test_inbound_network_progress_bar.setVisibility(View.VISIBLE);
 
 	try
 	{
-	    /*
-	    ** https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html
-	    */
+	    Thread thread = new Thread
+		(new IMAPTest(m_inbound_email.getText().toString(),
+			      m_inbound_address.getText().toString(),
+			      m_inbound_password.getText().toString(),
+			      m_inbound_port.getText().toString()));
 
-	    Properties properties = new Properties();
-
-	    properties.setProperty("mail.imaps.connectiontimeout", "10000");
-	    properties.setProperty("mail.imaps.ssl.enable", "true");
-	    properties.setProperty("mail.imaps.timeout", "10000");
-
-	    Session session = Session.getInstance(properties);
-
-	    store = session.getStore("imaps");
-	    store.connect
-		(m_inbound_address.getText().toString(),
-		 Integer.valueOf(m_inbound_port.getText().toString()),
-		 m_inbound_email.getText().toString(),
-		 m_inbound_password.getText().toString());
-	    Windows.show_dialog
-		(m_context, "Connected to IMAP server!", "Success");
+	    thread.start();
 	}
 	catch(Exception exception)
 	{
-	    Windows.show_dialog
-		(m_context, "IMAP connection failure!", "Error");
-	}
-	finally
-	{
-	    if(store != null)
-		store.close();
 	}
     }
 

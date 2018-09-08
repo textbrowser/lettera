@@ -36,6 +36,13 @@ public abstract class Windows
 {
     public static void show_dialog(Context context, String text, String title)
     {
+	if(context == null ||
+	   text == null ||
+	   text.trim().isEmpty() ||
+	   title == null ||
+	   title.trim().isEmpty())
+	    return;
+
 	try
 	{
 	    if(((Activity) context).isFinishing())
@@ -46,7 +53,7 @@ public abstract class Windows
 
 	    alert_dialog.setButton
 		(AlertDialog.BUTTON_NEUTRAL,
-		 "Dismiss",
+		 "Close",
 		 new DialogInterface.OnClickListener()
 		 {
 		     public void onClick(DialogInterface dialog, int which)
