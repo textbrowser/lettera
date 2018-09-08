@@ -287,8 +287,31 @@ public class Settings
 	try
 	{
 	    ContentValues content_values = new ContentValues();
+	    String error = "";
 	    String string = "";
 
+	    /*
+	    ** Display
+	    */
+
+	    content_values.put("key", "icon_theme");
+	    content_values.put
+		("value", m_icon_theme_spinner.getSelectedItem().toString());
+	    error = m_database.save_setting(content_values);
+
+	    if(!error.isEmpty())
+	    {
+		show_display_page();
+		Windows.show_dialog
+		    (m_context, "Failure (" + error + ")!", "Error");
+		return;
+	    }
+
+	    /*
+	    ** Network
+	    */
+
+	    content_values.clear();
 	    content_values.put
 		("delete_on_server",
 		 String.
@@ -388,7 +411,7 @@ public class Settings
 	    else
 		content_values.put("out_port", string);
 
-	    String error = m_database.save_email(content_values).trim();
+	    error = m_database.save_email(content_values).trim();
 
 	    if(!error.isEmpty())
 	    {
@@ -664,10 +687,7 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    m_current_page = PageEnumerator.DISPLAY_PAGE;
-		    m_display_layout.setVisibility(View.VISIBLE);
-		    m_network_layout.setVisibility(View.GONE);
-		    m_privacy_layout.setVisibility(View.GONE);
+		    show_display_page();
 		    prepare_icons();
 		}
 	    });
@@ -804,6 +824,17 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	spinner = (Spinner) m_view.findViewById(R.id.signature_key_spinner);
 	spinner.setAdapter(array_adapter);
+    }
+
+    private void show_display_page()
+    {
+	m_current_page = PageEnumerator.DISPLAY_PAGE;
+	m_display_button.setBackgroundResource(icon("display_pressed"));
+	m_display_layout.setVisibility(View.VISIBLE);
+	m_network_button.setBackgroundResource(icon("network"));
+	m_network_layout.setVisibility(View.GONE);
+	m_privacy_button.setBackgroundResource(icon("privacy"));
+	m_privacy_layout.setVisibility(View.GONE);
     }
 
     private void show_network_page()

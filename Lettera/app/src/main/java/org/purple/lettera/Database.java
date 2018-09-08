@@ -38,7 +38,7 @@ public class Database extends SQLiteOpenHelper
 {
     private SQLiteDatabase m_db = null;
     private final static String DATABASE_NAME = "lettera.db";
-    private final static int DATABASE_VERSION = 1;
+    private final static int DATABASE_VERSION = 2;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -167,9 +167,9 @@ public class Database extends SQLiteOpenHelper
     public String save_email(ContentValues content_values)
     {
 	if(content_values == null || content_values.size() == 0)
-	    return "empty container";
+	    return "empty container on save_email()";
 	else if(m_db == null)
-	    return "m_db is null";
+	    return "m_db is null on save_email()";
 
 	m_db.beginTransactionNonExclusive();
 
@@ -196,6 +196,35 @@ public class Database extends SQLiteOpenHelper
 			       content_values.getAsString("out_email"),
 			       content_values.getAsString("out_password"),
 			       content_values.getAsString("out_port")});
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	    return exception.getMessage();
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+
+	return "";
+    }
+
+    public String save_setting(ContentValues content_values)
+    {
+	if(content_values == null || content_values.size() == 0)
+	    return "empty container on save_setting()";
+	else if(m_db == null)
+	    return "m_db is null on save_setting()";
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    m_db.execSQL
+		("REPLACE INTO settings (key, value) VALUES (?, ?)",
+		 new String[] {content_values.getAsString("key"),
+			       content_values.getAsString("value")});
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
@@ -295,6 +324,18 @@ public class Database extends SQLiteOpenHelper
 	    "out_email TEXT NOT NULL, " +
 	    "out_password TEXT NOT NULL, " +
 	    "out_port INTEGER NOT NULL)";
+
+	try
+	{
+	    db.execSQL(str);
+	}
+	catch(Exception exception)
+	{
+	}
+
+	str = "CREATE TABLE IF NOT EXISTS settings (" +
+	    "key TEXT NOT NULL PRIMARY KEY, " +
+	    "value TEXT NOT NULL)";
 
 	try
 	{
