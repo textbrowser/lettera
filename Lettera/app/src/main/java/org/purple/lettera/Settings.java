@@ -665,12 +665,9 @@ public class Settings
 			return;
 
 		    m_current_page = PageEnumerator.DISPLAY_PAGE;
-		    m_view.findViewById(R.id.display_layout).setVisibility
-			(View.VISIBLE);
-		    m_view.findViewById(R.id.network_layout).setVisibility
-			(View.GONE);
-		    m_view.findViewById(R.id.privacy_layout).setVisibility
-			(View.GONE);
+		    m_display_layout.setVisibility(View.VISIBLE);
+		    m_network_layout.setVisibility(View.GONE);
+		    m_privacy_layout.setVisibility(View.GONE);
 		    prepare_icons();
 		}
 	    });
