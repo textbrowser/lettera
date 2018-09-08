@@ -52,6 +52,13 @@ import javax.mail.Store;
 
 public class Settings
 {
+    private abstract class PageEnumerator
+    {
+	public final static int DISPLAY_PAGE = 0;
+	public final static int NETWORK_PAGE = 1;
+	public final static int PRIVACY_PAGE = 2;
+    }
+
     private class IMAPTest implements Runnable
     {
 	private Store m_store = null;
@@ -145,6 +152,7 @@ public class Settings
     private Context m_context = null;
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
+    private Spinner m_icon_theme_spinner = null;
     private TextView m_inbound_address = null;
     private TextView m_inbound_email = null;
     private TextView m_inbound_password = null;
@@ -185,6 +193,94 @@ public class Settings
 	    return "";
 	}
     };
+    private int m_current_page = PageEnumerator.DISPLAY_PAGE;
+
+    private int icon(String name)
+    {
+	if(m_icon_theme_spinner == null || name == null)
+	    return R.drawable.lettera;
+
+	name = m_icon_theme_spinner.
+	    getSelectedItem().toString().toLowerCase() + "_" + name;
+
+	switch(name)
+	{
+	case "default_compose":
+	    return R.drawable.default_compose;
+	case "default_contacts":
+	    return R.drawable.default_contacts;
+	case "default_display":
+	    return R.drawable.default_display;
+	case "default_display_pressed":
+	    return R.drawable.default_display_pressed;
+	case "default_download":
+	    return R.drawable.default_download;
+	case "default_messaging":
+	    return R.drawable.default_messaging;
+	case "default_network":
+	    return R.drawable.default_network;
+	case "default_network_pressed":
+	    return R.drawable.default_network_pressed;
+	case "default_privacy":
+	    return R.drawable.default_privacy;
+	case "default_privacy_pressed":
+	    return R.drawable.default_privacy_pressed;
+	case "default_settings":
+	    return R.drawable.default_settings;
+	case "default_window_close":
+	    return R.drawable.default_window_close;
+	case "material_compose":
+	    return R.drawable.material_compose;
+	case "material_contacts":
+	    return R.drawable.material_contacts;
+	case "material_display":
+	    return R.drawable.material_display;
+	case "material_display_pressed":
+	    return R.drawable.material_display_pressed;
+	case "material_download":
+	    return R.drawable.material_download;
+	case "material_messaging":
+	    return R.drawable.material_messaging;
+	case "material_network":
+	    return R.drawable.material_network;
+	case "material_network_pressed":
+	    return R.drawable.material_network_pressed;
+	case "material_privacy":
+	    return R.drawable.material_privacy;
+	case "material_privacy_pressed":
+	    return R.drawable.material_privacy_pressed;
+	case "material_settings":
+	    return R.drawable.material_settings;
+	case "material_window_close":
+	    return R.drawable.material_window_close;
+	case "nuvola_compose":
+	    return R.drawable.nuvola_compose;
+	case "nuvola_contacts":
+	    return R.drawable.nuvola_contacts;
+	case "nuvola_display":
+	    return R.drawable.nuvola_display;
+	case "nuvola_display_pressed":
+	    return R.drawable.nuvola_display_pressed;
+	case "nuvola_download":
+	    return R.drawable.nuvola_download;
+	case "nuvola_messaging":
+	    return R.drawable.nuvola_messaging;
+	case "nuvola_network":
+	    return R.drawable.nuvola_network;
+	case "nuvola_network_pressed":
+	    return R.drawable.nuvola_network_pressed;
+	case "nuvola_privacy":
+	    return R.drawable.nuvola_privacy;
+	case "nuvola_privacy_pressed":
+	    return R.drawable.nuvola_privacy_pressed;
+	case "nuvola_settings":
+	    return R.drawable.nuvola_settings;
+	case "nuvola_window_close":
+	    return R.drawable.nuvola_window_close;
+	default:
+	    return R.drawable.lettera;
+	}
+    }
 
     private void apply_settings()
     {
@@ -343,6 +439,8 @@ public class Settings
 	m_display_layout = m_view.findViewById(R.id.display_layout);
 	m_generate_keys_progress_bar = m_view.findViewById
 	    (R.id.generate_keys_progress_bar);
+	m_icon_theme_spinner = (Spinner) m_view.findViewById
+	    (R.id.icon_theme_spinner);
 	m_inbound_address = (TextView) m_view.findViewById
 	    (R.id.inbound_address);
 	m_inbound_email = (TextView) m_view.findViewById(R.id.inbound_email);
@@ -444,6 +542,34 @@ public class Settings
 	}
     }
 
+    private void prepare_icons()
+    {
+	try
+	{
+	    switch(m_current_page)
+	    {
+	    case PageEnumerator.DISPLAY_PAGE:
+		m_display_button.setBackgroundResource(icon("display_pressed"));
+		m_network_button.setBackgroundResource(icon("network"));
+		m_privacy_button.setBackgroundResource(icon("privacy"));
+		break;
+	    case PageEnumerator.NETWORK_PAGE:
+		m_display_button.setBackgroundResource(icon("display"));
+		m_network_button.setBackgroundResource(icon("network_pressed"));
+		m_privacy_button.setBackgroundResource(icon("privacy"));
+		break;
+	    case PageEnumerator.PRIVACY_PAGE:
+		m_display_button.setBackgroundResource(icon("display"));
+		m_network_button.setBackgroundResource(icon("network"));
+		m_privacy_button.setBackgroundResource(icon("privacy_pressed"));
+		break;
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+    }
+
     private void prepare_listeners()
     {
 	if(m_context == null)
@@ -538,19 +664,35 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    m_view.findViewById(R.id.display_button).
-			setBackgroundResource
-			(R.drawable.default_display_pressed);
+		    m_current_page = PageEnumerator.DISPLAY_PAGE;
 		    m_view.findViewById(R.id.display_layout).setVisibility
 			(View.VISIBLE);
-		    m_view.findViewById(R.id.network_button).
-			setBackgroundResource(R.drawable.default_network);
 		    m_view.findViewById(R.id.network_layout).setVisibility
 			(View.GONE);
-		    m_view.findViewById(R.id.privacy_button).
-			setBackgroundResource(R.drawable.default_privacy);
 		    m_view.findViewById(R.id.privacy_layout).setVisibility
 			(View.GONE);
+		    prepare_icons();
+		}
+	    });
+
+	m_icon_theme_spinner.setOnItemSelectedListener
+	    (new OnItemSelectedListener()
+	    {
+		@Override
+		public void onItemSelected(AdapterView<?> parent,
+					   View view,
+					   int position,
+					   long id)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    prepare_icons();
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent)
+		{
 		}
 	    });
 
@@ -562,6 +704,7 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
+		    m_current_page = PageEnumerator.NETWORK_PAGE;
 		    show_network_page();
 		}
 	    });
@@ -574,15 +717,11 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    m_display_button.setBackgroundResource
-			(R.drawable.default_display);
+		    m_current_page = PageEnumerator.PRIVACY_PAGE;
 		    m_display_layout.setVisibility(View.GONE);
-		    m_network_button.setBackgroundResource
-			(R.drawable.default_network);
 		    m_network_layout.setVisibility(View.GONE);
-		    m_privacy_button.setBackgroundResource
-			(R.drawable.default_privacy_pressed);
 		    m_privacy_layout.setVisibility(View.VISIBLE);
+		    prepare_icons();
 		}
 	     });
 
@@ -636,11 +775,10 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
 	spinner.setAdapter(array_adapter);
-	array = new String[] {"Default"};
+	array = new String[] {"Default", "Material", "Nuvola"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById(R.id.icon_theme_spinner);
-	spinner.setAdapter(array_adapter);
+	m_icon_theme_spinner.setAdapter(array_adapter);
 
 	/*
 	** Network
@@ -673,12 +811,12 @@ public class Settings
 
     private void show_network_page()
     {
-	m_display_button.setBackgroundResource(R.drawable.default_display);
+	m_current_page = PageEnumerator.NETWORK_PAGE;
+	m_display_button.setBackgroundResource(icon("display"));
 	m_display_layout.setVisibility(View.GONE);
-	m_network_button.setBackgroundResource
-	    (R.drawable.default_network_pressed);
+	m_network_button.setBackgroundResource(icon("network_pressed"));
 	m_network_layout.setVisibility(View.VISIBLE);
-	m_privacy_button.setBackgroundResource(R.drawable.default_privacy);
+	m_privacy_button.setBackgroundResource(icon("privacy"));
 	m_privacy_layout.setVisibility(View.GONE);
     }
 
@@ -738,6 +876,7 @@ public class Settings
 	*/
 
 	initialize_widget_members();
+	prepare_icons();
 	prepare_listeners();
 	prepare_widgets();
 
