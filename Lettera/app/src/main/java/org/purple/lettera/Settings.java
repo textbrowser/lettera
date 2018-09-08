@@ -460,187 +460,167 @@ public class Settings
 	if(m_context == null)
 	    return;
 
-	try
-	{
-	    m_accounts_spinner.setOnItemSelectedListener
-		(new OnItemSelectedListener()
+	m_accounts_spinner.setOnItemSelectedListener
+	    (new OnItemSelectedListener()
+	    {
+		@Override
+		public void onItemSelected(AdapterView<?> parent,
+					   View view,
+					   int position,
+					   long id)
 		{
-		    @Override
-		    public void onItemSelected(AdapterView<?> parent,
-					       View view,
-					       int position,
-					       long id)
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    populate_network();
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent)
+		{
+		}
+	    });
+
+	if(!m_apply_button.hasOnClickListeners())
+	    m_apply_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    apply_settings();
+		}
+	    });
+
+	if(!m_close_button.hasOnClickListeners())
+	    m_close_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    if(m_dialog != null)
+			m_dialog.dismiss();
+		}
+	    });
+
+	if(!m_delete_account_button.hasOnClickListeners())
+	    m_delete_account_button.setOnClickListener
+		(new View.OnClickListener()
+		{
+		    public void onClick(View view)
 		    {
 			if(((Activity) m_context).isFinishing())
 			    return;
 
+			if(m_database.
+			   delete_email_account(m_accounts_spinner.
+						getSelectedItem().
+						toString()))
+			{
+			    m_delete_account_verify_check_box.setChecked(false);
+			    populate_accounts_spinner();
 			    populate_network();
-		    }
-
-		    @Override
-		    public void onNothingSelected(AdapterView<?> parent)
-		    {
-		    }
-		});
-
-	    if(!m_apply_button.hasOnClickListeners())
-		m_apply_button.setOnClickListener(new View.OnClickListener()
-	        {
-		    public void onClick(View view)
-		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
-
-			apply_settings();
-		    }
-		});
-
-	    if(!m_close_button.hasOnClickListeners())
-		m_close_button.setOnClickListener(new View.OnClickListener()
-		{
-		    public void onClick(View view)
-		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
-
-			if(m_dialog != null)
-			    m_dialog.dismiss();
-		    }
-		});
-
-	    if(!m_delete_account_button.hasOnClickListeners())
-		m_delete_account_button.
-		    setOnClickListener(new View.OnClickListener()
-		    {
-			public void onClick(View view)
-			{
-			    if(((Activity) m_context).isFinishing())
-				return;
-
-			    try
-			    {
-				if(m_database.
-				   delete_email_account(m_accounts_spinner.
-							getSelectedItem().
-							toString()))
-				{
-				    m_delete_account_verify_check_box.
-					setChecked(false);
-				    populate_accounts_spinner();
-				    populate_network();
-				}
-			    }
-			    catch(Exception exception)
-			    {
-			    }
-			}
-		    });
-
-	    m_delete_account_verify_check_box.setOnCheckedChangeListener
-		(new CompoundButton.OnCheckedChangeListener()
-		{
-		    @Override
-		    public void onCheckedChanged
-			(CompoundButton buttonView, boolean isChecked)
-		    {
-			try
-			{
-			    m_delete_account_button.setEnabled
-				(isChecked &&
-				 !m_accounts_spinner.
-				 getSelectedItem().equals("(Empty)"));
-			}
-			catch(Exception exception)
-			{
 			}
 		    }
 		});
 
-	    if(!m_display_button.hasOnClickListeners())
-		m_display_button.setOnClickListener(new View.OnClickListener()
+	m_delete_account_verify_check_box.setOnCheckedChangeListener
+	    (new CompoundButton.OnCheckedChangeListener()
+	    {
+		@Override
+		public void onCheckedChanged
+		    (CompoundButton buttonView, boolean isChecked)
 		{
-		    public void onClick(View view)
-		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
+		    m_delete_account_button.setEnabled
+			(isChecked &&
+			 !m_accounts_spinner.
+			 getSelectedItem().equals("(Empty)"));
+		}
+	    });
 
-			m_view.findViewById(R.id.display_button).
-			    setBackgroundResource
-			    (R.drawable.default_display_pressed);
-			m_view.findViewById(R.id.display_layout).setVisibility
-			    (View.VISIBLE);
-			m_view.findViewById(R.id.network_button).
-			    setBackgroundResource(R.drawable.default_network);
-			m_view.findViewById(R.id.network_layout).setVisibility
-			    (View.GONE);
-			m_view.findViewById(R.id.privacy_button).
-			    setBackgroundResource(R.drawable.default_privacy);
-			m_view.findViewById(R.id.privacy_layout).setVisibility
-			    (View.GONE);
-		    }
-		});
-
-	    if(!m_network_button.hasOnClickListeners())
-		m_network_button.setOnClickListener(new View.OnClickListener()
+	if(!m_display_button.hasOnClickListeners())
+	    m_display_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
 		{
-		    public void onClick(View view)
-		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
+		    if(((Activity) m_context).isFinishing())
+			return;
 
-			show_network_page();
-		    }
-		});
+		    m_view.findViewById(R.id.display_button).
+			setBackgroundResource
+			(R.drawable.default_display_pressed);
+		    m_view.findViewById(R.id.display_layout).setVisibility
+			(View.VISIBLE);
+		    m_view.findViewById(R.id.network_button).
+			setBackgroundResource(R.drawable.default_network);
+		    m_view.findViewById(R.id.network_layout).setVisibility
+			(View.GONE);
+		    m_view.findViewById(R.id.privacy_button).
+			setBackgroundResource(R.drawable.default_privacy);
+		    m_view.findViewById(R.id.privacy_layout).setVisibility
+			(View.GONE);
+		}
+	    });
 
-	    if(!m_privacy_button.hasOnClickListeners())
-		m_privacy_button.setOnClickListener(new View.OnClickListener()
+	if(!m_network_button.hasOnClickListeners())
+	    m_network_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
 		{
-		    public void onClick(View view)
-		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
+		    if(((Activity) m_context).isFinishing())
+			return;
 
-			m_display_button.setBackgroundResource
-			    (R.drawable.default_display);
-			m_display_layout.setVisibility(View.GONE);
-			m_network_button.setBackgroundResource
-			    (R.drawable.default_network);
-			m_network_layout.setVisibility(View.GONE);
-			m_privacy_button.setBackgroundResource
-			    (R.drawable.default_privacy_pressed);
-			m_privacy_layout.setVisibility(View.VISIBLE);
-		    }
-		});
+		    show_network_page();
+		}
+	    });
 
-	    if(!m_test_inbound_button.hasOnClickListeners())
-		m_test_inbound_button.
-		    setOnClickListener(new View.OnClickListener()
-		    {
-			public void onClick(View view)
-			{
-			    if(((Activity) m_context).isFinishing())
-				return;
-
-			    test_inbound_server();
-			}
-		    });
-
-	    if(!m_x_button.hasOnClickListeners())
-		m_x_button.setOnClickListener(new View.OnClickListener()
+	if(!m_privacy_button.hasOnClickListeners())
+	    m_privacy_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
 		{
-		    public void onClick(View view)
-		    {
-			if(((Activity) m_context).isFinishing())
-			    return;
+		    if(((Activity) m_context).isFinishing())
+			return;
 
-			if(m_dialog != null)
-			    m_dialog.dismiss();
-		    }
-		});
-	}
-	catch(Exception exception)
-	{
-	}
+		    m_display_button.setBackgroundResource
+			(R.drawable.default_display);
+		    m_display_layout.setVisibility(View.GONE);
+		    m_network_button.setBackgroundResource
+			(R.drawable.default_network);
+		    m_network_layout.setVisibility(View.GONE);
+		    m_privacy_button.setBackgroundResource
+			(R.drawable.default_privacy_pressed);
+		    m_privacy_layout.setVisibility(View.VISIBLE);
+		}
+	     });
+
+	if(!m_test_inbound_button.hasOnClickListeners())
+	    m_test_inbound_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    test_inbound_server();
+		}
+	    });
+
+	if(!m_x_button.hasOnClickListeners())
+	    m_x_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    if(m_dialog != null)
+			m_dialog.dismiss();
+		}
+	    });
     }
 
     private void prepare_widgets()
@@ -649,83 +629,68 @@ public class Settings
 	** Set Display as the primary section.
 	*/
 
-	try
-	{
-	    m_display_button.setBackgroundResource
-		(R.drawable.default_display_pressed);
-	    m_network_layout.setVisibility(View.GONE);
-	    m_privacy_layout.setVisibility(View.GONE);
+	m_display_button.setBackgroundResource
+	    (R.drawable.default_display_pressed);
+	m_network_layout.setVisibility(View.GONE);
+	m_privacy_layout.setVisibility(View.GONE);
 
-	    ArrayAdapter<String> array_adapter;
-	    Spinner spinner = null;
-	    String array[] = null;
+	ArrayAdapter<String> array_adapter;
+	Spinner spinner = null;
+	String array[] = null;
 
-	    /*
-	    ** Display
-	    */
+	/*
+	** Display
+	*/
 
-	    array = new String[] {"Default"};
-	    array_adapter = new ArrayAdapter<>
-		(m_context, android.R.layout.simple_spinner_item, array);
-	    spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
-	    spinner.setAdapter(array_adapter);
-	    array = new String[] {"Default"};
-	    array_adapter = new ArrayAdapter<>
-		(m_context, android.R.layout.simple_spinner_item, array);
-	    spinner = (Spinner) m_view.findViewById(R.id.icon_theme_spinner);
-	    spinner.setAdapter(array_adapter);
+	array = new String[] {"Default"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
+	spinner.setAdapter(array_adapter);
+	array = new String[] {"Default"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById(R.id.icon_theme_spinner);
+	spinner.setAdapter(array_adapter);
 
-	    /*
-	    ** Network
-	    */
+	/*
+	** Network
+	*/
 
-	    ((TextView) m_view.findViewById(R.id.inbound_port)).setFilters
-		(new InputFilter[] {s_port_filter});
-	    ((TextView) m_view.findViewById(R.id.outbound_port)).setFilters
-		(new InputFilter[] {s_port_filter});
-	    array = new String[] {"(Empty)"};
-	    array_adapter = new ArrayAdapter<>
-		(m_context, android.R.layout.simple_spinner_item, array);
-	    spinner = (Spinner) m_view.findViewById(R.id.accounts_spinner);
-	    spinner.setAdapter(array_adapter);
-	    m_view.findViewById(R.id.delete_account_button).setEnabled(false);
+	m_inbound_port.setFilters(new InputFilter[] {s_port_filter});
+	m_outbound_port.setFilters(new InputFilter[] {s_port_filter});
+	array = new String[] {"(Empty)"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	m_accounts_spinner.setAdapter(array_adapter);
+	m_delete_account_button.setEnabled(false);
 
-	    /*
-	    ** Privacy
-	    */
+	/*
+	** Privacy
+	*/
 
-	    array = new String[] {"McEliece", "RSA"};
-	    array_adapter = new ArrayAdapter<>
-		(m_context, android.R.layout.simple_spinner_item, array);
-	    spinner = (Spinner) m_view.findViewById
-		(R.id.encryption_key_spinner);
-	    spinner.setAdapter(array_adapter);
-	    array = new String[] {"RSA"};
-	    array_adapter = new ArrayAdapter<>
-		(m_context, android.R.layout.simple_spinner_item, array);
-	    spinner = (Spinner) m_view.findViewById(R.id.signature_key_spinner);
-	    spinner.setAdapter(array_adapter);
-	}
-	catch(Exception exception)
-	{
-	}
+	array = new String[] {"McEliece", "RSA"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById
+	    (R.id.encryption_key_spinner);
+	spinner.setAdapter(array_adapter);
+	array = new String[] {"RSA"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	spinner = (Spinner) m_view.findViewById(R.id.signature_key_spinner);
+	spinner.setAdapter(array_adapter);
     }
 
     private void show_network_page()
     {
-	try
-	{
-	    m_display_button.setBackgroundResource(R.drawable.default_display);
-	    m_display_layout.setVisibility(View.GONE);
-	    m_network_button.setBackgroundResource
-		(R.drawable.default_network_pressed);
-	    m_network_layout.setVisibility(View.VISIBLE);
-	    m_privacy_button.setBackgroundResource(R.drawable.default_privacy);
-	    m_privacy_layout.setVisibility(View.GONE);
-	}
-	catch(Exception exception)
-	{
-	}
+	m_display_button.setBackgroundResource(R.drawable.default_display);
+	m_display_layout.setVisibility(View.GONE);
+	m_network_button.setBackgroundResource
+	    (R.drawable.default_network_pressed);
+	m_network_layout.setVisibility(View.VISIBLE);
+	m_privacy_button.setBackgroundResource(R.drawable.default_privacy);
+	m_privacy_layout.setVisibility(View.GONE);
     }
 
     private void test_inbound_server()
@@ -758,56 +723,46 @@ public class Settings
     {
 	if(m_context == null || m_parent == null)
 	    return;
-	else if(m_dialog != null || m_view != null)
+	else if(m_dialog != null)
 	{
-	    try
-	    {
-		m_dialog.show();
-		m_inbound_address.requestFocus();
-		populate();
-	    }
-	    catch(Exception exception)
-	    {
-	    }
+	    m_dialog.show();
 
+	    if(m_inbound_address != null)
+		m_inbound_address.requestFocus();
+
+	    populate();
 	    return;
 	}
 
-	try
-	{
-	    LayoutInflater inflater = (LayoutInflater) m_context.
-		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    WindowManager.LayoutParams layout_params =
-		new WindowManager.LayoutParams();
+	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
+	    (Context.LAYOUT_INFLATER_SERVICE);
+	WindowManager.LayoutParams layout_params = new
+	    WindowManager.LayoutParams();
 
-	    layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
-	    layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-	    layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
-	    m_view = inflater.inflate(R.layout.settings, null);
+	layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
+	layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+	layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
+	m_view = inflater.inflate(R.layout.settings, null);
 
-	    /*
-	    ** Prepare things.
-	    */
+	/*
+	** Prepare things.
+	*/
 
-	    initialize_widget_members();
-	    prepare_listeners();
-	    prepare_widgets();
+	initialize_widget_members();
+	prepare_listeners();
+	prepare_widgets();
 
-	    /*
-	    ** The cute dialog.
-	    */
+	/*
+	** The cute dialog.
+	*/
 
-	    m_dialog = new Dialog(m_context);
-	    m_dialog.setCancelable(false);
-	    m_dialog.setContentView(m_view);
-	    m_dialog.setTitle("Settings");
-	    m_dialog.show();
-	    m_dialog.getWindow().setAttributes(layout_params); // After show().
-	    m_inbound_address.requestFocus();
-	    populate();
-	}
-	catch(Exception exception)
-	{
-	}
+	m_dialog = new Dialog(m_context);
+	m_dialog.setCancelable(false);
+	m_dialog.setContentView(m_view);
+	m_dialog.setTitle("Settings");
+	m_dialog.show();
+	m_dialog.getWindow().setAttributes(layout_params); // After show().
+	m_inbound_address.requestFocus();
+	populate();
     }
 }
