@@ -199,7 +199,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/inbound_imap_server"
+                        android:text="@string/inbound_imaps_server"
                         android:textSize="20sp" />
 
                     <LinearLayout
@@ -276,7 +276,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/outbound_smtp_server"
+                        android:text="@string/outbound_smtps_server"
                         android:textSize="20sp" />
 
                     <LinearLayout
@@ -329,6 +329,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/test" />
+
+                    <ProgressBar
+                        android:id="@+id/test_outbound_network_progress_bar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 

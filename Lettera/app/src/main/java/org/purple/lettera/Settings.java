@@ -45,6 +45,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import com.sun.mail.smtp.SMTPTransport;
 import java.util.ArrayList;
 import java.util.Properties;
 import javax.mail.Session;
@@ -59,21 +60,28 @@ public class Settings
 	public final static int PRIVACY_PAGE = 2;
     }
 
-    private class IMAPTest implements Runnable
+    private class EmailTest implements Runnable
     {
+	private SMTPTransport m_smtp_transport = null;
 	private Store m_store = null;
 	private String m_email = "";
 	private String m_host = "";
 	private String m_password = "";
+	private String m_protocol = "imaps";
 	private boolean m_error = true;
 	private int m_port = -1;
 
-	public IMAPTest(String email, String host, String password, String port)
+	public EmailTest(String email,
+			 String host,
+			 String password,
+			 String port,
+			 String protocol)
 	{
 	    m_email = email;
 	    m_host = host;
 	    m_password = password;
 	    m_port = Integer.valueOf(port);
+	    m_protocol = protocol;
 	}
 
 	@Override
@@ -87,15 +95,42 @@ public class Settings
 
 		Properties properties = new Properties();
 
-		properties.setProperty("mail.imaps.connectiontimeout", "10000");
-		properties.setProperty("mail.imaps.ssl.enable", "true");
-		properties.setProperty("mail.imaps.timeout", "10000");
+		properties.setProperty
+		    ("mail." + m_protocol + ".connectiontimeout", "10000");
+
+		if(m_protocol.equals("smtps"))
+		{
+		    properties.setProperty("mail.smtps.localhost", "localhost");
+		    properties.setProperty
+			("mail.smtp.starttls.enable", "true");
+		}
+
+		properties.setProperty
+		    ("mail." + m_protocol + ".ssl.enable", "true");
+		properties.setProperty
+		    ("mail." + m_protocol + ".timeout", "10000");
 
 		Session session = Session.getInstance(properties);
 
-		m_store = session.getStore("imaps");
-		m_store.connect(m_host, m_port, m_email, m_password);
-		m_error = false;
+		switch(m_protocol)
+		{
+		case "imaps":
+		    m_store = session.getStore(m_protocol);
+		    m_store.connect(m_host, m_port, m_email, m_password);
+		    m_error = false;
+		    break;
+		case "smtps":
+		    m_smtp_transport = (SMTPTransport) session.getTransport
+			("smtp"); // Not SMTPS!
+		    m_smtp_transport.setRequireStartTLS(true);
+		    m_smtp_transport.connect
+			(m_host, m_port, m_email, m_password);
+		    m_error = false;
+		    break;
+		default:
+		    m_error = true;
+		    break;
+		}
 	    }
 	    catch(Exception exception)
 	    {
@@ -105,6 +140,9 @@ public class Settings
 	    {
 		try
 		{
+		    if(m_smtp_transport != null)
+			m_smtp_transport.close();
+
 		    if(m_store != null)
 			m_store.close();
 		}
@@ -120,16 +158,34 @@ public class Settings
 		    @Override
 		    public void run()
 		    {
-			if(m_test_inbound_network_progress_bar != null)
-			    m_test_inbound_network_progress_bar.
-				setVisibility(View.GONE);
+			switch(m_protocol)
+			{
+			case "imaps":
+			    if(m_test_inbound_network_progress_bar != null)
+				m_test_inbound_network_progress_bar.
+				    setVisibility(View.GONE);
+
+			    break;
+			case "smtps":
+			    if(m_test_outbound_network_progress_bar != null)
+				m_test_outbound_network_progress_bar.
+				    setVisibility(View.GONE);
+
+			    break;
+			default:
+			    break;
+			}
 
 			if(m_error)
 			    Windows.show_dialog
-				(m_context, "IMAP test failed!", "Error");
+				(m_context,
+				 m_protocol.toUpperCase() + " test failed!",
+				 "Error");
 			else
 			    Windows.show_dialog
-				(m_context, "IMAP test succeeded!", "Success");
+				(m_context,
+				 m_protocol.toUpperCase() + " test succeeded!",
+				 "Success");
 		    }
 		});
 	    }
@@ -146,6 +202,7 @@ public class Settings
     private Button m_network_button = null;
     private Button m_privacy_button = null;
     private Button m_test_inbound_button = null;
+    private Button m_test_outbound_button = null;
     private Button m_x_button = null;
     private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_delete_account_verify_check_box = null;
@@ -167,6 +224,7 @@ public class Settings
     private View m_privacy_layout = null;
     private View m_generate_keys_progress_bar = null;
     private View m_test_inbound_network_progress_bar = null;
+    private View m_test_outbound_network_progress_bar = null;
     private View m_view = null;
     private final Database m_database = Database.getInstance();
     private final static InputFilter s_port_filter = new InputFilter()
@@ -482,8 +540,12 @@ public class Settings
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
 	m_test_inbound_button = (Button) m_view.findViewById
 	    (R.id.test_inbound_button);
+	m_test_outbound_button = (Button) m_view.findViewById
+	    (R.id.test_outbound_button);
 	m_test_inbound_network_progress_bar = m_view.findViewById
 	    (R.id.test_inbound_network_progress_bar);
+	m_test_outbound_network_progress_bar = m_view.findViewById
+	    (R.id.test_outbound_network_progress_bar);
 	m_x_button = (Button) m_view.findViewById(R.id.x_button);
     }
 
@@ -783,6 +845,18 @@ public class Settings
 		}
 	    });
 
+	if(!m_test_outbound_button.hasOnClickListeners())
+	    m_test_outbound_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    test_outbound_server();
+		}
+	    });
+
 	if(!m_x_button.hasOnClickListeners())
 	    m_x_button.setOnClickListener(new View.OnClickListener()
 	    {
@@ -885,10 +959,32 @@ public class Settings
 	try
 	{
 	    Thread thread = new Thread
-		(new IMAPTest(m_inbound_email.getText().toString(),
-			      m_inbound_address.getText().toString(),
-			      m_inbound_password.getText().toString(),
-			      m_inbound_port.getText().toString()));
+		(new EmailTest(m_inbound_email.getText().toString(),
+			       m_inbound_address.getText().toString(),
+			       m_inbound_password.getText().toString(),
+			       m_inbound_port.getText().toString(),
+			       "imaps"));
+
+	    thread.start();
+	}
+	catch(Exception exception)
+	{
+	}
+    }
+
+    private void test_outbound_server()
+    {
+	if(m_test_outbound_network_progress_bar != null)
+	    m_test_outbound_network_progress_bar.setVisibility(View.VISIBLE);
+
+	try
+	{
+	    Thread thread = new Thread
+		(new EmailTest(m_outbound_email.getText().toString(),
+			       m_outbound_address.getText().toString(),
+			       m_outbound_password.getText().toString(),
+			       m_outbound_port.getText().toString(),
+			       "smtps"));
 
 	    thread.start();
 	}
