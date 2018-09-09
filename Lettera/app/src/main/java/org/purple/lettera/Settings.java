@@ -970,6 +970,8 @@ public class Settings
 	}
 	catch(Exception exception)
 	{
+	    if(m_test_inbound_network_progress_bar != null)
+		m_test_inbound_network_progress_bar.setVisibility(View.GONE);
 	}
     }
 
@@ -991,6 +993,8 @@ public class Settings
 	}
 	catch(Exception exception)
 	{
+	    if(m_test_outbound_network_progress_bar != null)
+		m_test_outbound_network_progress_bar.setVisibility(View.GONE);
 	}
     }
 
