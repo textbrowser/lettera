@@ -164,6 +164,46 @@ public class Database extends SQLiteOpenHelper
 	return null;
     }
 
+    public SettingsElement settings_element(String key)
+    {
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT key, value FROM settings WHERE key = ?",
+		 new String[] {key});
+
+	    if(cursor != null && cursor.moveToFirst())
+	    {
+		SettingsElement settings_element = new SettingsElement();
+
+		for(int i = 0; i < cursor.getColumnCount(); i++)
+		    switch(i)
+		    {
+		    case 0:
+			settings_element.m_key = key;
+			break;
+		    case 1:
+			settings_element.m_value = cursor.getString(i).trim();
+			break;
+		    }
+
+		return settings_element;
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return null;
+    }
+
     public String save_email(ContentValues content_values)
     {
 	if(content_values == null || content_values.size() == 0)

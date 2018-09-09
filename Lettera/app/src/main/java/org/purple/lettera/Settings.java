@@ -490,6 +490,7 @@ public class Settings
     private void populate()
     {
 	populate_accounts_spinner();
+	populate_display();
 	populate_network();
     }
 
@@ -519,6 +520,34 @@ public class Settings
 		(m_context, android.R.layout.simple_spinner_item, array_list);
 
 	    m_accounts_spinner.setAdapter(array_adapter);
+	}
+	catch(Exception exception)
+	{
+	}
+    }
+
+    private void populate_display()
+    {
+	try
+	{
+	    SettingsElement settings_element = m_database.settings_element
+		("icon_theme");
+
+	    switch(settings_element.m_value)
+	    {
+	    case "Default":
+		m_icon_theme_spinner.setSelection(0);
+		break;
+	    case "Material":
+		m_icon_theme_spinner.setSelection(1);
+		break;
+	    case "Nuvola":
+		m_icon_theme_spinner.setSelection(2);
+		break;
+	    default:
+		m_icon_theme_spinner.setSelection(0);
+		break;
+	    }
 	}
 	catch(Exception exception)
 	{
