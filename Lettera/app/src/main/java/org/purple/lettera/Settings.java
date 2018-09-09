@@ -91,6 +91,7 @@ public class Settings
 	    {
 		/*
 		** https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html
+		** https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/SMTPTransport.html
 		*/
 
 		Properties properties = new Properties();
