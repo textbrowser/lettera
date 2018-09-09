@@ -29,8 +29,12 @@ package org.purple.lettera;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 public abstract class Windows
 {
@@ -64,6 +68,34 @@ public abstract class Windows
 	    alert_dialog.setMessage(text);
 	    alert_dialog.setTitle(title);
 	    alert_dialog.show();
+	}
+	catch(Exception exception)
+	{
+	}
+    }
+
+    public static void show_progress_dialog
+	(Context context, Dialog dialog, String text)
+    {
+	if(context == null ||
+	   dialog == null ||
+	   text == null ||
+	   text.trim().isEmpty())
+	    return;
+
+	try
+	{
+	    if(((Activity) context).isFinishing())
+		return;
+
+	    LayoutInflater inflater = (LayoutInflater) context.getSystemService
+		(Context.LAYOUT_INFLATER_SERVICE);
+	    View view = inflater.inflate(R.layout.progress, null);
+
+	    ((TextView) view.findViewById(R.id.text)).setText(text);
+	    dialog.setCancelable(false);
+	    dialog.setContentView(view);
+	    dialog.show();
 	}
 	catch(Exception exception)
 	{

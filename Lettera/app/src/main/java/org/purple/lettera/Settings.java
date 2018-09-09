@@ -62,6 +62,7 @@ public class Settings
 
     private class EmailTest implements Runnable
     {
+	private Dialog m_dialog = null;
 	private SMTPTransport m_smtp_transport = null;
 	private Store m_store = null;
 	private String m_email = "";
@@ -71,12 +72,14 @@ public class Settings
 	private boolean m_error = true;
 	private int m_port = -1;
 
-	public EmailTest(String email,
+	public EmailTest(Dialog dialog,
+			 String email,
 			 String host,
 			 String password,
 			 String port,
 			 String protocol)
 	{
+	    m_dialog = dialog;
 	    m_email = email;
 	    m_host = host;
 	    m_password = password;
@@ -162,20 +165,15 @@ public class Settings
 			switch(m_protocol)
 			{
 			case "imaps":
-			    if(m_test_inbound_network_progress_bar != null)
-				m_test_inbound_network_progress_bar.
-				    setVisibility(View.GONE);
-
 			    break;
 			case "smtps":
-			    if(m_test_outbound_network_progress_bar != null)
-				m_test_outbound_network_progress_bar.
-				    setVisibility(View.GONE);
-
 			    break;
 			default:
 			    break;
 			}
+
+			if(m_dialog != null)
+			    m_dialog.dismiss();
 
 			if(m_error)
 			    Windows.show_dialog
@@ -224,8 +222,6 @@ public class Settings
     private View m_parent = null;
     private View m_privacy_layout = null;
     private View m_generate_keys_progress_bar = null;
-    private View m_test_inbound_network_progress_bar = null;
-    private View m_test_outbound_network_progress_bar = null;
     private View m_view = null;
     private final Database m_database = Database.getInstance();
     private final static InputFilter s_port_filter = new InputFilter()
@@ -543,10 +539,6 @@ public class Settings
 	    (R.id.test_inbound_button);
 	m_test_outbound_button = (Button) m_view.findViewById
 	    (R.id.test_outbound_button);
-	m_test_inbound_network_progress_bar = m_view.findViewById
-	    (R.id.test_inbound_network_progress_bar);
-	m_test_outbound_network_progress_bar = m_view.findViewById
-	    (R.id.test_outbound_network_progress_bar);
 	m_x_button = (Button) m_view.findViewById(R.id.x_button);
     }
 
@@ -954,13 +946,17 @@ public class Settings
 
     private void test_inbound_server()
     {
-	if(m_test_inbound_network_progress_bar != null)
-	    m_test_inbound_network_progress_bar.setVisibility(View.VISIBLE);
+	Dialog dialog = null;
 
 	try
 	{
+	    dialog = new Dialog(m_context);
+	    Windows.show_progress_dialog
+		(m_context, dialog, "Testing IMAPS. Please be patient.");
+
 	    Thread thread = new Thread
-		(new EmailTest(m_inbound_email.getText().toString(),
+		(new EmailTest(dialog,
+			       m_inbound_email.getText().toString(),
 			       m_inbound_address.getText().toString(),
 			       m_inbound_password.getText().toString(),
 			       m_inbound_port.getText().toString(),
@@ -970,20 +966,24 @@ public class Settings
 	}
 	catch(Exception exception)
 	{
-	    if(m_test_inbound_network_progress_bar != null)
-		m_test_inbound_network_progress_bar.setVisibility(View.GONE);
+	    if(dialog != null)
+		dialog.dismiss();
 	}
     }
 
     private void test_outbound_server()
     {
-	if(m_test_outbound_network_progress_bar != null)
-	    m_test_outbound_network_progress_bar.setVisibility(View.VISIBLE);
+	Dialog dialog = null;
 
 	try
 	{
+	    dialog = new Dialog(m_context);
+	    Windows.show_progress_dialog
+		(m_context, dialog, "Testing SMTPS. Please be patient.");
+
 	    Thread thread = new Thread
-		(new EmailTest(m_outbound_email.getText().toString(),
+		(new EmailTest(dialog,
+			       m_outbound_email.getText().toString(),
 			       m_outbound_address.getText().toString(),
 			       m_outbound_password.getText().toString(),
 			       m_outbound_port.getText().toString(),
@@ -993,8 +993,8 @@ public class Settings
 	}
 	catch(Exception exception)
 	{
-	    if(m_test_outbound_network_progress_bar != null)
-		m_test_outbound_network_progress_bar.setVisibility(View.GONE);
+	    if(dialog != null)
+		dialog.dismiss();
 	}
     }
 
