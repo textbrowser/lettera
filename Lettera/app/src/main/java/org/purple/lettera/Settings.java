@@ -191,6 +191,11 @@ public class Settings
 	    catch(Exception exception)
 	    {
 	    }
+	    finally
+	    {
+		if(m_dialog != null)
+		    m_dialog.dismiss();
+	    }
 	}
     }
 
@@ -252,7 +257,9 @@ public class Settings
 
     private int icon(String name)
     {
-	if(m_icon_theme_spinner == null || name == null)
+	if(m_icon_theme_spinner == null ||
+	   m_icon_theme_spinner.getSelectedItem() == null ||
+	   name == null)
 	    return R.drawable.lettera;
 
 	name = m_icon_theme_spinner.
@@ -554,126 +561,106 @@ public class Settings
 	if(m_context == null)
 	    return;
 
-	try
+	if(((Activity) m_context).isFinishing())
+	    return;
+
+	ArrayList<String> array_list = m_database.email_account_names();
+
+	if(array_list == null || array_list.isEmpty())
 	{
-	    if(((Activity) m_context).isFinishing())
-		return;
-
-	    ArrayList<String> array_list = m_database.email_account_names();
-
-	    if(array_list == null || array_list.isEmpty())
-	    {
-		array_list = new ArrayList<> ();
-		array_list.add("(Empty)");
-		m_delete_account_button.setEnabled(false);
-	    }
-	    else
-		m_delete_account_button.setEnabled
-		    (m_delete_account_verify_check_box.isChecked());
-
-	    ArrayAdapter<String> array_adapter = new ArrayAdapter<>
-		(m_context, android.R.layout.simple_spinner_item, array_list);
-
-	    m_accounts_spinner.setAdapter(array_adapter);
+	    array_list = new ArrayList<> ();
+	    array_list.add("(Empty)");
+	    m_delete_account_button.setEnabled(false);
+	    m_delete_account_verify_check_box.setEnabled(false);
 	}
-	catch(Exception exception)
+	else
 	{
+	    m_delete_account_button.setEnabled
+		(m_delete_account_verify_check_box.isChecked());
+	    m_delete_account_verify_check_box.setEnabled(true);
 	}
+
+	ArrayAdapter<String> array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array_list);
+
+	m_accounts_spinner.setAdapter(array_adapter);
     }
 
     private void populate_display()
     {
-	try
-	{
-	    SettingsElement settings_element = m_database.settings_element
-		("icon_theme");
+	SettingsElement settings_element = m_database.settings_element
+	    ("icon_theme");
 
-	    switch(settings_element.m_value)
-	    {
-	    case "Default":
-		m_icon_theme_spinner.setSelection(0);
-		break;
-	    case "Material":
-		m_icon_theme_spinner.setSelection(1);
-		break;
-	    case "Nuvola":
-		m_icon_theme_spinner.setSelection(2);
-		break;
-	    default:
-		m_icon_theme_spinner.setSelection(0);
-		break;
-	    }
-	}
-	catch(Exception exception)
+	switch(settings_element.m_value)
 	{
+	case "Default":
+	    m_icon_theme_spinner.setSelection(0);
+	    break;
+	case "Material":
+	    m_icon_theme_spinner.setSelection(1);
+	    break;
+	case "Nuvola":
+	    m_icon_theme_spinner.setSelection(2);
+	    break;
+	default:
+	    m_icon_theme_spinner.setSelection(0);
+	    break;
 	}
     }
 
     private void populate_network()
     {
-	try
-	{
-	    EmailElement email_element = m_database.email_element
-		(m_accounts_spinner.getSelectedItem().toString());
+	EmailElement email_element = m_database.email_element
+	    (m_accounts_spinner.getSelectedItem().toString());
 
-	    if(email_element == null)
-	    {
-		m_delete_on_server_checkbox.setChecked(false);
-		m_inbound_address.setText("");
-		m_inbound_email.setText("");
-		m_inbound_password.setText("");
-		m_inbound_port.setText("993");
-		m_outbound_address.setText("");
-		m_outbound_email.setText("");
-		m_outbound_password.setText("");
-		m_outbound_port.setText("587");
-	    }
-	    else
-	    {
-		m_delete_on_server_checkbox.setChecked
-		    (email_element.m_delete_on_server);
-		m_inbound_address.setText(email_element.m_inbound_address);
-		m_inbound_email.setText(email_element.m_inbound_email);
-		m_inbound_password.setText(email_element.m_inbound_password);
-		m_inbound_port.setText
-		    (String.valueOf(email_element.m_inbound_port));
-		m_outbound_address.setText(email_element.m_outbound_address);
-		m_outbound_email.setText(email_element.m_outbound_email);
-		m_outbound_password.setText(email_element.m_outbound_password);
-		m_outbound_port.setText
-		    (String.valueOf(email_element.m_outbound_port));
-	    }
-	}
-	catch(Exception exception)
+	if(email_element == null)
 	{
+	    m_delete_on_server_checkbox.setChecked(false);
+	    m_inbound_address.setText("");
+	    m_inbound_email.setText("");
+	    m_inbound_password.setText("");
+	    m_inbound_port.setText("993");
+	    m_outbound_address.setText("");
+	    m_outbound_email.setText("");
+	    m_outbound_password.setText("");
+	    m_outbound_port.setText("587");
+	}
+	else
+	{
+	    m_delete_on_server_checkbox.setChecked
+		(email_element.m_delete_on_server);
+	    m_inbound_address.setText(email_element.m_inbound_address);
+	    m_inbound_email.setText(email_element.m_inbound_email);
+	    m_inbound_password.setText(email_element.m_inbound_password);
+	    m_inbound_port.setText
+		(String.valueOf(email_element.m_inbound_port));
+	    m_outbound_address.setText(email_element.m_outbound_address);
+	    m_outbound_email.setText(email_element.m_outbound_email);
+	    m_outbound_password.setText(email_element.m_outbound_password);
+	    m_outbound_port.setText
+		(String.valueOf(email_element.m_outbound_port));
 	}
     }
 
     private void prepare_icons()
     {
-	try
+	switch(m_current_page)
 	{
-	    switch(m_current_page)
-	    {
-	    case PageEnumerator.DISPLAY_PAGE:
-		m_display_button.setBackgroundResource(icon("display_pressed"));
-		m_network_button.setBackgroundResource(icon("network"));
-		m_privacy_button.setBackgroundResource(icon("privacy"));
-		break;
-	    case PageEnumerator.NETWORK_PAGE:
-		m_display_button.setBackgroundResource(icon("display"));
-		m_network_button.setBackgroundResource(icon("network_pressed"));
-		m_privacy_button.setBackgroundResource(icon("privacy"));
-		break;
-	    case PageEnumerator.PRIVACY_PAGE:
-		m_display_button.setBackgroundResource(icon("display"));
-		m_network_button.setBackgroundResource(icon("network"));
-		m_privacy_button.setBackgroundResource(icon("privacy_pressed"));
-		break;
-	    }
-	}
-	catch(Exception exception)
-	{
+	case PageEnumerator.DISPLAY_PAGE:
+	    m_display_button.setBackgroundResource(icon("display_pressed"));
+	    m_network_button.setBackgroundResource(icon("network"));
+	    m_privacy_button.setBackgroundResource(icon("privacy"));
+	    break;
+	case PageEnumerator.NETWORK_PAGE:
+	    m_display_button.setBackgroundResource(icon("display"));
+	    m_network_button.setBackgroundResource(icon("network_pressed"));
+	    m_privacy_button.setBackgroundResource(icon("privacy"));
+	    break;
+	case PageEnumerator.PRIVACY_PAGE:
+	    m_display_button.setBackgroundResource(icon("display"));
+	    m_network_button.setBackgroundResource(icon("network"));
+	    m_privacy_button.setBackgroundResource(icon("privacy_pressed"));
+	    break;
 	}
     }
 
