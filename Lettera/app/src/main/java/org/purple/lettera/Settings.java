@@ -293,6 +293,9 @@ public class Settings
 		return;
 	    }
 
+	    if(m_context instanceof Lettera)
+		((Lettera) m_context).prepare_icons();
+
 	    /*
 	    ** Network
 	    */

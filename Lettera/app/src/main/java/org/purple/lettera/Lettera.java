@@ -68,7 +68,34 @@ public class Lettera extends AppCompatActivity
 	    });
     }
 
-    private void prepare_icons()
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+	/*
+	** JavaMail may open sockets on the main thread. StrictMode
+	** is not available in older versions of Android.
+	*/
+
+	StrictMode.ThreadPolicy policy = new
+	    StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+	StrictMode.setThreadPolicy(policy);
+	setContentView(R.layout.activity_lettera);
+
+	/*
+	** Prepare the rest.
+	*/
+
+	initialize_widget_members();
+	m_database = Database.getInstance(getApplicationContext());
+	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
+	prepare_button_listeners();
+	prepare_icons();
+    }
+
+    public void prepare_icons()
     {
 	SettingsElement settings_element = m_database.settings_element
 	    ("icon_theme");
@@ -104,31 +131,5 @@ public class Lettera extends AppCompatActivity
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
 	}
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-	/*
-	** JavaMail may open sockets on the main thread.
-	*/
-
-	StrictMode.ThreadPolicy policy = new
-	    StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-	StrictMode.setThreadPolicy(policy);
-        setContentView(R.layout.activity_lettera);
-
-	/*
-	** Prepare the rest.
-	*/
-
-	initialize_widget_members();
-	m_database = Database.getInstance(getApplicationContext());
-	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
-	prepare_button_listeners();
-	prepare_icons();
     }
 }
