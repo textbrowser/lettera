@@ -262,86 +262,9 @@ public class Settings
 	   name == null)
 	    return R.drawable.lettera;
 
-	name = m_icon_theme_spinner.
-	    getSelectedItem().toString().toLowerCase() + "_" + name;
-
-	switch(name)
-	{
-	case "default_compose":
-	    return R.drawable.default_compose;
-	case "default_contacts":
-	    return R.drawable.default_contacts;
-	case "default_display":
-	    return R.drawable.default_display;
-	case "default_display_pressed":
-	    return R.drawable.default_display_pressed;
-	case "default_download":
-	    return R.drawable.default_download;
-	case "default_messaging":
-	    return R.drawable.default_messaging;
-	case "default_network":
-	    return R.drawable.default_network;
-	case "default_network_pressed":
-	    return R.drawable.default_network_pressed;
-	case "default_privacy":
-	    return R.drawable.default_privacy;
-	case "default_privacy_pressed":
-	    return R.drawable.default_privacy_pressed;
-	case "default_settings":
-	    return R.drawable.default_settings;
-	case "default_window_close":
-	    return R.drawable.default_window_close;
-	case "material_compose":
-	    return R.drawable.material_compose;
-	case "material_contacts":
-	    return R.drawable.material_contacts;
-	case "material_display":
-	    return R.drawable.material_display;
-	case "material_display_pressed":
-	    return R.drawable.material_display_pressed;
-	case "material_download":
-	    return R.drawable.material_download;
-	case "material_messaging":
-	    return R.drawable.material_messaging;
-	case "material_network":
-	    return R.drawable.material_network;
-	case "material_network_pressed":
-	    return R.drawable.material_network_pressed;
-	case "material_privacy":
-	    return R.drawable.material_privacy;
-	case "material_privacy_pressed":
-	    return R.drawable.material_privacy_pressed;
-	case "material_settings":
-	    return R.drawable.material_settings;
-	case "material_window_close":
-	    return R.drawable.material_window_close;
-	case "nuvola_compose":
-	    return R.drawable.nuvola_compose;
-	case "nuvola_contacts":
-	    return R.drawable.nuvola_contacts;
-	case "nuvola_display":
-	    return R.drawable.nuvola_display;
-	case "nuvola_display_pressed":
-	    return R.drawable.nuvola_display_pressed;
-	case "nuvola_download":
-	    return R.drawable.nuvola_download;
-	case "nuvola_messaging":
-	    return R.drawable.nuvola_messaging;
-	case "nuvola_network":
-	    return R.drawable.nuvola_network;
-	case "nuvola_network_pressed":
-	    return R.drawable.nuvola_network_pressed;
-	case "nuvola_privacy":
-	    return R.drawable.nuvola_privacy;
-	case "nuvola_privacy_pressed":
-	    return R.drawable.nuvola_privacy_pressed;
-	case "nuvola_settings":
-	    return R.drawable.nuvola_settings;
-	case "nuvola_window_close":
-	    return R.drawable.nuvola_window_close;
-	default:
-	    return R.drawable.lettera;
-	}
+	return icon_from_name
+	    (m_icon_theme_spinner.getSelectedItem().toString().
+	     toLowerCase() + "_" + name);
     }
 
     private void apply_settings()
@@ -992,6 +915,90 @@ public class Settings
     {
 	m_context = context;
 	m_parent = parent;
+    }
+
+    public static int icon_from_name(String name)
+    {
+	if(name == null)
+	    return R.drawable.lettera;
+
+	switch(name)
+	{
+	case "default_compose":
+	    return R.drawable.default_compose;
+	case "default_contacts":
+	    return R.drawable.default_contacts;
+	case "default_display":
+	    return R.drawable.default_display;
+	case "default_display_pressed":
+	    return R.drawable.default_display_pressed;
+	case "default_download":
+	    return R.drawable.default_download;
+	case "default_messaging":
+	    return R.drawable.default_messaging;
+	case "default_network":
+	    return R.drawable.default_network;
+	case "default_network_pressed":
+	    return R.drawable.default_network_pressed;
+	case "default_privacy":
+	    return R.drawable.default_privacy;
+	case "default_privacy_pressed":
+	    return R.drawable.default_privacy_pressed;
+	case "default_settings":
+	    return R.drawable.default_settings;
+	case "default_window_close":
+	    return R.drawable.default_window_close;
+	case "material_compose":
+	    return R.drawable.material_compose;
+	case "material_contacts":
+	    return R.drawable.material_contacts;
+	case "material_display":
+	    return R.drawable.material_display;
+	case "material_display_pressed":
+	    return R.drawable.material_display_pressed;
+	case "material_download":
+	    return R.drawable.material_download;
+	case "material_messaging":
+	    return R.drawable.material_messaging;
+	case "material_network":
+	    return R.drawable.material_network;
+	case "material_network_pressed":
+	    return R.drawable.material_network_pressed;
+	case "material_privacy":
+	    return R.drawable.material_privacy;
+	case "material_privacy_pressed":
+	    return R.drawable.material_privacy_pressed;
+	case "material_settings":
+	    return R.drawable.material_settings;
+	case "material_window_close":
+	    return R.drawable.material_window_close;
+	case "nuvola_compose":
+	    return R.drawable.nuvola_compose;
+	case "nuvola_contacts":
+	    return R.drawable.nuvola_contacts;
+	case "nuvola_display":
+	    return R.drawable.nuvola_display;
+	case "nuvola_display_pressed":
+	    return R.drawable.nuvola_display_pressed;
+	case "nuvola_download":
+	    return R.drawable.nuvola_download;
+	case "nuvola_messaging":
+	    return R.drawable.nuvola_messaging;
+	case "nuvola_network":
+	    return R.drawable.nuvola_network;
+	case "nuvola_network_pressed":
+	    return R.drawable.nuvola_network_pressed;
+	case "nuvola_privacy":
+	    return R.drawable.nuvola_privacy;
+	case "nuvola_privacy_pressed":
+	    return R.drawable.nuvola_privacy_pressed;
+	case "nuvola_settings":
+	    return R.drawable.nuvola_settings;
+	case "nuvola_window_close":
+	    return R.drawable.nuvola_window_close;
+	default:
+	    return R.drawable.lettera;
+	}
     }
 
     public void show()
