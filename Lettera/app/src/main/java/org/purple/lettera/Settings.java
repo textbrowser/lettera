@@ -610,8 +610,10 @@ public class Settings
 
     private void populate_network()
     {
-	EmailElement email_element = m_database.email_element
-	    (m_accounts_spinner.getSelectedItem().toString());
+	EmailElement email_element =
+	    m_accounts_spinner.getSelectedItem() == null ?
+	    null : m_database.email_element(m_accounts_spinner.
+					    getSelectedItem().toString());
 
 	if(email_element == null)
 	{
@@ -724,10 +726,10 @@ public class Settings
 			if(((Activity) m_context).isFinishing())
 			    return;
 
-			if(m_database.
+			if(m_accounts_spinner.getSelectedItem() != null &&
+			   m_database.
 			   delete_email_account(m_accounts_spinner.
-						getSelectedItem().
-						toString()))
+						getSelectedItem().toString()))
 			{
 			    m_delete_account_verify_check_box.setChecked(false);
 			    populate_accounts_spinner();
@@ -743,10 +745,11 @@ public class Settings
 		public void onCheckedChanged
 		    (CompoundButton buttonView, boolean isChecked)
 		{
-		    m_delete_account_button.setEnabled
-			(isChecked &&
-			 !m_accounts_spinner.
-			 getSelectedItem().equals("(Empty)"));
+		    if(m_accounts_spinner.getSelectedItem() != null)
+			m_delete_account_button.setEnabled
+			    (isChecked &&
+			     !m_accounts_spinner.
+			     getSelectedItem().equals("(Empty)"));
 		}
 	    });
 
