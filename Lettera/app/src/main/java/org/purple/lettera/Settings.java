@@ -228,6 +228,7 @@ public class Settings
     private View m_privacy_layout = null;
     private View m_generate_keys_progress_bar = null;
     private View m_view = null;
+    private WindowManager.LayoutParams m_layout_params = null;
     private final Database m_database = Database.getInstance();
     private final static InputFilter s_port_filter = new InputFilter()
     {
@@ -511,24 +512,35 @@ public class Settings
 
     private void populate_display()
     {
+	ArrayAdapter array_adapter = null;
+	String array[] = null;
+
+	array = new String[] {"Default", "Material", "Nuvola"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	m_icon_theme_spinner.setAdapter(array_adapter);
+
 	SettingsElement settings_element = m_database.settings_element
 	    ("icon_theme");
 
-	switch(settings_element.m_value)
-	{
-	case "Default":
+	if(settings_element == null)
 	    m_icon_theme_spinner.setSelection(0);
-	    break;
-	case "Material":
-	    m_icon_theme_spinner.setSelection(1);
-	    break;
-	case "Nuvola":
-	    m_icon_theme_spinner.setSelection(2);
-	    break;
-	default:
-	    m_icon_theme_spinner.setSelection(0);
-	    break;
-	}
+	else
+	    switch(settings_element.m_value.toLowerCase())
+	    {
+	    case "default":
+		m_icon_theme_spinner.setSelection(0);
+		break;
+	    case "material":
+		m_icon_theme_spinner.setSelection(1);
+		break;
+	    case "nuvola":
+		m_icon_theme_spinner.setSelection(2);
+		break;
+	    default:
+		m_icon_theme_spinner.setSelection(0);
+		break;
+	    }
     }
 
     private void populate_network()
@@ -684,8 +696,8 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
+		    m_current_page = PageEnumerator.DISPLAY_PAGE;
 		    show_display_page();
-		    prepare_icons();
 		}
 	    });
 
@@ -837,7 +849,6 @@ public class Settings
 
     private void show_display_page()
     {
-	m_current_page = PageEnumerator.DISPLAY_PAGE;
 	m_display_button.setBackgroundResource(icon("display_pressed"));
 	m_display_layout.setVisibility(View.VISIBLE);
 	m_network_button.setBackgroundResource(icon("network"));
@@ -848,7 +859,6 @@ public class Settings
 
     private void show_network_page()
     {
-	m_current_page = PageEnumerator.NETWORK_PAGE;
 	m_display_button.setBackgroundResource(icon("display"));
 	m_display_layout.setVisibility(View.GONE);
 	m_network_button.setBackgroundResource(icon("network_pressed"));
@@ -915,6 +925,33 @@ public class Settings
     {
 	m_context = context;
 	m_parent = parent;
+
+	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
+	    (Context.LAYOUT_INFLATER_SERVICE);
+
+	m_layout_params = new WindowManager.LayoutParams();
+	m_layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
+	m_layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+	m_layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
+	m_view = inflater.inflate(R.layout.settings, null);
+
+	/*
+	** Prepare things.
+	*/
+
+	initialize_widget_members();
+	prepare_listeners();
+	prepare_widgets();
+
+	/*
+	** The cute dialog.
+	*/
+
+	m_dialog = new Dialog(m_context);
+	m_dialog.setCancelable(false);
+	m_dialog.setContentView(m_view);
+	m_dialog.setTitle("Settings");
+	m_dialog.getWindow().setAttributes(m_layout_params);
     }
 
     public static int icon_from_name(String name)
@@ -922,7 +959,7 @@ public class Settings
 	if(name == null)
 	    return R.drawable.lettera;
 
-	switch(name)
+	switch(name.toLowerCase())
 	{
 	case "default_compose":
 	    return R.drawable.default_compose;
@@ -1003,49 +1040,8 @@ public class Settings
 
     public void show()
     {
-	if(m_context == null || m_parent == null)
-	    return;
-	else if(m_dialog != null)
-	{
-	    m_dialog.show();
-
-	    if(m_inbound_address != null)
-		m_inbound_address.requestFocus();
-
-	    populate();
-	    return;
-	}
-
-	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
-	    (Context.LAYOUT_INFLATER_SERVICE);
-	WindowManager.LayoutParams layout_params = new
-	    WindowManager.LayoutParams();
-
-	layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
-	layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-	layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
-	m_view = inflater.inflate(R.layout.settings, null);
-
-	/*
-	** Prepare things.
-	*/
-
-	initialize_widget_members();
-	prepare_icons();
-	prepare_listeners();
-	prepare_widgets();
-
-	/*
-	** The cute dialog.
-	*/
-
-	m_dialog = new Dialog(m_context);
-	m_dialog.setCancelable(false);
-	m_dialog.setContentView(m_view);
-	m_dialog.setTitle("Settings");
 	m_dialog.show();
-	m_dialog.getWindow().setAttributes(layout_params); // After show().
-	m_inbound_address.requestFocus();
 	populate();
+	prepare_icons();
     }
 }

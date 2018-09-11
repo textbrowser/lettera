@@ -35,13 +35,21 @@ import android.widget.Button;
 
 public class Lettera extends AppCompatActivity
 {
+    private Button m_compose_button = null;
+    private Button m_contacts_button = null;
+    private Button m_download_button = null;
+    private Button m_messaging_button = null;
     private Button m_settings_button = null;
     private Database m_database = null;
     private Settings m_settings = null;
 
     private void initialize_widget_members()
     {
-	m_settings_button = findViewById(R.id.settings_button);
+	m_compose_button = (Button) findViewById(R.id.compose_button);
+	m_contacts_button = (Button) findViewById(R.id.contacts_button);
+	m_download_button = (Button) findViewById(R.id.download_button);
+	m_messaging_button = (Button) findViewById(R.id.messaging_button);
+	m_settings_button = (Button) findViewById(R.id.settings_button);
     }
 
     private void prepare_button_listeners()
@@ -58,6 +66,44 @@ public class Lettera extends AppCompatActivity
 		    m_settings.show();
 		}
 	    });
+    }
+
+    private void prepare_icons()
+    {
+	SettingsElement settings_element = m_database.settings_element
+	    ("icon_theme");
+
+	if(settings_element == null)
+	{
+	    m_compose_button.setBackgroundResource
+		(Settings.icon_from_name("default_compose"));
+	    m_contacts_button.setBackgroundResource
+		(Settings.icon_from_name("default_contacts"));
+	    m_download_button.setBackgroundResource
+		(Settings.icon_from_name("default_download"));
+	    m_messaging_button.setBackgroundResource
+		(Settings.icon_from_name("default_messaging"));
+	    m_settings_button.setBackgroundResource
+		(Settings.icon_from_name("default_settings"));
+	}
+	else
+	{
+	    m_compose_button.setBackgroundResource
+		(Settings.
+		 icon_from_name(settings_element.m_value + "_compose"));
+	    m_contacts_button.setBackgroundResource
+		(Settings.
+		 icon_from_name(settings_element.m_value + "_contacts"));
+	    m_download_button.setBackgroundResource
+		(Settings.
+		 icon_from_name(settings_element.m_value + "_download"));
+	    m_messaging_button.setBackgroundResource
+		(Settings.
+		 icon_from_name(settings_element.m_value + "_messaging"));
+	    m_settings_button.setBackgroundResource
+		(Settings.
+		 icon_from_name(settings_element.m_value + "_settings"));
+	}
     }
 
     @Override
@@ -83,5 +129,6 @@ public class Lettera extends AppCompatActivity
 	m_database = Database.getInstance(getApplicationContext());
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	prepare_button_listeners();
+	prepare_icons();
     }
 }
