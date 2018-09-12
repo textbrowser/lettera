@@ -226,7 +226,6 @@ public class Settings
     private View m_network_layout = null;
     private View m_parent = null;
     private View m_privacy_layout = null;
-    private View m_generate_keys_progress_bar = null;
     private View m_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
     private final Database m_database = Database.getInstance();
@@ -449,8 +448,6 @@ public class Settings
 	m_display_button = (Button) m_view.findViewById
 	    (R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
-	m_generate_keys_progress_bar = m_view.findViewById
-	    (R.id.generate_keys_progress_bar);
 	m_icon_theme_spinner = (Spinner) m_view.findViewById
 	    (R.id.icon_theme_spinner);
 	m_inbound_address = (TextView) m_view.findViewById
