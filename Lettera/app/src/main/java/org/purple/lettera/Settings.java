@@ -203,6 +203,7 @@ public class Settings
     private Button m_close_button = null;
     private Button m_delete_account_button = null;
     private Button m_display_button = null;
+    private Button m_generate_keys_button = null;
     private Button m_network_button = null;
     private Button m_privacy_button = null;
     private Button m_test_inbound_button = null;
@@ -447,6 +448,7 @@ public class Settings
 	m_display_button = (Button) m_view.findViewById
 	    (R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
+	m_generate_keys_button = m_view.findViewById(R.id.generate_keys_button);
 	m_icon_theme_spinner = (Spinner) m_view.findViewById
 	    (R.id.icon_theme_spinner);
 	m_inbound_address = (TextView) m_view.findViewById
