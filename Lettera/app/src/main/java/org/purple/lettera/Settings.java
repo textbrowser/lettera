@@ -939,8 +939,9 @@ public class Settings
 	m_dialog.setCancelable(false);
 	m_dialog.setContentView(m_view);
 	m_dialog.setTitle("Settings");
-	Objects.requireNonNull
-	    (m_dialog.getWindow()).setAttributes(m_layout_params);
+
+	if(m_dialog.getWindow() != null)
+	    m_dialog.getWindow().setAttributes(m_layout_params);
     }
 
     public static int icon_from_name(String name)
