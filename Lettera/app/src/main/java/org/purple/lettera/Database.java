@@ -373,6 +373,22 @@ public class Database extends SQLiteOpenHelper
 	{
 	}
 
+	str = "CREATE TABLE IF NOT EXISTS open_pgp (" +
+	    "function TEXT NOT NULL, " + // Encryption, Signature.
+	    "private_key TEXT NOT NULL, " +
+	    "private_key_digest TEXT NOT NULL, " +
+	    "public_key TEXT NOT NULL, " +
+	    "public_key_digest TEXT NOT NULL, " +
+	    "PRIMARY KEY (function, private_key_digest, public_key_digest))";
+
+	try
+	{
+	    db.execSQL(str);
+	}
+	catch(Exception exception)
+	{
+	}
+
 	str = "CREATE TABLE IF NOT EXISTS settings (" +
 	    "key TEXT NOT NULL PRIMARY KEY, " +
 	    "value TEXT NOT NULL)";
