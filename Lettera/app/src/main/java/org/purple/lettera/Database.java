@@ -38,7 +38,7 @@ public class Database extends SQLiteOpenHelper
 {
     private SQLiteDatabase m_db = null;
     private final static String DATABASE_NAME = "lettera.db";
-    private final static int DATABASE_VERSION = 2;
+    private final static int DATABASE_VERSION = 3;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -118,7 +118,7 @@ public class Database extends SQLiteOpenHelper
 		    {
 		    case 0:
 			email_element.m_delete_on_server =
-			    cursor.getInt(i) == 0 ? false : true;
+			    cursor.getInt(i) != 0;
 			break;
 		    case 1:
 			email_element.m_inbound_email = cursor.getString(i);
@@ -171,7 +171,7 @@ public class Database extends SQLiteOpenHelper
 	try
 	{
 	    cursor = m_db.rawQuery
-		("SELECT key, value FROM settings WHERE key = ?",
+		("SELECT key_field, value FROM settings WHERE key_field = ?",
 		 new String[] {key});
 
 	    if(cursor != null && cursor.moveToFirst())
@@ -262,7 +262,7 @@ public class Database extends SQLiteOpenHelper
 	try
 	{
 	    m_db.execSQL
-		("REPLACE INTO settings (key, value) VALUES (?, ?)",
+		("REPLACE INTO settings (key_field, value) VALUES (?, ?)",
 		 new String[] {content_values.getAsString("key"),
 			       content_values.getAsString("value")});
 	    m_db.setTransactionSuccessful();
@@ -390,7 +390,7 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	str = "CREATE TABLE IF NOT EXISTS settings (" +
-	    "key TEXT NOT NULL PRIMARY KEY, " +
+	    "key_field TEXT NOT NULL PRIMARY KEY, " +
 	    "value TEXT NOT NULL)";
 
 	try

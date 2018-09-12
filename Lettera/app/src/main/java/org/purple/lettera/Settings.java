@@ -47,6 +47,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.sun.mail.smtp.SMTPTransport;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Properties;
 import javax.mail.Session;
 import javax.mail.Store;
@@ -55,9 +56,9 @@ public class Settings
 {
     private abstract class PageEnumerator
     {
-	public final static int DISPLAY_PAGE = 0;
-	public final static int NETWORK_PAGE = 1;
-	public final static int PRIVACY_PAGE = 2;
+	private final static int DISPLAY_PAGE = 0;
+	private final static int NETWORK_PAGE = 1;
+	private final static int PRIVACY_PAGE = 2;
     }
 
     private class EmailTest implements Runnable
@@ -72,12 +73,12 @@ public class Settings
 	private boolean m_error = true;
 	private int m_port = -1;
 
-	public EmailTest(Dialog dialog,
-			 String email,
-			 String host,
-			 String password,
-			 String port,
-			 String protocol)
+	private EmailTest(Dialog dialog,
+			  String email,
+			  String host,
+			  String password,
+			  String port,
+			  String protocol)
 	{
 	    m_dialog = dialog;
 	    m_email = email;
@@ -938,7 +939,8 @@ public class Settings
 	m_dialog.setCancelable(false);
 	m_dialog.setContentView(m_view);
 	m_dialog.setTitle("Settings");
-	m_dialog.getWindow().setAttributes(m_layout_params);
+	Objects.requireNonNull
+	    (m_dialog.getWindow()).setAttributes(m_layout_params);
     }
 
     public static int icon_from_name(String name)

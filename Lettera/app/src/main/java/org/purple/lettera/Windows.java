@@ -99,6 +99,7 @@ public abstract class Windows
 	}
 	catch(Exception exception)
 	{
+	    dialog.dismiss();
 	}
     }
 }
