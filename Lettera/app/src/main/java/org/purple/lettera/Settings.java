@@ -968,8 +968,6 @@ public class Settings
 	    return R.drawable.default_privacy_pressed;
 	case "default_settings":
 	    return R.drawable.default_settings;
-	case "default_window_close":
-	    return R.drawable.default_window_close;
 	case "material_compose":
 	    return R.drawable.material_compose;
 	case "material_contacts":
@@ -992,8 +990,6 @@ public class Settings
 	    return R.drawable.material_privacy_pressed;
 	case "material_settings":
 	    return R.drawable.material_settings;
-	case "material_window_close":
-	    return R.drawable.material_window_close;
 	case "nuvola_compose":
 	    return R.drawable.nuvola_compose;
 	case "nuvola_contacts":
@@ -1016,8 +1012,6 @@ public class Settings
 	    return R.drawable.nuvola_privacy_pressed;
 	case "nuvola_settings":
 	    return R.drawable.nuvola_settings;
-	case "nuvola_window_close":
-	    return R.drawable.nuvola_window_close;
 	default:
 	    return R.drawable.lettera;
 	}
