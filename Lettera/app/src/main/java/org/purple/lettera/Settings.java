@@ -207,7 +207,6 @@ public class Settings
     private Button m_privacy_button = null;
     private Button m_test_inbound_button = null;
     private Button m_test_outbound_button = null;
-    private Button m_x_button = null;
     private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_delete_account_verify_check_box = null;
     private Context m_context = null;
@@ -470,7 +469,6 @@ public class Settings
 	    (R.id.test_inbound_button);
 	m_test_outbound_button = (Button) m_view.findViewById
 	    (R.id.test_outbound_button);
-	m_x_button = (Button) m_view.findViewById(R.id.x_button);
     }
 
     private void populate()
@@ -772,19 +770,6 @@ public class Settings
 			return;
 
 		    test_outbound_server();
-		}
-	    });
-
-	if(!m_x_button.hasOnClickListeners())
-	    m_x_button.setOnClickListener(new View.OnClickListener()
-	    {
-		public void onClick(View view)
-		{
-		    if(((Activity) m_context).isFinishing())
-			return;
-
-		    if(m_dialog != null)
-			m_dialog.dismiss();
 		}
 	    });
     }

@@ -20,28 +20,6 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="#E0E0E0"
-                android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/x_button"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="0"
-                    android:background="@drawable/default_window_close" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#455a64"
                 android:orientation="horizontal"
