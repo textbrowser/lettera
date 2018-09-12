@@ -819,7 +819,7 @@ public class Settings
 	** Privacy
 	*/
 
-	array = new String[] {"McEliece", "RSA"};
+	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	spinner = (Spinner) m_view.findViewById
