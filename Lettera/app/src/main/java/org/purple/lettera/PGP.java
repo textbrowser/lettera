@@ -28,7 +28,9 @@
 package org.purple.lettera;
 
 import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.Security;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class PGP
@@ -41,9 +43,67 @@ public class PGP
     private KeyPair m_encryption_key_pair;
     private KeyPair m_signature_key_pair;
     private PGP s_instance = null;
+    private final ReentrantReadWriteLock m_encryption_key_pair_lock =
+	new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock m_signature_key_pair_lock =
+	new ReentrantReadWriteLock();
 
     private PGP()
     {
+    }
+
+    public KeyPair generate_key_pair(String type)
+    {
+	if(type == null)
+	    return null;
+	else
+	    switch(type)
+	    {
+	    case "RSA":
+		try
+		{
+		    KeyPairGenerator kpg = KeyPairGenerator.getInstance
+			("RSA", "BC");
+
+		    kpg.initialize(4096);
+		    return kpg.generateKeyPair();
+		}
+		catch(Exception exception)
+		{
+		}
+
+		return null;
+	    default:
+		return null;
+	    }
+    }
+
+    public KeyPair encryption_key_pair()
+    {
+	m_encryption_key_pair_lock.readLock().lock();
+
+	try
+	{
+	    return m_encryption_key_pair;
+	}
+	finally
+	{
+	    m_encryption_key_pair_lock.readLock().unlock();
+	}
+    }
+
+    public KeyPair signature_key_pair()
+    {
+	m_signature_key_pair_lock.readLock().lock();
+
+	try
+	{
+	    return m_signature_key_pair;
+	}
+	finally
+	{
+	    m_signature_key_pair_lock.readLock().unlock();
+	}
     }
 
     public synchronized PGP get_instance()
