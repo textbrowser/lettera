@@ -229,7 +229,7 @@ public class Settings
     private View m_privacy_layout = null;
     private View m_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
-    private final Database m_database = Database.getInstance();
+    private final Database m_database = Database.get_instance();
     private final static InputFilter s_port_filter = new InputFilter()
     {
 	public CharSequence filter(CharSequence source,

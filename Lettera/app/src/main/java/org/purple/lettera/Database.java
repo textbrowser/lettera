@@ -308,12 +308,12 @@ public class Database extends SQLiteOpenHelper
 	return ok;
     }
 
-    public static synchronized Database getInstance()
+    public static synchronized Database get_instance()
     {
 	return s_instance; // Should never be null.
     }
 
-    public static synchronized Database getInstance(Context context)
+    public static synchronized Database get_instance(Context context)
     {
 	if(s_instance == null)
 	    s_instance = new Database(context.getApplicationContext());

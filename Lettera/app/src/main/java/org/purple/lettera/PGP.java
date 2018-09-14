@@ -27,6 +27,7 @@
 
 package org.purple.lettera;
 
+import java.security.KeyPair;
 import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -35,5 +36,21 @@ public class PGP
     static
     {
 	Security.addProvider(new BouncyCastleProvider());
+    }
+
+    private KeyPair m_encryption_key_pair;
+    private KeyPair m_signature_key_pair;
+    private PGP s_instance = null;
+
+    private PGP()
+    {
+    }
+
+    public synchronized PGP get_instance()
+    {
+	if(s_instance == null)
+	    s_instance = new PGP();
+
+	return s_instance;
     }
 }

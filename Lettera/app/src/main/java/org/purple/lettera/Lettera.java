@@ -89,7 +89,7 @@ public class Lettera extends AppCompatActivity
 	*/
 
 	initialize_widget_members();
-	m_database = Database.getInstance(getApplicationContext());
+	m_database = Database.get_instance(getApplicationContext());
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	prepare_button_listeners();
 	prepare_icons();
