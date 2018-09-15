@@ -46,6 +46,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.sun.mail.smtp.SMTPTransport;
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
@@ -220,6 +221,11 @@ public class Settings
 	{
 	    try
 	    {
+		KeyPair key_pair_1 = PGP.generate_key_pair
+		    (m_encryption_key_type);
+		KeyPair key_pair_2 = PGP.generate_key_pair
+		    (m_signature_key_type);
+
 		((Activity) m_context).runOnUiThread(new Runnable()
 		{
 		    @Override
@@ -254,11 +260,14 @@ public class Settings
     private Button m_test_inbound_button = null;
     private Button m_test_outbound_button = null;
     private CheckBox m_delete_on_server_checkbox = null;
-    private CheckBox m_delete_account_verify_check_box = null;
+    private CheckBox m_delete_account_verify_checkbox = null;
+    private CheckBox m_generate_keys_checkbox = null;
     private Context m_context = null;
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
+    private Spinner m_encryption_key_spinner = null;
     private Spinner m_icon_theme_spinner = null;
+    private Spinner m_signature_key_spinner = null;
     private TextView m_inbound_address = null;
     private TextView m_inbound_email = null;
     private TextView m_inbound_password = null;
@@ -479,6 +488,32 @@ public class Settings
 	}
     }
 
+    private void generate_key_pairs()
+    {
+	Dialog dialog = null;
+
+	try
+	{
+	    dialog = new Dialog(m_context);
+	    Windows.show_progress_dialog
+		(m_context, dialog, "Generating key pairs. Please be patient.");
+
+	    Thread thread = new Thread
+		(new GenerateKeyPairs(dialog,
+				      m_encryption_key_spinner.
+				      getSelectedItem().toString(),
+				      m_signature_key_spinner.
+				      getSelectedItem().toString()));
+
+	    thread.start();
+	}
+	catch(Exception exception)
+	{
+	    if(dialog != null)
+		dialog.dismiss();
+	}
+    }
+
     private void initialize_widget_members()
     {
 	m_accounts_spinner = (Spinner) m_view.findViewById
@@ -487,14 +522,18 @@ public class Settings
 	m_close_button = (Button) m_view.findViewById(R.id.close_button);
 	m_delete_account_button = (Button) m_view.findViewById
 	    (R.id.delete_account_button);
-	m_delete_account_verify_check_box = (CheckBox)
-	    m_view.findViewById(R.id.delete_account_verify_check_box);
+	m_delete_account_verify_checkbox = (CheckBox)
+	    m_view.findViewById(R.id.delete_account_verify_checkbox);
 	m_delete_on_server_checkbox = (CheckBox)
 	    m_view.findViewById(R.id.delete_on_server_checkbox);
 	m_display_button = (Button) m_view.findViewById
 	    (R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
+	m_encryption_key_spinner = (Spinner) m_view.findViewById
+	    (R.id.encryption_key_spinner);
 	m_generate_keys_button = m_view.findViewById(R.id.generate_keys_button);
+	m_generate_keys_checkbox = (CheckBox) m_view.findViewById
+	    (R.id.generate_keys_checkbox);
 	m_icon_theme_spinner = (Spinner) m_view.findViewById
 	    (R.id.icon_theme_spinner);
 	m_inbound_address = (TextView) m_view.findViewById
@@ -513,6 +552,8 @@ public class Settings
 	m_network_layout = m_view.findViewById(R.id.network_layout);
 	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
+	m_signature_key_spinner = (Spinner) m_view.findViewById
+	    (R.id.signature_key_spinner);
 	m_test_inbound_button = (Button) m_view.findViewById
 	    (R.id.test_inbound_button);
 	m_test_outbound_button = (Button) m_view.findViewById
@@ -541,13 +582,13 @@ public class Settings
 	    array_list = new ArrayList<> ();
 	    array_list.add("(Empty)");
 	    m_delete_account_button.setEnabled(false);
-	    m_delete_account_verify_check_box.setEnabled(false);
+	    m_delete_account_verify_checkbox.setEnabled(false);
 	}
 	else
 	{
 	    m_delete_account_button.setEnabled
-		(m_delete_account_verify_check_box.isChecked());
-	    m_delete_account_verify_check_box.setEnabled(true);
+		(m_delete_account_verify_checkbox.isChecked());
+	    m_delete_account_verify_checkbox.setEnabled(true);
 	}
 
 	ArrayAdapter<String> array_adapter = new ArrayAdapter<>
@@ -712,14 +753,14 @@ public class Settings
 			   delete_email_account(m_accounts_spinner.
 						getSelectedItem().toString()))
 			{
-			    m_delete_account_verify_check_box.setChecked(false);
+			    m_delete_account_verify_checkbox.setChecked(false);
 			    populate_accounts_spinner();
 			    populate_network();
 			}
 		    }
 		});
 
-	m_delete_account_verify_check_box.setOnCheckedChangeListener
+	m_delete_account_verify_checkbox.setOnCheckedChangeListener
 	    (new CompoundButton.OnCheckedChangeListener()
 	    {
 		@Override
@@ -754,6 +795,19 @@ public class Settings
 		{
 		    if(((Activity) m_context).isFinishing())
 			return;
+
+		    generate_key_pairs();
+		}
+	    });
+
+	m_generate_keys_checkbox.setOnCheckedChangeListener
+	    (new CompoundButton.OnCheckedChangeListener()
+	    {
+		@Override
+		public void onCheckedChanged
+		    (CompoundButton buttonView, boolean isChecked)
+		{
+		    m_generate_keys_button.setEnabled(isChecked);
 		}
 	    });
 
@@ -880,14 +934,12 @@ public class Settings
 	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById
-	    (R.id.encryption_key_spinner);
-	spinner.setAdapter(array_adapter);
+	m_encryption_key_spinner.setAdapter(array_adapter);
+	m_generate_keys_button.setEnabled(false);
 	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById(R.id.signature_key_spinner);
-	spinner.setAdapter(array_adapter);
+	m_signature_key_spinner.setAdapter(array_adapter);
     }
 
     private void show_display_page()

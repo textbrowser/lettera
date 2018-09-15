@@ -162,7 +162,7 @@
                         android:text="@string/delete" />
 
                     <CheckBox
-                        android:id="@+id/delete_account_verify_check_box"
+                        android:id="@+id/delete_account_verify_checkbox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0" />
@@ -374,13 +374,27 @@
                         <Space
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
+
                     </android.support.v7.widget.GridLayout>
 
-                    <Button
-                        android:id="@+id/generate_keys_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/generate" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/generate_keys_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="@string/generate" />
+
+                        <CheckBox
+                            android:id="@+id/generate_keys_checkbox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0" />
+                    </LinearLayout>
 
                 </LinearLayout>
 

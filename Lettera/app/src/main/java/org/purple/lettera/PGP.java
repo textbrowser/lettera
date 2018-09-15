@@ -52,32 +52,6 @@ public class PGP
     {
     }
 
-    public KeyPair generate_key_pair(String type)
-    {
-	if(type == null)
-	    return null;
-	else
-	    switch(type)
-	    {
-	    case "RSA":
-		try
-		{
-		    KeyPairGenerator kpg = KeyPairGenerator.getInstance
-			("RSA", "BC");
-
-		    kpg.initialize(4096);
-		    return kpg.generateKeyPair();
-		}
-		catch(Exception exception)
-		{
-		}
-
-		return null;
-	    default:
-		return null;
-	    }
-    }
-
     public KeyPair encryption_key_pair()
     {
 	m_encryption_key_pair_lock.readLock().lock();
@@ -104,6 +78,32 @@ public class PGP
 	{
 	    m_signature_key_pair_lock.readLock().unlock();
 	}
+    }
+
+    public static KeyPair generate_key_pair(String type)
+    {
+	if(type == null)
+	    return null;
+	else
+	    switch(type)
+	    {
+	    case "RSA":
+		try
+		{
+		    KeyPairGenerator kpg = KeyPairGenerator.getInstance
+			("RSA", "BC");
+
+		    kpg.initialize(4096);
+		    return kpg.generateKeyPair();
+		}
+		catch(Exception exception)
+		{
+		}
+
+		return null;
+	    default:
+		return null;
+	    }
     }
 
     public static synchronized PGP get_instance()
