@@ -204,8 +204,9 @@ public class Settings
     private class GenerateKeyPairs implements Runnable
     {
 	private Dialog m_dialog = null;
-	private String m_encryption_key_type;
-	private String m_signature_key_type;
+	private String m_encryption_key_type = "";
+	private String m_signature_key_type = "";
+	private boolean m_error = false;
 
 	private GenerateKeyPairs(Dialog dialog,
 				 String encryption_key_type,
@@ -219,13 +220,24 @@ public class Settings
 	@Override
 	public void run()
 	{
+	    KeyPair key_pair_1 = null;
+	    KeyPair key_pair_2 = null;
+
 	    try
 	    {
-		KeyPair key_pair_1 = PGP.generate_key_pair
-		    (m_encryption_key_type);
-		KeyPair key_pair_2 = PGP.generate_key_pair
-		    (m_signature_key_type);
+		key_pair_1 = PGP.generate_key_pair(m_encryption_key_type);
+		key_pair_2 = PGP.generate_key_pair(m_signature_key_type);
 
+		if(key_pair_1 == null || key_pair_2 == null)
+		    m_error = true;
+	    }
+	    catch(Exception exception)
+	    {
+		m_error = true;
+	    }
+
+	    try
+	    {
 		((Activity) m_context).runOnUiThread(new Runnable()
 		{
 		    @Override
@@ -234,8 +246,14 @@ public class Settings
 			if(m_dialog != null)
 			    m_dialog.dismiss();
 
-			Windows.show_dialog
-			    (m_context, "Key pairs generated!", "Success");
+			if(!m_error)
+			    Windows.show_dialog
+				(m_context, "Key pairs generated!", "Success");
+			else
+			    Windows.show_dialog
+				(m_context,
+				 "Cannot generate key pairs!",
+				 "Error");
 		    }
 		});
 	    }
@@ -268,6 +286,7 @@ public class Settings
     private Spinner m_encryption_key_spinner = null;
     private Spinner m_icon_theme_spinner = null;
     private Spinner m_signature_key_spinner = null;
+    private TextView m_encryption_key_digest = null;
     private TextView m_inbound_address = null;
     private TextView m_inbound_email = null;
     private TextView m_inbound_password = null;
@@ -276,6 +295,7 @@ public class Settings
     private TextView m_outbound_email = null;
     private TextView m_outbound_password = null;
     private TextView m_outbound_port = null;
+    private TextView m_signature_key_digest = null;
     private View m_display_layout = null;
     private View m_network_layout = null;
     private View m_parent = null;
@@ -529,6 +549,8 @@ public class Settings
 	m_display_button = (Button) m_view.findViewById
 	    (R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
+	m_encryption_key_digest = (TextView) m_view.findViewById
+	    (R.id.encryption_key_digest);
 	m_encryption_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.encryption_key_spinner);
 	m_generate_keys_button = m_view.findViewById(R.id.generate_keys_button);
@@ -552,6 +574,7 @@ public class Settings
 	m_network_layout = m_view.findViewById(R.id.network_layout);
 	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
+	m_signature_key_digest = m_view.findViewById(R.id.signature_key_digest);
 	m_signature_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.signature_key_spinner);
 	m_test_inbound_button = (Button) m_view.findViewById
