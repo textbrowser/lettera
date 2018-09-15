@@ -42,11 +42,11 @@ public class PGP
 
     private KeyPair m_encryption_key_pair;
     private KeyPair m_signature_key_pair;
-    private PGP s_instance = null;
     private final ReentrantReadWriteLock m_encryption_key_pair_lock =
 	new ReentrantReadWriteLock();
     private final ReentrantReadWriteLock m_signature_key_pair_lock =
 	new ReentrantReadWriteLock();
+    private static PGP s_instance = null;
 
     private PGP()
     {
@@ -106,7 +106,7 @@ public class PGP
 	}
     }
 
-    public synchronized PGP get_instance()
+    public static synchronized PGP get_instance()
     {
 	if(s_instance == null)
 	    s_instance = new PGP();

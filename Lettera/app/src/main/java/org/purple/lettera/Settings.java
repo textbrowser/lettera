@@ -200,6 +200,50 @@ public class Settings
 	}
     }
 
+    private class GenerateKeyPairs implements Runnable
+    {
+	private Dialog m_dialog = null;
+	private String m_encryption_key_type;
+	private String m_signature_key_type;
+
+	private GenerateKeyPairs(Dialog dialog,
+				 String encryption_key_type,
+				 String signature_key_type)
+	{
+	    m_dialog = dialog;
+	    m_encryption_key_type = encryption_key_type;
+	    m_signature_key_type = signature_key_type;
+	}
+
+	@Override
+	public void run()
+	{
+	    try
+	    {
+		((Activity) m_context).runOnUiThread(new Runnable()
+		{
+		    @Override
+		    public void run()
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+
+			Windows.show_dialog
+			    (m_context, "Key pairs generated!", "Success");
+		    }
+		});
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	    finally
+	    {
+		if(m_dialog != null)
+		    m_dialog.dismiss();
+	    }
+	}
+    }
+
     private Button m_apply_button = null;
     private Button m_close_button = null;
     private Button m_delete_account_button = null;
@@ -230,6 +274,7 @@ public class Settings
     private View m_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
     private final Database m_database = Database.get_instance();
+    private final PGP m_pgp = PGP.get_instance();
     private final static InputFilter s_port_filter = new InputFilter()
     {
 	public CharSequence filter(CharSequence source,
@@ -699,6 +744,16 @@ public class Settings
 
 		    m_current_page = PageEnumerator.DISPLAY_PAGE;
 		    show_display_page();
+		}
+	    });
+
+	if(!m_generate_keys_button.hasOnClickListeners())
+	    m_generate_keys_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
 		}
 	    });
 
