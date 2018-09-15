@@ -347,7 +347,7 @@
                             android:id="@+id/encryption_key_digest"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/sha_512_digest" />
+                            android:text="@string/digest" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -369,7 +369,7 @@
                             android:id="@+id/signature_key_digest"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/sha_512_digest" />
+                            android:text="@string/digest" />
 
                         <Space
                             android:layout_width="wrap_content"
