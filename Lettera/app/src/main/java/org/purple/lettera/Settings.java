@@ -204,6 +204,8 @@ public class Settings
     private class GenerateKeyPairs implements Runnable
     {
 	private Dialog m_dialog = null;
+	private KeyPair m_encryption_key_pair = null;
+	private KeyPair m_signature_key_pair = null;
 	private String m_encryption_key_type = "";
 	private String m_signature_key_type = "";
 	private boolean m_error = false;
@@ -220,15 +222,15 @@ public class Settings
 	@Override
 	public void run()
 	{
-	    KeyPair key_pair_1 = null;
-	    KeyPair key_pair_2 = null;
-
 	    try
 	    {
-		key_pair_1 = PGP.generate_key_pair(m_encryption_key_type);
-		key_pair_2 = PGP.generate_key_pair(m_signature_key_type);
+		m_encryption_key_pair = PGP.generate_key_pair
+		    (m_encryption_key_type);
+		m_signature_key_pair = PGP.generate_key_pair
+		    (m_signature_key_type);
 
-		if(key_pair_1 == null || key_pair_2 == null)
+		if(m_encryption_key_pair == null ||
+		   m_signature_key_pair == null)
 		    m_error = true;
 	    }
 	    catch(Exception exception)
@@ -245,6 +247,26 @@ public class Settings
 		    {
 			if(m_dialog != null)
 			    m_dialog.dismiss();
+
+			if(m_encryption_key_pair == null)
+			    m_encryption_key_digest.setText
+				(Cryptography.sha_1_fingerprint(null));
+			else
+			    m_encryption_key_digest.setText
+				("SHA-1: " +
+				 Cryptography.
+				 sha_1_fingerprint(m_encryption_key_pair.
+						   getPublic()));
+
+			if(m_signature_key_pair == null)
+			    m_signature_key_digest.setText
+				(Cryptography.sha_1_fingerprint(null));
+			else
+			    m_signature_key_digest.setText
+				("SHA-1: " + 
+				 Cryptography.
+				 sha_1_fingerprint(m_signature_key_pair.
+						   getPublic()));
 
 			if(!m_error)
 			    Windows.show_dialog

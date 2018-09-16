@@ -93,7 +93,7 @@ public class PGP
 		    KeyPairGenerator kpg = KeyPairGenerator.getInstance
 			("RSA", "BC");
 
-		    kpg.initialize(4096);
+		    kpg.initialize(1024);
 		    return kpg.generateKeyPair();
 		}
 		catch(Exception exception)
