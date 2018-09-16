@@ -647,7 +647,7 @@ public class Settings
 	ArrayAdapter array_adapter = null;
 	String array[] = null;
 
-	array = new String[] {"Default", "Material", "Nuvola"};
+	array = new String[] {"Default", "Hand Drawn", "Material", "Nuvola"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_icon_theme_spinner.setAdapter(array_adapter);
@@ -663,11 +663,14 @@ public class Settings
 	    case "default":
 		m_icon_theme_spinner.setSelection(0);
 		break;
-	    case "material":
+	    case "hand drawn":
 		m_icon_theme_spinner.setSelection(1);
 		break;
-	    case "nuvola":
+	    case "material":
 		m_icon_theme_spinner.setSelection(2);
+		break;
+	    case "nuvola":
+		m_icon_theme_spinner.setSelection(3);
 		break;
 	    default:
 		m_icon_theme_spinner.setSelection(0);
@@ -955,7 +958,7 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
 	spinner.setAdapter(array_adapter);
-	array = new String[] {"Default", "Material", "Nuvola"};
+	array = new String[] {"Default", "Hand Drawn", "Material", "Nuvola"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_icon_theme_spinner.setAdapter(array_adapter);
@@ -1125,6 +1128,28 @@ public class Settings
 	    return R.drawable.default_privacy_pressed;
 	case "default_settings":
 	    return R.drawable.default_settings;
+	case "hand drawn_compose":
+	    return R.drawable.hand_drawn_compose;
+	case "hand drawn_contacts":
+	    return R.drawable.hand_drawn_contacts;
+	case "hand drawn_display":
+	    return R.drawable.hand_drawn_display;
+	case "hand drawn_display_pressed":
+	    return R.drawable.hand_drawn_display_pressed;
+	case "hand drawn_download":
+	    return R.drawable.hand_drawn_download;
+	case "hand drawn_messaging":
+	    return R.drawable.hand_drawn_messaging;
+	case "hand drawn_network":
+	    return R.drawable.hand_drawn_network;
+	case "hand drawn_network_pressed":
+	    return R.drawable.hand_drawn_network_pressed;
+	case "hand drawn_privacy":
+	    return R.drawable.hand_drawn_privacy;
+	case "hand drawn_privacy_pressed":
+	    return R.drawable.hand_drawn_privacy_pressed;
+	case "hand drawn_settings":
+	    return R.drawable.hand_drawn_settings;
 	case "material_compose":
 	    return R.drawable.material_compose;
 	case "material_contacts":
