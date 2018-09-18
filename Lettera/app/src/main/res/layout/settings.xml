@@ -83,41 +83,33 @@
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
-                <LinearLayout
+                <android.support.v7.widget.GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    app:columnCount="2"
+                    app:rowCount="2">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0"
                         android:text="@string/color_theme" />
 
                     <Spinner
                         android:id="@+id/color_theme_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0"
                         android:text="@string/icon_theme" />
 
                     <Spinner
                         android:id="@+id/icon_theme_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0" />
-                </LinearLayout>
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content" />
+
+                </android.support.v7.widget.GridLayout>
 
             </LinearLayout>
 
@@ -331,7 +323,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
                             android:text="@string/encryption_key" />
@@ -355,7 +347,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
                             android:text="@string/signature_key" />
