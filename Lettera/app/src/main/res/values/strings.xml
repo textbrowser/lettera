@@ -23,4 +23,7 @@
     <string name="_587">587</string>
     <string name="_993">993</string>
     <string name="digest">Digest</string>
+    <string name="proxy">Proxy</string>
+    <string name="type">Type</string>
+    <string name="user">User</string>
 </resources>

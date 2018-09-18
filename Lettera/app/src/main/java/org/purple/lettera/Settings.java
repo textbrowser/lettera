@@ -307,6 +307,7 @@ public class Settings
     private Spinner m_accounts_spinner = null;
     private Spinner m_encryption_key_spinner = null;
     private Spinner m_icon_theme_spinner = null;
+    private Spinner m_proxy_type_spinner = null;
     private Spinner m_signature_key_spinner = null;
     private TextView m_encryption_key_digest = null;
     private TextView m_inbound_address = null;
@@ -596,6 +597,8 @@ public class Settings
 	m_network_layout = m_view.findViewById(R.id.network_layout);
 	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
+	m_proxy_type_spinner = (Spinner) m_view.findViewById
+	    (R.id.proxy_type_spinner);
 	m_signature_key_digest = m_view.findViewById(R.id.signature_key_digest);
 	m_signature_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.signature_key_spinner);
@@ -974,6 +977,10 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_accounts_spinner.setAdapter(array_adapter);
 	m_delete_account_button.setEnabled(false);
+	array = new String[] {"HTTP", "SOCKS"};
+	array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, array);
+	m_proxy_type_spinner.setAdapter(array_adapter);
 
 	/*
 	** Privacy
