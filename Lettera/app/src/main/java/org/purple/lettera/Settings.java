@@ -318,6 +318,10 @@ public class Settings
     private TextView m_outbound_email = null;
     private TextView m_outbound_password = null;
     private TextView m_outbound_port = null;
+    private TextView m_proxy_address = null;
+    private TextView m_proxy_password = null;
+    private TextView m_proxy_port = null;
+    private TextView m_proxy_user = null;
     private TextView m_signature_key_digest = null;
     private View m_display_layout = null;
     private View m_network_layout = null;
@@ -500,6 +504,18 @@ public class Settings
 	    else
 		content_values.put("out_port", string);
 
+	    content_values.put
+		("proxy_address", m_proxy_address.getText().toString().trim());
+	    content_values.put
+		("proxy_password",
+		 m_proxy_password.getText().toString().trim());
+	    content_values.put
+		("proxy_port", m_proxy_port.getText().toString().trim());
+	    content_values.put
+		("proxy_type",
+		 m_proxy_type_spinner.getSelectedItem().toString());
+	    content_values.put
+		("proxy_user", m_proxy_user.getText().toString().trim());
 	    error = m_database.save_email(content_values).trim();
 
 	    if(!error.isEmpty())
@@ -600,8 +616,12 @@ public class Settings
 	m_network_layout = m_view.findViewById(R.id.network_layout);
 	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
+	m_proxy_address = (TextView) m_view.findViewById(R.id.proxy_address);
+	m_proxy_password = (TextView) m_view.findViewById(R.id.proxy_password);
+	m_proxy_port = (TextView) m_view.findViewById(R.id.proxy_port);
 	m_proxy_type_spinner = (Spinner) m_view.findViewById
 	    (R.id.proxy_type_spinner);
+	m_proxy_user = (TextView) m_view.findViewById(R.id.proxy_user);
 	m_signature_key_digest = m_view.findViewById(R.id.signature_key_digest);
 	m_signature_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.signature_key_spinner);

@@ -38,7 +38,7 @@ public class Database extends SQLiteOpenHelper
 {
     private SQLiteDatabase m_db = null;
     private final static String DATABASE_NAME = "lettera.db";
-    private final static int DATABASE_VERSION = 3;
+    private final static int DATABASE_VERSION = 4;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -225,8 +225,13 @@ public class Database extends SQLiteOpenHelper
 		 "out_address, " +
 		 "out_email, " +
 		 "out_password, " +
-		 "out_port) VALUES " +
-		 "(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		 "out_port, " +
+		 "proxy_address, " +
+		 "proxy_password, " +
+		 "proxy_port, " +
+		 "proxy_type, " +
+		 "proxy_user) VALUES " +
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 		 new String[] {content_values.getAsString("delete_on_server"),
 			       content_values.getAsString("email_account"),
 			       content_values.getAsString("in_address"),
@@ -235,7 +240,12 @@ public class Database extends SQLiteOpenHelper
 			       content_values.getAsString("out_address"),
 			       content_values.getAsString("out_email"),
 			       content_values.getAsString("out_password"),
-			       content_values.getAsString("out_port")});
+			       content_values.getAsString("out_port"),
+			       content_values.getAsString("proxy_address"),
+			       content_values.getAsString("proxy_password"),
+			       content_values.getAsString("proxy_port"),
+			       content_values.getAsString("proxy_type"),
+			       content_values.getAsString("proxy_user")});
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
