@@ -363,7 +363,12 @@ public class Database extends SQLiteOpenHelper
 	    "out_address TEXT NOT NULL, " +
 	    "out_email TEXT NOT NULL, " +
 	    "out_password TEXT NOT NULL, " +
-	    "out_port INTEGER NOT NULL)";
+	    "out_port INTEGER NOT NULL, " +
+	    "proxy_address TEXT, " +
+	    "proxy_password TEXT, " +
+	    "proxy_port INTEGER, " +
+	    "proxy_type TEXT, " +
+	    "proxy_user TEXT)";
 
 	try
 	{
