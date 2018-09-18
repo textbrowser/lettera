@@ -263,7 +263,7 @@ public class Settings
 				(Cryptography.sha_1_fingerprint(null));
 			else
 			    m_signature_key_digest.setText
-				("SHA-1: " + 
+				("SHA-1: " +
 				 Cryptography.
 				 sha_1_fingerprint(m_signature_key_pair.
 						   getPublic()));
@@ -351,6 +351,9 @@ public class Settings
 	    return "";
 	}
     };
+    private final static String s_icon_themes_array[] =	new String[]
+	{"Default", "Hand Drawn", "Material", "Nuvola", "SAILFISH"};
+
     private int m_current_page = PageEnumerator.DISPLAY_PAGE;
 
     private int icon(String name)
@@ -647,12 +650,11 @@ public class Settings
 
     private void populate_display()
     {
-	ArrayAdapter array_adapter = null;
-	String array[] = null;
+	ArrayAdapter array_adapter = new ArrayAdapter<>
+	    (m_context,
+	     android.R.layout.simple_spinner_item,
+	     s_icon_themes_array);
 
-	array = new String[] {"Default", "Hand Drawn", "Material", "Nuvola"};
-	array_adapter = new ArrayAdapter<>
-	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_icon_theme_spinner.setAdapter(array_adapter);
 
 	SettingsElement settings_element = m_database.settings_element
@@ -674,6 +676,9 @@ public class Settings
 		break;
 	    case "nuvola":
 		m_icon_theme_spinner.setSelection(3);
+		break;
+	    case "sailfish":
+		m_icon_theme_spinner.setSelection(4);
 		break;
 	    default:
 		m_icon_theme_spinner.setSelection(0);
@@ -961,9 +966,10 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
 	spinner.setAdapter(array_adapter);
-	array = new String[] {"Default", "Hand Drawn", "Material", "Nuvola"};
 	array_adapter = new ArrayAdapter<>
-	    (m_context, android.R.layout.simple_spinner_item, array);
+	    (m_context,
+	     android.R.layout.simple_spinner_item,
+	     s_icon_themes_array);
 	m_icon_theme_spinner.setAdapter(array_adapter);
 
 	/*
@@ -1201,6 +1207,28 @@ public class Settings
 	    return R.drawable.nuvola_privacy_pressed;
 	case "nuvola_settings":
 	    return R.drawable.nuvola_settings;
+	case "sailfish_compose":
+	    return R.drawable.sailfish_compose;
+	case "sailfish_contacts":
+	    return R.drawable.sailfish_contacts;
+	case "sailfish_display":
+	    return R.drawable.sailfish_display;
+	case "sailfish_display_pressed":
+	    return R.drawable.sailfish_display_pressed;
+	case "sailfish_download":
+	    return R.drawable.sailfish_download;
+	case "sailfish_messaging":
+	    return R.drawable.sailfish_messaging;
+	case "sailfish_network":
+	    return R.drawable.sailfish_network;
+	case "sailfish_network_pressed":
+	    return R.drawable.sailfish_network_pressed;
+	case "sailfish_privacy":
+	    return R.drawable.sailfish_privacy;
+	case "sailfish_privacy_pressed":
+	    return R.drawable.sailfish_privacy_pressed;
+	case "sailfish_settings":
+	    return R.drawable.sailfish_settings;
 	default:
 	    return R.drawable.lettera;
 	}
