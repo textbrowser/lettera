@@ -357,7 +357,6 @@ public class Settings
     };
     private final static String s_icon_themes_array[] =	new String[]
 	{"Default", "Hand Drawn", "Material", "Nuvola", "SAILFISH"};
-
     private int m_current_page = PageEnumerator.DISPLAY_PAGE;
 
     private int icon(String name)
