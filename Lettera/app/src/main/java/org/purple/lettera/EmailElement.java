@@ -35,8 +35,13 @@ public class EmailElement
     public String m_outbound_address = "";
     public String m_outbound_email = "";
     public String m_outbound_password = "";
+    public String m_proxy_address = "";
+    public String m_proxy_password = "";
+    public String m_proxy_type = "";
+    public String m_proxy_user = "";
     public boolean m_delete_on_server = false;
     public int m_inbound_port = 1;
     public int m_outbound_port = 1;
+    public int m_proxy_port = 0;
     public long m_oid = -1;
 }
