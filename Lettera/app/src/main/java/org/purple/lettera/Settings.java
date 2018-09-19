@@ -357,6 +357,8 @@ public class Settings
     };
     private final static String s_icon_themes_array[] =	new String[]
 	{"Default", "Hand Drawn", "Material", "Nuvola", "SAILFISH"};
+    private final static String s_proxy_types[] =
+	new String[] {"HTTP", "SOCKS"};
     private int m_current_page = PageEnumerator.DISPLAY_PAGE;
 
     private int icon(String name)
@@ -707,10 +709,14 @@ public class Settings
 
     private void populate_network()
     {
+	ArrayAdapter<String> array_adapter = new ArrayAdapter<>
+	    (m_context, android.R.layout.simple_spinner_item, s_proxy_types);
 	EmailElement email_element =
 	    m_accounts_spinner.getSelectedItem() == null ?
 	    null : m_database.email_element(m_accounts_spinner.
 					    getSelectedItem().toString());
+
+	m_proxy_type_spinner.setAdapter(array_adapter);
 
 	if(email_element == null)
 	{
@@ -723,6 +729,11 @@ public class Settings
 	    m_outbound_email.setText("");
 	    m_outbound_password.setText("");
 	    m_outbound_port.setText("587");
+	    m_proxy_address.setText("");
+	    m_proxy_password.setText("");
+	    m_proxy_port.setText("");
+	    m_proxy_type_spinner.setSelection(0);
+	    m_proxy_user.setText("");
 	}
 	else
 	{
@@ -738,6 +749,20 @@ public class Settings
 	    m_outbound_password.setText(email_element.m_outbound_password);
 	    m_outbound_port.setText
 		(String.valueOf(email_element.m_outbound_port));
+	    m_proxy_address.setText(email_element.m_proxy_address);
+	    m_proxy_password.setText(email_element.m_proxy_password);
+	    m_proxy_port.setText(String.valueOf(email_element.m_proxy_port));
+
+	    switch(email_element.m_proxy_type)
+	    {
+	    case "SOCKS":
+		m_proxy_type_spinner.setSelection(1);
+		break;
+	    default:
+		m_proxy_type_spinner.setSelection(0);
+	    }
+
+	    m_proxy_user.setText(email_element.m_proxy_user);
 	}
     }
 
@@ -995,16 +1020,16 @@ public class Settings
 	** Network
 	*/
 
-	m_inbound_port.setFilters(new InputFilter[] {s_port_filter});
-	m_outbound_port.setFilters(new InputFilter[] {s_port_filter});
 	array = new String[] {"(Empty)"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_accounts_spinner.setAdapter(array_adapter);
 	m_delete_account_button.setEnabled(false);
-	array = new String[] {"HTTP", "SOCKS"};
+	m_inbound_port.setFilters(new InputFilter[] {s_port_filter});
+	m_outbound_port.setFilters(new InputFilter[] {s_port_filter});
+	m_proxy_port.setFilters(new InputFilter[] {s_port_filter});
 	array_adapter = new ArrayAdapter<>
-	    (m_context, android.R.layout.simple_spinner_item, array);
+	    (m_context, android.R.layout.simple_spinner_item, s_proxy_types);
 	m_proxy_type_spinner.setAdapter(array_adapter);
 
 	/*
