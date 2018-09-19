@@ -105,7 +105,12 @@ public class Database extends SQLiteOpenHelper
 		 "out_email, " +               // 6
 		 "out_password, " +            // 7
 		 "out_port, " +                // 8
-		 "OID " +                      // 9
+		 "proxy_address, " +           // 9
+		 "proxy_password, " +          // 10
+		 "proxy_port, " +              // 11
+		 "proxy_type, " +              // 12
+		 "proxy_user, " +              // 13
+		 "OID " +                      // 14
 		 "FROM email_accounts WHERE email_account = ?",
 		 new String[] {account});
 
@@ -145,6 +150,21 @@ public class Database extends SQLiteOpenHelper
 			email_element.m_outbound_port = cursor.getInt(i);
 			break;
 		    case 9:
+			email_element.m_proxy_address = cursor.getString(i);
+			break;
+		    case 10:
+			email_element.m_proxy_password = cursor.getString(i);
+			break;
+		    case 11:
+			email_element.m_proxy_port = cursor.getInt(i);
+			break;
+		    case 12:
+			email_element.m_proxy_type = cursor.getString(i);
+			break;
+		    case 13:
+			email_element.m_proxy_user = cursor.getString(i);
+			break;
+		    case 14:
 			email_element.m_oid = cursor.getLong(i);
 			break;
 		    }
