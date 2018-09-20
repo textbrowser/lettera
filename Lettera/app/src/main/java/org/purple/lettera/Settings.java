@@ -117,21 +117,30 @@ public class Settings
 		Properties properties = new Properties();
 
 		properties.setProperty
-		    ("mail." + m_protocol + ".connectiontimeout", "10000");
-		properties.setProperty
 		    ("mail." + m_protocol + ".ssl.enable", "true");
 		properties.setProperty
 		    ("mail." + m_protocol + ".starttls.enable", "true");
 		properties.setProperty
 		    ("mail." + m_protocol + ".starttls.required", "true");
-		properties.setProperty
-		    ("mail." + m_protocol + ".timeout", "10000");
 
 		switch(m_protocol)
 		{
+		case "imaps":
+		    properties.setProperty
+			("mail." + m_protocol + ".connectiontimeout", "10000");
+		    properties.setProperty
+			("mail." + m_protocol + ".timeout", "10000");
+		    break;
+		case "smtp":
 		case "smtps":
 		    properties.setProperty
+			("mail.smtp.connectiontimeout", "10000");
+		    properties.setProperty("mail.smtp.localhost", "localhost");
+		    properties.setProperty("mail.smtp.timeout", "10000");
+		    properties.setProperty
 			("mail.smtps.localhost", "localhost");
+		    break;
+		default:
 		    break;
 		}
 
@@ -155,6 +164,7 @@ public class Settings
 				("mail." + m_protocol + ".proxy.user",
 				 m_proxy_user);
 			    break;
+			case "smtp":
 			case "smtps":
 			    properties.setProperty
 				("mail.smtp.proxy.host", m_proxy_address);
@@ -179,6 +189,7 @@ public class Settings
 			    properties.setProperty
 				("mail.imaps.socks.port", m_proxy_port);
 			    break;
+			case "smtp":
 			case "smtps":
 			    properties.setProperty
 				("mail.smtp.socks.host", m_proxy_address);
@@ -204,6 +215,7 @@ public class Settings
 			(m_host, Integer.valueOf(m_port), m_email, m_password);
 		    m_error = false;
 		    break;
+		case "smtp":
 		case "smtps":
 		    m_smtp_transport = (SMTPTransport) session.getTransport
 			("smtp"); // Not SMTPS!
@@ -247,6 +259,7 @@ public class Settings
 			{
 			case "imaps":
 			    break;
+			case "smtp":
 			case "smtps":
 			    break;
 			default:
