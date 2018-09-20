@@ -118,13 +118,21 @@ public class Settings
 
 		properties.setProperty
 		    ("mail." + m_protocol + ".connectiontimeout", "10000");
+		properties.setProperty
+		    ("mail." + m_protocol + ".ssl.enable", "true");
+		properties.setProperty
+		    ("mail." + m_protocol + ".starttls.enable", "true");
+		properties.setProperty
+		    ("mail." + m_protocol + ".starttls.required", "true");
+		properties.setProperty
+		    ("mail." + m_protocol + ".timeout", "10000");
 
-		if(m_protocol.equals("smtps"))
+		switch(m_protocol)
 		{
+		case "smtps":
 		    properties.setProperty
 			("mail.smtps.localhost", "localhost");
-		    properties.setProperty
-			("mail.smtp.starttls.enable", "true");
+		    break;
 		}
 
 		if(!m_proxy_address.isEmpty())
@@ -153,11 +161,13 @@ public class Settings
 			    properties.setProperty
 				("mail.imaps.socks.port", m_proxy_port);
 			    break;
-			default:
+			case "smtps":
 			    properties.setProperty
 				("mail.smtp.socks.host", m_proxy_address);
 			    properties.setProperty
 				("mail.smtp.socks.port", m_proxy_port);
+			    break;
+			default:
 			    break;
 			}
 
@@ -165,11 +175,6 @@ public class Settings
 		    default:
 			break;
 		    }
-
-		properties.setProperty
-		    ("mail." + m_protocol + ".ssl.enable", "true");
-		properties.setProperty
-		    ("mail." + m_protocol + ".timeout", "10000");
 
 		Session session = Session.getInstance(properties);
 
