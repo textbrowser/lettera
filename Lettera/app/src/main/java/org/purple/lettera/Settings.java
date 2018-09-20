@@ -344,21 +344,29 @@ public class Settings
 			    m_encryption_key_digest.setText
 				(Cryptography.sha_1_fingerprint(null));
 			else
+			{
+			    m_database.save_pgp_key_pair
+				(m_encryption_key_pair, "encryption");
 			    m_encryption_key_digest.setText
 				("SHA-1: " +
 				 Cryptography.
 				 sha_1_fingerprint(m_encryption_key_pair.
 						   getPublic()));
+			}
 
 			if(m_signature_key_pair == null)
 			    m_signature_key_digest.setText
 				(Cryptography.sha_1_fingerprint(null));
 			else
+			{
+			    m_database.save_pgp_key_pair
+				(m_signature_key_pair, "signature");
 			    m_signature_key_digest.setText
 				("SHA-1: " +
 				 Cryptography.
 				 sha_1_fingerprint(m_signature_key_pair.
 						   getPublic()));
+			}
 
 			if(!m_error)
 			    Windows.show_dialog

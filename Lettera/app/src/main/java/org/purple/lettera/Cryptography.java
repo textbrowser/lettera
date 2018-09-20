@@ -27,6 +27,7 @@
 
 package org.purple.lettera;
 
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.PublicKey;
 
@@ -35,13 +36,13 @@ public class Cryptography
     final static String s_empty_sha_1 =
 	"0000000000000000000000000000000000000000";
 
-    static String sha_1_fingerprint(PublicKey public_key)
+    static String sha_1_fingerprint(Key key)
     {
-	if(public_key == null)
+	if(key == null)
 	    return s_empty_sha_1;
 	else
 	{
-	    byte bytes[] = sha_1(public_key.getEncoded());
+	    byte bytes[] = sha_1(key.getEncoded());
 
 	    if(bytes != null)
 		return Utilities.bytes_to_hex(bytes);

@@ -32,6 +32,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Base64;
+import java.security.KeyPair;
 import java.util.ArrayList;
 
 public class Database extends SQLiteOpenHelper
@@ -336,6 +338,50 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	return ok;
+    }
+
+    public boolean save_pgp_key_pair(KeyPair key_pair, String function)
+    {
+	if(key_pair == null || m_db == null)
+	    return false;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    String strings[] = new String[4];
+
+	    strings[0] = Base64.encodeToString
+		(key_pair.getPrivate().getEncoded(), Base64.NO_WRAP);
+	    strings[1] = Cryptography.sha_1_fingerprint(key_pair.getPrivate());
+	    strings[2] = Base64.encodeToString
+		(key_pair.getPublic().getEncoded(), Base64.NO_WRAP);
+	    strings[3] = Cryptography.sha_1_fingerprint(key_pair.getPublic());
+	    m_db.execSQL
+		("REPLACE INTO open_pgp (" +
+		 "function, " +
+		 "private_key, " +
+		 "private_key_digest, " +
+		 "public_key, " +
+		 "public_key_digest) " +
+		 "(?, ?, ?, ?, ?)",
+		 new String[] {function,
+			       strings[0],
+			       strings[1],
+			       strings[2],
+			       strings[3]});
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	    return false;
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+
+	return true;
     }
 
     public static synchronized Database get_instance()
