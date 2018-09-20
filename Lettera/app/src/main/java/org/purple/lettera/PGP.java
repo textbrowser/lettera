@@ -40,8 +40,8 @@ public class PGP
 	Security.addProvider(new BouncyCastleProvider());
     }
 
-    private KeyPair m_encryption_key_pair;
-    private KeyPair m_signature_key_pair;
+    private KeyPair m_encryption_key_pair = null;
+    private KeyPair m_signature_key_pair = null;
     private final ReentrantReadWriteLock m_encryption_key_pair_lock =
 	new ReentrantReadWriteLock();
     private final ReentrantReadWriteLock m_signature_key_pair_lock =
@@ -90,11 +90,11 @@ public class PGP
 	    case "RSA":
 		try
 		{
-		    KeyPairGenerator kpg = KeyPairGenerator.getInstance
-			("RSA", "BC");
+		    KeyPairGenerator key_pair_generator =
+			KeyPairGenerator.getInstance("RSA", "BC");
 
-		    kpg.initialize(1024);
-		    return kpg.generateKeyPair();
+		    key_pair_generator.initialize(1024);
+		    return key_pair_generator.generateKeyPair();
 		}
 		catch(Exception exception)
 		{

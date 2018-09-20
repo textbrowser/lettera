@@ -84,15 +84,18 @@ public class Cryptography
 
     public static byte[] sha_1(byte[] ... data)
     {
+	if(data == null)
+	    return null;
+
 	try
 	{
-	    MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+	    MessageDigest message_digest = MessageDigest.getInstance("SHA-1");
 
 	    for(byte b[] : data)
 		if(b != null)
-		    messageDigest.update(b);
+		    message_digest.update(b);
 
-	    return messageDigest.digest();
+	    return message_digest.digest();
 	}
 	catch(Exception exception)
 	{
