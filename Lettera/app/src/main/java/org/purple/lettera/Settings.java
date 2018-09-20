@@ -71,15 +71,25 @@ public class Settings
 	private String m_host = "";
 	private String m_password = "";
 	private String m_protocol = "imaps";
+	private String m_proxy_address = "";
+	private String m_proxy_password = "";
+	private String m_proxy_type = "";
+	private String m_proxy_user = "";
 	private boolean m_error = true;
 	private int m_port = -1;
+	private int m_proxy_port = -1;
 
 	private EmailTest(Dialog dialog,
 			  String email,
 			  String host,
 			  String password,
 			  String port,
-			  String protocol)
+			  String protocol,
+			  String proxy_address,
+			  String proxy_password,
+			  String proxy_port,
+			  String proxy_type,
+			  String proxy_user)
 	{
 	    m_dialog = dialog;
 	    m_email = email;
@@ -87,6 +97,11 @@ public class Settings
 	    m_password = password;
 	    m_port = Integer.valueOf(port);
 	    m_protocol = protocol;
+	    m_proxy_address = proxy_address;
+	    m_proxy_password = proxy_password;
+	    m_proxy_port = Integer.valueOf(proxy_port);
+	    m_proxy_type = proxy_type;
+	    m_proxy_user = proxy_user;
 	}
 
 	@Override
@@ -1083,7 +1098,13 @@ public class Settings
 			       m_inbound_address.getText().toString(),
 			       m_inbound_password.getText().toString(),
 			       m_inbound_port.getText().toString(),
-			       "imaps"));
+			       "imaps",
+			       m_proxy_address.getText().toString(),
+			       m_proxy_password.getText().toString(),
+			       m_proxy_port.getText().toString(),
+			       m_proxy_type_spinner.getSelectedItem().
+			       toString(),
+			       m_proxy_user.getText().toString()));
 
 	    thread.start();
 	}
@@ -1110,7 +1131,13 @@ public class Settings
 			       m_outbound_address.getText().toString(),
 			       m_outbound_password.getText().toString(),
 			       m_outbound_port.getText().toString(),
-			       "smtps"));
+			       "smtps",
+			       m_proxy_address.getText().toString(),
+			       m_proxy_password.getText().toString(),
+			       m_proxy_port.getText().toString(),
+			       m_proxy_type_spinner.getSelectedItem().
+			       toString(),
+			       m_proxy_user.getText().toString()));
 
 	    thread.start();
 	}
