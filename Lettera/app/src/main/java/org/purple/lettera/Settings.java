@@ -139,18 +139,28 @@ public class Settings
 			     m_proxy_password);
 			properties.setProperty
 			    ("mail." + m_protocol + ".proxy.port",
-			     String.valueOf(m_proxy_port));
+			     m_proxy_port);
 			properties.setProperty
 			    ("mail." + m_protocol + ".proxy.user",
 			     m_proxy_user);
 			break;
 		    case "SOCKS":
-			properties.setProperty
-			    ("mail." + m_protocol + ".socks.host",
-			     m_proxy_address);
-			properties.setProperty
-			    ("mail." + m_protocol + ".socks.port",
-			     String.valueOf(m_proxy_port));
+			switch(m_protocol)
+			{
+			case "imaps":
+			    properties.setProperty
+				("mail.imaps.socks.host", m_proxy_address);
+			    properties.setProperty
+				("mail.imaps.socks.port", m_proxy_port);
+			    break;
+			default:
+			    properties.setProperty
+				("mail.smtp.socks.host", m_proxy_address);
+			    properties.setProperty
+				("mail.smtp.socks.port", m_proxy_port);
+			    break;
+			}
+
 			break;
 		    default:
 			break;
