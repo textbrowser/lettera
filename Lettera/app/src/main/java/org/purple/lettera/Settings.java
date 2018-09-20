@@ -139,18 +139,36 @@ public class Settings
 		    switch(m_proxy_type)
 		    {
 		    case "HTTP":
-			properties.setProperty
-			    ("mail." + m_protocol + ".proxy.host",
-			     m_proxy_address);
-			properties.setProperty
-			    ("mail." + m_protocol + ".proxy.password",
-			     m_proxy_password);
-			properties.setProperty
-			    ("mail." + m_protocol + ".proxy.port",
-			     m_proxy_port);
-			properties.setProperty
-			    ("mail." + m_protocol + ".proxy.user",
-			     m_proxy_user);
+			switch(m_protocol)
+			{
+			case "imaps":
+			    properties.setProperty
+				("mail." + m_protocol + ".proxy.host",
+				 m_proxy_address);
+			    properties.setProperty
+				("mail." + m_protocol + ".proxy.password",
+				 m_proxy_password);
+			    properties.setProperty
+				("mail." + m_protocol + ".proxy.port",
+				 m_proxy_port);
+			    properties.setProperty
+				("mail." + m_protocol + ".proxy.user",
+				 m_proxy_user);
+			    break;
+			case "smtps":
+			    properties.setProperty
+				("mail.smtp.proxy.host", m_proxy_address);
+			    properties.setProperty
+				("mail.smtp.proxy.password", m_proxy_password);
+			    properties.setProperty
+				("mail.smtp.proxy.port", m_proxy_port);
+			    properties.setProperty
+				("mail.smtp.proxy.user", m_proxy_user);
+			    break;
+			default:
+			    break;
+			}
+
 			break;
 		    case "SOCKS":
 			switch(m_protocol)
