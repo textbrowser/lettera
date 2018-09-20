@@ -1,10 +1,10 @@
 Completed Items
 
 1.  Key generation.
+2.  Proxies for e-mail.
 
 Remaining Items
 
 1.  McEliece key generation, exchange, etc.
 2.  PGP 4096 (PGP::generate_key_pair()).
-3.  Proxies for e-mail.
-4.  Save keys.
+3.  Save keys.
