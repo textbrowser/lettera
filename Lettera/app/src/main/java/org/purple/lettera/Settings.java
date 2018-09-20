@@ -70,14 +70,14 @@ public class Settings
 	private String m_email = "";
 	private String m_host = "";
 	private String m_password = "";
+	private String m_port = "";
 	private String m_protocol = "imaps";
 	private String m_proxy_address = "";
 	private String m_proxy_password = "";
+	private String m_proxy_port = "";
 	private String m_proxy_type = "";
 	private String m_proxy_user = "";
 	private boolean m_error = true;
-	private int m_port = -1;
-	private int m_proxy_port = -1;
 
 	private EmailTest(Dialog dialog,
 			  String email,
@@ -95,11 +95,11 @@ public class Settings
 	    m_email = email;
 	    m_host = host;
 	    m_password = password;
-	    m_port = Integer.valueOf(port);
+	    m_port = port;
 	    m_protocol = protocol;
 	    m_proxy_address = proxy_address;
 	    m_proxy_password = proxy_password;
-	    m_proxy_port = Integer.valueOf(proxy_port);
+	    m_proxy_port = proxy_port;
 	    m_proxy_type = proxy_type;
 	    m_proxy_user = proxy_user;
 	}
@@ -121,10 +121,40 @@ public class Settings
 
 		if(m_protocol.equals("smtps"))
 		{
-		    properties.setProperty("mail.smtps.localhost", "localhost");
+		    properties.setProperty
+			("mail.smtps.localhost", "localhost");
 		    properties.setProperty
 			("mail.smtp.starttls.enable", "true");
 		}
+
+		if(!m_proxy_address.isEmpty())
+		    switch(m_proxy_type)
+		    {
+		    case "HTTP":
+			properties.setProperty
+			    ("mail." + m_protocol + ".proxy.host",
+			     m_proxy_address);
+			properties.setProperty
+			    ("mail." + m_protocol + ".proxy.password",
+			     m_proxy_password);
+			properties.setProperty
+			    ("mail." + m_protocol + ".proxy.port",
+			     String.valueOf(m_proxy_port));
+			properties.setProperty
+			    ("mail." + m_protocol + ".proxy.user",
+			     m_proxy_user);
+			break;
+		    case "SOCKS":
+			properties.setProperty
+			    ("mail." + m_protocol + ".socks.host",
+			     m_proxy_address);
+			properties.setProperty
+			    ("mail." + m_protocol + ".socks.port",
+			     String.valueOf(m_proxy_port));
+			break;
+		    default:
+			break;
+		    }
 
 		properties.setProperty
 		    ("mail." + m_protocol + ".ssl.enable", "true");
@@ -137,7 +167,8 @@ public class Settings
 		{
 		case "imaps":
 		    m_store = session.getStore(m_protocol);
-		    m_store.connect(m_host, m_port, m_email, m_password);
+		    m_store.connect
+			(m_host, Integer.valueOf(m_port), m_email, m_password);
 		    m_error = false;
 		    break;
 		case "smtps":
@@ -145,7 +176,7 @@ public class Settings
 			("smtp"); // Not SMTPS!
 		    m_smtp_transport.setRequireStartTLS(true);
 		    m_smtp_transport.connect
-			(m_host, m_port, m_email, m_password);
+			(m_host, Integer.valueOf(m_port), m_email, m_password);
 		    m_error = false;
 		    break;
 		default:
