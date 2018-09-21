@@ -384,6 +384,39 @@ public class Database extends SQLiteOpenHelper
 	return true;
     }
 
+    public byte[][] read_pgp_pair(String function)
+    {
+	if(m_db == null)
+	    return null;
+
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT private_key, public_key FROM open_pgp WHERE " +
+		 "function = ?", new String[] {function});
+
+	    if(cursor != null && cursor.moveToFirst())
+	    {
+		byte bytes[][] = new byte[2][];
+
+		bytes[0] = Base64.decode(cursor.getString(0), Base64.NO_WRAP);
+		bytes[1] = Base64.decode(cursor.getString(1), Base64.NO_WRAP);
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return null;
+    }
+
     public static synchronized Database get_instance()
     {
 	return s_instance; // Should never be null.
@@ -455,7 +488,7 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	str = "CREATE TABLE IF NOT EXISTS open_pgp (" +
-	    "function TEXT NOT NULL, " + // Encryption, Signature.
+	    "function TEXT NOT NULL, " + // encryption, signature.
 	    "private_key TEXT NOT NULL, " +
 	    "private_key_digest TEXT NOT NULL, " +
 	    "public_key TEXT NOT NULL, " +
