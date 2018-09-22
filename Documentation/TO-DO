@@ -10,4 +10,4 @@ Remaining Items
 1.  Background services.
 2.  McEliece key generation, exchange, etc.
 3.  PGP 4096 (PGP::generate_key_pair()).
-
+4.  Status bar on main activity.
