@@ -342,30 +342,42 @@ public class Settings
 
 			if(m_encryption_key_pair == null)
 			    m_encryption_key_digest.setText
-				(Cryptography.sha_1_fingerprint(null));
+				("SHA-1: " +
+				 Cryptography.sha_1_fingerprint(null));
 			else
 			{
-			    m_database.save_pgp_key_pair
-				(m_encryption_key_pair, "encryption");
-			    m_encryption_key_digest.setText
-				("SHA-1: " +
-				 Cryptography.
-				 sha_1_fingerprint(m_encryption_key_pair.
-						   getPublic()));
+			    if(m_database.
+			       save_pgp_key_pair(m_encryption_key_pair,
+						 "encryption"))
+				m_encryption_key_digest.setText
+				    ("SHA-1: " +
+				     Cryptography.
+				     sha_1_fingerprint(m_encryption_key_pair.
+						       getPublic()));
+			    else
+				m_encryption_key_digest.setText
+				    ("SHA-1: " +
+				     Cryptography.sha_1_fingerprint(null));
 			}
 
 			if(m_signature_key_pair == null)
 			    m_signature_key_digest.setText
-				(Cryptography.sha_1_fingerprint(null));
+				("SHA-1: " +
+				 Cryptography.sha_1_fingerprint(null));
 			else
 			{
-			    m_database.save_pgp_key_pair
-				(m_signature_key_pair, "signature");
-			    m_signature_key_digest.setText
-				("SHA-1: " +
-				 Cryptography.
-				 sha_1_fingerprint(m_signature_key_pair.
-						   getPublic()));
+			    if(m_database.
+			       save_pgp_key_pair(m_signature_key_pair,
+						 "signature"))
+				m_signature_key_digest.setText
+				    ("SHA-1: " +
+				     Cryptography.
+				     sha_1_fingerprint(m_signature_key_pair.
+						       getPublic()));
+			    else
+				m_signature_key_digest.setText
+				    ("SHA-1: " +
+				     Cryptography.sha_1_fingerprint(null));
 			}
 
 			if(!m_error)
@@ -737,6 +749,7 @@ public class Settings
 	populate_accounts_spinner();
 	populate_display();
 	populate_network();
+	populate_privacy();
     }
 
     private void populate_accounts_spinner()
@@ -863,6 +876,28 @@ public class Settings
 	    }
 
 	    m_proxy_user.setText(email_element.m_proxy_user);
+	}
+    }
+
+    private void populate_privacy()
+    {
+	try
+	{
+	    m_encryption_key_digest.setText
+		("SHA-1: " +
+		 Cryptography.sha_1_fingerprint(m_pgp.encryption_key_pair().
+						getPublic()));
+	    m_signature_key_digest.setText
+		("SHA-1: " +
+		 Cryptography.sha_1_fingerprint(m_pgp.signature_key_pair().
+						getPublic()));
+	}
+	catch(Exception exception)
+	{
+	    m_encryption_key_digest.setText
+		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
+	    m_signature_key_digest.setText
+		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
 	}
     }
 

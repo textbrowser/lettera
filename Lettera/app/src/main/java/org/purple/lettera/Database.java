@@ -363,7 +363,7 @@ public class Database extends SQLiteOpenHelper
 		 "private_key, " +
 		 "private_key_digest, " +
 		 "public_key, " +
-		 "public_key_digest) " +
+		 "public_key_digest) VALUES " +
 		 "(?, ?, ?, ?, ?)",
 		 new String[] {function,
 			       strings[0],
@@ -403,6 +403,7 @@ public class Database extends SQLiteOpenHelper
 
 		bytes[0] = Base64.decode(cursor.getString(0), Base64.NO_WRAP);
 		bytes[1] = Base64.decode(cursor.getString(1), Base64.NO_WRAP);
+		return bytes;
 	    }
 	}
 	catch(Exception exception)

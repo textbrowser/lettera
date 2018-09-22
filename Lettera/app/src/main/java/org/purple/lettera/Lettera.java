@@ -32,9 +32,39 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import java.security.KeyPair;
 
 public class Lettera extends AppCompatActivity
 {
+    private class PopulatePGP implements Runnable
+    {
+	private PopulatePGP()
+	{
+	}
+
+	@Override
+	public void run()
+	{
+	    try
+	    {
+		KeyPair key_pair = null;
+		byte bytes[][] = null;
+
+		bytes = m_database.read_pgp_pair("encryption");
+		key_pair = Cryptography.key_pair_from_bytes(bytes[0], bytes[1]);
+		m_pgp.set_encryption_key_pair(key_pair);
+		bytes = m_database.read_pgp_pair("signature");
+		key_pair = Cryptography.key_pair_from_bytes(bytes[0], bytes[1]);
+		m_pgp.set_signature_key_pair(key_pair);
+	    }
+	    catch(Exception exception)
+	    {
+		m_pgp.set_encryption_key_pair(null);
+		m_pgp.set_signature_key_pair(null);
+	    }
+	}
+    }
+
     private Button m_compose_button = null;
     private Button m_contacts_button = null;
     private Button m_download_button = null;
@@ -42,6 +72,7 @@ public class Lettera extends AppCompatActivity
     private Button m_settings_button = null;
     private Database m_database = null;
     private Settings m_settings = null;
+    private final PGP m_pgp = PGP.get_instance();
 
     private void initialize_widget_members()
     {
@@ -93,6 +124,10 @@ public class Lettera extends AppCompatActivity
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	prepare_button_listeners();
 	prepare_icons();
+
+	Thread thread = new Thread(new PopulatePGP());
+
+	thread.start();
     }
 
     public void prepare_icons()

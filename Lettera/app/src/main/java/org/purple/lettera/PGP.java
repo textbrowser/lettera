@@ -113,4 +113,32 @@ public class PGP
 
 	return s_instance;
     }
+
+    public void set_encryption_key_pair(KeyPair key_pair)
+    {
+	m_encryption_key_pair_lock.writeLock().lock();
+
+	try
+	{
+	    m_encryption_key_pair = key_pair;
+	}
+	finally
+	{
+	    m_encryption_key_pair_lock.writeLock().unlock();
+	}
+    }
+
+    public void set_signature_key_pair(KeyPair key_pair)
+    {
+	m_signature_key_pair_lock.writeLock().lock();
+
+	try
+	{
+	    m_signature_key_pair = key_pair;
+	}
+	finally
+	{
+	    m_signature_key_pair_lock.writeLock().unlock();
+	}
+    }
 }

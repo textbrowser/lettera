@@ -42,8 +42,7 @@ public class Cryptography
     final static String s_empty_sha_1 =
 	"0000000000000000000000000000000000000000";
 
-    public static KeyPair key_pair_from_bytes(String algorithm,
-					      byte private_bytes[],
+    public static KeyPair key_pair_from_bytes(byte private_bytes[],
 					      byte public_bytes[])
     {
 	try
@@ -52,7 +51,7 @@ public class Cryptography
 		(private_bytes);
 	    EncodedKeySpec encoded_key_spec_2 = new X509EncodedKeySpec
 		(public_bytes);
-	    KeyFactory key_factory = KeyFactory.getInstance(algorithm);
+	    KeyFactory key_factory = KeyFactory.getInstance("RSA");
 	    PrivateKey private_key = key_factory.generatePrivate
 		(encoded_key_spec_1);
 	    PublicKey public_key = key_factory.generatePublic
