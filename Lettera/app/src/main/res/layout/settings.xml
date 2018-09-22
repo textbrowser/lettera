@@ -181,7 +181,7 @@
                             android:id="@+id/inbound_address"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.75"
+                            android:layout_weight="0.70"
                             android:ems="10"
                             android:hint="@string/address"
                             android:inputType="textPersonName"
@@ -191,7 +191,7 @@
                             android:id="@+id/inbound_port"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.25"
+                            android:layout_weight="0.30"
                             android:ems="10"
                             android:hint="@string/port"
                             android:inputType="number"
@@ -251,7 +251,7 @@
                             android:id="@+id/outbound_address"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.75"
+                            android:layout_weight="0.70"
                             android:ems="10"
                             android:hint="@string/address"
                             android:inputType="textPersonName"
@@ -261,7 +261,7 @@
                             android:id="@+id/outbound_port"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.25"
+                            android:layout_weight="0.30"
                             android:ems="10"
                             android:hint="@string/port"
                             android:inputType="number"
@@ -316,13 +316,13 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:text="@string/type"
-                            app:layout_columnWeight="0.75" />
+                            app:layout_columnWeight="0.70" />
 
                         <Spinner
                             android:id="@+id/proxy_type_spinner"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_columnWeight="0.25" />
+                            app:layout_columnWeight="0.30" />
 
                         <EditText
                             android:id="@+id/proxy_address"
@@ -332,7 +332,7 @@
                             android:hint="@string/address"
                             android:inputType="textPersonName"
                             android:nextFocusDown="@id/proxy_port"
-                            app:layout_columnWeight="0.75" />
+                            app:layout_columnWeight="0.70" />
 
                         <EditText
                             android:id="@+id/proxy_port"
@@ -342,7 +342,7 @@
                             android:hint="@string/port"
                             android:inputType="number"
                             android:nextFocusDown="@id/proxy_user"
-                            app:layout_columnWeight="0.25" />
+                            app:layout_columnWeight="0.30" />
 
                         <EditText
                             android:id="@+id/proxy_user"
@@ -352,7 +352,7 @@
                             android:hint="@string/user"
                             android:inputType="textPersonName"
                             android:nextFocusDown="@id/proxy_password"
-                            app:layout_columnWeight="0.75" />
+                            app:layout_columnWeight="0.70" />
 
                         <EditText
                             android:id="@+id/proxy_password"
@@ -361,7 +361,7 @@
                             android:ems="10"
                             android:hint="@string/password"
                             android:inputType="textPassword"
-                            app:layout_columnWeight="0.25" />
+                            app:layout_columnWeight="0.30" />
                     </android.support.v7.widget.GridLayout>
                 </LinearLayout>
 
