@@ -349,15 +349,22 @@ public class Settings
 			    if(m_database.
 			       save_pgp_key_pair(m_encryption_key_pair,
 						 "encryption"))
+			    {
 				m_encryption_key_digest.setText
 				    ("SHA-1: " +
 				     Cryptography.
 				     sha_1_fingerprint(m_encryption_key_pair.
 						       getPublic()));
+				m_pgp.set_encryption_key_pair
+				    (m_encryption_key_pair);
+			    }
 			    else
+			    {
 				m_encryption_key_digest.setText
 				    ("SHA-1: " +
 				     Cryptography.sha_1_fingerprint(null));
+				m_error = true;
+			    }
 			}
 
 			if(m_signature_key_pair == null)
@@ -369,25 +376,37 @@ public class Settings
 			    if(m_database.
 			       save_pgp_key_pair(m_signature_key_pair,
 						 "signature"))
+			    {
+				m_pgp.set_signature_key_pair
+				    (m_signature_key_pair);
 				m_signature_key_digest.setText
 				    ("SHA-1: " +
 				     Cryptography.
 				     sha_1_fingerprint(m_signature_key_pair.
 						       getPublic()));
+			    }
 			    else
+			    {
+				m_error = true;
 				m_signature_key_digest.setText
 				    ("SHA-1: " +
 				     Cryptography.sha_1_fingerprint(null));
+			    }
 			}
 
 			if(!m_error)
 			    Windows.show_dialog
 				(m_context, "Key pairs generated!", "Success");
 			else
+			{
+			    m_database.delete("open_pgp");
+			    m_pgp.set_encryption_key_pair(null);
+			    m_pgp.set_signature_key_pair(null);
 			    Windows.show_dialog
 				(m_context,
 				 "Cannot generate key pairs!",
 				 "Error");
+			}
 		    }
 		});
 	    }
@@ -670,6 +689,7 @@ public class Settings
 	try
 	{
 	    dialog = new Dialog(m_context);
+	    m_database.delete("open_pgp");
 	    Windows.show_progress_dialog
 		(m_context, dialog, "Generating key pairs. Please be patient.");
 

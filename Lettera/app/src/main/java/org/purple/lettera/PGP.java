@@ -46,6 +46,7 @@ public class PGP
 	new ReentrantReadWriteLock();
     private final ReentrantReadWriteLock m_signature_key_pair_lock =
 	new ReentrantReadWriteLock();
+    private final static int RSA_KEY_SIZE = 4096;
     private static PGP s_instance = null;
 
     private PGP()
@@ -93,7 +94,7 @@ public class PGP
 		    KeyPairGenerator key_pair_generator =
 			KeyPairGenerator.getInstance("RSA", "BC");
 
-		    key_pair_generator.initialize(1024);
+		    key_pair_generator.initialize(RSA_KEY_SIZE);
 		    return key_pair_generator.generateKeyPair();
 		}
 		catch(Exception exception)

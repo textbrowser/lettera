@@ -431,6 +431,27 @@ public class Database extends SQLiteOpenHelper
 	return s_instance;
     }
 
+    public void delete(String table)
+    {
+	if(m_db == null)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    m_db.delete(table, null, null);
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+    }
+
     @Override
     public void onConfigure(SQLiteDatabase db)
     {
