@@ -21,6 +21,13 @@
                 android:background="@android:color/transparent"
                 android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/save" />
+
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -94,6 +101,15 @@
                     android:hint="@string/telephone"
                     android:inputType="phone"
                     android:autofillHints="" tools:targetApi="o"/>
+
+                <EditText
+                    android:id="@+id/notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/notes"
+                    android:inputType="textMultiLine"
+                    android:importantForAutofill="no" tools:targetApi="o" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

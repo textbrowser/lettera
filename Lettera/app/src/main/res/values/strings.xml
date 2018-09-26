@@ -29,4 +29,6 @@
     <string name="name">Name</string>
     <string name="e_mail">E-Mail</string>
     <string name="telephone">Telephone</string>
+    <string name="notes">Notes</string>
+    <string name="save">Save</string>
 </resources>
