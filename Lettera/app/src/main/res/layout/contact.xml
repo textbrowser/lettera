@@ -79,31 +79,17 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/delete_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/save" />
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/delete"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:enabled="false"
-                    android:text="@string/delete" />
 
                 <CheckBox
                     android:id="@+id/delete_checkbox"
