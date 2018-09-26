@@ -3,7 +3,6 @@
     <string name="network">Network</string>
     <string name="inbound_imaps_server">Inbound IMAPS Server</string>
     <string name="port">Port</string>
-    <string name="e_mail">E-Mail</string>
     <string name="password">Password</string>
     <string name="outbound_smtps_server">Outbound SMTPS Server</string>
     <string name="address">Address</string>
@@ -26,4 +25,8 @@
     <string name="proxy">Proxy</string>
     <string name="type">Type</string>
     <string name="user">User</string>
+    <string name="select_image">Select image.</string>
+    <string name="name">Name</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="telephone">Telephone</string>
 </resources>
