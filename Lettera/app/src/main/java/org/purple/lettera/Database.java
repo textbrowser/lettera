@@ -485,6 +485,20 @@ public class Database extends SQLiteOpenHelper
     {
 	String str = "";
 
+	str = "CREATE TABLE IF NOT EXISTS contacts (" +
+	    "email_account TEXT NOT NULL PRIMARY KEY, " +
+	    "name TEXT NOT NULL, " +
+	    "notes TEXT, " +
+	    "telephone_number TEXT)";
+
+	try
+	{
+	    db.execSQL(str);
+	}
+	catch(Exception exception)
+	{
+	}
+
 	str = "CREATE TABLE IF NOT EXISTS email_accounts (" +
 	    "delete_on_server INTEGER DEFAULT 0 NOT NULL, " +
 	    "email_account TEXT NOT NULL PRIMARY KEY, " +
