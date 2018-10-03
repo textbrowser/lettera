@@ -36,11 +36,13 @@ import java.security.PublicKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Cryptography
 {
     final static String s_empty_sha_1 =
 	"0000000000000000000000000000000000000000";
+    protected AtomicBoolean m_is_plaintext = new AtomicBoolean(true);
 
     public static KeyPair key_pair_from_bytes(byte private_bytes[],
 					      byte public_bytes[])
