@@ -185,7 +185,8 @@
                             android:ems="10"
                             android:hint="@string/address"
                             android:inputType="textPersonName"
-                            android:nextFocusDown="@id/inbound_port" />
+                            android:nextFocusDown="@id/inbound_port"
+                            android:importantForAutofill="no" tools:targetApi="o"/>
 
                         <EditText
                             android:id="@+id/inbound_port"
@@ -195,7 +196,8 @@
                             android:ems="10"
                             android:hint="@string/port"
                             android:inputType="number"
-                            android:text="@string/_993" />
+                            android:text="@string/_993"
+                            android:importantForAutofill="no" tools:targetApi="o"/>
 
                     </LinearLayout>
 
@@ -206,7 +208,8 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:hint="@string/e_mail"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:importantForAutofill="no" tools:targetApi="o"/>
 
                     <EditText
                         android:id="@+id/inbound_password"
@@ -214,7 +217,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/password"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:importantForAutofill="no" tools:targetApi="o"/>
 
                     <CheckBox
                         android:id="@+id/delete_on_server_checkbox"
@@ -255,7 +259,8 @@
                             android:ems="10"
                             android:hint="@string/address"
                             android:inputType="textPersonName"
-                            android:nextFocusDown="@id/outbound_port" />
+                            android:nextFocusDown="@id/outbound_port"
+                            android:importantForAutofill="no" tools:targetApi="o"/>
 
                         <EditText
                             android:id="@+id/outbound_port"
@@ -265,7 +270,8 @@
                             android:ems="10"
                             android:hint="@string/port"
                             android:inputType="number"
-                            android:text="@string/_587" />
+                            android:text="@string/_587"
+                            android:importantForAutofill="no" tools:targetApi="o"/>
 
                     </LinearLayout>
 
@@ -276,7 +282,8 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:hint="@string/e_mail"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:importantForAutofill="no" tools:targetApi="o"/>
 
                     <EditText
                         android:id="@+id/outbound_password"
@@ -284,7 +291,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/password"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:importantForAutofill="no" tools:targetApi="o"/>
 
                     <Button
                         android:id="@+id/test_outbound_button"
@@ -332,7 +340,8 @@
                             android:hint="@string/address"
                             android:inputType="textPersonName"
                             android:nextFocusDown="@id/proxy_port"
-                            app:layout_columnWeight="0.70" />
+                            app:layout_columnWeight="0.70"
+                            android:importantForAutofill="no" tools:targetApi="o"/>
 
                         <EditText
                             android:id="@+id/proxy_port"
@@ -342,7 +351,8 @@
                             android:hint="@string/port"
                             android:inputType="number"
                             android:nextFocusDown="@id/proxy_user"
-                            app:layout_columnWeight="0.30" />
+                            app:layout_columnWeight="0.30"
+                            android:importantForAutofill="no" tools:targetApi="o"/>
 
                         <EditText
                             android:id="@+id/proxy_user"
@@ -352,7 +362,8 @@
                             android:hint="@string/user"
                             android:inputType="textPersonName"
                             android:nextFocusDown="@id/proxy_password"
-                            app:layout_columnWeight="0.70" />
+                            app:layout_columnWeight="0.70"
+                            android:importantForAutofill="no" tools:targetApi="o"/>
 
                         <EditText
                             android:id="@+id/proxy_password"
@@ -361,7 +372,8 @@
                             android:ems="10"
                             android:hint="@string/password"
                             android:inputType="textPassword"
-                            app:layout_columnWeight="0.30" />
+                            app:layout_columnWeight="0.30"
+                            android:importantForAutofill="no" tools:targetApi="o"/>
                     </android.support.v7.widget.GridLayout>
                 </LinearLayout>
 
