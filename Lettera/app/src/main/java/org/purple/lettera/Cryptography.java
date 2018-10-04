@@ -38,12 +38,20 @@ import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 public class Cryptography
 {
-    final static String s_empty_sha_1 =
+    private KeyPair m_encryption_key = null;
+    private KeyPair m_mac_key = null;
+    private final ReentrantReadWriteLock m_encryption_key_mutex = new
+	ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock m_mac_key_mutex = new
+	ReentrantReadWriteLock();
+    private final static String HMAC_ALGORITHM = "HmacSHA512";
+    private final static String s_empty_sha_1 =
 	"0000000000000000000000000000000000000000";
     protected AtomicBoolean m_is_plaintext = new AtomicBoolean(true);
 
