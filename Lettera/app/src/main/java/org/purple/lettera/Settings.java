@@ -421,6 +421,67 @@ public class Settings
 	}
     }
 
+    private class SavePassword implements Runnable
+    {
+	private Dialog m_dialog = null;
+	private String m_password = "";
+	private boolean m_error = false;
+	private int m_iteration_count = 0;
+
+	private SavePassword(Dialog dialog,
+			     String password,
+			     int iteration_count)
+	{
+	    m_dialog = dialog;
+	    m_iteration_count = iteration_count;
+	    m_password = password;
+	}
+
+	@Override
+	public void run()
+	{
+	    try
+	    {
+	    }
+	    catch(Exception exception)
+	    {
+		m_error = true;
+	    }
+
+	    try
+	    {
+		((Activity) m_context).runOnUiThread(new Runnable()
+		{
+		    @Override
+		    public void run()
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+
+			if(!m_error)
+			    Windows.show_dialog
+				(m_context, "Credentials saved!", "Success");
+			else
+			{
+			    Windows.show_dialog
+				(m_context,
+				 "Cannot save credentials!",
+				 "Error");
+			}
+		    }
+		});
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	    finally
+	    {
+		if(m_dialog != null)
+		    m_dialog.dismiss();
+	    }
+	}
+    }
+
     private Button m_apply_button = null;
     private Button m_close_button = null;
     private Button m_delete_account_button = null;

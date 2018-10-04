@@ -468,15 +468,34 @@
                             android:layout_weight="0" />
                     </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/password"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/password"
-                        android:importantForAutofill="no"
-                        android:inputType="textPassword|textVisiblePassword"
-                        tools:targetApi="o" />
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/iteration_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:ems="10"
+                            android:hint="@string/iteration_count"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:nextFocusDown="@id/password"
+                            tools:targetApi="o" />
+
+                        <EditText
+                            android:id="@+id/password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:ems="10"
+                            android:hint="@string/password"
+                            android:importantForAutofill="no"
+                            android:inputType="textPassword|textVisiblePassword"
+                            tools:targetApi="o" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
