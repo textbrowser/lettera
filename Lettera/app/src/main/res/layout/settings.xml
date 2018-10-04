@@ -186,7 +186,7 @@
                             android:hint="@string/address"
                             android:inputType="textPersonName"
                             android:nextFocusDown="@id/inbound_port"
-                            android:importantForAutofill="no" tools:targetApi="o"/>
+                            android:importantForAutofill="no" tools:targetApi="o" />
 
                         <EditText
                             android:id="@+id/inbound_port"
@@ -197,7 +197,7 @@
                             android:hint="@string/port"
                             android:inputType="number"
                             android:text="@string/_993"
-                            android:importantForAutofill="no" tools:targetApi="o"/>
+                            android:importantForAutofill="no" tools:targetApi="o" />
 
                     </LinearLayout>
 
@@ -209,7 +209,7 @@
                         android:ems="10"
                         android:hint="@string/e_mail"
                         android:inputType="textEmailAddress"
-                        android:importantForAutofill="no" tools:targetApi="o"/>
+                        android:importantForAutofill="no" tools:targetApi="o" />
 
                     <EditText
                         android:id="@+id/inbound_password"
@@ -218,7 +218,7 @@
                         android:ems="10"
                         android:hint="@string/password"
                         android:inputType="textPassword"
-                        android:importantForAutofill="no" tools:targetApi="o"/>
+                        android:importantForAutofill="no" tools:targetApi="o" />
 
                     <CheckBox
                         android:id="@+id/delete_on_server_checkbox"
@@ -260,7 +260,7 @@
                             android:hint="@string/address"
                             android:inputType="textPersonName"
                             android:nextFocusDown="@id/outbound_port"
-                            android:importantForAutofill="no" tools:targetApi="o"/>
+                            android:importantForAutofill="no" tools:targetApi="o" />
 
                         <EditText
                             android:id="@+id/outbound_port"
@@ -271,7 +271,7 @@
                             android:hint="@string/port"
                             android:inputType="number"
                             android:text="@string/_587"
-                            android:importantForAutofill="no" tools:targetApi="o"/>
+                            android:importantForAutofill="no" tools:targetApi="o" />
 
                     </LinearLayout>
 
@@ -283,7 +283,7 @@
                         android:ems="10"
                         android:hint="@string/e_mail"
                         android:inputType="textEmailAddress"
-                        android:importantForAutofill="no" tools:targetApi="o"/>
+                        android:importantForAutofill="no" tools:targetApi="o" />
 
                     <EditText
                         android:id="@+id/outbound_password"
@@ -292,7 +292,7 @@
                         android:ems="10"
                         android:hint="@string/password"
                         android:inputType="textPassword"
-                        android:importantForAutofill="no" tools:targetApi="o"/>
+                        android:importantForAutofill="no" tools:targetApi="o" />
 
                     <Button
                         android:id="@+id/test_outbound_button"
@@ -341,7 +341,7 @@
                             android:inputType="textPersonName"
                             android:nextFocusDown="@id/proxy_port"
                             app:layout_columnWeight="0.70"
-                            android:importantForAutofill="no" tools:targetApi="o"/>
+                            android:importantForAutofill="no" tools:targetApi="o" />
 
                         <EditText
                             android:id="@+id/proxy_port"
@@ -352,7 +352,7 @@
                             android:inputType="number"
                             android:nextFocusDown="@id/proxy_user"
                             app:layout_columnWeight="0.30"
-                            android:importantForAutofill="no" tools:targetApi="o"/>
+                            android:importantForAutofill="no" tools:targetApi="o" />
 
                         <EditText
                             android:id="@+id/proxy_user"
@@ -363,7 +363,7 @@
                             android:inputType="textPersonName"
                             android:nextFocusDown="@id/proxy_password"
                             app:layout_columnWeight="0.70"
-                            android:importantForAutofill="no" tools:targetApi="o"/>
+                            android:importantForAutofill="no" tools:targetApi="o" />
 
                         <EditText
                             android:id="@+id/proxy_password"
@@ -373,7 +373,7 @@
                             android:hint="@string/password"
                             android:inputType="textPassword"
                             app:layout_columnWeight="0.30"
-                            android:importantForAutofill="no" tools:targetApi="o"/>
+                            android:importantForAutofill="no" tools:targetApi="o" />
                     </android.support.v7.widget.GridLayout>
                 </LinearLayout>
 
@@ -463,6 +463,35 @@
 
                         <CheckBox
                             android:id="@+id/generate_keys_checkbox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/password"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword|textVisiblePassword"
+                        tools:targetApi="o" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/save_password"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="@string/save_password" />
+
+                        <CheckBox
+                            android:id="@+id/save_password_checkbox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0" />

@@ -3,7 +3,6 @@
     <string name="network">Network</string>
     <string name="inbound_imaps_server">Inbound IMAPS Server</string>
     <string name="port">Port</string>
-    <string name="password">Password</string>
     <string name="outbound_smtps_server">Outbound SMTPS Server</string>
     <string name="address">Address</string>
     <string name="close">Close</string>
@@ -31,4 +30,6 @@
     <string name="telephone">Telephone</string>
     <string name="notes">Notes</string>
     <string name="save">Save</string>
+    <string name="password">Password</string>
+    <string name="save_password">Save Password</string>
 </resources>

@@ -428,11 +428,13 @@ public class Settings
     private Button m_generate_keys_button = null;
     private Button m_network_button = null;
     private Button m_privacy_button = null;
+    private Button m_save_password_button = null;
     private Button m_test_inbound_button = null;
     private Button m_test_outbound_button = null;
     private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_delete_account_verify_checkbox = null;
     private CheckBox m_generate_keys_checkbox = null;
+    private CheckBox m_save_password_checkbox = null;
     private Context m_context = null;
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
@@ -755,6 +757,10 @@ public class Settings
 	m_proxy_type_spinner = (Spinner) m_view.findViewById
 	    (R.id.proxy_type_spinner);
 	m_proxy_user = (TextView) m_view.findViewById(R.id.proxy_user);
+	m_save_password_button = (Button) m_view.findViewById
+	    (R.id.save_password);
+	m_save_password_checkbox = (CheckBox) m_view.findViewById
+	    (R.id.save_password_checkbox);
 	m_signature_key_digest = m_view.findViewById(R.id.signature_key_digest);
 	m_signature_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.signature_key_spinner);
@@ -1116,6 +1122,17 @@ public class Settings
 		}
 	     });
 
+	m_save_password_checkbox.setOnCheckedChangeListener
+	    (new CompoundButton.OnCheckedChangeListener()
+	    {
+		@Override
+		public void onCheckedChanged
+		    (CompoundButton buttonView, boolean isChecked)
+		{
+		    m_save_password_button.setEnabled(isChecked);
+		}
+	    });
+
 	if(!m_test_inbound_button.hasOnClickListeners())
 	    m_test_inbound_button.setOnClickListener(new View.OnClickListener()
 	    {
@@ -1196,6 +1213,7 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_encryption_key_spinner.setAdapter(array_adapter);
 	m_generate_keys_button.setEnabled(false);
+	m_save_password_button.setEnabled(false);
 	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
