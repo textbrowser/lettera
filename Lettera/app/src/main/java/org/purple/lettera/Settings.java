@@ -508,6 +508,7 @@ public class Settings
     private TextView m_inbound_email = null;
     private TextView m_inbound_password = null;
     private TextView m_inbound_port = null;
+    private TextView m_iteration_count = null;
     private TextView m_outbound_address = null;
     private TextView m_outbound_email = null;
     private TextView m_outbound_password = null;
@@ -525,6 +526,31 @@ public class Settings
     private WindowManager.LayoutParams m_layout_params = null;
     private final Database m_database = Database.get_instance();
     private final PGP m_pgp = PGP.get_instance();
+    private final static InputFilter s_iteration_count_filter =
+	new InputFilter()
+    {
+	public CharSequence filter(CharSequence source,
+				   int start,
+				   int end,
+				   Spanned dest,
+				   int dstart,
+				   int dend)
+	{
+	    try
+	    {
+		int iteration_count = Integer.parseInt
+		    (dest.toString() + source.toString());
+
+		if(iteration_count >= 1)
+		    return null;
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    return "";
+	}
+    };
     private final static InputFilter s_port_filter = new InputFilter()
     {
 	public CharSequence filter(CharSequence source,
@@ -802,6 +828,8 @@ public class Settings
 	m_inbound_password = (TextView) m_view.findViewById
 	    (R.id.inbound_password);
 	m_inbound_port = (TextView) m_view.findViewById(R.id.inbound_port);
+	m_iteration_count = (TextView) m_view.findViewById
+	    (R.id.iteration_count);
 	m_network_button = (Button) m_view.findViewById(R.id.network_button);
 	m_outbound_address = (TextView) m_view.findViewById
 	    (R.id.outbound_address);
@@ -974,6 +1002,7 @@ public class Settings
 		("SHA-1: " +
 		 Cryptography.sha_1_fingerprint(m_pgp.encryption_key_pair().
 						getPublic()));
+	    m_iteration_count.setText("5000");
 	    m_signature_key_digest.setText
 		("SHA-1: " +
 		 Cryptography.sha_1_fingerprint(m_pgp.signature_key_pair().
@@ -1274,6 +1303,8 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_encryption_key_spinner.setAdapter(array_adapter);
 	m_generate_keys_button.setEnabled(false);
+	m_iteration_count.setFilters
+	    (new InputFilter[] {s_iteration_count_filter});
 	m_save_password_button.setEnabled(false);
 	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>

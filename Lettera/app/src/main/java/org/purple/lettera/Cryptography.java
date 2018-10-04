@@ -34,9 +34,12 @@ import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.EncodedKeySpec;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 public class Cryptography
 {
@@ -81,6 +84,27 @@ public class Cryptography
 	}
 
 	return s_empty_sha_1;
+    }
+
+    public static byte[] pbkdf2(byte salt[],
+				char password[],
+				int iteration_count,
+				int length)
+    {
+	try
+	{
+	    KeySpec key_spec = new PBEKeySpec
+		(password, salt, iteration_count, length);
+	    SecretKeyFactory secret_key_factory = SecretKeyFactory.getInstance
+		("PBKDF2WithHmacSHA1");
+
+	    return secret_key_factory.generateSecret(key_spec).getEncoded();
+	}
+	catch(Exception exception)
+	{
+	}
+
+	return null;
     }
 
     public static byte[] sha_1(byte[] ... data)
