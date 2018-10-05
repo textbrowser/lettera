@@ -1220,6 +1220,8 @@ public class Settings
 		    (CompoundButton buttonView, boolean isChecked)
 		{
 		    m_save_password_button.setEnabled(isChecked);
+		    m_view.findViewById(R.id.warning_label).setVisibility
+			(isChecked ? View.VISIBLE : View.GONE);
 		}
 	    });
 
