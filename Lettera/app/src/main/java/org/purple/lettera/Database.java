@@ -431,6 +431,41 @@ public class Database extends SQLiteOpenHelper
 	return s_instance;
     }
 
+    public void clear()
+    {
+	if(m_db == null)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    String tables[] = new String[]
+		{"contacts",
+		 "email_accounts",
+		 "open_pgp",
+		 "settings"};
+
+	    for(int i = 0; i < tables.length; i++)
+		try
+		{
+		    m_db.delete(tables[i], null, null);
+		}
+		catch(Exception exception)
+		{
+		}
+
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+    }
+
     public void delete(String table)
     {
 	if(m_db == null)
