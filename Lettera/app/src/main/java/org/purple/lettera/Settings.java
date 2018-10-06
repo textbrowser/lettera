@@ -1212,6 +1212,18 @@ public class Settings
 		}
 	     });
 
+	if(!m_save_password_button.hasOnClickListeners())
+	    m_save_password_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(((Activity) m_context).isFinishing())
+			return;
+
+		    save_password();
+		}
+	     });
+
 	m_save_password_checkbox.setOnCheckedChangeListener
 	    (new CompoundButton.OnCheckedChangeListener()
 	    {
@@ -1312,6 +1324,10 @@ public class Settings
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_signature_key_spinner.setAdapter(array_adapter);
+    }
+
+    private void save_password()
+    {
     }
 
     private void show_display_page()
