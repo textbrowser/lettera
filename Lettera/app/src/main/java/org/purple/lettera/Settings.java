@@ -515,6 +515,7 @@ public class Settings
     private TextView m_outbound_email = null;
     private TextView m_outbound_password = null;
     private TextView m_outbound_port = null;
+    private TextView m_password = null;
     private TextView m_proxy_address = null;
     private TextView m_proxy_password = null;
     private TextView m_proxy_port = null;
@@ -839,6 +840,7 @@ public class Settings
 	    (R.id.outbound_password);
 	m_outbound_port = (TextView) m_view.findViewById(R.id.outbound_port);
 	m_network_layout = m_view.findViewById(R.id.network_layout);
+	m_password = (TextView) m_view.findViewById(R.id.password);
 	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
 	m_proxy_address = (TextView) m_view.findViewById(R.id.proxy_address);
@@ -1338,6 +1340,14 @@ public class Settings
 		(m_context,
 		 dialog,
 		 "Generating credentials. Please be patient.");
+
+	    Thread thread = new Thread
+		(new SavePassword(dialog,
+				  m_password.getText().toString(),
+				  Integer.parseInt(m_iteration_count.
+						   getText().toString())));
+
+	    thread.start();
 	}
 	catch(Exception exception)
 	{

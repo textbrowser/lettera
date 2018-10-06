@@ -33,6 +33,7 @@ import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -50,9 +51,14 @@ public class Cryptography
 	ReentrantReadWriteLock();
     private final ReentrantReadWriteLock m_mac_key_mutex = new
 	ReentrantReadWriteLock();
+    private final static String HASH_ALGORITHM = "SHA-512";
     private final static String HMAC_ALGORITHM = "HmacSHA512";
+    private final static String SYMMETRIC_ALGORITHM = "AES";
+    private final static String SYMMETRIC_CIPHER_TRANSFORMATION =
+	"AES/CTS/NoPadding";
     private final static String s_empty_sha_1 =
 	"0000000000000000000000000000000000000000";
+    private static SecureRandom s_secure_random = null;
     protected AtomicBoolean m_is_plaintext = new AtomicBoolean(true);
 
     public static KeyPair key_pair_from_bytes(byte private_bytes[],
@@ -135,5 +141,20 @@ public class Cryptography
 	}
 
 	return null;
+    }
+
+    private static synchronized void prepare_secure_random()
+    {
+	if(s_secure_random != null)
+	    return;
+
+	try
+	{
+	    s_secure_random = SecureRandom.getInstance("SHA1PRNG");
+	}
+	catch(Exception exception)
+	{
+	    s_secure_random = new SecureRandom();
+	}
     }
 }
