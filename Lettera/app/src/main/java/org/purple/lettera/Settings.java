@@ -324,6 +324,8 @@ public class Settings
 		if(m_encryption_key_pair == null ||
 		   m_signature_key_pair == null)
 		    m_error = true;
+		else
+		    m_database.delete("open_pgp");
 	    }
 	    catch(Exception exception)
 	    {
@@ -778,7 +780,6 @@ public class Settings
 	try
 	{
 	    dialog = new Dialog(m_context);
-	    m_database.delete("open_pgp");
 	    Windows.show_progress_dialog
 		(m_context, dialog, "Generating key pairs. Please be patient.");
 
@@ -1328,6 +1329,21 @@ public class Settings
 
     private void save_password()
     {
+	Dialog dialog = null;
+
+	try
+	{
+	    dialog = new Dialog(m_context);
+	    Windows.show_progress_dialog
+		(m_context,
+		 dialog,
+		 "Generating credentials. Please be patient.");
+	}
+	catch(Exception exception)
+	{
+	    if(dialog != null)
+		dialog.dismiss();
+	}
     }
 
     private void show_display_page()
