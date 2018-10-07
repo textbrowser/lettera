@@ -27,6 +27,7 @@
 
 package org.purple.lettera;
 
+import android.util.Base64;
 import java.nio.ByteBuffer;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -87,6 +88,36 @@ public class Cryptography
 	}
     }
 
+    public String etm_base64(byte data[])
+    {
+	byte bytes[] = etm(data);
+
+	if(bytes != null)
+	    return Base64.encodeToString(bytes, Base64.NO_WRAP);
+	else
+	    return Base64.encodeToString("".getBytes(), Base64.NO_WRAP);
+    }
+
+    public String hmac_base64(byte data[])
+    {
+	byte bytes[] = hmac(data);
+
+	if(bytes != null)
+	    return Base64.encodeToString(bytes, Base64.NO_WRAP);
+	else
+	    return Base64.encodeToString("".getBytes(), Base64.NO_WRAP);
+    }
+
+    public String mtd_base64(byte data[])
+    {
+	byte bytes[] = mtd(data);
+
+	if(bytes != null)
+	    return Base64.encodeToString(bytes, Base64.NO_WRAP);
+	else
+	    return Base64.encodeToString("".getBytes(), Base64.NO_WRAP);
+    }
+
     public byte[] etm(byte data[]) // Encrypt-Then-MAC
     {
 	if(data == null || data.length == 0)
@@ -144,6 +175,35 @@ public class Cryptography
 	catch(Exception exception)
 	{
 	    return null;
+	}
+    }
+
+    public byte[] hmac(byte data[])
+    {
+	if(data == null || data.length == 0)
+	    return null;
+	else if(m_is_plaintext.get())
+	    return data;
+
+	m_mac_key_mutex.readLock().lock();
+
+	try
+	{
+	    if(m_mac_key == null)
+		return null;
+
+	    Mac mac = Mac.getInstance(HMAC_ALGORITHM);
+
+	    mac.init(m_mac_key);
+	    return mac.doFinal(data);
+	}
+	catch(Exception exception)
+	{
+	    return null;
+	}
+	finally
+	{
+	    m_mac_key_mutex.readLock().unlock();
 	}
     }
 

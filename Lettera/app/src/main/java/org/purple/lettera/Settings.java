@@ -349,7 +349,8 @@ public class Settings
 			else
 			{
 			    if(m_database.
-			       save_pgp_key_pair(m_encryption_key_pair,
+			       save_pgp_key_pair(m_cryptography,
+						 m_encryption_key_pair,
 						 "encryption"))
 			    {
 				m_encryption_key_digest.setText
@@ -376,7 +377,8 @@ public class Settings
 			else
 			{
 			    if(m_database.
-			       save_pgp_key_pair(m_signature_key_pair,
+			       save_pgp_key_pair(m_cryptography,
+						 m_signature_key_pair,
 						 "signature"))
 			    {
 				m_pgp.set_signature_key_pair
@@ -499,6 +501,7 @@ public class Settings
     private CheckBox m_generate_keys_checkbox = null;
     private CheckBox m_save_password_checkbox = null;
     private Context m_context = null;
+    private Cryptography m_cryptography = Cryptography.instance();
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
     private Spinner m_encryption_key_spinner = null;

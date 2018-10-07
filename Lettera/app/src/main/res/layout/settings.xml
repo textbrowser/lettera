@@ -449,6 +449,26 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
+                    <Button
+                        android:id="@+id/generate_keys_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/generate" />
+
+                    <CheckBox
+                        android:id="@+id/generate_keys_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
                     <EditText
                         android:id="@+id/iteration_count"
                         android:layout_width="wrap_content"
@@ -471,26 +491,6 @@
                         android:importantForAutofill="no"
                         android:inputType="textPassword|textVisiblePassword"
                         tools:targetApi="o" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/generate_keys_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/generate" />
-
-                    <CheckBox
-                        android:id="@+id/generate_keys_checkbox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0" />
-
                 </LinearLayout>
 
                 <TextView
