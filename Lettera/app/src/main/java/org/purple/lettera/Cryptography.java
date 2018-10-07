@@ -39,6 +39,7 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.crypto.Cipher;
@@ -144,6 +145,69 @@ public class Cryptography
 	}
     }
 
+    public byte[] mtd(byte data[]) // MAC-Then-Decrypt
+    {
+	if(data == null || data.length == 0)
+	    return null;
+
+	/*
+	** Verify the computed digest with the provided digest.
+	*/
+
+	m_mac_key_mutex.readLock().lock();
+
+	try
+	{
+	    if(m_mac_key == null)
+		return null;
+
+	    Mac mac = Mac.getInstance(HMAC_ALGORITHM);
+
+	    mac.init(m_mac_key);
+
+	    byte digest1[] = Arrays.copyOfRange // Provided Digest
+		(data, data.length - 64, data.length);
+	    byte digest2[] = mac.doFinal // Computed Digest
+		(Arrays.copyOf(data, data.length - 64));
+
+	    if(!memcmp(digest1, digest2))
+		return null;
+	}
+	catch(Exception exception)
+	{
+	    return null;
+	}
+	finally
+	{
+	    m_mac_key_mutex.readLock().unlock();
+	}
+
+	m_cipher_key_mutex.readLock().lock();
+
+	try
+	{
+	    if(m_cipher_key_mutex == null)
+		return null;
+
+	    Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER_TRANSFORMATION);
+	    byte iv[] = Arrays.copyOf(data, 16);
+
+	    cipher.init(Cipher.DECRYPT_MODE,
+			m_cipher_key,
+			new IvParameterSpec(iv));
+	    return cipher.doFinal
+		(Arrays.copyOfRange(data, 16, data.length - 64));
+	}
+	catch(Exception exception)
+	{
+	    return null;
+	}
+	finally
+	{
+	    m_cipher_key_mutex.readLock().unlock();
+	}
+    }
+
     public static KeyPair key_pair_from_bytes(byte private_bytes[],
 					      byte public_bytes[])
     {
@@ -181,6 +245,20 @@ public class Cryptography
 	}
 
 	return s_empty_sha_1;
+    }
+
+    public static boolean memcmp(byte a[], byte b[])
+    {
+	if(a == null || b == null)
+	    return false;
+
+	int rc = 0;
+	int size = java.lang.Math.max(a.length, b.length);
+
+	for(int i = 0; i < size; i++)
+	    rc |= (i < a.length ? a[i] : 0) ^ (i < b.length ? b[i] : 0);
+
+	return rc == 0;
     }
 
     public static byte[] pbkdf2(byte salt[],
