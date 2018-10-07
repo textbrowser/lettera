@@ -88,6 +88,8 @@ public class PGP
 	else
 	    switch(type)
 	    {
+	    case "McEliece":
+		return null;
 	    case "RSA":
 		try
 		{

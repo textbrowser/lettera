@@ -91,6 +91,8 @@ public class Cryptography
     {
 	if(data == null || data.length == 0)
 	    return null;
+	else if(m_is_plaintext.get())
+	    return data;
 
 	try
 	{
@@ -149,6 +151,8 @@ public class Cryptography
     {
 	if(data == null || data.length == 0)
 	    return null;
+	else if(m_is_plaintext.get())
+	    return data;
 
 	/*
 	** Verify the computed digest with the provided digest.
