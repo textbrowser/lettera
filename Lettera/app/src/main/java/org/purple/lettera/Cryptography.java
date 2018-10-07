@@ -27,6 +27,7 @@
 
 package org.purple.lettera;
 
+import java.nio.ByteBuffer;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -40,18 +41,25 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 
 public class Cryptography
 {
-    private SecretKey m_gcm_key = null;
-    private final ReentrantReadWriteLock m_gcm_key_mutex = new
+    private SecretKey m_cipher_key = null;
+    private SecretKey m_mac_key = null;
+    private final ReentrantReadWriteLock m_cipher_key_mutex = new
 	ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock m_mac_key_mutex = new
+	ReentrantReadWriteLock();
+    private final static String HMAC_ALGORITHM = "HmacSHA512";
     private final static String SYMMETRIC_ALGORITHM = "AES";
     private final static String SYMMETRIC_CIPHER_TRANSFORMATION =
-	"AES/GCM/NoPadding";
+	"AES/CTS/NoPadding";
     private final static String s_empty_sha_1 =
 	"0000000000000000000000000000000000000000";
     private static Cryptography s_instance = null;
@@ -78,30 +86,61 @@ public class Cryptography
 	}
     }
 
-    public byte[] gcm(byte data[]) // Galois Counter Mode
+    public byte[] etm(byte data[]) // Encrypt-Then-MAC
     {
-	/*
-	** Encrypt-then-MAC.
-	*/
-
 	if(data == null || data.length == 0)
 	    return null;
 
-	m_gcm_key_mutex.readLock().lock();
-
 	try
 	{
-	    byte bytes[] = null;
+	    ByteBuffer byte_buffer = ByteBuffer.allocate
+		(16 + 64 + data.length); // IV + MAC + Data
 
-	    return bytes;
+	    m_cipher_key_mutex.readLock().lock();
+
+	    try
+	    {
+		if(m_cipher_key == null)
+		    return null;
+
+		Cipher cipher = Cipher.getInstance
+		    (SYMMETRIC_CIPHER_TRANSFORMATION);
+		byte iv[] = new byte[16];
+
+		s_secure_random.nextBytes(iv);
+		cipher.init(Cipher.ENCRYPT_MODE,
+			    m_cipher_key,
+			    new IvParameterSpec(iv));
+		byte_buffer.put(iv);
+		byte_buffer.put(cipher.doFinal(data));
+	    }
+	    finally
+	    {
+		m_cipher_key_mutex.readLock().unlock();
+	    }
+
+	    m_mac_key_mutex.readLock().lock();
+
+	    try
+	    {
+		if(m_mac_key == null)
+		    return null;
+
+		Mac mac = Mac.getInstance(HMAC_ALGORITHM);
+
+		mac.init(m_mac_key);
+		byte_buffer.put(mac.doFinal(byte_buffer.array()));
+	    }
+	    finally
+	    {
+		m_mac_key_mutex.readLock().unlock();
+	    }
+
+	    return byte_buffer.array();
 	}
 	catch(Exception exception)
 	{
 	    return null;
-	}
-	finally
-	{
-	    m_gcm_key_mutex.readLock().unlock();
 	}
     }
 
