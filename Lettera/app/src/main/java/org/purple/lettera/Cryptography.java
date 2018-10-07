@@ -40,26 +40,70 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 public class Cryptography
 {
-    private KeyPair m_encryption_key = null;
-    private KeyPair m_mac_key = null;
-    private final ReentrantReadWriteLock m_encryption_key_mutex = new
+    private SecretKey m_gcm_key = null;
+    private final ReentrantReadWriteLock m_gcm_key_mutex = new
 	ReentrantReadWriteLock();
-    private final ReentrantReadWriteLock m_mac_key_mutex = new
-	ReentrantReadWriteLock();
-    private final static String HASH_ALGORITHM = "SHA-512";
-    private final static String HMAC_ALGORITHM = "HmacSHA512";
     private final static String SYMMETRIC_ALGORITHM = "AES";
     private final static String SYMMETRIC_CIPHER_TRANSFORMATION =
-	"AES/CTS/NoPadding";
+	"AES/GCM/NoPadding";
     private final static String s_empty_sha_1 =
 	"0000000000000000000000000000000000000000";
+    private static Cryptography s_instance = null;
     private static SecureRandom s_secure_random = null;
     protected AtomicBoolean m_is_plaintext = new AtomicBoolean(true);
+
+    private Cryptography()
+    {
+	prepare_secure_random();
+    }
+
+    private static synchronized void prepare_secure_random()
+    {
+	if(s_secure_random != null)
+	    return;
+
+	try
+	{
+	    s_secure_random = SecureRandom.getInstance("SHA1PRNG");
+	}
+	catch(Exception exception)
+	{
+	    s_secure_random = new SecureRandom();
+	}
+    }
+
+    public byte[] gcm(byte data[]) // Galois Counter Mode
+    {
+	/*
+	** Encrypt-then-MAC.
+	*/
+
+	if(data == null || data.length == 0)
+	    return null;
+
+	m_gcm_key_mutex.readLock().lock();
+
+	try
+	{
+	    byte bytes[] = null;
+
+	    return bytes;
+	}
+	catch(Exception exception)
+	{
+	    return null;
+	}
+	finally
+	{
+	    m_gcm_key_mutex.readLock().unlock();
+	}
+    }
 
     public static KeyPair key_pair_from_bytes(byte private_bytes[],
 					      byte public_bytes[])
@@ -143,18 +187,11 @@ public class Cryptography
 	return null;
     }
 
-    private static synchronized void prepare_secure_random()
+    public static synchronized Cryptography instance()
     {
-	if(s_secure_random != null)
-	    return;
+	if(s_instance == null)
+	    s_instance = new Cryptography();
 
-	try
-	{
-	    s_secure_random = SecureRandom.getInstance("SHA1PRNG");
-	}
-	catch(Exception exception)
-	{
-	    s_secure_random = new SecureRandom();
-	}
+	return s_instance;
     }
 }
