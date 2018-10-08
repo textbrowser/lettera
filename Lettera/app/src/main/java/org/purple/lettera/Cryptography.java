@@ -73,6 +73,27 @@ public class Cryptography
 	prepare_secure_random();
     }
 
+    private static byte[] hash(String algorithm, byte[] ... data)
+    {
+	if(data == null)
+	    return null;
+
+	try
+	{
+	    MessageDigest message_digest = MessageDigest.getInstance(algorithm);
+
+	    for(byte b[] : data)
+		if(b != null)
+		    message_digest.update(b);
+
+	    return message_digest.digest();
+	}
+	catch(Exception exception)
+	{
+	    return null;
+	}
+    }
+
     private static synchronized void prepare_secure_random()
     {
 	if(s_secure_random != null)
@@ -120,9 +141,7 @@ public class Cryptography
 
     public byte[] etm(byte data[]) // Encrypt-Then-MAC
     {
-	if(data == null || data.length == 0)
-	    return null;
-	else if(m_is_plaintext.get())
+	if(data == null || m_is_plaintext.get())
 	    return data;
 
 	try
@@ -180,9 +199,7 @@ public class Cryptography
 
     public byte[] hmac(byte data[])
     {
-	if(data == null || data.length == 0)
-	    return null;
-	else if(m_is_plaintext.get())
+	if(data == null || m_is_plaintext.get())
 	    return data;
 
 	m_mac_key_mutex.readLock().lock();
@@ -209,9 +226,7 @@ public class Cryptography
 
     public byte[] mtd(byte data[]) // MAC-Then-Decrypt
     {
-	if(data == null || data.length == 0)
-	    return null;
-	else if(m_is_plaintext.get())
+	if(data == null || m_is_plaintext.get())
 	    return data;
 
 	/*
@@ -346,26 +361,31 @@ public class Cryptography
 	return null;
     }
 
-    public static byte[] sha_1(byte[] ... data)
+    public static byte[] random_bytes(int length)
     {
-	if(data == null)
-	    return null;
+	prepare_secure_random();
 
 	try
 	{
-	    MessageDigest message_digest = MessageDigest.getInstance("SHA-1");
+	    byte bytes[] = new byte[length];
 
-	    for(byte b[] : data)
-		if(b != null)
-		    message_digest.update(b);
-
-	    return message_digest.digest();
+	    s_secure_random.nextBytes(bytes);
+	    return bytes;
 	}
 	catch(Exception exception)
 	{
+	    return null;
 	}
+    }
 
-	return null;
+    public static byte[] sha_1(byte[] ... data)
+    {
+	return hash("SHA-1", data);
+    }
+
+    public static byte[] sha_512(byte[] ... data)
+    {
+	return hash("SHA-512", data);
     }
 
     public static synchronized Cryptography instance()

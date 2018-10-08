@@ -430,6 +430,10 @@ public class Settings
 	private Dialog m_dialog = null;
 	private String m_password = "";
 	private boolean m_error = false;
+	private byte m_cipher_key[] = null;
+	private byte m_mac_key[] = null;
+	private byte m_salt_1[] = null;
+	private byte m_salt_2[] = null;
 	private int m_iteration_count = 0;
 
 	private SavePassword(Dialog dialog,
@@ -446,6 +450,16 @@ public class Settings
 	{
 	    try
 	    {
+		m_salt_1 = Cryptography.random_bytes(32);
+		m_salt_2 = Cryptography.random_bytes(64);
+		m_cipher_key = Cryptography.pbkdf2(m_salt_1,
+						   m_password.toCharArray(),
+						   m_iteration_count,
+						   256);
+		m_mac_key = Cryptography.pbkdf2(m_salt_2,
+						m_password.toCharArray(),
+						m_iteration_count,
+						512);
 	    }
 	    catch(Exception exception)
 	    {
