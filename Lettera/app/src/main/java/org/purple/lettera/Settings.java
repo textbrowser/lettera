@@ -349,8 +349,7 @@ public class Settings
 			else
 			{
 			    if(m_database.
-			       save_pgp_key_pair(m_cryptography,
-						 m_encryption_key_pair,
+			       save_pgp_key_pair(m_encryption_key_pair,
 						 "encryption"))
 			    {
 				m_encryption_key_digest.setText
@@ -377,8 +376,7 @@ public class Settings
 			else
 			{
 			    if(m_database.
-			       save_pgp_key_pair(m_cryptography,
-						 m_signature_key_pair,
+			       save_pgp_key_pair(m_signature_key_pair,
 						 "signature"))
 			    {
 				m_pgp.set_signature_key_pair
@@ -425,81 +423,6 @@ public class Settings
 	}
     }
 
-    private class SavePassword implements Runnable
-    {
-	private Dialog m_dialog = null;
-	private String m_password = "";
-	private boolean m_error = false;
-	private byte m_cipher_key[] = null;
-	private byte m_mac_key[] = null;
-	private byte m_salt_1[] = null;
-	private byte m_salt_2[] = null;
-	private int m_iteration_count = 0;
-
-	private SavePassword(Dialog dialog,
-			     String password,
-			     int iteration_count)
-	{
-	    m_dialog = dialog;
-	    m_iteration_count = iteration_count;
-	    m_password = password;
-	}
-
-	@Override
-	public void run()
-	{
-	    try
-	    {
-		m_salt_1 = Cryptography.random_bytes(32);
-		m_salt_2 = Cryptography.random_bytes(64);
-		m_cipher_key = Cryptography.pbkdf2(m_salt_1,
-						   m_password.toCharArray(),
-						   m_iteration_count,
-						   256);
-		m_mac_key = Cryptography.pbkdf2(m_salt_2,
-						m_password.toCharArray(),
-						m_iteration_count,
-						512);
-	    }
-	    catch(Exception exception)
-	    {
-		m_error = true;
-	    }
-
-	    try
-	    {
-		((Activity) m_context).runOnUiThread(new Runnable()
-		{
-		    @Override
-		    public void run()
-		    {
-			if(m_dialog != null)
-			    m_dialog.dismiss();
-
-			if(!m_error)
-			    Windows.show_dialog
-				(m_context, "Credentials saved!", "Success");
-			else
-			{
-			    Windows.show_dialog
-				(m_context,
-				 "Cannot save credentials!",
-				 "Error");
-			}
-		    }
-		});
-	    }
-	    catch(Exception exception)
-	    {
-	    }
-	    finally
-	    {
-		if(m_dialog != null)
-		    m_dialog.dismiss();
-	    }
-	}
-    }
-
     private Button m_apply_button = null;
     private Button m_close_button = null;
     private Button m_delete_account_button = null;
@@ -507,15 +430,12 @@ public class Settings
     private Button m_generate_keys_button = null;
     private Button m_network_button = null;
     private Button m_privacy_button = null;
-    private Button m_save_password_button = null;
     private Button m_test_inbound_button = null;
     private Button m_test_outbound_button = null;
     private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_delete_account_verify_checkbox = null;
     private CheckBox m_generate_keys_checkbox = null;
-    private CheckBox m_save_password_checkbox = null;
     private Context m_context = null;
-    private Cryptography m_cryptography = Cryptography.instance();
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
     private Spinner m_encryption_key_spinner = null;
@@ -527,12 +447,10 @@ public class Settings
     private TextView m_inbound_email = null;
     private TextView m_inbound_password = null;
     private TextView m_inbound_port = null;
-    private TextView m_iteration_count = null;
     private TextView m_outbound_address = null;
     private TextView m_outbound_email = null;
     private TextView m_outbound_password = null;
     private TextView m_outbound_port = null;
-    private TextView m_password = null;
     private TextView m_proxy_address = null;
     private TextView m_proxy_password = null;
     private TextView m_proxy_port = null;
@@ -546,31 +464,6 @@ public class Settings
     private WindowManager.LayoutParams m_layout_params = null;
     private final Database m_database = Database.get_instance();
     private final PGP m_pgp = PGP.get_instance();
-    private final static InputFilter s_iteration_count_filter =
-	new InputFilter()
-    {
-	public CharSequence filter(CharSequence source,
-				   int start,
-				   int end,
-				   Spanned dest,
-				   int dstart,
-				   int dend)
-	{
-	    try
-	    {
-		int iteration_count = Integer.parseInt
-		    (dest.toString() + source.toString());
-
-		if(iteration_count >= 1)
-		    return null;
-	    }
-	    catch(Exception exception)
-	    {
-	    }
-
-	    return "";
-	}
-    };
     private final static InputFilter s_port_filter = new InputFilter()
     {
 	public CharSequence filter(CharSequence source,
@@ -847,8 +740,6 @@ public class Settings
 	m_inbound_password = (TextView) m_view.findViewById
 	    (R.id.inbound_password);
 	m_inbound_port = (TextView) m_view.findViewById(R.id.inbound_port);
-	m_iteration_count = (TextView) m_view.findViewById
-	    (R.id.iteration_count);
 	m_network_button = (Button) m_view.findViewById(R.id.network_button);
 	m_outbound_address = (TextView) m_view.findViewById
 	    (R.id.outbound_address);
@@ -857,7 +748,6 @@ public class Settings
 	    (R.id.outbound_password);
 	m_outbound_port = (TextView) m_view.findViewById(R.id.outbound_port);
 	m_network_layout = m_view.findViewById(R.id.network_layout);
-	m_password = (TextView) m_view.findViewById(R.id.password);
 	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
 	m_proxy_address = (TextView) m_view.findViewById(R.id.proxy_address);
@@ -866,10 +756,6 @@ public class Settings
 	m_proxy_type_spinner = (Spinner) m_view.findViewById
 	    (R.id.proxy_type_spinner);
 	m_proxy_user = (TextView) m_view.findViewById(R.id.proxy_user);
-	m_save_password_button = (Button) m_view.findViewById
-	    (R.id.save_password);
-	m_save_password_checkbox = (CheckBox) m_view.findViewById
-	    (R.id.save_password_checkbox);
 	m_signature_key_digest = m_view.findViewById(R.id.signature_key_digest);
 	m_signature_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.signature_key_spinner);
@@ -1022,7 +908,6 @@ public class Settings
 		("SHA-1: " +
 		 Cryptography.sha_1_fingerprint(m_pgp.encryption_key_pair().
 						getPublic()));
-	    m_iteration_count.setText("5000");
 	    m_signature_key_digest.setText
 		("SHA-1: " +
 		 Cryptography.sha_1_fingerprint(m_pgp.signature_key_pair().
@@ -1232,31 +1117,6 @@ public class Settings
 		}
 	     });
 
-	if(!m_save_password_button.hasOnClickListeners())
-	    m_save_password_button.setOnClickListener(new View.OnClickListener()
-	    {
-		public void onClick(View view)
-		{
-		    if(((Activity) m_context).isFinishing())
-			return;
-
-		    save_password();
-		}
-	     });
-
-	m_save_password_checkbox.setOnCheckedChangeListener
-	    (new CompoundButton.OnCheckedChangeListener()
-	    {
-		@Override
-		public void onCheckedChanged
-		    (CompoundButton buttonView, boolean isChecked)
-		{
-		    m_save_password_button.setEnabled(isChecked);
-		    m_view.findViewById(R.id.warning_label).setVisibility
-			(isChecked ? View.VISIBLE : View.GONE);
-		}
-	    });
-
 	if(!m_test_inbound_button.hasOnClickListeners())
 	    m_test_inbound_button.setOnClickListener(new View.OnClickListener()
 	    {
@@ -1337,40 +1197,10 @@ public class Settings
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_encryption_key_spinner.setAdapter(array_adapter);
 	m_generate_keys_button.setEnabled(false);
-	m_iteration_count.setFilters
-	    (new InputFilter[] {s_iteration_count_filter});
-	m_save_password_button.setEnabled(false);
 	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_signature_key_spinner.setAdapter(array_adapter);
-    }
-
-    private void save_password()
-    {
-	Dialog dialog = null;
-
-	try
-	{
-	    dialog = new Dialog(m_context);
-	    Windows.show_progress_dialog
-		(m_context,
-		 dialog,
-		 "Generating credentials. Please be patient.");
-
-	    Thread thread = new Thread
-		(new SavePassword(dialog,
-				  m_password.getText().toString(),
-				  Integer.parseInt(m_iteration_count.
-						   getText().toString())));
-
-	    thread.start();
-	}
-	catch(Exception exception)
-	{
-	    if(dialog != null)
-		dialog.dismiss();
-	}
     }
 
     private void show_display_page()

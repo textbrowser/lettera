@@ -464,62 +464,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/iteration_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:ems="10"
-                        android:hint="@string/iteration_count"
-                        android:importantForAutofill="no"
-                        android:inputType="number"
-                        android:nextFocusDown="@id/password"
-                        tools:targetApi="o" />
-
-                    <EditText
-                        android:id="@+id/password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:ems="10"
-                        android:hint="@string/password"
-                        android:importantForAutofill="no"
-                        android:inputType="textPassword|textVisiblePassword"
-                        tools:targetApi="o" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/warning_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/all_confidential_data_will_be_erased"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:visibility="gone" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/save_password"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/save_password" />
-
-                    <CheckBox
-                        android:id="@+id/save_password_checkbox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0" />
-                </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout

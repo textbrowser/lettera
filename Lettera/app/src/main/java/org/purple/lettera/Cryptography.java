@@ -27,50 +27,24 @@
 
 package org.purple.lettera;
 
-import android.util.Base64;
-import java.nio.ByteBuffer;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.spec.EncodedKeySpec;
-import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import javax.crypto.Cipher;
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
 
 public class Cryptography
 {
-    private SecretKey m_cipher_key = null;
-    private SecretKey m_mac_key = null;
-    private final ReentrantReadWriteLock m_cipher_key_mutex = new
-	ReentrantReadWriteLock();
-    private final ReentrantReadWriteLock m_mac_key_mutex = new
-	ReentrantReadWriteLock();
-    private final static String HMAC_ALGORITHM = "HmacSHA512";
-    private final static String SYMMETRIC_ALGORITHM = "AES";
-    private final static String SYMMETRIC_CIPHER_TRANSFORMATION =
-	"AES/CTS/NoPadding";
     private final static String s_empty_sha_1 =
 	"0000000000000000000000000000000000000000";
     private static Cryptography s_instance = null;
-    private static SecureRandom s_secure_random = null;
-    protected AtomicBoolean m_is_plaintext = new AtomicBoolean(true);
 
     private Cryptography()
     {
-	prepare_secure_random();
     }
 
     private static byte[] hash(String algorithm, byte[] ... data)
@@ -91,199 +65,6 @@ public class Cryptography
 	catch(Exception exception)
 	{
 	    return null;
-	}
-    }
-
-    private static synchronized void prepare_secure_random()
-    {
-	if(s_secure_random != null)
-	    return;
-
-	try
-	{
-	    s_secure_random = SecureRandom.getInstance("SHA1PRNG");
-	}
-	catch(Exception exception)
-	{
-	    s_secure_random = new SecureRandom();
-	}
-    }
-
-    public String etm_base64(byte data[])
-    {
-	byte bytes[] = etm(data);
-
-	if(bytes != null)
-	    return Base64.encodeToString(bytes, Base64.NO_WRAP);
-	else
-	    return Base64.encodeToString("".getBytes(), Base64.NO_WRAP);
-    }
-
-    public String hmac_base64(byte data[])
-    {
-	byte bytes[] = hmac(data);
-
-	if(bytes != null)
-	    return Base64.encodeToString(bytes, Base64.NO_WRAP);
-	else
-	    return Base64.encodeToString("".getBytes(), Base64.NO_WRAP);
-    }
-
-    public String mtd_base64(byte data[])
-    {
-	byte bytes[] = mtd(data);
-
-	if(bytes != null)
-	    return Base64.encodeToString(bytes, Base64.NO_WRAP);
-	else
-	    return Base64.encodeToString("".getBytes(), Base64.NO_WRAP);
-    }
-
-    public byte[] etm(byte data[]) // Encrypt-Then-MAC
-    {
-	if(data == null || m_is_plaintext.get())
-	    return data;
-
-	try
-	{
-	    ByteBuffer byte_buffer = ByteBuffer.allocate
-		(16 + 64 + data.length); // IV + MAC + Data
-
-	    m_cipher_key_mutex.readLock().lock();
-
-	    try
-	    {
-		if(m_cipher_key == null)
-		    return null;
-
-		Cipher cipher = Cipher.getInstance
-		    (SYMMETRIC_CIPHER_TRANSFORMATION);
-		byte iv[] = new byte[16];
-
-		s_secure_random.nextBytes(iv);
-		cipher.init(Cipher.ENCRYPT_MODE,
-			    m_cipher_key,
-			    new IvParameterSpec(iv));
-		byte_buffer.put(iv);
-		byte_buffer.put(cipher.doFinal(data));
-	    }
-	    finally
-	    {
-		m_cipher_key_mutex.readLock().unlock();
-	    }
-
-	    m_mac_key_mutex.readLock().lock();
-
-	    try
-	    {
-		if(m_mac_key == null)
-		    return null;
-
-		Mac mac = Mac.getInstance(HMAC_ALGORITHM);
-
-		mac.init(m_mac_key);
-		byte_buffer.put(mac.doFinal(byte_buffer.array()));
-	    }
-	    finally
-	    {
-		m_mac_key_mutex.readLock().unlock();
-	    }
-
-	    return byte_buffer.array();
-	}
-	catch(Exception exception)
-	{
-	    return null;
-	}
-    }
-
-    public byte[] hmac(byte data[])
-    {
-	if(data == null || m_is_plaintext.get())
-	    return data;
-
-	m_mac_key_mutex.readLock().lock();
-
-	try
-	{
-	    if(m_mac_key == null)
-		return null;
-
-	    Mac mac = Mac.getInstance(HMAC_ALGORITHM);
-
-	    mac.init(m_mac_key);
-	    return mac.doFinal(data);
-	}
-	catch(Exception exception)
-	{
-	    return null;
-	}
-	finally
-	{
-	    m_mac_key_mutex.readLock().unlock();
-	}
-    }
-
-    public byte[] mtd(byte data[]) // MAC-Then-Decrypt
-    {
-	if(data == null || m_is_plaintext.get())
-	    return data;
-
-	/*
-	** Verify the computed digest with the provided digest.
-	*/
-
-	m_mac_key_mutex.readLock().lock();
-
-	try
-	{
-	    if(m_mac_key == null)
-		return null;
-
-	    Mac mac = Mac.getInstance(HMAC_ALGORITHM);
-
-	    mac.init(m_mac_key);
-
-	    byte digest1[] = Arrays.copyOfRange // Provided Digest
-		(data, data.length - 64, data.length);
-	    byte digest2[] = mac.doFinal // Computed Digest
-		(Arrays.copyOf(data, data.length - 64));
-
-	    if(!memcmp(digest1, digest2))
-		return null;
-	}
-	catch(Exception exception)
-	{
-	    return null;
-	}
-	finally
-	{
-	    m_mac_key_mutex.readLock().unlock();
-	}
-
-	m_cipher_key_mutex.readLock().lock();
-
-	try
-	{
-	    if(m_cipher_key_mutex == null)
-		return null;
-
-	    Cipher cipher = Cipher.getInstance(SYMMETRIC_CIPHER_TRANSFORMATION);
-	    byte iv[] = Arrays.copyOf(data, 16);
-
-	    cipher.init(Cipher.DECRYPT_MODE,
-			m_cipher_key,
-			new IvParameterSpec(iv));
-	    return cipher.doFinal
-		(Arrays.copyOfRange(data, 16, data.length - 64));
-	}
-	catch(Exception exception)
-	{
-	    return null;
-	}
-	finally
-	{
-	    m_cipher_key_mutex.readLock().unlock();
 	}
     }
 
@@ -324,58 +105,6 @@ public class Cryptography
 	}
 
 	return s_empty_sha_1;
-    }
-
-    public static boolean memcmp(byte a[], byte b[])
-    {
-	if(a == null || b == null)
-	    return false;
-
-	int rc = 0;
-	int size = java.lang.Math.max(a.length, b.length);
-
-	for(int i = 0; i < size; i++)
-	    rc |= (i < a.length ? a[i] : 0) ^ (i < b.length ? b[i] : 0);
-
-	return rc == 0;
-    }
-
-    public static byte[] pbkdf2(byte salt[],
-				char password[],
-				int iteration_count,
-				int length)
-    {
-	try
-	{
-	    KeySpec key_spec = new PBEKeySpec
-		(password, salt, iteration_count, length);
-	    SecretKeyFactory secret_key_factory = SecretKeyFactory.getInstance
-		("PBKDF2WithHmacSHA1");
-
-	    return secret_key_factory.generateSecret(key_spec).getEncoded();
-	}
-	catch(Exception exception)
-	{
-	}
-
-	return null;
-    }
-
-    public static byte[] random_bytes(int length)
-    {
-	prepare_secure_random();
-
-	try
-	{
-	    byte bytes[] = new byte[length];
-
-	    s_secure_random.nextBytes(bytes);
-	    return bytes;
-	}
-	catch(Exception exception)
-	{
-	    return null;
-	}
     }
 
     public static byte[] sha_1(byte[] ... data)

@@ -51,14 +51,10 @@ public class Lettera extends AppCompatActivity
 		byte bytes[][] = null;
 
 		bytes = m_database.read_pgp_pair("encryption");
-		key_pair = Cryptography.key_pair_from_bytes
-		    (m_cryptography.mtd(bytes[0]),
-		     m_cryptography.mtd(bytes[1]));
+		key_pair = Cryptography.key_pair_from_bytes(bytes[0], bytes[1]);
 		m_pgp.set_encryption_key_pair(key_pair);
 		bytes = m_database.read_pgp_pair("signature");
-		key_pair = Cryptography.key_pair_from_bytes
-		    (m_cryptography.mtd(bytes[0]),
-		     m_cryptography.mtd(bytes[1]));
+		key_pair = Cryptography.key_pair_from_bytes(bytes[0], bytes[1]);
 		m_pgp.set_signature_key_pair(key_pair);
 	    }
 	    catch(Exception exception)
@@ -74,7 +70,6 @@ public class Lettera extends AppCompatActivity
     private Button m_download_button = null;
     private Button m_messaging_button = null;
     private Button m_settings_button = null;
-    private Cryptography m_cryptography = Cryptography.instance();
     private Database m_database = null;
     private Settings m_settings = null;
     private final PGP m_pgp = PGP.get_instance();

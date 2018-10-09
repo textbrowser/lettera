@@ -340,11 +340,10 @@ public class Database extends SQLiteOpenHelper
 	return ok;
     }
 
-    public boolean save_pgp_key_pair(Cryptography cryptography,
-				     KeyPair key_pair,
+    public boolean save_pgp_key_pair(KeyPair key_pair,
 				     String function)
     {
-	if(cryptography == null || key_pair == null || m_db == null)
+	if(key_pair == null || m_db == null)
 	    return false;
 
 	m_db.beginTransactionNonExclusive();
@@ -353,14 +352,12 @@ public class Database extends SQLiteOpenHelper
 	{
 	    String strings[] = new String[4];
 
-	    strings[0] = cryptography.etm_base64
-		(key_pair.getPrivate().getEncoded());
-	    strings[1] = cryptography.hmac_base64
-		(key_pair.getPrivate().getEncoded());
-	    strings[2] = cryptography.etm_base64
-		(key_pair.getPublic().getEncoded());
-	    strings[3] = cryptography.hmac_base64
-		(key_pair.getPublic().getEncoded());
+	    strings[0] = Base64.encodeToString
+		(key_pair.getPrivate().getEncoded(), Base64.NO_WRAP);
+	    strings[1] = Cryptography.sha_1_fingerprint(key_pair.getPrivate());
+	    strings[2] = Base64.encodeToString
+		(key_pair.getPublic().getEncoded(), Base64.NO_WRAP);
+	    strings[3] = Cryptography.sha_1_fingerprint(key_pair.getPublic());
 	    m_db.execSQL
 		("REPLACE INTO open_pgp (" +
 		 "function, " +
