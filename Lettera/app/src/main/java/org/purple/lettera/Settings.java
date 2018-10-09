@@ -462,8 +462,8 @@ public class Settings
     private View m_privacy_layout = null;
     private View m_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
-    private final Database m_database = Database.get_instance();
-    private final PGP m_pgp = PGP.get_instance();
+    private final Database m_database = Database.instance();
+    private final PGP m_pgp = PGP.instance();
     private final static InputFilter s_port_filter = new InputFilter()
     {
 	public CharSequence filter(CharSequence source,
@@ -908,6 +908,15 @@ public class Settings
 		("SHA-1: " +
 		 Cryptography.sha_1_fingerprint(m_pgp.encryption_key_pair().
 						getPublic()));
+	}
+	catch(Exception exception)
+	{
+	    m_encryption_key_digest.setText
+		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
+	}
+
+	try
+	{
 	    m_signature_key_digest.setText
 		("SHA-1: " +
 		 Cryptography.sha_1_fingerprint(m_pgp.signature_key_pair().
@@ -915,8 +924,6 @@ public class Settings
 	}
 	catch(Exception exception)
 	{
-	    m_encryption_key_digest.setText
-		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
 	    m_signature_key_digest.setText
 		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
 	}
@@ -1192,7 +1199,7 @@ public class Settings
 	** Privacy
 	*/
 
-	array = new String[] {"RSA"};
+	array = new String[] {"McEliece", "RSA"};
 	array_adapter = new ArrayAdapter<>
 	    (m_context, android.R.layout.simple_spinner_item, array);
 	m_encryption_key_spinner.setAdapter(array_adapter);

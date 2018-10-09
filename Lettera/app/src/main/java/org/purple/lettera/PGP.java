@@ -27,16 +27,27 @@
 
 package org.purple.lettera;
 
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Security;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.pqc.asn1.PQCObjectIdentifiers;
+import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
+import org.bouncycastle.pqc.jcajce.provider.mceliece.BCMcElieceCCA2PublicKey;
+import org.bouncycastle.pqc.jcajce.spec.McElieceCCA2KeyGenParameterSpec;
 
 public class PGP
 {
     static
     {
+	Security.addProvider(new BouncyCastlePQCProvider());
 	Security.addProvider(new BouncyCastleProvider());
     }
 
@@ -46,6 +57,7 @@ public class PGP
 	new ReentrantReadWriteLock();
     private final ReentrantReadWriteLock m_signature_key_pair_lock =
 	new ReentrantReadWriteLock();
+    private final static int MCELIECE_PARAMETERS[] = new int[] {12, 68};
     private final static int RSA_KEY_SIZE = 4096;
     private static PGP s_instance = null;
 
@@ -89,7 +101,24 @@ public class PGP
 	    switch(type)
 	    {
 	    case "McEliece":
-		return null;
+		try
+		{
+		    KeyPairGenerator key_pair_generator =
+			KeyPairGenerator.getInstance("McElieceFujisaki");
+		    McElieceCCA2KeyGenParameterSpec parameters =
+			new McElieceCCA2KeyGenParameterSpec
+			(MCELIECE_PARAMETERS[0],
+			 MCELIECE_PARAMETERS[1],
+			 McElieceCCA2KeyGenParameterSpec.SHA256);
+
+		    key_pair_generator.initialize(parameters);
+		    return key_pair_generator.generateKeyPair();
+		}
+		catch(Exception exception)
+		{
+		}
+
+		break;
 	    case "RSA":
 		try
 		{
@@ -103,13 +132,68 @@ public class PGP
 		{
 		}
 
-		return null;
+		break;
 	    default:
 		return null;
 	    }
+
+	return null;
     }
 
-    public static synchronized PGP get_instance()
+    public static KeyPair key_pair_from_bytes(byte private_bytes[],
+					      byte public_bytes[])
+    {
+	for(int i = 0; i < 2; i++)
+	    switch(i)
+	    {
+	    case 0:
+		try
+		{
+		    EncodedKeySpec encoded_key_spec_1 = new PKCS8EncodedKeySpec
+			(private_bytes);
+		    EncodedKeySpec encoded_key_spec_2 = new X509EncodedKeySpec
+			(public_bytes);
+		    KeyFactory key_factory = KeyFactory.getInstance
+			(PQCObjectIdentifiers.mcElieceCca2.getId());
+		    PrivateKey private_key = key_factory.generatePrivate
+			(encoded_key_spec_1);
+		    PublicKey public_key = key_factory.generatePublic
+			(encoded_key_spec_2);
+
+		    return new KeyPair(public_key, private_key);
+		}
+		catch(Exception exception)
+		{
+		}
+
+		break;
+	    default:
+		try
+		{
+		    EncodedKeySpec encoded_key_spec_1 = new PKCS8EncodedKeySpec
+			(private_bytes);
+		    EncodedKeySpec encoded_key_spec_2 = new X509EncodedKeySpec
+			(public_bytes);
+		    KeyFactory key_factory = KeyFactory.getInstance
+			("RSA", "BC");
+		    PrivateKey private_key = key_factory.generatePrivate
+			(encoded_key_spec_1);
+		    PublicKey public_key = key_factory.generatePublic
+			(encoded_key_spec_2);
+
+		    return new KeyPair(public_key, private_key);
+		}
+		catch(Exception exception)
+		{
+		}
+
+		break;
+	    }
+
+	return null;
+    }
+
+    public static synchronized PGP instance()
     {
 	if(s_instance == null)
 	    s_instance = new PGP();

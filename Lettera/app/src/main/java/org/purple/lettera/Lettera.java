@@ -47,19 +47,25 @@ public class Lettera extends AppCompatActivity
 	{
 	    try
 	    {
-		KeyPair key_pair = null;
-		byte bytes[][] = null;
+		byte bytes[][] = m_database.read_pgp_pair("encryption");
 
-		bytes = m_database.read_pgp_pair("encryption");
-		key_pair = Cryptography.key_pair_from_bytes(bytes[0], bytes[1]);
-		m_pgp.set_encryption_key_pair(key_pair);
-		bytes = m_database.read_pgp_pair("signature");
-		key_pair = Cryptography.key_pair_from_bytes(bytes[0], bytes[1]);
-		m_pgp.set_signature_key_pair(key_pair);
+		m_pgp.set_encryption_key_pair
+		    (PGP.key_pair_from_bytes(bytes[0], bytes[1]));
 	    }
 	    catch(Exception exception)
 	    {
 		m_pgp.set_encryption_key_pair(null);
+	    }
+
+	    try
+	    {
+		byte bytes[][] = m_database.read_pgp_pair("signature");
+
+		m_pgp.set_signature_key_pair
+		    (PGP.key_pair_from_bytes(bytes[0], bytes[1]));
+	    }
+	    catch(Exception exception)
+	    {
 		m_pgp.set_signature_key_pair(null);
 	    }
 	}
@@ -72,7 +78,7 @@ public class Lettera extends AppCompatActivity
     private Button m_settings_button = null;
     private Database m_database = null;
     private Settings m_settings = null;
-    private final PGP m_pgp = PGP.get_instance();
+    private final PGP m_pgp = PGP.instance();
 
     private void initialize_widget_members()
     {
@@ -120,7 +126,7 @@ public class Lettera extends AppCompatActivity
 	*/
 
 	initialize_widget_members();
-	m_database = Database.get_instance(getApplicationContext());
+	m_database = Database.instance(getApplicationContext());
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	prepare_button_listeners();
 	prepare_icons();

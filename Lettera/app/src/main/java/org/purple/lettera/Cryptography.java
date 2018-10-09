@@ -28,14 +28,7 @@
 package org.purple.lettera;
 
 import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
 import java.security.MessageDigest;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.EncodedKeySpec;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 
 public class Cryptography
 {
@@ -66,30 +59,6 @@ public class Cryptography
 	{
 	    return null;
 	}
-    }
-
-    public static KeyPair key_pair_from_bytes(byte private_bytes[],
-					      byte public_bytes[])
-    {
-	try
-	{
-	    EncodedKeySpec encoded_key_spec_1 = new PKCS8EncodedKeySpec
-		(private_bytes);
-	    EncodedKeySpec encoded_key_spec_2 = new X509EncodedKeySpec
-		(public_bytes);
-	    KeyFactory key_factory = KeyFactory.getInstance("RSA");
-	    PrivateKey private_key = key_factory.generatePrivate
-		(encoded_key_spec_1);
-	    PublicKey public_key = key_factory.generatePublic
-		(encoded_key_spec_2);
-
-	    return new KeyPair(public_key, private_key);
-	}
-	catch(Exception exception)
-	{
-	}
-
-	return null;
     }
 
     public static String sha_1_fingerprint(Key key)
