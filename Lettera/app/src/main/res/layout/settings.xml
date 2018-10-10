@@ -407,13 +407,13 @@
 
                     <Spinner
                         android:id="@+id/encryption_key_spinner"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0" />
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/encryption_key_digest"
+                    android:id="@+id/encryption_key_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/digest"
@@ -432,13 +432,13 @@
 
                     <Spinner
                         android:id="@+id/signature_key_spinner"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0" />
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/signature_key_digest"
+                    android:id="@+id/signature_key_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/digest"

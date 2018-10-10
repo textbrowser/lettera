@@ -1,13 +1,13 @@
 Completed Items
 
-1.  Key generation.
-2.  Proxies for e-mail.
-3.  Restore personal key pairs.
-4.  Save personal key pairs.
+1.  Include algorithm information in Settings::Privacy.
+2.  Key generation.
+3.  Proxies for e-mail.
+4.  Restore personal key pairs.
+5.  Save personal key pairs.
 
 Remaining Items
 
 1.  Background services.
-2.  Include algorithm information in Settings::Privacy.
-3.  McEliece key generation, exchange, etc.
-4.  Status bar on main activity.
+2.  McEliece key generation, exchange, etc.
+3.  Status bar on main activity.

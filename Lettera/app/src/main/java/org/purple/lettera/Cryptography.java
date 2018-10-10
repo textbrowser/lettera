@@ -29,6 +29,9 @@ package org.purple.lettera;
 
 import java.security.Key;
 import java.security.MessageDigest;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import org.bouncycastle.pqc.jcajce.provider.mceliece.BCMcElieceCCA2PublicKey;
 
 public class Cryptography
 {
@@ -59,6 +62,73 @@ public class Cryptography
 	{
 	    return null;
 	}
+    }
+
+    public static String key_information(PublicKey public_key)
+    {
+	if(public_key == null)
+	    return "";
+
+	try
+	{
+	    String algorithm = public_key.getAlgorithm();
+	    StringBuilder string_builder = new StringBuilder();
+
+	    string_builder.append("Algorithm: ");
+	    string_builder.append(algorithm);
+	    string_builder.append("\n");
+	    string_builder.append("Disk Size: ");
+	    string_builder.append(public_key.getEncoded().length);
+	    string_builder.append(" Bytes\n");
+	    string_builder.append("Format: ");
+	    string_builder.append(public_key.getFormat());
+	    string_builder.append("\n");
+	    string_builder.append("SHA-1: ");
+	    string_builder.append(sha_1_fingerprint(public_key));
+
+	    if(algorithm.equals("McEliece-CCA2") ||
+	       algorithm.equals("RSA"))
+		try
+		{
+		    switch(algorithm)
+		    {
+		    case "McEliece-CCA2":
+		    {
+			BCMcElieceCCA2PublicKey pk =
+			    (BCMcElieceCCA2PublicKey) public_key;
+
+			if(pk != null)
+			    string_builder.append("\n").append("m = ").
+				append((int) (Math.log(pk.getN()) /
+					      Math.log(2))).
+				append(", t = ").
+				append(pk.getT());
+
+			break;
+		    }
+		    case "RSA":
+		    {
+			RSAPublicKey pk = (RSAPublicKey) public_key;
+
+			if(pk != null)
+			    string_builder.append("\n").append("Size: ").
+				append(pk.getModulus().bitLength());
+
+			break;
+		    }
+		    }
+		}
+		catch(Exception exception)
+		{
+		}
+
+	    return string_builder.toString();
+	}
+	catch(Exception exception)
+	{
+	}
+
+	return "";
     }
 
     public static String sha_1_fingerprint(Key key)

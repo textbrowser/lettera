@@ -343,7 +343,7 @@ public class Settings
 			    m_dialog.dismiss();
 
 			if(m_encryption_key_pair == null)
-			    m_encryption_key_digest.setText
+			    m_encryption_key_data.setText
 				("SHA-1: " +
 				 Cryptography.sha_1_fingerprint(null));
 			else
@@ -352,17 +352,16 @@ public class Settings
 			       save_pgp_key_pair(m_encryption_key_pair,
 						 "encryption"))
 			    {
-				m_encryption_key_digest.setText
-				    ("SHA-1: " +
-				     Cryptography.
-				     sha_1_fingerprint(m_encryption_key_pair.
-						       getPublic()));
+				m_encryption_key_data.setText
+				    (Cryptography.
+				     key_information(m_encryption_key_pair.
+						     getPublic()));
 				m_pgp.set_encryption_key_pair
 				    (m_encryption_key_pair);
 			    }
 			    else
 			    {
-				m_encryption_key_digest.setText
+				m_encryption_key_data.setText
 				    ("SHA-1: " +
 				     Cryptography.sha_1_fingerprint(null));
 				m_error = true;
@@ -370,7 +369,7 @@ public class Settings
 			}
 
 			if(m_signature_key_pair == null)
-			    m_signature_key_digest.setText
+			    m_signature_key_data.setText
 				("SHA-1: " +
 				 Cryptography.sha_1_fingerprint(null));
 			else
@@ -381,16 +380,15 @@ public class Settings
 			    {
 				m_pgp.set_signature_key_pair
 				    (m_signature_key_pair);
-				m_signature_key_digest.setText
-				    ("SHA-1: " +
-				     Cryptography.
-				     sha_1_fingerprint(m_signature_key_pair.
-						       getPublic()));
+				m_signature_key_data.setText
+				    (Cryptography.
+				     key_information(m_signature_key_pair.
+						     getPublic()));
 			    }
 			    else
 			    {
 				m_error = true;
-				m_signature_key_digest.setText
+				m_signature_key_data.setText
 				    ("SHA-1: " +
 				     Cryptography.sha_1_fingerprint(null));
 			    }
@@ -442,7 +440,7 @@ public class Settings
     private Spinner m_icon_theme_spinner = null;
     private Spinner m_proxy_type_spinner = null;
     private Spinner m_signature_key_spinner = null;
-    private TextView m_encryption_key_digest = null;
+    private TextView m_encryption_key_data = null;
     private TextView m_inbound_address = null;
     private TextView m_inbound_email = null;
     private TextView m_inbound_password = null;
@@ -455,7 +453,7 @@ public class Settings
     private TextView m_proxy_password = null;
     private TextView m_proxy_port = null;
     private TextView m_proxy_user = null;
-    private TextView m_signature_key_digest = null;
+    private TextView m_signature_key_data = null;
     private View m_display_layout = null;
     private View m_network_layout = null;
     private View m_parent = null;
@@ -725,8 +723,8 @@ public class Settings
 	m_display_button = (Button) m_view.findViewById
 	    (R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
-	m_encryption_key_digest = (TextView) m_view.findViewById
-	    (R.id.encryption_key_digest);
+	m_encryption_key_data = (TextView) m_view.findViewById
+	    (R.id.encryption_key_data);
 	m_encryption_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.encryption_key_spinner);
 	m_generate_keys_button = m_view.findViewById(R.id.generate_keys_button);
@@ -756,7 +754,7 @@ public class Settings
 	m_proxy_type_spinner = (Spinner) m_view.findViewById
 	    (R.id.proxy_type_spinner);
 	m_proxy_user = (TextView) m_view.findViewById(R.id.proxy_user);
-	m_signature_key_digest = m_view.findViewById(R.id.signature_key_digest);
+	m_signature_key_data = m_view.findViewById(R.id.signature_key_data);
 	m_signature_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.signature_key_spinner);
 	m_test_inbound_button = (Button) m_view.findViewById
@@ -904,27 +902,25 @@ public class Settings
     {
 	try
 	{
-	    m_encryption_key_digest.setText
-		("SHA-1: " +
-		 Cryptography.sha_1_fingerprint(m_pgp.encryption_key_pair().
-						getPublic()));
+	    m_encryption_key_data.setText
+		(Cryptography.key_information(m_pgp.encryption_key_pair().
+					      getPublic()));
 	}
 	catch(Exception exception)
 	{
-	    m_encryption_key_digest.setText
+	    m_encryption_key_data.setText
 		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
 	}
 
 	try
 	{
-	    m_signature_key_digest.setText
-		("SHA-1: " +
-		 Cryptography.sha_1_fingerprint(m_pgp.signature_key_pair().
-						getPublic()));
+	    m_signature_key_data.setText
+		(Cryptography.key_information(m_pgp.signature_key_pair().
+					      getPublic()));
 	}
 	catch(Exception exception)
 	{
-	    m_signature_key_digest.setText
+	    m_signature_key_data.setText
 		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
 	}
     }
