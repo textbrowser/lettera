@@ -1045,7 +1045,6 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    m_current_page = PageEnumerator.DISPLAY_PAGE;
 		    show_display_page();
 		}
 	    });
@@ -1102,7 +1101,6 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    m_current_page = PageEnumerator.NETWORK_PAGE;
 		    show_network_page();
 		}
 	    });
@@ -1115,11 +1113,7 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    m_current_page = PageEnumerator.PRIVACY_PAGE;
-		    m_display_layout.setVisibility(View.GONE);
-		    m_network_layout.setVisibility(View.GONE);
-		    m_privacy_layout.setVisibility(View.VISIBLE);
-		    prepare_icons();
+		    show_privacy_page();
 		}
 	     });
 
@@ -1211,6 +1205,7 @@ public class Settings
 
     private void show_display_page()
     {
+	m_current_page = PageEnumerator.DISPLAY_PAGE;
 	m_display_button.setBackgroundResource(icon("display_pressed"));
 	m_display_layout.setVisibility(View.VISIBLE);
 	m_network_button.setBackgroundResource(icon("network"));
@@ -1221,12 +1216,24 @@ public class Settings
 
     private void show_network_page()
     {
+	m_current_page = PageEnumerator.NETWORK_PAGE;
 	m_display_button.setBackgroundResource(icon("display"));
 	m_display_layout.setVisibility(View.GONE);
 	m_network_button.setBackgroundResource(icon("network_pressed"));
 	m_network_layout.setVisibility(View.VISIBLE);
 	m_privacy_button.setBackgroundResource(icon("privacy"));
 	m_privacy_layout.setVisibility(View.GONE);
+    }
+
+    private void show_privacy_page()
+    {
+	m_current_page = PageEnumerator.PRIVACY_PAGE;
+	m_display_button.setBackgroundResource(icon("display"));
+	m_display_layout.setVisibility(View.GONE);
+	m_network_button.setBackgroundResource(icon("network"));
+	m_network_layout.setVisibility(View.GONE);
+	m_privacy_button.setBackgroundResource(icon("privacy_pressed"));
+	m_privacy_layout.setVisibility(View.VISIBLE);
     }
 
     private void test_inbound_server()
