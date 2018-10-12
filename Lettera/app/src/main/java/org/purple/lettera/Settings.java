@@ -487,7 +487,7 @@ public class Settings
 	}
     };
     private final static String s_icon_themes_array[] =	new String[]
-	{"Default", "Hand Drawn", "Material", "Nuvola", "SAILFISH"};
+	{"Default", "Funky", "Hand Drawn", "Material", "Nuvola", "SAILFISH"};
     private final static String s_proxy_types[] =
 	new String[] {"HTTP", "SOCKS"};
     private int m_current_page = PageEnumerator.DISPLAY_PAGE;
@@ -821,17 +821,20 @@ public class Settings
 	    case "default":
 		m_icon_theme_spinner.setSelection(0);
 		break;
-	    case "hand drawn":
+	    case "funky":
 		m_icon_theme_spinner.setSelection(1);
 		break;
-	    case "material":
+	    case "hand drawn":
 		m_icon_theme_spinner.setSelection(2);
 		break;
-	    case "nuvola":
+	    case "material":
 		m_icon_theme_spinner.setSelection(3);
 		break;
-	    case "sailfish":
+	    case "nuvola":
 		m_icon_theme_spinner.setSelection(4);
+		break;
+	    case "sailfish":
+		m_icon_theme_spinner.setSelection(5);
 		break;
 	    default:
 		m_icon_theme_spinner.setSelection(0);
@@ -1356,6 +1359,28 @@ public class Settings
 	    return R.drawable.default_privacy_pressed;
 	case "default_settings":
 	    return R.drawable.default_settings;
+	case "funky_compose":
+	    return R.drawable.funky_compose;
+	case "funky_contacts":
+	    return R.drawable.funky_contacts;
+	case "funky_display":
+	    return R.drawable.funky_display;
+	case "funky_display_pressed":
+	    return R.drawable.funky_display_pressed;
+	case "funky_download":
+	    return R.drawable.funky_download;
+	case "funky_messaging":
+	    return R.drawable.funky_messaging;
+	case "funky_network":
+	    return R.drawable.funky_network;
+	case "funky_network_pressed":
+	    return R.drawable.funky_network_pressed;
+	case "funky_privacy":
+	    return R.drawable.funky_privacy;
+	case "funky_privacy_pressed":
+	    return R.drawable.funky_privacy_pressed;
+	case "funky_settings":
+	    return R.drawable.funky_settings;
 	case "hand drawn_compose":
 	    return R.drawable.hand_drawn_compose;
 	case "hand drawn_contacts":
