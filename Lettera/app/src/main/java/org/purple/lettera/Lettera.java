@@ -27,7 +27,9 @@
 
 package org.purple.lettera;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -38,8 +40,11 @@ public class Lettera extends AppCompatActivity
 {
     private class PopulatePGP implements Runnable
     {
-	private PopulatePGP()
+	private Dialog m_dialog = null;
+
+	private PopulatePGP(Dialog dialog)
 	{
+	    m_dialog = dialog;
 	}
 
 	@Override
@@ -67,6 +72,22 @@ public class Lettera extends AppCompatActivity
 	    catch(Exception exception)
 	    {
 		m_pgp.set_signature_key_pair(null);
+	    }
+
+	    try
+	    {
+		Lettera.this.runOnUiThread(new Runnable()
+		{
+		    @Override
+		    public void run()
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		});
+	    }
+	    catch(Exception exception)
+	    {
 	    }
 	}
     }
@@ -128,12 +149,34 @@ public class Lettera extends AppCompatActivity
 	initialize_widget_members();
 	m_database = Database.instance(getApplicationContext());
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
+	new Handler().postDelayed(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		Dialog dialog = null;
+
+		try
+		{
+		    dialog = new Dialog(Lettera.this);
+		    Windows.show_progress_dialog
+			(Lettera.this,
+			 dialog,
+			 "Populating PGP container. Please be patient.");
+
+		    Thread thread = new Thread(new PopulatePGP(dialog));
+
+		    thread.start();
+		}
+		catch(Exception exception)
+		{
+		    if(dialog != null)
+			dialog.dismiss();
+		}
+	    }
+	}, 1500);
 	prepare_button_listeners();
 	prepare_icons();
-
-	Thread thread = new Thread(new PopulatePGP());
-
-	thread.start();
     }
 
     public void prepare_icons()

@@ -255,40 +255,47 @@ public class Settings
 		    @Override
 		    public void run()
 		    {
-			switch(m_protocol)
+			try
 			{
-			case "imaps":
-			    break;
-			case "smtp":
-			case "smtps":
-			    break;
-			default:
-			    break;
+			    switch(m_protocol)
+			    {
+			    case "imaps":
+				break;
+			    case "smtp":
+			    case "smtps":
+				break;
+			    default:
+				break;
+			    }
+
+			    if(m_dialog != null)
+				m_dialog.dismiss();
+
+			    if(m_error)
+				Windows.show_dialog
+				    (m_context,
+				     m_protocol.toUpperCase() + " test failed!",
+				     "Error");
+			    else
+				Windows.show_dialog
+				    (m_context,
+				     m_protocol.toUpperCase() +
+				     " test succeeded!",
+				     "Success");
 			}
-
-			if(m_dialog != null)
-			    m_dialog.dismiss();
-
-			if(m_error)
-			    Windows.show_dialog
-				(m_context,
-				 m_protocol.toUpperCase() + " test failed!",
-				 "Error");
-			else
-			    Windows.show_dialog
-				(m_context,
-				 m_protocol.toUpperCase() + " test succeeded!",
-				 "Success");
+			catch(Exception exception)
+			{
+			}
+			finally
+			{
+			    if(m_dialog != null)
+				m_dialog.dismiss();
+			}
 		    }
 		});
 	    }
 	    catch(Exception exception)
 	    {
-	    }
-	    finally
-	    {
-		if(m_dialog != null)
-		    m_dialog.dismiss();
 	    }
 	}
     }
@@ -412,11 +419,6 @@ public class Settings
 	    }
 	    catch(Exception exception)
 	    {
-	    }
-	    finally
-	    {
-		if(m_dialog != null)
-		    m_dialog.dismiss();
 	    }
 	}
     }
