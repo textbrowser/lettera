@@ -174,7 +174,7 @@ public class Lettera extends AppCompatActivity
 			dialog.dismiss();
 		}
 	    }
-	}, 1500);
+	}, 500);
 	prepare_button_listeners();
 	prepare_icons();
     }
