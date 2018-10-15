@@ -28,10 +28,13 @@
 package org.purple.lettera;
 
 import java.util.Properties;
+import javax.mail.Session;
+import javax.mail.Store;
 
 public class Mail
 {
     private Database m_database = Database.instance();
+    private Store m_store = null;
     private String m_inbound_address = "";
     private String m_inbound_email = "";
     private String m_inbound_password = "";
@@ -73,6 +76,30 @@ public class Mail
 	m_proxy_port = proxy_port;
 	m_proxy_type = proxy_type;
 	m_proxy_user = proxy_user;
+
+	try
+	{
+	    m_store = Session.getInstance
+		(properties(m_inbound_email,
+			    m_inbound_address,
+			    m_inbound_password,
+			    m_inbound_port,
+			    "imaps",
+			    m_proxy_address,
+			    m_proxy_password,
+			    m_proxy_port,
+			    m_proxy_type,
+			    m_proxy_user)).getStore("imaps");
+	    m_store.connect
+		(m_inbound_address,
+		 Integer.valueOf(m_inbound_port),
+		 m_inbound_email,
+		 m_inbound_password);
+	}
+	catch(Exception exception)
+	{
+	    m_store = null;
+	}
     }
 
     public static Properties properties(String email,
