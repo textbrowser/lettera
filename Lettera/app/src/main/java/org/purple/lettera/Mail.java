@@ -27,6 +27,8 @@
 
 package org.purple.lettera;
 
+import java.util.Properties;
+
 public class Mail
 {
     private Database m_database = Database.instance();
@@ -71,5 +73,104 @@ public class Mail
 	m_proxy_port = proxy_port;
 	m_proxy_type = proxy_type;
 	m_proxy_user = proxy_user;
+    }
+
+    public static Properties properties(String email,
+					String host,
+					String password,
+					String port,
+					String protocol,
+					String proxy_address,
+					String proxy_password,
+					String proxy_port,
+					String proxy_type,
+					String proxy_user)
+    {
+	/*
+	** https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html
+	** https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/SMTPTransport.html
+	*/
+
+	Properties properties = new Properties();
+
+	properties.setProperty("mail." + protocol + ".ssl.enable", "true");
+	properties.setProperty
+	    ("mail." + protocol + ".starttls.enable", "true");
+	properties.setProperty
+	    ("mail." + protocol + ".starttls.required", "true");
+
+	switch(protocol)
+	{
+	case "imaps":
+	    properties.setProperty
+		("mail." + protocol + ".connectiontimeout", "10000");
+	    properties.setProperty("mail." + protocol + ".timeout", "10000");
+	    break;
+	case "smtp":
+	case "smtps":
+	    properties.setProperty("mail.smtp.connectiontimeout", "10000");
+	    properties.setProperty("mail.smtp.localhost", "localhost");
+	    properties.setProperty("mail.smtp.timeout", "10000");
+	    properties.setProperty("mail.smtps.localhost", "localhost");
+	    break;
+	default:
+	    break;
+	}
+
+	if(!proxy_address.isEmpty())
+	    switch(proxy_type)
+	    {
+	    case "HTTP":
+		switch(protocol)
+		{
+		case "imaps":
+		    properties.setProperty
+			("mail." + protocol + ".proxy.host", proxy_address);
+		    properties.setProperty
+			("mail." + protocol + ".proxy.password",
+			 proxy_password);
+		    properties.setProperty
+			("mail." + protocol + ".proxy.port", proxy_port);
+		    properties.setProperty
+			("mail." + protocol + ".proxy.user", proxy_user);
+		    break;
+		case "smtp":
+		case "smtps":
+		    properties.setProperty("mail.smtp.proxy.host",
+					   proxy_address);
+		    properties.setProperty
+			("mail.smtp.proxy.password", proxy_password);
+		    properties.setProperty("mail.smtp.proxy.port", proxy_port);
+		    properties.setProperty("mail.smtp.proxy.user", proxy_user);
+		    break;
+		default:
+		    break;
+		}
+
+		break;
+	    case "SOCKS":
+		switch(protocol)
+		{
+		case "imaps":
+		    properties.setProperty
+			("mail.imaps.socks.host", proxy_address);
+		    properties.setProperty("mail.imaps.socks.port", proxy_port);
+		    break;
+		case "smtp":
+		case "smtps":
+		    properties.setProperty("mail.smtp.socks.host",
+					   proxy_address);
+		    properties.setProperty("mail.smtp.socks.port", proxy_port);
+		    break;
+		default:
+		    break;
+		}
+
+		break;
+	    default:
+		break;
+	    }
+
+	return properties;
     }
 }

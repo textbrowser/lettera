@@ -109,102 +109,17 @@ public class Settings
 	{
 	    try
 	    {
-		/*
-		** https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html
-		** https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/SMTPTransport.html
-		*/
-
-		Properties properties = new Properties();
-
-		properties.setProperty
-		    ("mail." + m_protocol + ".ssl.enable", "true");
-		properties.setProperty
-		    ("mail." + m_protocol + ".starttls.enable", "true");
-		properties.setProperty
-		    ("mail." + m_protocol + ".starttls.required", "true");
-
-		switch(m_protocol)
-		{
-		case "imaps":
-		    properties.setProperty
-			("mail." + m_protocol + ".connectiontimeout", "10000");
-		    properties.setProperty
-			("mail." + m_protocol + ".timeout", "10000");
-		    break;
-		case "smtp":
-		case "smtps":
-		    properties.setProperty
-			("mail.smtp.connectiontimeout", "10000");
-		    properties.setProperty("mail.smtp.localhost", "localhost");
-		    properties.setProperty("mail.smtp.timeout", "10000");
-		    properties.setProperty
-			("mail.smtps.localhost", "localhost");
-		    break;
-		default:
-		    break;
-		}
-
-		if(!m_proxy_address.isEmpty())
-		    switch(m_proxy_type)
-		    {
-		    case "HTTP":
-			switch(m_protocol)
-			{
-			case "imaps":
-			    properties.setProperty
-				("mail." + m_protocol + ".proxy.host",
-				 m_proxy_address);
-			    properties.setProperty
-				("mail." + m_protocol + ".proxy.password",
-				 m_proxy_password);
-			    properties.setProperty
-				("mail." + m_protocol + ".proxy.port",
-				 m_proxy_port);
-			    properties.setProperty
-				("mail." + m_protocol + ".proxy.user",
-				 m_proxy_user);
-			    break;
-			case "smtp":
-			case "smtps":
-			    properties.setProperty
-				("mail.smtp.proxy.host", m_proxy_address);
-			    properties.setProperty
-				("mail.smtp.proxy.password", m_proxy_password);
-			    properties.setProperty
-				("mail.smtp.proxy.port", m_proxy_port);
-			    properties.setProperty
-				("mail.smtp.proxy.user", m_proxy_user);
-			    break;
-			default:
-			    break;
-			}
-
-			break;
-		    case "SOCKS":
-			switch(m_protocol)
-			{
-			case "imaps":
-			    properties.setProperty
-				("mail.imaps.socks.host", m_proxy_address);
-			    properties.setProperty
-				("mail.imaps.socks.port", m_proxy_port);
-			    break;
-			case "smtp":
-			case "smtps":
-			    properties.setProperty
-				("mail.smtp.socks.host", m_proxy_address);
-			    properties.setProperty
-				("mail.smtp.socks.port", m_proxy_port);
-			    break;
-			default:
-			    break;
-			}
-
-			break;
-		    default:
-			break;
-		    }
-
+		Properties properties = Mail.properties
+		    (m_email,
+		     m_host,
+		     m_password,
+		     m_port,
+		     m_protocol,
+		     m_proxy_address,
+		     m_proxy_password,
+		     m_proxy_port,
+		     m_proxy_type,
+		     m_proxy_user);
 		Session session = Session.getInstance(properties);
 
 		switch(m_protocol)
