@@ -359,6 +359,7 @@ public class Settings
     private Context m_context = null;
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
+    private Spinner m_email_folders_spinner = null;
     private Spinner m_encryption_key_spinner = null;
     private Spinner m_icon_theme_spinner = null;
     private Spinner m_proxy_type_spinner = null;
@@ -409,7 +410,9 @@ public class Settings
 	    return "";
 	}
     };
-    private final static String s_icon_themes_array[] =	new String[]
+    private final static String s_email_folders[] = new String[]
+	{"Drawer", "Spinner"};
+    private final static String s_icon_themes[] = new String[]
 	{"Default", "Funky", "Hand Drawn", "Material", "Nuvola", "SAILFISH"};
     private final static String s_proxy_types[] =
 	new String[] {"HTTP", "SOCKS"};
@@ -646,6 +649,8 @@ public class Settings
 	m_display_button = (Button) m_view.findViewById
 	    (R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
+	m_email_folders_spinner = (Spinner) m_view.findViewById
+	    (R.id.email_folders);
 	m_encryption_key_data = (TextView) m_view.findViewById
 	    (R.id.encryption_key_data);
 	m_encryption_key_spinner = (Spinner) m_view.findViewById
@@ -729,7 +734,7 @@ public class Settings
 	ArrayAdapter array_adapter = new ArrayAdapter<>
 	    (m_context,
 	     android.R.layout.simple_spinner_item,
-	     s_icon_themes_array);
+	     s_icon_themes);
 
 	m_icon_theme_spinner.setAdapter(array_adapter);
 
@@ -1092,7 +1097,12 @@ public class Settings
 	array_adapter = new ArrayAdapter<>
 	    (m_context,
 	     android.R.layout.simple_spinner_item,
-	     s_icon_themes_array);
+	     s_email_folders);
+	m_email_folders_spinner.setAdapter(array_adapter);
+	array_adapter = new ArrayAdapter<>
+	    (m_context,
+	     android.R.layout.simple_spinner_item,
+	     s_icon_themes);
 	m_icon_theme_spinner.setAdapter(array_adapter);
 
 	/*

@@ -33,12 +33,88 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import java.security.KeyPair;
+import java.util.ArrayList;
 
 public class Lettera extends AppCompatActivity
 {
+    private class PopulateFolders implements Runnable
+    {
+	private ArrayList<String> m_folders = null;
+	private Dialog m_dialog = null;
+
+	private PopulateFolders(Dialog dialog)
+	{
+	    m_dialog = dialog;
+	}
+
+	@Override
+	public void run()
+	{
+	    try
+	    {
+		ArrayList<String> array_list =
+		    m_database.email_account_names();
+		EmailElement email_element = m_database.
+		    email_element(array_list.get(0));
+		Mail mail = new Mail
+		    (email_element.m_inbound_address,
+		     email_element.m_inbound_email,
+		     email_element.m_inbound_password,
+		     String.valueOf(email_element.m_inbound_port),
+		     email_element.m_outbound_address,
+		     email_element.m_outbound_email,
+		     email_element.m_outbound_password,
+		     String.valueOf(email_element.m_outbound_port),
+		     email_element.m_proxy_address,
+		     email_element.m_proxy_password,
+		     String.valueOf(email_element.m_proxy_port),
+		     email_element.m_proxy_type,
+		     email_element.m_proxy_user);
+
+		mail.connect_imap();
+		m_folders = mail.folder_names();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    try
+	    {
+		Lettera.this.runOnUiThread(new Runnable()
+		{
+		    @Override
+		    public void run()
+		    {
+			ArrayAdapter<String> array_adapter = null;
+
+			if(m_folders == null || m_folders.isEmpty())
+			    array_adapter = new ArrayAdapter<>
+				(Lettera.this,
+				 android.R.layout.simple_spinner_item,
+				 new String[] {"(Empty)"});
+			else
+			    array_adapter = new ArrayAdapter<>
+				(Lettera.this,
+				 android.R.layout.simple_spinner_item,
+				 m_folders);
+
+			m_folders_spinner.setAdapter(array_adapter);
+
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		});
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	}
+    }
+
     private class PopulatePGP implements Runnable
     {
 	private Dialog m_dialog = null;
@@ -114,6 +190,10 @@ public class Lettera extends AppCompatActivity
 		(Lettera.this,
 		 dialog,
 		 "Downloading e-mail folders. Please be patient.");
+
+	    Thread thread = new Thread(new PopulateFolders(dialog));
+
+	    thread.start();
 	}
 	catch(Exception exception)
 	{
@@ -128,6 +208,10 @@ public class Lettera extends AppCompatActivity
 	m_contacts_button = (Button) findViewById(R.id.contacts_button);
 	m_download_button = (Button) findViewById(R.id.download_button);
 	m_folders_spinner = (Spinner) findViewById(R.id.folders);
+	m_folders_spinner.setAdapter
+	    (new ArrayAdapter<> (Lettera.this,
+				 android.R.layout.simple_spinner_item,
+				 new String[] {"(Empty)"}));
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
     }
@@ -183,7 +267,6 @@ public class Lettera extends AppCompatActivity
 
 	initialize_widget_members();
 	m_database = Database.instance(getApplicationContext());
-	m_folders_spinner.setVisibility(View.GONE);
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	new Handler().postDelayed(new Runnable()
 	{

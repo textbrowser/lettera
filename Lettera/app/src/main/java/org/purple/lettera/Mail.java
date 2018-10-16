@@ -28,7 +28,10 @@
 package org.purple.lettera;
 
 import com.sun.mail.smtp.SMTPTransport;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
+import javax.mail.Folder;
 import javax.mail.Session;
 import javax.mail.Store;
 
@@ -78,6 +81,26 @@ public class Mail
 	m_proxy_port = proxy_port;
 	m_proxy_type = proxy_type;
 	m_proxy_user = proxy_user;
+    }
+
+    public ArrayList<String> folder_names()
+    {
+	try
+	{
+	    ArrayList<String> array_list = new ArrayList<> ();
+	    Folder folders[] = m_imap.getDefaultFolder().list();
+
+	    for(Folder folder:folders)
+		array_list.add
+		    (folder.getName() + " (" + folder.getMessageCount() + ")");
+
+	    Collections.sort(array_list);
+	    return array_list;
+	}
+	catch(Exception exception)
+	{
+	    return null;
+	}
     }
 
     public static Properties properties(String email,

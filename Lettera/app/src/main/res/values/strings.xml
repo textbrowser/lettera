@@ -34,4 +34,6 @@
     <string name="save_password">Save Password</string>
     <string name="iteration_count">Iteration Count</string>
     <string name="all_confidential_data_will_be_erased">All confidential data will be erased!</string>
+    <string name="e_mail_folders">E-Mail Folders</string>
+    <string name="folders">Folders</string>
 </resources>
