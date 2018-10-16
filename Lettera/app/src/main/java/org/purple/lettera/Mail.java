@@ -35,8 +35,8 @@ import javax.mail.Store;
 public class Mail
 {
     private Database m_database = Database.instance();
-    private SMTPTransport m_smtp_transport = null;
-    private Store m_store = null;
+    private SMTPTransport m_smtp = null;
+    private Store m_imap = null;
     private String m_inbound_address = "";
     private String m_inbound_email = "";
     private String m_inbound_password = "";
@@ -185,7 +185,7 @@ public class Mail
 
 	try
 	{
-	    m_store = Session.getInstance
+	    m_imap = Session.getInstance
 		(properties(m_inbound_email,
 			    m_inbound_address,
 			    m_inbound_password,
@@ -196,7 +196,7 @@ public class Mail
 			    m_proxy_port,
 			    m_proxy_type,
 			    m_proxy_user)).getStore("imaps");
-	    m_store.connect
+	    m_imap.connect
 		(m_inbound_address,
 		 Integer.valueOf(m_inbound_port),
 		 m_inbound_email,
@@ -204,7 +204,33 @@ public class Mail
 	}
 	catch(Exception exception)
 	{
-	    m_store = null;
+	    m_imap = null;
+	}
+
+	try
+	{
+	    m_smtp = (SMTPTransport)
+		(Session.getInstance(properties(m_outbound_email,
+						m_outbound_address,
+						m_outbound_password,
+						m_outbound_port,
+						"smtps",
+						m_proxy_address,
+						m_proxy_password,
+						m_proxy_port,
+						m_proxy_type,
+						m_proxy_user))).
+		getTransport("smtp");
+	    m_smtp.setRequireStartTLS(true);
+	    m_smtp.connect
+		(m_outbound_address,
+		 Integer.valueOf(m_outbound_port),
+		 m_outbound_email,
+		 m_outbound_password);
+	}
+	catch(Exception exception)
+	{
+	    m_smtp = null;
 	}
     }
 
@@ -212,8 +238,8 @@ public class Mail
     {
 	try
 	{
-	    if(m_smtp_transport != null)
-		m_smtp_transport.close();
+	    if(m_imap != null)
+		m_imap.close();
 	}
 	catch(Exception exception)
 	{
@@ -221,14 +247,14 @@ public class Mail
 
 	try
 	{
-	    if(m_store != null)
-		m_store.close();
+	    if(m_smtp != null)
+		m_smtp.close();
 	}
 	catch(Exception exception)
 	{
 	}
 
-	m_smtp_transport = null;
-	m_store = null;
+	m_imap = null;
+	m_smtp = null;
     }
 }
