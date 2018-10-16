@@ -237,6 +237,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/delete_on_server" />
 
+                    <CheckBox
+                        android:id="@+id/primary_account_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/primary_account" />
+
                     <Button
                         android:id="@+id/test_inbound_button"
                         style="@style/Widget.AppCompat.Button"

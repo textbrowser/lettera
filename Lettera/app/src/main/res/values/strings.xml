@@ -36,4 +36,5 @@
     <string name="all_confidential_data_will_be_erased">All confidential data will be erased!</string>
     <string name="e_mail_folders">E-Mail Folders</string>
     <string name="folders">Folders</string>
+    <string name="primary_account">Primary Account</string>
 </resources>
