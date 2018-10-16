@@ -154,7 +154,13 @@ public class Settings
 		{
 		    if(m_smtp_transport != null)
 			m_smtp_transport.close();
+		}
+		catch(Exception exception)
+		{
+		}
 
+		try
+		{
 		    if(m_store != null)
 			m_store.close();
 		}
