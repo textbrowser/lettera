@@ -34,6 +34,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import java.security.KeyPair;
 
 public class Lettera extends AppCompatActivity
@@ -99,19 +100,53 @@ public class Lettera extends AppCompatActivity
     private Button m_settings_button = null;
     private Database m_database = null;
     private Settings m_settings = null;
+    private Spinner m_folders_spinner = null;
     private final PGP m_pgp = PGP.instance();
+
+    private void download()
+    {
+	Dialog dialog = null;
+
+	try
+	{
+	    dialog = new Dialog(Lettera.this);
+	    Windows.show_progress_dialog
+		(Lettera.this,
+		 dialog,
+		 "Download e-mail folders. Please be patient.");
+	}
+	catch(Exception exception)
+	{
+	    if(dialog != null)
+		dialog.dismiss();
+	}
+    }
 
     private void initialize_widget_members()
     {
 	m_compose_button = (Button) findViewById(R.id.compose_button);
 	m_contacts_button = (Button) findViewById(R.id.contacts_button);
 	m_download_button = (Button) findViewById(R.id.download_button);
+	m_folders_spinner = (Spinner) findViewById(R.id.folders);
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
     }
 
     private void prepare_button_listeners()
     {
+	if(m_download_button != null && !m_download_button.
+	                                 hasOnClickListeners())
+	    m_download_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing() || m_settings == null)
+			return;
+
+		    download();
+		}
+	    });
+
 	if(m_settings_button != null && !m_settings_button.
 	                                 hasOnClickListeners())
 	    m_settings_button.setOnClickListener(new View.OnClickListener()
@@ -148,6 +183,7 @@ public class Lettera extends AppCompatActivity
 
 	initialize_widget_members();
 	m_database = Database.instance(getApplicationContext());
+	m_folders_spinner.setVisibility(View.GONE);
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	new Handler().postDelayed(new Runnable()
 	{

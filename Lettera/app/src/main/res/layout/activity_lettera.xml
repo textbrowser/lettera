@@ -74,40 +74,18 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:background="#78909C"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingEnd="15dp"
-        android:paddingStart="15dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/folders_view"
+        <Spinner
+            android:id="@+id/folders"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:background="#78909C"
-        android:orientation="vertical"
-        android:paddingEnd="15dp"
-        android:paddingStart="15dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/messaging_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:layout_editor_absoluteX="270dp"
+            tools:layout_editor_absoluteY="5dp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

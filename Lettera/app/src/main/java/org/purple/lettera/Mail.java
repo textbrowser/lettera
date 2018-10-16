@@ -181,7 +181,13 @@ public class Mail
 
     public void connect()
     {
-	disconnect();
+	connect_imap();
+	connect_smtp();
+    }
+
+    public void connect_imap()
+    {
+	disconnect_imap();
 
 	try
 	{
@@ -206,6 +212,11 @@ public class Mail
 	{
 	    m_imap = null;
 	}
+    }
+
+    public void connect_smtp()
+    {
+	disconnect_smtp();
 
 	try
 	{
@@ -236,6 +247,12 @@ public class Mail
 
     public void disconnect()
     {
+	disconnect_imap();
+	disconnect_smtp();
+    }
+
+    public void disconnect_imap()
+    {
 	try
 	{
 	    if(m_imap != null)
@@ -245,6 +262,11 @@ public class Mail
 	{
 	}
 
+	m_imap = null;
+    }
+
+    public void disconnect_smtp()
+    {
 	try
 	{
 	    if(m_smtp != null)
@@ -254,7 +276,6 @@ public class Mail
 	{
 	}
 
-	m_imap = null;
 	m_smtp = null;
     }
 }
