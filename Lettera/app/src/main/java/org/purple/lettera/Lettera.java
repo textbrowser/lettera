@@ -113,7 +113,7 @@ public class Lettera extends AppCompatActivity
 	    Windows.show_progress_dialog
 		(Lettera.this,
 		 dialog,
-		 "Download e-mail folders. Please be patient.");
+		 "Downloading e-mail folders. Please be patient.");
 	}
 	catch(Exception exception)
 	{
