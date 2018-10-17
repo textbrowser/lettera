@@ -444,6 +444,20 @@ public class Settings
 	    ** Display
 	    */
 
+	    content_values.put("key", "email_folders");
+	    content_values.put
+		("value", m_email_folders_spinner.getSelectedItem().toString());
+	    error = m_database.save_setting(content_values);
+
+	    if(!error.isEmpty())
+	    {
+		show_display_page();
+		Windows.show_dialog
+		    (m_context, "Failure (" + error + ")!", "Error");
+		return;
+	    }
+
+	    content_values.clear();
 	    content_values.put("key", "icon_theme");
 	    content_values.put
 		("value", m_icon_theme_spinner.getSelectedItem().toString());
@@ -744,15 +758,28 @@ public class Settings
 
     private void populate_display()
     {
+	SettingsElement settings_element = m_database.settings_element
+	    ("email_folders");
+
+	if(settings_element == null)
+	    m_email_folders_spinner.setSelection(1); // Spinner
+	else
+	    switch(settings_element.m_value.toLowerCase())
+	    {
+	    case "drawer":
+		m_email_folders_spinner.setSelection(0);
+		break;
+	    default:
+		m_email_folders_spinner.setSelection(1);
+	    }
+
 	ArrayAdapter array_adapter = new ArrayAdapter<>
 	    (m_context,
 	     android.R.layout.simple_spinner_item,
 	     s_icon_themes);
 
 	m_icon_theme_spinner.setAdapter(array_adapter);
-
-	SettingsElement settings_element = m_database.settings_element
-	    ("icon_theme");
+	settings_element = m_database.settings_element("icon_theme");
 
 	if(settings_element == null)
 	    m_icon_theme_spinner.setSelection(0);
