@@ -88,11 +88,23 @@ public class Mail
 	try
 	{
 	    ArrayList<String> array_list = new ArrayList<> ();
-	    Folder folders[] = m_imap.getDefaultFolder().list();
+	    Folder folders[] = m_imap.getDefaultFolder().list("*");
 
 	    for(Folder folder:folders)
-		array_list.add
-		    (folder.getName() + " (" + folder.getMessageCount() + ")");
+	    {
+		int c = 0;
+
+		try
+		{
+		    c = folder.getMessageCount();
+		}
+		catch(Exception exception)
+		{
+		    c = 0;
+		}
+
+		array_list.add(folder.getName() + " (" + c + ")");
+	    }
 
 	    Collections.sort(array_list);
 	    return array_list;
@@ -112,7 +124,8 @@ public class Mail
 					String proxy_password,
 					String proxy_port,
 					String proxy_type,
-					String proxy_user)
+					String proxy_user,
+					String read_timeout)
     {
 	/*
 	** https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html
@@ -132,13 +145,14 @@ public class Mail
 	case "imaps":
 	    properties.setProperty
 		("mail." + protocol + ".connectiontimeout", "10000");
-	    properties.setProperty("mail." + protocol + ".timeout", "10000");
+	    properties.setProperty
+		("mail." + protocol + ".timeout", read_timeout);
 	    break;
 	case "smtp":
 	case "smtps":
 	    properties.setProperty("mail.smtp.connectiontimeout", "10000");
 	    properties.setProperty("mail.smtp.localhost", "localhost");
-	    properties.setProperty("mail.smtp.timeout", "10000");
+	    properties.setProperty("mail.smtp.timeout", read_timeout);
 	    properties.setProperty("mail.smtps.localhost", "localhost");
 	    break;
 	default:
@@ -224,7 +238,8 @@ public class Mail
 			    m_proxy_password,
 			    m_proxy_port,
 			    m_proxy_type,
-			    m_proxy_user)).getStore("imaps");
+			    m_proxy_user,
+			    "60000")).getStore("imaps");
 	    m_imap.connect
 		(m_inbound_address,
 		 Integer.valueOf(m_inbound_port),
@@ -253,7 +268,8 @@ public class Mail
 						m_proxy_password,
 						m_proxy_port,
 						m_proxy_type,
-						m_proxy_user))).
+						m_proxy_user,
+						"60000"))).
 		getTransport("smtp");
 	    m_smtp.setRequireStartTLS(true);
 	    m_smtp.connect

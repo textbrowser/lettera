@@ -119,7 +119,8 @@ public class Settings
 		     m_proxy_password,
 		     m_proxy_port,
 		     m_proxy_type,
-		     m_proxy_user);
+		     m_proxy_user,
+		     "10000");
 		Session session = Session.getInstance(properties);
 
 		switch(m_protocol)

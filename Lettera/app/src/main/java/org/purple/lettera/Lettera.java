@@ -56,10 +56,9 @@ public class Lettera extends AppCompatActivity
 	{
 	    try
 	    {
-		ArrayList<String> array_list =
-		    m_database.email_account_names();
-		EmailElement email_element = m_database.
-		    email_element(array_list.get(0));
+		EmailElement email_element = m_database.email_element
+		    (m_database.settings_element("primary_email_account").
+		     m_value);
 		Mail mail = new Mail
 		    (email_element.m_inbound_address,
 		     email_element.m_inbound_email,

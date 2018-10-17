@@ -152,7 +152,7 @@
 
                     <Spinner
                         android:id="@+id/accounts_spinner"
-                        android:layout_width="wrap_content"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0" />
 
