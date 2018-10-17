@@ -586,11 +586,14 @@ public class Settings
 	    }
 	    else
 	    {
-		content_values.clear();
-		content_values.put("key", "primary_email_account");
-		content_values.put
-		    ("value", m_inbound_email.getText().toString().trim());
-		m_database.save_setting(content_values);
+		if(m_primary_account_checkbox.isChecked())
+		{
+		    content_values.clear();
+		    content_values.put("key", "primary_email_account");
+		    content_values.put
+			("value", m_inbound_email.getText().toString().trim());
+		    m_database.save_setting(content_values);
+		}
 
 		String selected_item = m_accounts_spinner.
 		    getSelectedItem().toString();
@@ -813,6 +816,15 @@ public class Settings
 	}
 	else
 	{
+	    if(m_accounts_spinner.getCount() == 1)
+	    {
+		ContentValues content_values = new ContentValues();
+
+		content_values.put("key", "primary_email_account");
+		content_values.put("value", email_element.m_inbound_email);
+		m_database.save_setting(content_values);
+	    }
+
 	    m_delete_on_server_checkbox.setChecked
 		(email_element.m_delete_on_server);
 	    m_inbound_address.setText(email_element.m_inbound_address);
