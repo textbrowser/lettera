@@ -356,6 +356,7 @@ public class Settings
     private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_delete_account_verify_checkbox = null;
     private CheckBox m_generate_keys_checkbox = null;
+    private CheckBox m_primary_account_checkbox = null;
     private Context m_context = null;
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
@@ -584,6 +585,12 @@ public class Settings
 	    }
 	    else
 	    {
+		content_values.clear();
+		content_values.put("key", "primary_email_account");
+		content_values.put
+		    ("value", m_inbound_email.getText().toString().trim());
+		m_database.save_setting(content_values);
+
 		String selected_item = m_accounts_spinner.
 		    getSelectedItem().toString();
 		int selected_position = m_accounts_spinner.
@@ -674,6 +681,8 @@ public class Settings
 	    (R.id.outbound_password);
 	m_outbound_port = (TextView) m_view.findViewById(R.id.outbound_port);
 	m_network_layout = m_view.findViewById(R.id.network_layout);
+	m_primary_account_checkbox = (CheckBox) m_view.findViewById
+	    (R.id.primary_account_checkbox);
 	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
 	m_proxy_address = (TextView) m_view.findViewById(R.id.proxy_address);
@@ -778,6 +787,8 @@ public class Settings
 	    m_accounts_spinner.getSelectedItem() == null ?
 	    null : m_database.email_element(m_accounts_spinner.
 					    getSelectedItem().toString());
+	SettingsElement settings_element = m_database.settings_element
+	    ("primary_email_account");
 
 	m_proxy_type_spinner.setAdapter(array_adapter);
 
@@ -792,6 +803,7 @@ public class Settings
 	    m_outbound_email.setText("");
 	    m_outbound_password.setText("");
 	    m_outbound_port.setText("587");
+	    m_primary_account_checkbox.setChecked(false);
 	    m_proxy_address.setText("");
 	    m_proxy_password.setText("");
 	    m_proxy_port.setText("");
@@ -812,6 +824,14 @@ public class Settings
 	    m_outbound_password.setText(email_element.m_outbound_password);
 	    m_outbound_port.setText
 		(String.valueOf(email_element.m_outbound_port));
+
+	    if(settings_element != null)
+		m_primary_account_checkbox.setChecked
+		    (email_element.m_inbound_email.
+		     equals(settings_element.m_value));
+	    else
+		m_primary_account_checkbox.setChecked(false);
+
 	    m_proxy_address.setText(email_element.m_proxy_address);
 	    m_proxy_password.setText(email_element.m_proxy_password);
 	    m_proxy_port.setText(String.valueOf(email_element.m_proxy_port));

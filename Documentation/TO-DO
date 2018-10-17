@@ -1,10 +1,11 @@
 Completed Items
 
-1.  Include algorithm information in Settings::Privacy.
-2.  Key generation.
-3.  Proxies for e-mail.
-4.  Restore personal key pairs.
-5.  Save personal key pairs.
+1.  Denote primary e-mail account in Settings.
+2.  Include algorithm information in Settings::Privacy.
+3.  Key generation.
+4.  Proxies for e-mail.
+5.  Restore personal key pairs.
+6.  Save personal key pairs.
 
 Future Items
 
@@ -13,6 +14,5 @@ Future Items
 Remaining Items
 
 1.  Background services.
-2.  Denote primary e-mail account in Settings.
-3.  McEliece key generation, exchange, etc.
-4.  Status bar on main activity.
+2.  McEliece key generation, exchange, etc.
+3.  Status bar on main activity.
