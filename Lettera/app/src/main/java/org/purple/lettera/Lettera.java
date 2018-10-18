@@ -312,7 +312,7 @@ public class Lettera extends AppCompatActivity
 	    {
 		string_builder.setLength(0);
 		string_builder.append(folder_element.m_name);
-		string_builder.append("(");
+		string_builder.append(" (");
 		string_builder.append(folder_element.m_message_count);
 		string_builder.append(")");
 		strings[i++] = string_builder.toString();

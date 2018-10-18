@@ -89,6 +89,7 @@ public class Mail
 	{
 	    ArrayList<String> array_list = new ArrayList<> ();
 	    Folder folders[] = m_imap.getDefaultFolder().list("*");
+	    StringBuilder string_builder = new StringBuilder();
 
 	    for(Folder folder : folders)
 	    {
@@ -113,7 +114,12 @@ public class Mail
 		    new_message_count = 0;
 		}
 
-		array_list.add(folder.getName() + " (" + message_count + ")");
+		string_builder.setLength(0);
+		string_builder.append(folder.getName());
+		string_builder.append(" (");
+		string_builder.append(message_count);
+		string_builder.append(")");
+		array_list.add(string_builder.toString());
 		m_database.write_folder(folder.getName(),
 					m_inbound_email,
 					message_count,
