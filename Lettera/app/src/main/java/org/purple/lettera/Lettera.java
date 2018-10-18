@@ -215,6 +215,34 @@ public class Lettera extends AppCompatActivity
 	m_settings_button = (Button) findViewById(R.id.settings_button);
     }
 
+    private void populate_folders_from_database()
+    {
+	try
+	{
+	    ArrayList<FolderElement> array_list = m_database.
+		folders(m_database.settings_element("primary_email_account").
+			m_value);
+	    String strings[] = new String[array_list.size()];
+	    int i = 0;
+
+	    for(FolderElement folder_element : array_list)
+		strings[i++] = folder_element.
+		    m_name + "(" + folder_element.m_message_count + ")";
+
+	    m_folders_spinner.setAdapter
+		(new ArrayAdapter<> (Lettera.this,
+				     android.R.layout.simple_spinner_item,
+				     strings));
+	}
+	catch(Exception exception)
+	{
+	    m_folders_spinner.setAdapter
+		(new ArrayAdapter<> (Lettera.this,
+				     android.R.layout.simple_spinner_item,
+				     new String[] {"(Empty)"}));
+	}
+    }
+
     private void prepare_button_listeners()
     {
 	if(m_download_button != null && !m_download_button.
@@ -293,6 +321,7 @@ public class Lettera extends AppCompatActivity
 		}
 	    }
 	}, 500);
+	populate_folders_from_database();
 	prepare_button_listeners();
 	prepare_icons();
     }

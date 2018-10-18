@@ -40,7 +40,7 @@ public class Database extends SQLiteOpenHelper
 {
     private SQLiteDatabase m_db = null;
     private final static String DATABASE_NAME = "lettera.db";
-    private final static int DATABASE_VERSION = 4;
+    private final static int DATABASE_VERSION = 5;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -55,6 +55,52 @@ public class Database extends SQLiteOpenHelper
 	{
 	    m_db = null;
 	}
+    }
+
+    public ArrayList<FolderElement> folders(String email_account)
+    {
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT email_account, " +
+		 "message_count, " +
+		 "name, " +
+		 "new_message_count " +
+		 "FROM folders WHERE email_account = ? " +
+		 "ORDER BY name",
+		 new String[] {email_account});
+
+	    if(cursor != null && cursor.moveToFirst())
+	    {
+		ArrayList<FolderElement> array_list = new ArrayList<> ();
+
+		while(!cursor.isAfterLast())
+		{
+		    FolderElement folder_element = new FolderElement();
+
+		    folder_element.m_email_account = cursor.getString(0);
+		    folder_element.m_message_count = cursor.getInt(1);
+		    folder_element.m_name = cursor.getString(2);
+		    folder_element.m_new_message_count = cursor.getInt(3);
+		    array_list.add(folder_element);
+		    cursor.moveToNext();
+		}
+
+		return array_list;
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return null;
     }
 
     public ArrayList<String> email_account_names()
@@ -559,6 +605,23 @@ public class Database extends SQLiteOpenHelper
 	{
 	}
 
+	str = "CREATE TABLE IF NOT EXISTS folders (" +
+	    "email_account TEXT NOT NULL, " +
+	    "message_count INTEGER NOT NULL DEFAULT 0, " +
+	    "name TEXT NOT NULL, " +
+	    "new_message_count INTEGER NOT NULL DEFAULT 0, " +
+	    "FOREIGN KEY (email_account) REFERENCES " +
+	    "email_accounts (email_account) ON DELETE CASCADE, " +
+	    "PRIMARY KEY (email_account, name))";
+
+	try
+	{
+	    db.execSQL(str);
+	}
+	catch(Exception exception)
+	{
+	}
+
 	str = "CREATE TABLE IF NOT EXISTS open_pgp (" +
 	    "function TEXT NOT NULL, " + // encryption, signature.
 	    "private_key TEXT NOT NULL, " +
@@ -598,5 +661,39 @@ public class Database extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         onCreate(db);
+    }
+
+    public void write_folder(String name,
+			     String email_account,
+			     int message_count,
+			     int new_message_count)
+    {
+	if(m_db == null)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    m_db.execSQL
+		("REPLACE INTO folders (" +
+		 "email_account, " +
+		 "message_count, " +
+		 "name, " +
+		 "new_message_count) VALUES " +
+		 "(?, ?, ?, ?)",
+		 new String[] {email_account,
+			       String.valueOf(message_count),
+			       name,
+			       String.valueOf(new_message_count)});
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
     }
 }

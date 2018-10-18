@@ -90,20 +90,34 @@ public class Mail
 	    ArrayList<String> array_list = new ArrayList<> ();
 	    Folder folders[] = m_imap.getDefaultFolder().list("*");
 
-	    for(Folder folder:folders)
+	    for(Folder folder : folders)
 	    {
-		int c = 0;
+		int message_count = 0;
+		int new_message_count = 0;
 
 		try
 		{
-		    c = folder.getMessageCount();
+		    message_count = folder.getMessageCount();
 		}
 		catch(Exception exception)
 		{
-		    c = 0;
+		    message_count = 0;
 		}
 
-		array_list.add(folder.getName() + " (" + c + ")");
+		try
+		{
+		    new_message_count = folder.getNewMessageCount();
+		}
+		catch(Exception exception)
+		{
+		    new_message_count = 0;
+		}
+
+		array_list.add(folder.getName() + " (" + message_count + ")");
+		m_database.write_folder(folder.getName(),
+					m_inbound_email,
+					message_count,
+					new_message_count);
 	    }
 
 	    Collections.sort(array_list);
