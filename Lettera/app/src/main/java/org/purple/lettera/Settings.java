@@ -607,6 +607,9 @@ public class Settings
 		    content_values.put
 			("value", m_inbound_email.getText().toString().trim());
 		    m_database.save_setting(content_values);
+
+		    if(m_context instanceof Lettera)
+			((Lettera) m_context).populate_folders_from_database();
 		}
 
 		String selected_item = m_accounts_spinner.

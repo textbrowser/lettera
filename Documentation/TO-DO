@@ -3,9 +3,10 @@ Completed Items
 1.  Denote primary e-mail account in Settings.
 2.  Include algorithm information in Settings::Privacy.
 3.  Key generation.
-4.  Proxies for e-mail.
-5.  Restore personal key pairs.
-6.  Save personal key pairs.
+4.  Prepare e-mail folders on account change.
+5.  Proxies for e-mail.
+6.  Restore personal key pairs.
+7.  Save personal key pairs.
 
 Future Items
 
@@ -16,5 +17,4 @@ Remaining Items
 1.  Background services.
 2.  McEliece key generation, exchange, etc.
 3.  Offline and online design.
-4.  Prepare e-mail folders on account change.
 5.  Status bar on main activity.
