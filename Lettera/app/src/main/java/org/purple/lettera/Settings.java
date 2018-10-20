@@ -44,6 +44,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import com.sun.mail.smtp.SMTPTransport;
 import java.security.KeyPair;
@@ -366,6 +367,7 @@ public class Settings
     private Spinner m_icon_theme_spinner = null;
     private Spinner m_proxy_type_spinner = null;
     private Spinner m_signature_key_spinner = null;
+    private Switch m_outbound_as_inbound = null;
     private TextView m_encryption_key_data = null;
     private TextView m_inbound_address = null;
     private TextView m_inbound_email = null;
@@ -697,6 +699,8 @@ public class Settings
 	m_network_button = (Button) m_view.findViewById(R.id.network_button);
 	m_outbound_address = (TextView) m_view.findViewById
 	    (R.id.outbound_address);
+	m_outbound_as_inbound = (Switch) m_view.findViewById
+	    (R.id.outbound_as_inbound);
 	m_outbound_email = (TextView) m_view.findViewById(R.id.outbound_email);
 	m_outbound_password = (TextView) m_view.findViewById
 	    (R.id.outbound_password);
@@ -1093,6 +1097,20 @@ public class Settings
 			return;
 
 		    show_network_page();
+		}
+	    });
+
+	m_outbound_as_inbound.setOnCheckedChangeListener
+	    (new CompoundButton.OnCheckedChangeListener()
+	    {
+		@Override
+		public void onCheckedChanged
+		    (CompoundButton buttonView, boolean isChecked)
+		{
+		    m_outbound_email.setEnabled(!isChecked);
+		    m_outbound_email.setText(m_inbound_email.getText());
+		    m_outbound_password.setEnabled(!isChecked);
+		    m_outbound_password.setText(m_inbound_password.getText());
 		}
 	    });
 

@@ -228,8 +228,9 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/password"
+                        android:importantForAutofill="no"
                         android:inputType="textPassword"
-                        android:importantForAutofill="no" tools:targetApi="o" />
+                        tools:targetApi="o" />
 
                     <CheckBox
                         android:id="@+id/delete_on_server_checkbox"
@@ -262,6 +263,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/outbound_smtps_server"
                         android:textSize="20sp" />
+
+                    <Switch
+                        android:id="@+id/outbound_as_inbound"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/like_inbound" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
