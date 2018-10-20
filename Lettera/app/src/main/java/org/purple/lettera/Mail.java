@@ -37,7 +37,6 @@ import javax.mail.Store;
 
 public class Mail
 {
-    private Database m_database = Database.instance();
     private SMTPTransport m_smtp = null;
     private Store m_imap = null;
     private String m_inbound_address = "";
@@ -53,6 +52,7 @@ public class Mail
     private String m_proxy_port = "";
     private String m_proxy_type = "";
     private String m_proxy_user = "";
+    private final Database m_database = Database.instance();
 
     public Mail(String inbound_address,
 		String inbound_email,
