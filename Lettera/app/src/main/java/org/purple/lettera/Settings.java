@@ -49,7 +49,6 @@ import android.widget.TextView;
 import com.sun.mail.smtp.SMTPTransport;
 import java.security.KeyPair;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Properties;
 import javax.mail.Session;
 import javax.mail.Store;

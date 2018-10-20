@@ -493,12 +493,12 @@ public class Database extends SQLiteOpenHelper
 		 "open_pgp",
 		 "settings"};
 
-	    for(int i = 0; i < tables.length; i++)
+	    for(String table : tables)
 		try
 		{
-		    m_db.delete(tables[i], null, null);
+		    m_db.delete(table, null, null);
 		}
-		catch(Exception exception)
+		catch (Exception exception)
 		{
 		}
 

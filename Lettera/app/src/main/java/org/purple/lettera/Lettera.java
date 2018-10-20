@@ -36,7 +36,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import java.security.KeyPair;
 import java.util.ArrayList;
 
 public class Lettera extends AppCompatActivity
