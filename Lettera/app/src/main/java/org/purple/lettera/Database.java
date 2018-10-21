@@ -490,6 +490,7 @@ public class Database extends SQLiteOpenHelper
 	    String tables[] = new String[]
 		{"contacts",
 		 "email_accounts",
+		 "folders",
 		 "open_pgp",
 		 "settings"};
 
