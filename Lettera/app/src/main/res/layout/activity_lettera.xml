@@ -96,6 +96,18 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0" />
 
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="@android:color/white" />
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0" />
+
                 <Button
                     android:id="@+id/settings_button"
                     style="@style/Widget.AppCompat.Button"
