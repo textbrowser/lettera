@@ -18,4 +18,6 @@ Remaining Items
 2.  Folder drawer.
 3.  McEliece key generation, exchange, etc.
 4.  Offline and online design.
-5.  Status bar on main activity.
+5.  Real-time changes of Outbound text if
+    Like Inbound is enabled.
+6.  Status bar on main activity.
