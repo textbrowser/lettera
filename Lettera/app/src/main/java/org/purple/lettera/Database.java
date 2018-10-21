@@ -40,7 +40,7 @@ public class Database extends SQLiteOpenHelper
 {
     private SQLiteDatabase m_db = null;
     private final static String DATABASE_NAME = "lettera.db";
-    private final static int DATABASE_VERSION = 5;
+    private final static int DATABASE_VERSION = 6;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -368,10 +368,14 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    ok = m_db.delete
-		("email_accounts",
-		 "email_account = ?",
-		 new String[] {account}) > 0;
+	    ok = m_db.delete("email_accounts",
+			     "email_account = ?",
+			     new String[] {account}) > 0;
+
+	    if(ok)
+		m_db.delete
+		    ("folders", "email_account = ?", new String[] {account});
+
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
@@ -606,13 +610,16 @@ public class Database extends SQLiteOpenHelper
 	{
 	}
 
+	/*
+	** Do not set DELETE CASCADE as email_accounts entries are
+	** prepared via REPLACE.
+	*/
+
 	str = "CREATE TABLE IF NOT EXISTS folders (" +
 	    "email_account TEXT NOT NULL, " +
 	    "message_count INTEGER NOT NULL DEFAULT 0, " +
 	    "name TEXT NOT NULL, " +
 	    "new_message_count INTEGER NOT NULL DEFAULT 0, " +
-	    "FOREIGN KEY (email_account) REFERENCES " +
-	    "email_accounts (email_account) ON DELETE CASCADE, " +
 	    "PRIMARY KEY (email_account, name))";
 
 	try
