@@ -1497,6 +1497,10 @@ public class Settings
     public void show()
     {
 	m_dialog.show();
+	m_delete_account_verify_checkbox.setChecked(false);
+	m_encryption_key_spinner.setSelection(0);
+	m_generate_keys_checkbox.setChecked(false);
+	m_outbound_as_inbound.setChecked(false);
 	populate();
 	prepare_icons();
     }
