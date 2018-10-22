@@ -27,7 +27,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/folders_menu"
+                    android:id="@+id/folders_drawer_button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"

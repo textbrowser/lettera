@@ -35,6 +35,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import java.util.ArrayList;
 
@@ -173,6 +174,8 @@ public class Lettera extends AppCompatActivity
     private Button m_messaging_button = null;
     private Button m_settings_button = null;
     private Database m_database = null;
+    private FoldersDrawer m_folders_drawer = null;
+    private ImageButton m_folders_drawer_button = null;
     private Settings m_settings = null;
     private Spinner m_folders_spinner = null;
     private final PGP m_pgp = PGP.instance();
@@ -205,6 +208,8 @@ public class Lettera extends AppCompatActivity
 	m_compose_button = (Button) findViewById(R.id.compose_button);
 	m_contacts_button = (Button) findViewById(R.id.contacts_button);
 	m_download_button = (Button) findViewById(R.id.download_button);
+	m_folders_drawer_button = (ImageButton) findViewById
+	    (R.id.folders_drawer_button);
 	m_folders_spinner = (Spinner) findViewById(R.id.folders);
 	m_folders_spinner.setAdapter
 	    (new ArrayAdapter<> (Lettera.this,
@@ -228,6 +233,21 @@ public class Lettera extends AppCompatActivity
 		    download();
 		}
 	    });
+
+	if(m_folders_drawer_button != null && !m_folders_drawer_button.
+	                                       hasOnClickListeners())
+	    m_folders_drawer_button.
+		setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing() || m_folders_drawer == null)
+			return;
+
+		    m_folders_drawer.show();
+		}
+	    });
+
 
 	if(m_settings_button != null && !m_settings_button.
 	                                 hasOnClickListeners())
@@ -265,6 +285,8 @@ public class Lettera extends AppCompatActivity
 
 	initialize_widget_members();
 	m_database = Database.instance(getApplicationContext());
+	m_folders_drawer = new FoldersDrawer
+	    (Lettera.this, findViewById(R.id.main_layout));
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	new Handler().postDelayed(new Runnable()
 	{
