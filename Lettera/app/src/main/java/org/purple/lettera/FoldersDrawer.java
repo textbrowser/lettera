@@ -64,7 +64,9 @@ public class FoldersDrawer
 	m_popup_window.setFocusable(true);
 	m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
 	m_popup_window.setOutsideTouchable(true);
-	m_popup_window.setWidth(750);
+	m_popup_window.setWidth
+	    ((int) (0.75 *
+		    m_context.getResources().getDisplayMetrics().widthPixels));
     }
 
     public void show()
