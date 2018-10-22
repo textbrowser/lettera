@@ -34,7 +34,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:layout_weight="1"
-            android:text="email@email.org" />
+            android:text="@string/email_email_org" />
 
         <View
             android:layout_width="match_parent"

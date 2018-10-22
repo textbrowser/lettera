@@ -36,6 +36,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import java.util.ArrayList;
 
@@ -176,6 +177,7 @@ public class Lettera extends AppCompatActivity
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private ImageButton m_folders_drawer_button = null;
+    private LinearLayout m_folders_spinner_layout = null;
     private Settings m_settings = null;
     private Spinner m_folders_spinner = null;
     private final PGP m_pgp = PGP.instance();
@@ -215,6 +217,8 @@ public class Lettera extends AppCompatActivity
 	    (new ArrayAdapter<> (Lettera.this,
 				 android.R.layout.simple_spinner_item,
 				 new String[] {"(Empty)"}));
+	m_folders_spinner_layout = (LinearLayout) findViewById
+	    (R.id.folders_spinner_layout);
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
     }
@@ -316,6 +320,7 @@ public class Lettera extends AppCompatActivity
 	}, 500);
 	populate_folders_from_database();
 	prepare_button_listeners();
+	prepare_folders_widgets();
 	prepare_icons();
     }
 
@@ -350,6 +355,31 @@ public class Lettera extends AppCompatActivity
 		(new ArrayAdapter<> (Lettera.this,
 				     android.R.layout.simple_spinner_item,
 				     new String[] {"(Empty)"}));
+	}
+    }
+
+    public void prepare_folders_widgets()
+    {
+	SettingsElement settings_element = m_database.settings_element
+	    ("email_folders");
+
+	if(settings_element == null)
+	{
+	    m_folders_drawer_button.setVisibility(View.GONE);
+	    m_folders_spinner_layout.setVisibility(View.VISIBLE);
+	}
+	else
+	{
+	    if(settings_element.m_value.toLowerCase().equals("drawer"))
+	    {
+		m_folders_drawer_button.setVisibility(View.VISIBLE);
+		m_folders_spinner_layout.setVisibility(View.GONE);
+	    }
+	    else
+	    {
+		m_folders_drawer_button.setVisibility(View.GONE);
+		m_folders_spinner_layout.setVisibility(View.VISIBLE);
+	    }
 	}
     }
 
