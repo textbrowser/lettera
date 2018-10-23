@@ -31,6 +31,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,6 +134,7 @@ public class FoldersDrawer
 	    button = new Button(m_context);
 	    button.setAllCaps(false);
 	    button.setBackgroundColor(Color.TRANSPARENT);
+	    button.setCompoundDrawablePadding(100);
 
 	    switch(name)
 	    {
@@ -162,7 +164,10 @@ public class FoldersDrawer
 		break;
 	    }
 
+	    button.setEllipsize(TextUtils.TruncateAt.END);
 	    button.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+	    button.setMaxLines(1);
+	    button.setPadding(15, 0, 15, 0);
 	    button.setText(name);
 
 	    if(is_main_folder)
