@@ -1027,11 +1027,11 @@ public class Settings
 	    {
 		@Override
 		public void onCheckedChanged
-		    (CompoundButton buttonView, boolean isChecked)
+		    (CompoundButton button_view, boolean is_checked)
 		{
 		    if(m_accounts_spinner.getSelectedItem() != null)
 			m_delete_account_button.setEnabled
-			    (isChecked &&
+			    (is_checked &&
 			     !m_accounts_spinner.
 			     getSelectedItem().equals("(Empty)"));
 		}
@@ -1066,9 +1066,9 @@ public class Settings
 	    {
 		@Override
 		public void onCheckedChanged
-		    (CompoundButton buttonView, boolean isChecked)
+		    (CompoundButton button_view, boolean is_checked)
 		{
-		    m_generate_keys_button.setEnabled(isChecked);
+		    m_generate_keys_button.setEnabled(is_checked);
 		}
 	    });
 
@@ -1110,11 +1110,11 @@ public class Settings
 	    {
 		@Override
 		public void onCheckedChanged
-		    (CompoundButton buttonView, boolean isChecked)
+		    (CompoundButton button_view, boolean is_checked)
 		{
-		    m_outbound_email.setEnabled(!isChecked);
+		    m_outbound_email.setEnabled(!is_checked);
 		    m_outbound_email.setText(m_inbound_email.getText());
-		    m_outbound_password.setEnabled(!isChecked);
+		    m_outbound_password.setEnabled(!is_checked);
 		    m_outbound_password.setText(m_inbound_password.getText());
 		}
 	    });

@@ -37,6 +37,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -181,6 +182,14 @@ public class FoldersDrawer
 	    button.setEllipsize(TextUtils.TruncateAt.END);
 	    button.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 	    button.setMaxLines(1);
+	    button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    view.setBackgroundResource(R.drawable.folder_selection);
+		    view.setPadding(15, 0, 15, 0);
+		}
+	    });
 	    button.setPadding(15, 0, 15, 0);
 	    button.setText(string_buffer.toString());
 
