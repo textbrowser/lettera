@@ -44,7 +44,8 @@ public class Lettera extends AppCompatActivity
 {
     private class PopulateFolders implements Runnable
     {
-	private ArrayList<String> m_folders = null;
+	private ArrayList<FolderElement> m_folders = null;
+	private ArrayList<String> m_folder_names = null;
 	private Dialog m_dialog = null;
 
 	private PopulateFolders(Dialog dialog)
@@ -76,7 +77,8 @@ public class Lettera extends AppCompatActivity
 		     email_element.m_proxy_user);
 
 		mail.connect_imap();
-		m_folders = mail.folder_names();
+		m_folder_names = mail.folder_names();
+		m_folders = mail.folders();
 	    }
 	    catch(Exception exception)
 	    {
@@ -91,7 +93,7 @@ public class Lettera extends AppCompatActivity
 		    {
 			ArrayAdapter<String> array_adapter = null;
 
-			if(m_folders == null || m_folders.isEmpty())
+			if(m_folder_names == null || m_folder_names.isEmpty())
 			    array_adapter = new ArrayAdapter<>
 				(Lettera.this,
 				 android.R.layout.simple_spinner_item,
@@ -100,12 +102,13 @@ public class Lettera extends AppCompatActivity
 			    array_adapter = new ArrayAdapter<>
 				(Lettera.this,
 				 android.R.layout.simple_spinner_item,
-				 m_folders);
+				 m_folder_names);
 
 			m_folders_drawer.set_email_address
 			    (m_database.
 			     settings_element("primary_email_account").
 			     m_value);
+			m_folders_drawer.set_folders(m_folders);
 			m_folders_spinner.setAdapter(array_adapter);
 
 			if(m_dialog != null)

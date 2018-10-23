@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import java.util.ArrayList;
 
 public class FoldersDrawer
 {
@@ -88,6 +89,13 @@ public class FoldersDrawer
 	    m_email_address.setText("e-mail@e-mail.org");
 	else
 	    m_email_address.setText(email_address);
+    }
+
+    public void set_folders(ArrayList<FolderElement> array_list)
+    {
+	if(array_list == null || array_list.isEmpty())
+	{
+	}
     }
 
     public void show()

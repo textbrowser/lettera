@@ -83,6 +83,45 @@ public class Mail
 	m_proxy_user = proxy_user;
     }
 
+    public ArrayList<FolderElement> folders()
+    {
+	try
+	{
+	    ArrayList<FolderElement> array_list = new ArrayList<> ();
+	    Folder folders[] = m_imap.getDefaultFolder().list("*");
+
+	    for(Folder folder : folders)
+	    {
+		FolderElement folder_element = new FolderElement();
+
+		try
+		{
+		    folder_element.m_message_count = folder.getMessageCount();
+		}
+		catch(Exception exception)
+		{
+		}
+
+		try
+		{
+		    folder_element.m_new_message_count =
+			folder.getNewMessageCount();
+		}
+		catch(Exception exception)
+		{
+		}
+
+		array_list.add(folder_element);
+	    }
+
+	    return array_list;
+	}
+	catch(Exception exception)
+	{
+	    return null;
+	}
+    }
+
     public ArrayList<String> folder_names()
     {
 	try
