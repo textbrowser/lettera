@@ -351,6 +351,7 @@ public class Lettera extends AppCompatActivity
 		strings[i++] = string_builder.toString();
 	    }
 
+	    m_folders_drawer.set_folders(array_list);
 	    m_folders_spinner.setAdapter
 		(new ArrayAdapter<> (Lettera.this,
 				     android.R.layout.simple_spinner_item,

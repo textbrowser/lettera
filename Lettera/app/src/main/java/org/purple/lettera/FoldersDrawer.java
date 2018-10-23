@@ -120,6 +120,8 @@ public class FoldersDrawer
 
 	    Button button = null;
 	    String name = folder_element.m_name.toLowerCase().trim();
+	    StringBuffer string_buffer = new StringBuffer();
+
 	    boolean is_main_folder = false;
 
 	    if(name.contains("draft"))
@@ -128,9 +130,15 @@ public class FoldersDrawer
 		name = "Inbox";
 	    else if(name.contains("sent"))
 		name = "Sent";
+	    else if(name.contains("star"))
+		name = "Starred";
 	    else
 		name = folder_element.m_name;
 
+	    string_buffer.append(name);
+	    string_buffer.append(" (");
+	    string_buffer.append(folder_element.m_message_count);
+	    string_buffer.append(")");
 	    button = new Button(m_context);
 	    button.setAllCaps(false);
 	    button.setBackgroundColor(Color.TRANSPARENT);
@@ -144,6 +152,7 @@ public class FoldersDrawer
 		is_main_folder = true;
 		break;
 	    case "Inbox":
+		button.setBackgroundResource(R.drawable.folder_selection);
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.inbox_folder, 0, 0, 0);
 		is_main_folder = true;
@@ -151,6 +160,11 @@ public class FoldersDrawer
 	    case "Sent":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.sent_folder, 0, 0, 0);
+		is_main_folder = true;
+		break;
+	    case "Starred":
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (R.drawable.starred_folder, 0, 0, 0);
 		is_main_folder = true;
 		break;
 	    case "Trash":
@@ -168,7 +182,7 @@ public class FoldersDrawer
 	    button.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 	    button.setMaxLines(1);
 	    button.setPadding(15, 0, 15, 0);
-	    button.setText(name);
+	    button.setText(string_buffer.toString());
 
 	    if(is_main_folder)
 		m_main_folders_layout.addView(button);
@@ -185,32 +199,38 @@ public class FoldersDrawer
 	m_popup_window.showAsDropDown
 	    (m_parent, 0, 0, Gravity.LEFT | Gravity.TOP);
 
-	View view;
-
-	if(m_popup_window.getBackground() == null)
+	try
 	{
-	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		view = (View) m_popup_window.getContentView().getParent();
+	    View view;
+
+	    if(m_popup_window.getBackground() == null)
+	    {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		    view = (View) m_popup_window.getContentView().getParent();
+		else
+		    view = (View) m_popup_window.getContentView();
+	    }
 	    else
-		view = (View) m_popup_window.getContentView();
-        }
-	else
+	    {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		    view = (View) m_popup_window.getContentView().getParent().
+			getParent();
+		else
+		    view = (View) m_popup_window.getContentView().getParent();
+	    }
+
+	    Context context = m_popup_window.getContentView().getContext();
+	    WindowManager window_manager = (WindowManager) context.
+		getSystemService(Context.WINDOW_SERVICE);
+	    WindowManager.LayoutParams layout_params =
+		(WindowManager.LayoutParams) view.getLayoutParams();
+
+	    layout_params.dimAmount = 0.5f;
+	    layout_params.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+	    window_manager.updateViewLayout(view, layout_params);
+	}
+	catch(Exception exception)
 	{
-	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		view = (View) m_popup_window.getContentView().getParent().
-		    getParent();
-	    else
-		view = (View) m_popup_window.getContentView().getParent();
-        }
-
-	Context context = m_popup_window.getContentView().getContext();
-	WindowManager window_manager = (WindowManager) context.
-	    getSystemService(Context.WINDOW_SERVICE);
-	WindowManager.LayoutParams layout_params =
-	    (WindowManager.LayoutParams) view.getLayoutParams();
-
-	layout_params.dimAmount = 0.5f;
-	layout_params.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-	window_manager.updateViewLayout(view, layout_params);
+	}
     }
 }
