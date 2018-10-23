@@ -613,7 +613,10 @@ public class Settings
 		    m_database.save_setting(content_values);
 
 		    if(m_context instanceof Lettera)
+		    {
 			((Lettera) m_context).populate_folders_from_database();
+			((Lettera) m_context).prepare_folders_widgets();
+		    }
 		}
 
 		String selected_item = m_accounts_spinner.

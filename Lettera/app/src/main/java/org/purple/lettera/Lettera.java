@@ -102,6 +102,10 @@ public class Lettera extends AppCompatActivity
 				 android.R.layout.simple_spinner_item,
 				 m_folders);
 
+			m_folders_drawer.set_email_address
+			    (m_database.
+			     settings_element("primary_email_account").
+			     m_value);
 			m_folders_spinner.setAdapter(array_adapter);
 
 			if(m_dialog != null)
@@ -381,6 +385,9 @@ public class Lettera extends AppCompatActivity
 		m_folders_spinner_layout.setVisibility(View.VISIBLE);
 	    }
 	}
+
+	m_folders_drawer.set_email_address
+	    (m_database.settings_element("primary_email_account").m_value);
     }
 
     public void prepare_icons()

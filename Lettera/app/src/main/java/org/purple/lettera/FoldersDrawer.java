@@ -35,11 +35,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 public class FoldersDrawer
 {
     private Context m_context = null;
     private PopupWindow m_popup_window = null;
+    private TextView m_email_address = null;
     private View m_parent = null;
     private View m_view = null;
 
@@ -67,6 +69,25 @@ public class FoldersDrawer
 	m_popup_window.setWidth
 	    ((int) (0.80 *
 		    m_context.getResources().getDisplayMetrics().widthPixels));
+
+	/*
+	** Initialize other widgets.
+	*/
+
+	initialize_widget_members();
+    }
+
+    private void initialize_widget_members()
+    {
+	m_email_address = (TextView) m_view.findViewById(R.id.email_address);
+    }
+
+    public void set_email_address(String email_address)
+    {
+	if(email_address.trim().isEmpty())
+	    m_email_address.setText("e-mail@e-mail.org");
+	else
+	    m_email_address.setText(email_address);
     }
 
     public void show()
@@ -81,7 +102,7 @@ public class FoldersDrawer
 	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
 		view = (View) m_popup_window.getContentView().getParent();
 	    else
-		view = m_popup_window.getContentView();
+		view = (View) m_popup_window.getContentView();
         }
 	else
 	{
