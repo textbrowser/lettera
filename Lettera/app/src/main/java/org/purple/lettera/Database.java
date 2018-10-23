@@ -80,7 +80,7 @@ public class Database extends SQLiteOpenHelper
 		{
 		    FolderElement folder_element = new FolderElement();
 
-		    folder_element.m_email_account = cursor.getString(0);
+		    folder_element.m_email_address = cursor.getString(0);
 		    folder_element.m_message_count = cursor.getInt(1);
 		    folder_element.m_name = cursor.getString(2);
 		    folder_element.m_new_message_count = cursor.getInt(3);

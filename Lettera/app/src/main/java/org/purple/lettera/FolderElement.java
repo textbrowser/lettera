@@ -29,7 +29,7 @@ package org.purple.lettera;
 
 public class FolderElement
 {
-    public String m_email_account = "";
+    public String m_email_address = "";
     public String m_name = "";
     public int m_message_count = 0;
     public int m_new_message_count = 0;

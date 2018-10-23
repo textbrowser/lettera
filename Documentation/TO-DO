@@ -18,6 +18,7 @@ Remaining Items
 2.  Folder drawer.
 3.  McEliece key generation, exchange, etc.
 4.  Offline and online design.
-5.  Real-time changes of Outbound text if
+5.  Prepare drawer from database values.
+6.  Real-time changes of Outbound text if
     Like Inbound is enabled.
-6.  Status bar on main activity.
+7.  Status bar on main activity.

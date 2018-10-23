@@ -111,6 +111,8 @@ public class Mail
 		{
 		}
 
+		folder_element.m_email_address = m_inbound_email;
+		folder_element.m_name = folder.getName();
 		array_list.add(folder_element);
 	    }
 

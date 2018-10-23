@@ -29,11 +29,14 @@ package org.purple.lettera;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -41,9 +44,12 @@ import java.util.ArrayList;
 public class FoldersDrawer
 {
     private Context m_context = null;
+    private LinearLayout m_main_folders_layout = null;
+    private LinearLayout m_other_folders_layout = null;
     private PopupWindow m_popup_window = null;
     private TextView m_email_address = null;
     private View m_parent = null;
+    private View m_separator = null;
     private View m_view = null;
 
     public FoldersDrawer(Context context, View parent)
@@ -76,11 +82,17 @@ public class FoldersDrawer
 	*/
 
 	initialize_widget_members();
+	m_separator.setVisibility(View.GONE);
     }
 
     private void initialize_widget_members()
     {
 	m_email_address = (TextView) m_view.findViewById(R.id.email_address);
+	m_main_folders_layout = (LinearLayout) m_view.findViewById
+	    (R.id.main_folders_layout);
+	m_other_folders_layout = (LinearLayout) m_view.findViewById
+	    (R.id.other_folders_layout);
+	m_separator = m_view.findViewById(R.id.separator);
     }
 
     public void set_email_address(String email_address)
@@ -93,8 +105,73 @@ public class FoldersDrawer
 
     public void set_folders(ArrayList<FolderElement> array_list)
     {
+	m_main_folders_layout.removeAllViews();
+	m_other_folders_layout.removeAllViews();
+	m_separator.setVisibility(View.GONE);
+
 	if(array_list == null || array_list.isEmpty())
+	    return;
+
+	for(FolderElement folder_element : array_list)
 	{
+	    if(folder_element == null)
+		continue;
+
+	    Button button = null;
+	    String name = folder_element.m_name.toLowerCase().trim();
+	    boolean is_main_folder = false;
+
+	    if(name.contains("draft"))
+		name = "Drafts";
+	    else if(name.contains("inbox"))
+		name = "Inbox";
+	    else if(name.contains("sent"))
+		name = "Sent";
+	    else
+		name = folder_element.m_name;
+
+	    button = new Button(m_context);
+	    button.setAllCaps(false);
+	    button.setBackgroundColor(Color.TRANSPARENT);
+
+	    switch(name)
+	    {
+	    case "Drafts":
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (R.drawable.drafts_folder, 0, 0, 0);
+		is_main_folder = true;
+		break;
+	    case "Inbox":
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (R.drawable.inbox_folder, 0, 0, 0);
+		is_main_folder = true;
+		break;
+	    case "Sent":
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (R.drawable.sent_folder, 0, 0, 0);
+		is_main_folder = true;
+		break;
+	    case "Trash":
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (R.drawable.trash_folder, 0, 0, 0);
+		is_main_folder = true;
+		break;
+	    default:
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (R.drawable.folder_folder, 0, 0, 0);
+		break;
+	    }
+
+	    button.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+	    button.setText(name);
+
+	    if(is_main_folder)
+		m_main_folders_layout.addView(button);
+	    else
+	    {
+		m_other_folders_layout.addView(button);
+		m_separator.setVisibility(View.VISIBLE);
+	    }
 	}
     }
 
