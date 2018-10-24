@@ -36,10 +36,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import java.util.ArrayList;
 
@@ -119,7 +119,7 @@ public class FoldersDrawer
 	    if(folder_element == null)
 		continue;
 
-	    Button button = null;
+	    RadioButton button = null;
 	    String name = folder_element.m_name.toLowerCase().trim();
 	    StringBuffer string_buffer = new StringBuffer();
 
@@ -140,9 +140,10 @@ public class FoldersDrawer
 	    string_buffer.append(" (");
 	    string_buffer.append(folder_element.m_message_count);
 	    string_buffer.append(")");
-	    button = new Button(m_context);
+	    button = new RadioButton(m_context);
 	    button.setAllCaps(false);
 	    button.setBackgroundColor(Color.TRANSPARENT);
+	    button.setButtonDrawable(Color.TRANSPARENT);
 	    button.setCompoundDrawablePadding(100);
 
 	    switch(name)
@@ -186,11 +187,26 @@ public class FoldersDrawer
 	    {
 		public void onClick(View view)
 		{
+		    ((RadioButton) view).setTextColor(Color.rgb(42, 11, 60));
 		    view.setBackgroundResource(R.drawable.folder_selection);
-		    view.setPadding(15, 0, 15, 0);
+		    view.setPadding(15, 15, 15, 15);
+
+		    for(int i = 0;
+			i < m_main_folders_layout.getChildCount();
+			i++)
+			if(m_main_folders_layout.getChildAt(i) != view)
+			    m_main_folders_layout.getChildAt(i).
+				setBackgroundColor(Color.TRANSPARENT);
+
+		    for(int i = 0;
+			i < m_other_folders_layout.getChildCount();
+			i++)
+			if(m_other_folders_layout.getChildAt(i) != view)
+			    m_other_folders_layout.getChildAt(i).
+				setBackgroundColor(Color.TRANSPARENT);
 		}
 	    });
-	    button.setPadding(15, 0, 15, 0);
+	    button.setPadding(15, 15, 15, 15);
 	    button.setText(string_buffer.toString());
 
 	    if(is_main_folder)
