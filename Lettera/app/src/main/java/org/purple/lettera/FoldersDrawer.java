@@ -157,6 +157,7 @@ public class FoldersDrawer
 		button.setBackgroundResource(R.drawable.folder_selection);
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.inbox_folder, 0, 0, 0);
+		button.setId(0);
 		is_main_folder = true;
 		break;
 	    case "Sent":
@@ -187,23 +188,33 @@ public class FoldersDrawer
 	    {
 		public void onClick(View view)
 		{
+		    if(view.getId() == 0)
+			return;
+
 		    ((RadioButton) view).setTextColor(Color.rgb(42, 11, 60));
 		    view.setBackgroundResource(R.drawable.folder_selection);
+		    view.setId(0);
 		    view.setPadding(15, 15, 15, 15);
 
 		    for(int i = 0;
 			i < m_main_folders_layout.getChildCount();
 			i++)
 			if(m_main_folders_layout.getChildAt(i) != view)
+			{
 			    m_main_folders_layout.getChildAt(i).
 				setBackgroundColor(Color.TRANSPARENT);
+			    m_main_folders_layout.getChildAt(i).setId(-1);
+			}
 
 		    for(int i = 0;
 			i < m_other_folders_layout.getChildCount();
 			i++)
 			if(m_other_folders_layout.getChildAt(i) != view)
+			{
 			    m_other_folders_layout.getChildAt(i).
 				setBackgroundColor(Color.TRANSPARENT);
+			    m_other_folders_layout.getChildAt(i).setId(-1);
+			}
 		}
 	    });
 	    button.setPadding(15, 15, 15, 15);
