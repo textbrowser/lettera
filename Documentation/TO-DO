@@ -20,6 +20,7 @@ Remaining Items
 3.  Folder drawer folders order.
 4.  McEliece key generation, exchange, etc.
 5.  Offline and online design.
-6.  Real-time changes of Outbound text if
+6.  Prepare application within a progress-dialog block.
+7.  Real-time changes of Outbound text if
     Like Inbound is enabled.
-7.  Status bar on main activity.
+8.  Status bar on main activity.
