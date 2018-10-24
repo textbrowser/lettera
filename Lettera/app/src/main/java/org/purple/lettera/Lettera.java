@@ -42,6 +42,62 @@ import java.util.ArrayList;
 
 public class Lettera extends AppCompatActivity
 {
+    private class PopulateContainers implements Runnable
+    {
+	private Dialog m_dialog = null;
+
+	private PopulateContainers(Dialog dialog)
+	{
+	    m_dialog = dialog;
+	}
+
+	@Override
+	public void run()
+	{
+	    try
+	    {
+		byte bytes[][] = m_database.read_pgp_pair("encryption");
+
+		m_pgp.set_encryption_key_pair
+		    (PGP.key_pair_from_bytes(bytes[0], bytes[1]));
+	    }
+	    catch(Exception exception)
+	    {
+		m_pgp.set_encryption_key_pair(null);
+	    }
+
+	    try
+	    {
+		byte bytes[][] = m_database.read_pgp_pair("signature");
+
+		m_pgp.set_signature_key_pair
+		    (PGP.key_pair_from_bytes(bytes[0], bytes[1]));
+	    }
+	    catch(Exception exception)
+	    {
+		m_pgp.set_signature_key_pair(null);
+	    }
+
+	    try
+	    {
+		Lettera.this.runOnUiThread(new Runnable()
+		{
+		    @Override
+		    public void run()
+		    {
+			populate_folders_from_database();
+
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		});
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	}
+    }
+
     private class PopulateFolders implements Runnable
     {
 	private ArrayList<FolderElement> m_folders = null;
@@ -111,60 +167,6 @@ public class Lettera extends AppCompatActivity
 			m_folders_drawer.set_folders(m_folders);
 			m_folders_spinner.setAdapter(array_adapter);
 
-			if(m_dialog != null)
-			    m_dialog.dismiss();
-		    }
-		});
-	    }
-	    catch(Exception exception)
-	    {
-	    }
-	}
-    }
-
-    private class PopulatePGP implements Runnable
-    {
-	private Dialog m_dialog = null;
-
-	private PopulatePGP(Dialog dialog)
-	{
-	    m_dialog = dialog;
-	}
-
-	@Override
-	public void run()
-	{
-	    try
-	    {
-		byte bytes[][] = m_database.read_pgp_pair("encryption");
-
-		m_pgp.set_encryption_key_pair
-		    (PGP.key_pair_from_bytes(bytes[0], bytes[1]));
-	    }
-	    catch(Exception exception)
-	    {
-		m_pgp.set_encryption_key_pair(null);
-	    }
-
-	    try
-	    {
-		byte bytes[][] = m_database.read_pgp_pair("signature");
-
-		m_pgp.set_signature_key_pair
-		    (PGP.key_pair_from_bytes(bytes[0], bytes[1]));
-	    }
-	    catch(Exception exception)
-	    {
-		m_pgp.set_signature_key_pair(null);
-	    }
-
-	    try
-	    {
-		Lettera.this.runOnUiThread(new Runnable()
-		{
-		    @Override
-		    public void run()
-		    {
 			if(m_dialog != null)
 			    m_dialog.dismiss();
 		    }
@@ -312,9 +314,9 @@ public class Lettera extends AppCompatActivity
 		    Windows.show_progress_dialog
 			(Lettera.this,
 			 dialog,
-			 "Populating PGP container. Please be patient.");
+			 "Initializing Lettera. Please be patient.");
 
-		    Thread thread = new Thread(new PopulatePGP(dialog));
+		    Thread thread = new Thread(new PopulateContainers(dialog));
 
 		    thread.start();
 		}
@@ -325,7 +327,6 @@ public class Lettera extends AppCompatActivity
 		}
 	    }
 	}, 500);
-	populate_folders_from_database();
 	prepare_button_listeners();
 	prepare_folders_widgets();
 	prepare_icons();

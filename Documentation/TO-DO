@@ -1,26 +1,26 @@
 Completed Items
 
-1.  Denote primary e-mail account in Settings.
-2.  Include algorithm information in Settings::Privacy.
-3.  Key generation.
-4.  Prepare drawer from database values.
-5.  Prepare e-mail folders on account change.
-6.  Proxies for e-mail.
-7.  Real-time changes of Outbound text if
-    Like Inbound is enabled.
-8.  Restore personal key pairs.
-9.  Save personal key pairs.
+1.   Denote primary e-mail account in Settings.
+2.   Include algorithm information in Settings::Privacy.
+3.   Key generation.
+4.   Prepare application within a progress-dialog block.
+5.   Prepare drawer from database values.
+6.   Prepare e-mail folders on account change.
+7.   Proxies for e-mail.
+8.   Real-time changes of Outbound text if
+     Like Inbound is enabled.
+9.   Restore personal key pairs.
+10.  Save personal key pairs.
 
 Future Items
 
-1.  Encrypted database containers.
+1.   Encrypted database containers.
 
 Remaining Items
 
-1.  Background services.
-2.  Folder drawer.
-3.  Folder drawer folders order.
-4.  McEliece key generation, exchange, etc.
-5.  Offline and online design.
-6.  Prepare application within a progress-dialog block.
-7.  Status bar on main activity.
+1.   Background services.
+2.   Folder drawer.
+3.   Folder drawer folders order.
+4.   McEliece key generation, exchange, etc.
+5.   Offline and online design.
+6.   Status bar on main activity.
