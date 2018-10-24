@@ -360,6 +360,7 @@ public class Settings
     private CheckBox m_delete_account_verify_checkbox = null;
     private CheckBox m_generate_keys_checkbox = null;
     private CheckBox m_primary_account_checkbox = null;
+    private CheckBox m_show_vertical_separator_before_settings_checkbox = null;
     private Context m_context = null;
     private Dialog m_dialog = null;
     private Spinner m_accounts_spinner = null;
@@ -450,6 +451,23 @@ public class Settings
 	    content_values.put("key", "email_folders");
 	    content_values.put
 		("value", m_email_folders_spinner.getSelectedItem().toString());
+	    error = m_database.save_setting(content_values);
+
+	    if(!error.isEmpty())
+	    {
+		show_display_page();
+		Windows.show_dialog
+		    (m_context, "Failure (" + error + ")!", "Error");
+		return;
+	    }
+
+	    content_values.clear();
+	    content_values.put
+		("key", "show_vertical_separator_before_settings");
+	    content_values.put
+		("value",
+		 m_show_vertical_separator_before_settings_checkbox.
+		 isChecked() ? "true" : "false");
 	    error = m_database.save_setting(content_values);
 
 	    if(!error.isEmpty())
@@ -723,6 +741,8 @@ public class Settings
 	m_proxy_type_spinner = (Spinner) m_view.findViewById
 	    (R.id.proxy_type_spinner);
 	m_proxy_user = (TextView) m_view.findViewById(R.id.proxy_user);
+	m_show_vertical_separator_before_settings_checkbox = (CheckBox)
+	    m_view.findViewById(R.id.show_vertical_separator_before_settings);
 	m_signature_key_data = m_view.findViewById(R.id.signature_key_data);
 	m_signature_key_spinner = (Spinner) m_view.findViewById
 	    (R.id.signature_key_spinner);
@@ -786,6 +806,17 @@ public class Settings
 	    default:
 		m_email_folders_spinner.setSelection(1);
 	    }
+
+	settings_element = m_database.settings_element
+	    ("show_vertical_separator_before_settings");
+
+	if(settings_element == null ||
+	   settings_element.m_value.equals("true"))
+	    m_show_vertical_separator_before_settings_checkbox.setChecked
+		(true);
+	else
+	    m_show_vertical_separator_before_settings_checkbox.setChecked
+		(false);
 
 	ArrayAdapter array_adapter = new ArrayAdapter<>
 	    (m_context,

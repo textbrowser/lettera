@@ -40,4 +40,5 @@
     <string name="like_inbound">Like Inbound</string>
     <string name="lettera">Lettera</string>
     <string name="email_email_org">e-mail@e-mail.org</string>
+    <string name="show_a_vertical_separator_before_the_settings_icon">Show a vertical separator before the Settings icon.</string>
 </resources>
