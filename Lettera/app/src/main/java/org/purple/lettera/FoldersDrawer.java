@@ -223,11 +223,12 @@ public class FoldersDrawer
 	    if(is_main_folder)
 		m_main_folders_layout.addView(button);
 	    else
-	    {
 		m_other_folders_layout.addView(button);
-		m_separator.setVisibility(View.VISIBLE);
-	    }
 	}
+
+	if(m_main_folders_layout.getChildCount() > 0 &&
+	   m_other_folders_layout.getChildCount() > 0)
+	    m_separator.setVisibility(View.VISIBLE);
     }
 
     public void show()
