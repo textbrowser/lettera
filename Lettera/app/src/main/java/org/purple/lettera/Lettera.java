@@ -391,8 +391,10 @@ public class Lettera extends AppCompatActivity
 	    }
 	}
 
-	m_folders_drawer.set_email_address
-	    (m_database.settings_element("primary_email_account").m_value);
+	settings_element = m_database.settings_element("primary_email_account");
+
+	if(settings_element != null)
+	    m_folders_drawer.set_email_address(settings_element.m_value);
     }
 
     public void prepare_icons()
