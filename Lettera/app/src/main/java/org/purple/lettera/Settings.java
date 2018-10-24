@@ -418,7 +418,7 @@ public class Settings
     private final static String s_email_folders[] = new String[]
 	{"Drawer", "Spinner"};
     private final static String s_icon_themes[] = new String[]
-	{"Default", "Funky", "Hand Drawn", "Material", "Nuvola", "SAILFISH"};
+	{"Default", "Funky", "Hand Drawn", "Material", "Nuvola", "SailFish"};
     private final static String s_proxy_types[] =
 	new String[] {"HTTP", "SOCKS"};
     private int m_current_page = PageEnumerator.DISPLAY_PAGE;
