@@ -189,6 +189,7 @@ public class Lettera extends AppCompatActivity
     private LinearLayout m_folders_spinner_layout = null;
     private Settings m_settings = null;
     private Spinner m_folders_spinner = null;
+    private View m_vertical_separator = null;
     private final PGP m_pgp = PGP.instance();
 
     private void download()
@@ -230,6 +231,7 @@ public class Lettera extends AppCompatActivity
 	    (R.id.folders_spinner_layout);
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
+	m_vertical_separator = findViewById(R.id.vertical_separator);
     }
 
     private void prepare_button_listeners()
@@ -329,6 +331,7 @@ public class Lettera extends AppCompatActivity
 	}, 500);
 	prepare_button_listeners();
 	prepare_folders_widgets();
+	prepare_generic_widgets();
 	prepare_icons();
     }
 
@@ -395,6 +398,17 @@ public class Lettera extends AppCompatActivity
 
 	if(settings_element != null)
 	    m_folders_drawer.set_email_address(settings_element.m_value);
+    }
+
+    public void prepare_generic_widgets()
+    {
+	SettingsElement settings_element = m_database.settings_element
+	    ("show_vertical_separator_before_settings");
+
+	if(settings_element == null || settings_element.m_value.equals("true"))
+	    m_vertical_separator.setVisibility(View.VISIBLE);
+	else
+	    m_vertical_separator.setVisibility(View.GONE);
     }
 
     public void prepare_icons()

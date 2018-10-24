@@ -495,6 +495,7 @@ public class Settings
 	    if(m_context instanceof Lettera)
 	    {
 		((Lettera) m_context).prepare_folders_widgets();
+		((Lettera) m_context).prepare_generic_widgets();
 		((Lettera) m_context).prepare_icons();
 	    }
 
