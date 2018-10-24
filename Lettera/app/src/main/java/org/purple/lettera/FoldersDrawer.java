@@ -130,6 +130,8 @@ public class FoldersDrawer
 		name = "Inbox";
 	    else if(name.contains("sent"))
 		name = "Sent";
+	    else if(name.contains("spam"))
+		name = "Spam";
 	    else if(name.contains("star"))
 		name = "Starred";
 	    else
@@ -163,6 +165,11 @@ public class FoldersDrawer
 	    case "Sent":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.sent_folder, 0, 0, 0);
+		is_main_folder = true;
+		break;
+	    case "Spam":
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (R.drawable.spam_folder, 0, 0, 0);
 		is_main_folder = true;
 		break;
 	    case "Starred":
