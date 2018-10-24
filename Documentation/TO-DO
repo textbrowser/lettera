@@ -6,8 +6,10 @@ Completed Items
 4.  Prepare drawer from database values.
 5.  Prepare e-mail folders on account change.
 6.  Proxies for e-mail.
-7.  Restore personal key pairs.
-8.  Save personal key pairs.
+7.  Real-time changes of Outbound text if
+    Like Inbound is enabled.
+8.  Restore personal key pairs.
+9.  Save personal key pairs.
 
 Future Items
 
@@ -21,6 +23,4 @@ Remaining Items
 4.  McEliece key generation, exchange, etc.
 5.  Offline and online design.
 6.  Prepare application within a progress-dialog block.
-7.  Real-time changes of Outbound text if
-    Like Inbound is enabled.
-8.  Status bar on main activity.
+7.  Status bar on main activity.

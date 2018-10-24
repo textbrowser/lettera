@@ -31,8 +31,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -1092,6 +1094,58 @@ public class Settings
 		{
 		}
 	    });
+
+	m_inbound_email.addTextChangedListener(new TextWatcher()
+	{
+	    @Override
+	    public void afterTextChanged(Editable s)
+	    {
+	    }
+
+	    @Override
+	    public void beforeTextChanged(CharSequence s,
+					  int start,
+					  int count,
+					  int after)
+	    {
+	    }
+
+	    @Override
+	    public void onTextChanged(CharSequence s,
+				      int start,
+				      int before,
+				      int count)
+	    {
+		if(m_outbound_as_inbound.isChecked())
+		    m_outbound_email.setText(s);
+	    }
+	});
+
+	m_inbound_password.addTextChangedListener(new TextWatcher()
+	{
+	    @Override
+	    public void afterTextChanged(Editable s)
+	    {
+	    }
+
+	    @Override
+	    public void beforeTextChanged(CharSequence s,
+					  int start,
+					  int count,
+					  int after)
+	    {
+	    }
+
+	    @Override
+	    public void onTextChanged(CharSequence s,
+				      int start,
+				      int before,
+				      int count)
+	    {
+		if(m_outbound_as_inbound.isChecked())
+		    m_outbound_password.setText(s);
+	    }
+	});
 
 	if(!m_network_button.hasOnClickListeners())
 	    m_network_button.setOnClickListener(new View.OnClickListener()
