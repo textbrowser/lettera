@@ -122,7 +122,6 @@ public class FoldersDrawer
 	    RadioButton button = null;
 	    String name = folder_element.m_name.toLowerCase().trim();
 	    StringBuffer string_buffer = new StringBuffer();
-
 	    boolean is_main_folder = false;
 
 	    if(name.contains("draft"))
