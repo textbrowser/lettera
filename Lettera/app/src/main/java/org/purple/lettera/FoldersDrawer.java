@@ -157,6 +157,7 @@ public class FoldersDrawer
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.inbox_folder, 0, 0, 0);
 		button.setId(0);
+		button.setTextColor(Color.rgb(42, 11, 60));
 		is_main_folder = true;
 		break;
 	    case "Sent":
