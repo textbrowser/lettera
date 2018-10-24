@@ -126,6 +126,8 @@ public class FoldersDrawer
 
 	    if(name.contains("draft"))
 		name = "Drafts";
+	    else if(name.contains("important"))
+		name = "Important";
 	    else if(name.contains("inbox"))
 		name = "Inbox";
 	    else if(name.contains("sent"))
@@ -152,6 +154,11 @@ public class FoldersDrawer
 	    case "Drafts":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.drafts_folder, 0, 0, 0);
+		is_main_folder = true;
+		break;
+	    case "Important":
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (R.drawable.important_folder, 0, 0, 0);
 		is_main_folder = true;
 		break;
 	    case "Inbox":
