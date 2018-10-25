@@ -166,7 +166,7 @@ public class FoldersDrawer
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.inbox_folder, 0, 0, 0);
 		button.setId(0);
-		button.setTextColor(Color.rgb(42, 11, 60));
+		button.setTextColor(Color.parseColor("#5e35b1"));
 		is_main_folder = true;
 		break;
 	    case "Sent":
@@ -205,7 +205,8 @@ public class FoldersDrawer
 		    if(view.getId() == 0)
 			return;
 
-		    ((RadioButton) view).setTextColor(Color.rgb(42, 11, 60));
+		    ((RadioButton) view).setTextColor
+			(Color.parseColor("#5e35b1"));
 		    view.setBackgroundResource(R.drawable.folder_selection);
 		    view.setId(0);
 		    view.setPadding(15, 15, 15, 15);
@@ -215,6 +216,8 @@ public class FoldersDrawer
 			i++)
 			if(m_main_folders_layout.getChildAt(i) != view)
 			{
+			    ((RadioButton) m_main_folders_layout.
+			     getChildAt(i)).setTextColor(Color.BLACK);
 			    m_main_folders_layout.getChildAt(i).
 				setBackgroundColor(Color.TRANSPARENT);
 			    m_main_folders_layout.getChildAt(i).setId(-1);
@@ -225,6 +228,8 @@ public class FoldersDrawer
 			i++)
 			if(m_other_folders_layout.getChildAt(i) != view)
 			{
+			    ((RadioButton) m_other_folders_layout.
+			     getChildAt(i)).setTextColor(Color.BLACK);
 			    m_other_folders_layout.getChildAt(i).
 				setBackgroundColor(Color.TRANSPARENT);
 			    m_other_folders_layout.getChildAt(i).setId(-1);
