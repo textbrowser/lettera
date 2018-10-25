@@ -37,6 +37,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -46,6 +47,7 @@ import java.util.ArrayList;
 public class FoldersDrawer
 {
     private Context m_context = null;
+    private ImageButton m_close_button = null;
     private LinearLayout m_main_folders_layout = null;
     private LinearLayout m_other_folders_layout = null;
     private PopupWindow m_popup_window = null;
@@ -85,16 +87,30 @@ public class FoldersDrawer
 
 	initialize_widget_members();
 	m_separator.setVisibility(View.GONE);
+	prepare_button_listeners();
     }
 
     private void initialize_widget_members()
     {
+	m_close_button = (ImageButton) m_view.findViewById(R.id.close_button);
 	m_email_address = (TextView) m_view.findViewById(R.id.email_address);
 	m_main_folders_layout = (LinearLayout) m_view.findViewById
 	    (R.id.main_folders_layout);
 	m_other_folders_layout = (LinearLayout) m_view.findViewById
 	    (R.id.other_folders_layout);
 	m_separator = m_view.findViewById(R.id.separator);
+    }
+
+    private void prepare_button_listeners()
+    {
+	if(m_close_button != null && !m_close_button.hasOnClickListeners())
+	    m_close_button.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    m_popup_window.dismiss();
+		}
+	    });
     }
 
     public void set_email_address(String email_address)
