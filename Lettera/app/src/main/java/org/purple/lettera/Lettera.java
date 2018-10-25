@@ -202,7 +202,7 @@ public class Lettera extends AppCompatActivity
 	    Windows.show_progress_dialog
 		(Lettera.this,
 		 dialog,
-		 "Downloading e-mail folders. Please be patient.");
+		 "Downloading e-mail folders.\nPlease be patient.");
 
 	    Thread thread = new Thread(new PopulateFolders(dialog));
 
@@ -316,7 +316,7 @@ public class Lettera extends AppCompatActivity
 		    Windows.show_progress_dialog
 			(Lettera.this,
 			 dialog,
-			 "Initializing Lettera. Please be patient.");
+			 "Initializing Lettera.\nPlease be patient.");
 
 		    Thread thread = new Thread(new PopulateContainers(dialog));
 
