@@ -69,7 +69,7 @@ public class Database extends SQLiteOpenHelper
 		 "name, " +
 		 "new_message_count " +
 		 "FROM folders WHERE email_account = ? " +
-		 "ORDER BY name",
+		 "ORDER BY LOWER(name)",
 		 new String[] {email_account});
 
 	    if(cursor != null && cursor.moveToFirst())
