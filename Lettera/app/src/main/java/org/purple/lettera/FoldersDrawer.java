@@ -46,6 +46,18 @@ import java.util.ArrayList;
 
 public class FoldersDrawer
 {
+    private abstract class IconsEnumerator
+    {
+	public final static int DRAFTS = 0;
+	public final static int IMPORTANT = 1;
+	public final static int INBOX = 2;
+	public final static int SENT = 3;
+	public final static int SPAM = 4;
+	public final static int STARRED = 5;
+	public final static int TRASH = 6;
+	public final static int XYZ = 7;
+    }
+
     private Context m_context = null;
     private ImageButton m_close_button = null;
     private LinearLayout m_main_folders_layout = null;
@@ -55,6 +67,9 @@ public class FoldersDrawer
     private View m_parent = null;
     private View m_separator = null;
     private View m_view = null;
+    private final static int s_icons[] = new int[IconsEnumerator.XYZ + 1];
+    private final static int s_selected_icons[] =
+	new int[IconsEnumerator.XYZ + 1];
 
     public FoldersDrawer(Context context, View parent)
     {
@@ -88,6 +103,30 @@ public class FoldersDrawer
 	initialize_widget_members();
 	m_separator.setVisibility(View.GONE);
 	prepare_button_listeners();
+	s_icons[IconsEnumerator.DRAFTS] = R.drawable.drafts_folder;
+	s_icons[IconsEnumerator.IMPORTANT] = R.drawable.important_folder;
+	s_icons[IconsEnumerator.INBOX] = R.drawable.inbox_folder;
+	s_icons[IconsEnumerator.SENT] = R.drawable.sent_folder;
+	s_icons[IconsEnumerator.SPAM] = R.drawable.spam_folder;
+	s_icons[IconsEnumerator.STARRED] = R.drawable.starred_folder;
+	s_icons[IconsEnumerator.TRASH] = R.drawable.trash_folder;
+	s_icons[IconsEnumerator.XYZ] = R.drawable.folder_folder;
+	s_selected_icons[IconsEnumerator.DRAFTS] = R.drawable.
+	    drafts_folder_selected;
+	s_selected_icons[IconsEnumerator.IMPORTANT] = R.drawable.
+	    important_folder_selected;
+	s_selected_icons[IconsEnumerator.INBOX] = R.drawable.
+	    inbox_folder_selected;
+	s_selected_icons[IconsEnumerator.SENT] = R.drawable.
+	    sent_folder_selected;
+	s_selected_icons[IconsEnumerator.SPAM] = R.drawable.
+	    spam_folder_selected;
+	s_selected_icons[IconsEnumerator.STARRED] = R.drawable.
+	    starred_folder_selected;
+	s_selected_icons[IconsEnumerator.TRASH] = R.drawable.
+	    trash_folder_selected;
+	s_selected_icons[IconsEnumerator.XYZ] = R.drawable.
+	    folder_folder_selected;
     }
 
     private void initialize_widget_members()
@@ -170,44 +209,51 @@ public class FoldersDrawer
 	    case "Drafts":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.drafts_folder, 0, 0, 0);
+		button.setId(IconsEnumerator.DRAFTS);
 		is_main_folder = true;
 		break;
 	    case "Important":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.important_folder, 0, 0, 0);
+		button.setId(IconsEnumerator.IMPORTANT);
 		is_main_folder = true;
 		break;
 	    case "Inbox":
 		button.setBackgroundResource(R.drawable.folder_selection);
 		button.setCompoundDrawablesWithIntrinsicBounds
-		    (R.drawable.inbox_folder, 0, 0, 0);
-		button.setId(0);
+		    (R.drawable.inbox_folder_selected, 0, 0, 0);
+		button.setId(IconsEnumerator.INBOX);
 		button.setTextColor(Color.parseColor("#5e35b1"));
 		is_main_folder = true;
 		break;
 	    case "Sent":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.sent_folder, 0, 0, 0);
+		button.setId(IconsEnumerator.SENT);
 		is_main_folder = true;
 		break;
 	    case "Spam":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.spam_folder, 0, 0, 0);
+		button.setId(IconsEnumerator.SPAM);
 		is_main_folder = true;
 		break;
 	    case "Starred":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.starred_folder, 0, 0, 0);
+		button.setId(IconsEnumerator.STARRED);
 		is_main_folder = true;
 		break;
 	    case "Trash":
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.trash_folder, 0, 0, 0);
+		button.setId(IconsEnumerator.TRASH);
 		is_main_folder = true;
 		break;
 	    default:
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.folder_folder, 0, 0, 0);
+		button.setId(IconsEnumerator.XYZ);
 		break;
 	    }
 
@@ -218,13 +264,12 @@ public class FoldersDrawer
 	    {
 		public void onClick(View view)
 		{
-		    if(view.getId() == 0)
-			return;
-
+		    ((RadioButton) view).
+			setCompoundDrawablesWithIntrinsicBounds
+			(s_selected_icons[view.getId()], 0, 0, 0);
 		    ((RadioButton) view).setTextColor
 			(Color.parseColor("#5e35b1"));
 		    view.setBackgroundResource(R.drawable.folder_selection);
-		    view.setId(0);
 		    view.setPadding(15, 15, 15, 15);
 
 		    for(int i = 0;
@@ -233,10 +278,14 @@ public class FoldersDrawer
 			if(m_main_folders_layout.getChildAt(i) != view)
 			{
 			    ((RadioButton) m_main_folders_layout.
+			     getChildAt(i)).
+				setCompoundDrawablesWithIntrinsicBounds
+				(s_icons[m_main_folders_layout.
+					 getChildAt(i).getId()], 0, 0, 0);
+			    ((RadioButton) m_main_folders_layout.
 			     getChildAt(i)).setTextColor(Color.BLACK);
 			    m_main_folders_layout.getChildAt(i).
 				setBackgroundColor(Color.TRANSPARENT);
-			    m_main_folders_layout.getChildAt(i).setId(-1);
 			}
 
 		    for(int i = 0;
@@ -245,10 +294,14 @@ public class FoldersDrawer
 			if(m_other_folders_layout.getChildAt(i) != view)
 			{
 			    ((RadioButton) m_other_folders_layout.
+			     getChildAt(i)).
+				setCompoundDrawablesWithIntrinsicBounds
+				(s_icons[m_other_folders_layout.
+					 getChildAt(i).getId()], 0, 0, 0);
+			    ((RadioButton) m_other_folders_layout.
 			     getChildAt(i)).setTextColor(Color.BLACK);
 			    m_other_folders_layout.getChildAt(i).
 				setBackgroundColor(Color.TRANSPARENT);
-			    m_other_folders_layout.getChildAt(i).setId(-1);
 			}
 		}
 	    });
