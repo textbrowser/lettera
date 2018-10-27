@@ -43,6 +43,8 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class FoldersDrawer
 {
@@ -57,6 +59,17 @@ public class FoldersDrawer
 	public final static int TRASH = 6;
 	public final static int XYZ = 7;
     }
+
+    private final static Comparator<FolderElement>
+	s_folders_comparator = new Comparator<FolderElement> ()
+	{
+	    @Override
+	    public int compare(FolderElement f1, FolderElement f2)
+	    {
+		return f1.m_name.toLowerCase().trim().compareTo
+		(f2.m_name.toLowerCase().trim());
+	    }
+	};
 
     private Context m_context = null;
     private ImageButton m_close_button = null;
@@ -168,6 +181,8 @@ public class FoldersDrawer
 
 	if(array_list == null || array_list.isEmpty())
 	    return;
+
+	Collections.sort(array_list, s_folders_comparator);
 
 	for(FolderElement folder_element : array_list)
 	{
