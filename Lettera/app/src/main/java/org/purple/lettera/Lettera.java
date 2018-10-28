@@ -39,6 +39,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Lettera extends AppCompatActivity
 {
@@ -187,10 +190,12 @@ public class Lettera extends AppCompatActivity
     private FoldersDrawer m_folders_drawer = null;
     private ImageButton m_folders_drawer_button = null;
     private LinearLayout m_folders_spinner_layout = null;
+    private ScheduledExecutorService m_folders_drawer_scheduler = null;
     private Settings m_settings = null;
     private Spinner m_folders_spinner = null;
     private View m_vertical_separator = null;
     private final PGP m_pgp = PGP.instance();
+    private final int FOLDERS_DRAWER_FETCH_INTERVAL = 30;
 
     private void download()
     {
@@ -278,6 +283,67 @@ public class Lettera extends AppCompatActivity
 	    });
     }
 
+    private void prepare_schedulers()
+    {
+	if(m_folders_drawer_scheduler == null)
+	{
+	    m_folders_drawer_scheduler = Executors.
+		newSingleThreadScheduledExecutor();
+	    m_folders_drawer_scheduler.scheduleAtFixedRate(new Runnable()
+	    {
+		private Mail m_mail = null;
+
+		@Override
+		public void run()
+		{
+		    try
+		    {
+			EmailElement email_element = m_database.email_element
+			    (m_database.
+			     settings_element("primary_email_account").m_value);
+
+			if(m_mail != null)
+			{
+			    if(!m_mail.imap_connected())
+			    {
+				m_mail.disconnect();
+				m_mail = null;
+			    }
+			    else if(!m_mail.email_address().
+				    equals(email_element.m_inbound_email))
+			    {
+				m_mail.disconnect();
+				m_mail = null;
+			    }
+			}
+
+			if(m_mail == null)
+			{
+			    m_mail = new Mail
+				(email_element.m_inbound_address,
+				 email_element.m_inbound_email,
+				 email_element.m_inbound_password,
+				 String.valueOf(email_element.m_inbound_port),
+				 email_element.m_outbound_address,
+				 email_element.m_outbound_email,
+				 email_element.m_outbound_password,
+				 String.valueOf(email_element.m_outbound_port),
+				 email_element.m_proxy_address,
+				 email_element.m_proxy_password,
+				 String.valueOf(email_element.m_proxy_port),
+				 email_element.m_proxy_type,
+				 email_element.m_proxy_user);
+			    m_mail.connect_imap();
+			}
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    }, 5, FOLDERS_DRAWER_FETCH_INTERVAL, TimeUnit.SECONDS);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -333,6 +399,7 @@ public class Lettera extends AppCompatActivity
 	prepare_folders_widgets();
 	prepare_generic_widgets();
 	prepare_icons();
+	prepare_schedulers();
     }
 
     public void populate_folders_from_database()

@@ -176,6 +176,24 @@ public class Mail
 	}
     }
 
+    public String email_address()
+    {
+	return m_inbound_email;
+    }
+
+    public boolean connected()
+    {
+	if(m_imap != null && m_smtp != null)
+	    return m_imap.isConnected() && m_smtp.isConnected();
+	else
+	    return false;
+    }
+
+    public boolean imap_connected()
+    {
+	return m_imap != null && m_imap.isConnected();
+    }
+
     public static Properties properties(String email,
 					String host,
 					String password,
