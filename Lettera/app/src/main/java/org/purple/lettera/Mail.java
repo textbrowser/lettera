@@ -126,7 +126,8 @@ public class Mail
 
     public ArrayList<String> folder_names()
     {
-	m_database.delete_folders(m_inbound_email);
+	if(imap_connected())
+	    m_database.delete_folders(m_inbound_email);
 
 	try
 	{
