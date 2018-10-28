@@ -23,4 +23,5 @@ Remaining Items
 2.   Folder drawer.
 3.   McEliece key generation, exchange, etc.
 4.   Offline and online design.
-5.   Status bar on main activity.
+5.   Populate folder spinner on mail thread.
+6.   Status bar on main activity.

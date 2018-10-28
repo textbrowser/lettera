@@ -80,6 +80,8 @@ public class Mail
 	m_proxy_port = proxy_port;
 	m_proxy_type = proxy_type;
 	m_proxy_user = proxy_user;
+	imap();
+	smtp();
     }
 
     public ArrayList<FolderElement> folders()
@@ -173,7 +175,58 @@ public class Mail
 
     public IMAPStore imap()
     {
+	if(m_imap != null)
+	    return m_imap;
+
+	try
+	{
+	    m_imap = (IMAPStore) Session.getInstance
+		(properties(m_inbound_email,
+			    m_inbound_address,
+			    m_inbound_password,
+			    m_inbound_port,
+			    "imaps",
+			    m_proxy_address,
+			    m_proxy_password,
+			    m_proxy_port,
+			    m_proxy_type,
+			    m_proxy_user,
+			    "60000")).getStore("imaps");
+	}
+	catch(Exception exception)
+	{
+	    m_imap = null;
+	}
+
 	return m_imap;
+    }
+
+    public SMTPTransport smtp()
+    {
+	if(m_smtp != null)
+	    return m_smtp;
+
+	try
+	{
+	    m_smtp = (SMTPTransport)
+		(Session.getInstance(properties(m_outbound_email,
+						m_outbound_address,
+						m_outbound_password,
+						m_outbound_port,
+						"smtps",
+						m_proxy_address,
+						m_proxy_password,
+						m_proxy_port,
+						m_proxy_type,
+						m_proxy_user,
+						"60000"))).getTransport("smtp");
+	}
+	catch(Exception exception)
+	{
+	    m_smtp = null;
+	}
+
+	return m_smtp;
     }
 
     public String email_address()
@@ -303,22 +356,11 @@ public class Mail
 
     public void connect_imap()
     {
-	disconnect_imap();
+	if(m_imap == null || m_imap.isConnected())
+	    return;
 
 	try
 	{
-	    m_imap = (IMAPStore) Session.getInstance
-		(properties(m_inbound_email,
-			    m_inbound_address,
-			    m_inbound_password,
-			    m_inbound_port,
-			    "imaps",
-			    m_proxy_address,
-			    m_proxy_password,
-			    m_proxy_port,
-			    m_proxy_type,
-			    m_proxy_user,
-			    "60000")).getStore("imaps");
 	    m_imap.connect
 		(m_inbound_address,
 		 Integer.valueOf(m_inbound_port),
@@ -327,29 +369,16 @@ public class Mail
 	}
 	catch(Exception exception)
 	{
-	    m_imap = null;
 	}
     }
 
     public void connect_smtp()
     {
-	disconnect_smtp();
+	if(m_smtp == null || m_smtp.isConnected())
+	    return;
 
 	try
 	{
-	    m_smtp = (SMTPTransport)
-		(Session.getInstance(properties(m_outbound_email,
-						m_outbound_address,
-						m_outbound_password,
-						m_outbound_port,
-						"smtps",
-						m_proxy_address,
-						m_proxy_password,
-						m_proxy_port,
-						m_proxy_type,
-						m_proxy_user,
-						"60000"))).
-		getTransport("smtp");
 	    m_smtp.setRequireStartTLS(true);
 	    m_smtp.connect
 		(m_outbound_address,
@@ -379,8 +408,6 @@ public class Mail
 	catch(Exception exception)
 	{
 	}
-
-	m_imap = null;
     }
 
     public void disconnect_smtp()
@@ -393,7 +420,5 @@ public class Mail
 	catch(Exception exception)
 	{
 	}
-
-	m_smtp = null;
     }
 }
