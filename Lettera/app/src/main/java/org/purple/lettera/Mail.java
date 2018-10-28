@@ -388,7 +388,6 @@ public class Mail
 	}
 	catch(Exception exception)
 	{
-	    m_smtp = null;
 	}
     }
 
