@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.mail.event.FolderEvent;
+import javax.mail.event.FolderListener;
 
 public class Lettera extends AppCompatActivity
 {
@@ -195,7 +197,7 @@ public class Lettera extends AppCompatActivity
     private Spinner m_folders_spinner = null;
     private View m_vertical_separator = null;
     private final PGP m_pgp = PGP.instance();
-    private final int FOLDERS_DRAWER_FETCH_INTERVAL = 30;
+    private final int FOLDERS_DRAWER_INTERVAL = 10;
 
     private void download()
     {
@@ -302,15 +304,18 @@ public class Lettera extends AppCompatActivity
 			    (m_database.
 			     settings_element("primary_email_account").m_value);
 
+			if(email_element == null)
+			    return;
+
 			if(m_mail != null)
 			{
-			    if(!m_mail.imap_connected())
+			    if(!m_mail.email_address().equals(email_element.
+							      m_inbound_email))
 			    {
 				m_mail.disconnect();
 				m_mail = null;
 			    }
-			    else if(!m_mail.email_address().
-				    equals(email_element.m_inbound_email))
+			    else if(!m_mail.imap_connected())
 			    {
 				m_mail.disconnect();
 				m_mail = null;
@@ -334,13 +339,53 @@ public class Lettera extends AppCompatActivity
 				 email_element.m_proxy_type,
 				 email_element.m_proxy_user);
 			    m_mail.connect_imap();
+
+			    if(m_mail.imap() != null)
+				m_mail.imap().addFolderListener
+				    (new FolderListener()
+				    {
+					private void populate()
+					{
+					    final ArrayList<FolderElement>
+						array_list = m_mail.folders();
+
+					    Lettera.this.
+						runOnUiThread(new Runnable()
+					    {
+						@Override
+						public void run()
+						{
+						    m_folders_drawer.set_folders
+							(array_list);
+						}
+					    });
+					}
+
+					@Override
+					public void folderCreated(FolderEvent e)
+					{
+					    populate();
+					}
+
+					@Override
+					public void folderDeleted(FolderEvent e)
+					{
+					    populate();
+					}
+
+					@Override
+					public void folderRenamed(FolderEvent e)
+					{
+					    populate();
+					}
+				    });
 			}
 		    }
 		    catch(Exception exception)
 		    {
 		    }
 		}
-	    }, 5, FOLDERS_DRAWER_FETCH_INTERVAL, TimeUnit.SECONDS);
+	    }, 5, FOLDERS_DRAWER_INTERVAL, TimeUnit.SECONDS);
         }
     }
 

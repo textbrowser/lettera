@@ -27,18 +27,18 @@
 
 package org.purple.lettera;
 
+import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
 import javax.mail.Folder;
 import javax.mail.Session;
-import javax.mail.Store;
 
 public class Mail
 {
+    private IMAPStore m_imap = null;
     private SMTPTransport m_smtp = null;
-    private Store m_imap = null;
     private String m_inbound_address = "";
     private String m_inbound_email = "";
     private String m_inbound_password = "";
@@ -126,6 +126,8 @@ public class Mail
 
     public ArrayList<String> folder_names()
     {
+	m_database.delete_folders(m_inbound_email);
+
 	try
 	{
 	    ArrayList<String> array_list = new ArrayList<> ();
@@ -174,6 +176,11 @@ public class Mail
 	{
 	    return null;
 	}
+    }
+
+    public IMAPStore imap()
+    {
+	return m_imap;
     }
 
     public String email_address()
@@ -307,7 +314,7 @@ public class Mail
 
 	try
 	{
-	    m_imap = Session.getInstance
+	    m_imap = (IMAPStore) Session.getInstance
 		(properties(m_inbound_email,
 			    m_inbound_address,
 			    m_inbound_password,

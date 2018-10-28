@@ -390,6 +390,34 @@ public class Database extends SQLiteOpenHelper
 	return ok;
     }
 
+    public boolean delete_folders(String account)
+    {
+	if(m_db == null)
+	    return false;
+
+	boolean ok = false;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    ok = m_db.delete
+		("folders", "email_account = ?", new String[] {account}) > 0;
+
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	    ok = false;
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+
+	return ok;
+    }
+
     public boolean save_pgp_key_pair(KeyPair key_pair,
 				     String function)
     {
