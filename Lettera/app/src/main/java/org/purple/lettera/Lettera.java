@@ -199,7 +199,7 @@ public class Lettera extends AppCompatActivity
     private Spinner m_folders_spinner = null;
     private View m_vertical_separator = null;
     private final PGP m_pgp = PGP.instance();
-    private final int FOLDERS_DRAWER_INTERVAL = 5;
+    private final int FOLDERS_DRAWER_INTERVAL = 10;
 
     private void download()
     {
