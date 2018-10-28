@@ -699,29 +699,35 @@ public class Database extends SQLiteOpenHelper
         onCreate(db);
     }
 
-    public void write_folder(String name,
-			     String email_account,
-			     int message_count,
-			     int new_message_count)
+    public void write_folders(ArrayList<FolderElement> array_list)
     {
-	if(m_db == null)
+	if(array_list == null || array_list.isEmpty() || m_db == null)
 	    return;
 
 	m_db.beginTransactionNonExclusive();
 
 	try
 	{
-	    m_db.execSQL
-		("REPLACE INTO folders (" +
-		 "email_account, " +
-		 "message_count, " +
-		 "name, " +
-		 "new_message_count) VALUES " +
-		 "(?, ?, ?, ?)",
-		 new String[] {email_account,
-			       String.valueOf(message_count),
-			       name,
-			       String.valueOf(new_message_count)});
+	    for(FolderElement folder_element : array_list)
+	    {
+		if(folder_element == null)
+		    continue;
+
+		m_db.execSQL
+		    ("REPLACE INTO folders (" +
+		     "email_account, " +
+		     "message_count, " +
+		     "name, " +
+		     "new_message_count) VALUES " +
+		     "(?, ?, ?, ?)",
+		     new String[] {folder_element.m_email_address,
+				   String.valueOf(folder_element.
+						  m_message_count),
+				   folder_element.m_name,
+				   String.valueOf(folder_element.
+						  m_new_message_count)});
+	    }
+
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)

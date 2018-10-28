@@ -52,7 +52,6 @@ public class Mail
     private String m_proxy_port = "";
     private String m_proxy_type = "";
     private String m_proxy_user = "";
-    private final Database m_database = Database.instance();
 
     public Mail(String inbound_address,
 		String inbound_email,
@@ -126,9 +125,6 @@ public class Mail
 
     public ArrayList<String> folder_names()
     {
-	if(imap_connected())
-	    m_database.delete_folders(m_inbound_email);
-
 	try
 	{
 	    ArrayList<String> array_list = new ArrayList<> ();
@@ -164,10 +160,6 @@ public class Mail
 		string_builder.append(message_count);
 		string_builder.append(")");
 		array_list.add(string_builder.toString());
-		m_database.write_folder(folder.getName(),
-					m_inbound_email,
-					message_count,
-					new_message_count);
 	    }
 
 	    Collections.sort(array_list);

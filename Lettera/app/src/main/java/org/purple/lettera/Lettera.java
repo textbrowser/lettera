@@ -138,8 +138,12 @@ public class Lettera extends AppCompatActivity
 		     email_element.m_proxy_user);
 
 		mail.connect_imap();
+
+		if(mail.imap_connected())
+		    m_database.delete_folders(email_element.m_inbound_email);
+
+		m_database.write_folders(m_folders = mail.folders());
 		m_folder_names = mail.folder_names();
-		m_folders = mail.folders();
 	    }
 	    catch(Exception exception)
 	    {
