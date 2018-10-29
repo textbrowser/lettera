@@ -232,6 +232,45 @@ public class Database extends SQLiteOpenHelper
 	return null;
     }
 
+    public FolderElement folder(String email_account, int position)
+    {
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT email_account, " +
+		 "message_count, " +
+		 "name, " +
+		 "new_message_count " +
+		 "FROM folders WHERE email_account = ? " +
+		 "ORDER BY LOWER(name) LIMIT 1 OFFSET CAST(? AS INTEGER)",
+		 new String[] {email_account, String.valueOf(position)});
+
+	    if(cursor != null && cursor.moveToFirst())
+	    {
+		FolderElement folder_element = new FolderElement();
+
+		folder_element.m_email_address = cursor.getString(0);
+		folder_element.m_message_count = cursor.getInt(1);
+		folder_element.m_name = cursor.getString(2);
+		folder_element.m_new_message_count = cursor.getInt(3);
+
+		return folder_element;
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return null;
+    }
+
     public SettingsElement settings_element(String key)
     {
 	Cursor cursor = null;
