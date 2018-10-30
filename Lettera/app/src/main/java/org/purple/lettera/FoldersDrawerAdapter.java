@@ -67,7 +67,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    m_button = button;
 	}
 
-	public void set_data(FolderElement folder_element, int position)
+	public void set_data(FolderElement folder_element)
 	{
 	    if(folder_element == null || m_button == null)
 		return;
@@ -187,12 +187,21 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 
     private void clicked()
     {
-	for(RadioButton button : m_visible_buttons)
+	try
 	{
-	    button.setCompoundDrawablesWithIntrinsicBounds
-		(s_icons[button.getId()], 0, 0, 0);
-	    button.setBackgroundColor(Color.TRANSPARENT);
-	    button.setTextColor(Color.BLACK);
+	    for(RadioButton button : m_visible_buttons)
+	    {
+		if(button == null)
+		    continue;
+
+		button.setCompoundDrawablesWithIntrinsicBounds
+		    (s_icons[button.getId()], 0, 0, 0);
+		button.setBackgroundColor(Color.TRANSPARENT);
+		button.setTextColor(Color.BLACK);
+	    }
+	}
+	catch(Exception exception)
+	{
 	}
     }
 
@@ -255,7 +264,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	FolderElement folder_element = s_database.folder
 	    (m_email_address, position);
 
-	view_holder.set_data(folder_element, position);
+	view_holder.set_data(folder_element);
     }
 
     @Override

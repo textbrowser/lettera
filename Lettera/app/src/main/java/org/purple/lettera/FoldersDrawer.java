@@ -159,12 +159,13 @@ public class FoldersDrawer
     public void set_email_address(String email_address)
     {
 	((FoldersDrawerAdapter) m_adapter).set_email_address(email_address);
-	m_adapter.notifyDataSetChanged();
 
 	if(email_address.trim().isEmpty())
 	    m_email_address.setText("e-mail@e-mail.org");
 	else
 	    m_email_address.setText(email_address);
+
+	update();
     }
 
     public void show()
