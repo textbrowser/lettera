@@ -40,7 +40,7 @@ public class Database extends SQLiteOpenHelper
 {
     private SQLiteDatabase m_db = null;
     private final static String DATABASE_NAME = "lettera.db";
-    private final static int DATABASE_VERSION = 6;
+    private final static int DATABASE_VERSION = 7;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -242,9 +242,11 @@ public class Database extends SQLiteOpenHelper
 		("SELECT email_account, " +
 		 "message_count, " +
 		 "name, " +
-		 "new_message_count " +
+		 "new_message_count, " +
+		 "OID " +
 		 "FROM folders WHERE email_account = ? " +
-		 "ORDER BY LOWER(name) LIMIT 1 OFFSET CAST(? AS INTEGER)",
+		 "ORDER BY is_regular_folder, LOWER(name) " +
+		 "LIMIT 1 OFFSET CAST(? AS INTEGER)",
 		 new String[] {email_account, String.valueOf(position)});
 
 	    if(cursor != null && cursor.moveToFirst())
@@ -255,6 +257,7 @@ public class Database extends SQLiteOpenHelper
 		folder_element.m_message_count = cursor.getInt(1);
 		folder_element.m_name = cursor.getString(2);
 		folder_element.m_new_message_count = cursor.getInt(3);
+		folder_element.m_oid = cursor.getInt(4);
 
 		return folder_element;
 	    }
@@ -536,6 +539,33 @@ public class Database extends SQLiteOpenHelper
 	return null;
     }
 
+    public int folder_count(String email_account)
+    {
+	Cursor cursor = null;
+	int count = 0;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT COUNT(*) FROM folders WHERE email_account = ?",
+		 new String[] {email_account});
+
+	    if(cursor != null && cursor.moveToFirst())
+		count = cursor.getInt(0);
+	}
+	catch(Exception exception)
+	{
+	    count = -1;
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return count;
+    }
+
     public static synchronized Database instance()
     {
 	return s_instance; // Should never be null.
@@ -684,6 +714,7 @@ public class Database extends SQLiteOpenHelper
 
 	str = "CREATE TABLE IF NOT EXISTS folders (" +
 	    "email_account TEXT NOT NULL, " +
+	    "is_regular_folder INTEGER NOT NULL DEFAULT 1, " +
 	    "message_count INTEGER NOT NULL DEFAULT 0, " +
 	    "name TEXT NOT NULL, " +
 	    "new_message_count INTEGER NOT NULL DEFAULT 0, " +
@@ -752,14 +783,34 @@ public class Database extends SQLiteOpenHelper
 		if(folder_element == null)
 		    continue;
 
+		String name = folder_element.m_name.toLowerCase().trim();
+		int is_regular_folder = 1;
+
+		if(name.contains("draft"))
+		    is_regular_folder = 0;
+		else if(name.contains("important"))
+		    is_regular_folder = 0;
+		else if(name.contains("inbox"))
+		    is_regular_folder = 0;
+		else if(name.contains("sent"))
+		    is_regular_folder = 0;
+		else if(name.contains("spam"))
+		    is_regular_folder = 0;
+		else if(name.contains("star"))
+		    is_regular_folder = 0;
+		else if(name.contains("trash"))
+		    is_regular_folder = 0;
+
 		m_db.execSQL
 		    ("REPLACE INTO folders (" +
 		     "email_account, " +
+		     "is_regular_folder, " +
 		     "message_count, " +
 		     "name, " +
 		     "new_message_count) VALUES " +
-		     "(?, ?, ?, ?)",
+		     "(?, ?, ?, ?, ?)",
 		     new String[] {folder_element.m_email_address,
+				   String.valueOf(is_regular_folder),
 				   String.valueOf(folder_element.
 						  m_message_count),
 				   folder_element.m_name,

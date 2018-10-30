@@ -103,7 +103,6 @@ public class Lettera extends AppCompatActivity
 
     private class PopulateFolders implements Runnable
     {
-	private ArrayList<FolderElement> m_folders = null;
 	private ArrayList<String> m_folder_names = null;
 	private Dialog m_dialog = null;
 
@@ -140,7 +139,7 @@ public class Lettera extends AppCompatActivity
 		if(mail.imap_connected())
 		    m_database.delete_folders(email_element.m_inbound_email);
 
-		m_database.write_folders(m_folders = mail.folders());
+		m_database.write_folders(mail.folders());
 		m_folder_names = mail.folder_names();
 	    }
 	    catch(Exception exception)
@@ -171,7 +170,7 @@ public class Lettera extends AppCompatActivity
 			    (m_database.
 			     settings_element("primary_email_account").
 			     m_value);
-			m_folders_drawer.set_folders(m_folders);
+			m_folders_drawer.update();
 			m_folders_spinner.setAdapter(array_adapter);
 
 			if(m_dialog != null)
@@ -352,7 +351,7 @@ public class Lettera extends AppCompatActivity
 				@Override
 				public void run()
 				{
-				    m_folders_drawer.set_folders(array_list);
+				    m_folders_drawer.update();
 				}
 			    });
 			}
@@ -443,7 +442,7 @@ public class Lettera extends AppCompatActivity
 		strings[i++] = string_builder.toString();
 	    }
 
-	    m_folders_drawer.set_folders(array_list);
+	    m_folders_drawer.update();
 	    m_folders_spinner.setAdapter
 		(new ArrayAdapter<> (Lettera.this,
 				     android.R.layout.simple_spinner_item,
