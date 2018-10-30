@@ -151,6 +151,11 @@ public class FoldersDrawer
 	    });
     }
 
+    public void dismiss()
+    {
+	m_popup_window.dismiss();
+    }
+
     public void set_email_address(String email_address)
     {
 	((FoldersDrawerAdapter) m_adapter).set_email_address(email_address);

@@ -28,6 +28,7 @@
 package org.purple.lettera;
 
 import android.app.Dialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -410,6 +411,27 @@ public class Lettera extends AppCompatActivity
 	prepare_generic_widgets();
 	prepare_icons();
 	prepare_schedulers();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+	super.onDestroy();
+	m_folders_drawer.dismiss();
+    }
+
+    @Override
+    protected void onPause()
+    {
+	super.onPause();
+	m_folders_drawer.dismiss();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration new_config)
+    {
+	super.onConfigurationChanged(new_config);
+	m_folders_drawer.dismiss();
     }
 
     public void populate_folders_from_database()
