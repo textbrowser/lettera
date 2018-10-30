@@ -416,8 +416,7 @@ public class Settings
 	    return "";
 	}
     };
-    private final static String s_email_folders[] = new String[]
-	{"Drawer", "Spinner"};
+    private final static String s_email_folders[] = new String[] {"Drawer"};
     private final static String s_icon_themes[] = new String[]
 	{"Default", "Funky", "Hand Drawn", "Material", "Nuvola", "SailFish"};
     private final static String s_proxy_types[] =
@@ -799,15 +798,13 @@ public class Settings
 	    ("email_folders");
 
 	if(settings_element == null)
-	    m_email_folders_spinner.setSelection(1); // Spinner
+	    m_email_folders_spinner.setSelection(0); // Drawer
 	else
 	    switch(settings_element.m_value.toLowerCase())
 	    {
-	    case "drawer":
+	    default:
 		m_email_folders_spinner.setSelection(0);
 		break;
-	    default:
-		m_email_folders_spinner.setSelection(1);
 	    }
 
 	settings_element = m_database.settings_element

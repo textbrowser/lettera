@@ -112,28 +112,6 @@
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp">
 
-                <LinearLayout
-                    android:id="@+id/folders_spinner_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/folders" />
-
-                    <Spinner
-                        android:id="@+id/folders"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        tools:layout_editor_absoluteX="270dp"
-                        tools:layout_editor_absoluteY="5dp" />
-                </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
 

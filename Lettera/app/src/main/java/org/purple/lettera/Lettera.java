@@ -171,7 +171,6 @@ public class Lettera extends AppCompatActivity
 			     settings_element("primary_email_account").
 			     m_value);
 			m_folders_drawer.update();
-			m_folders_spinner.setAdapter(array_adapter);
 
 			if(m_dialog != null)
 			    m_dialog.dismiss();
@@ -192,10 +191,8 @@ public class Lettera extends AppCompatActivity
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private ImageButton m_folders_drawer_button = null;
-    private LinearLayout m_folders_spinner_layout = null;
     private ScheduledExecutorService m_folders_drawer_scheduler = null;
     private Settings m_settings = null;
-    private Spinner m_folders_spinner = null;
     private View m_vertical_separator = null;
     private final PGP m_pgp = PGP.instance();
     private final int FOLDERS_DRAWER_INTERVAL = 10;
@@ -230,13 +227,6 @@ public class Lettera extends AppCompatActivity
 	m_download_button = (Button) findViewById(R.id.download_button);
 	m_folders_drawer_button = (ImageButton) findViewById
 	    (R.id.folders_drawer_button);
-	m_folders_spinner = (Spinner) findViewById(R.id.folders);
-	m_folders_spinner.setAdapter
-	    (new ArrayAdapter<> (Lettera.this,
-				 android.R.layout.simple_spinner_item,
-				 new String[] {"(Empty)"}));
-	m_folders_spinner_layout = (LinearLayout) findViewById
-	    (R.id.folders_spinner_layout);
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
 	m_vertical_separator = findViewById(R.id.vertical_separator);
@@ -426,62 +416,17 @@ public class Lettera extends AppCompatActivity
     {
 	try
 	{
-	    ArrayList<FolderElement> array_list = m_database.folders
-		(m_database.settings_element("primary_email_account").m_value);
-	    String strings[] = new String[array_list.size()];
-	    StringBuilder string_builder = new StringBuilder();
-	    int i = 0;
-
-	    for(FolderElement folder_element : array_list)
-	    {
-		string_builder.setLength(0);
-		string_builder.append(folder_element.m_name);
-		string_builder.append(" (");
-		string_builder.append(folder_element.m_message_count);
-		string_builder.append(")");
-		strings[i++] = string_builder.toString();
-	    }
-
 	    m_folders_drawer.update();
-	    m_folders_spinner.setAdapter
-		(new ArrayAdapter<> (Lettera.this,
-				     android.R.layout.simple_spinner_item,
-				     strings));
 	}
 	catch(Exception exception)
 	{
-	    m_folders_spinner.setAdapter
-		(new ArrayAdapter<> (Lettera.this,
-				     android.R.layout.simple_spinner_item,
-				     new String[] {"(Empty)"}));
 	}
     }
 
     public void prepare_folders_widgets()
     {
 	SettingsElement settings_element = m_database.settings_element
-	    ("email_folders");
-
-	if(settings_element == null)
-	{
-	    m_folders_drawer_button.setVisibility(View.GONE);
-	    m_folders_spinner_layout.setVisibility(View.VISIBLE);
-	}
-	else
-	{
-	    if(settings_element.m_value.toLowerCase().equals("drawer"))
-	    {
-		m_folders_drawer_button.setVisibility(View.VISIBLE);
-		m_folders_spinner_layout.setVisibility(View.GONE);
-	    }
-	    else
-	    {
-		m_folders_drawer_button.setVisibility(View.GONE);
-		m_folders_spinner_layout.setVisibility(View.VISIBLE);
-	    }
-	}
-
-	settings_element = m_database.settings_element("primary_email_account");
+	    ("primary_email_account");
 
 	if(settings_element != null)
 	    m_folders_drawer.set_email_address(settings_element.m_value);

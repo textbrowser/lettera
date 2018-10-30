@@ -10,8 +10,10 @@ Completed Items
 8.   Proxies for e-mail.
 9.   Real-time changes of Outbound text if
      Like Inbound is enabled.
-10.  Restore personal key pairs.
-11.  Save personal key pairs.
+10.  Remove folder spinner.
+11.  Restore personal key pairs.
+12.  Retain selected folder in folder drawer.
+13.  Save personal key pairs.
 
 Future Items
 
@@ -23,7 +25,4 @@ Remaining Items
 2.   Folder drawer.
 3.   McEliece key generation, exchange, etc.
 4.   Offline and online design.
-5.   Populate folder spinner on mail thread.
-6.   Remove folder spinner.
-7.   Retain selected folder in folder drawer.
-8.   Status bar on main activity.
+5.   Status bar on main activity.
