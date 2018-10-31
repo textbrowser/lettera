@@ -105,25 +105,6 @@ public class FoldersDrawer
 
 	initialize_widget_members();
 	m_adapter = new FoldersDrawerAdapter();
-	m_adapter.registerAdapterDataObserver
-	    (new RecyclerView.AdapterDataObserver()
-	    {
-		@Override
-		public void onItemRangeInserted
-		    (int positionStart, int itemCount)
-		{
-		    m_layout_manager.smoothScrollToPosition
-			(m_recycler, null, positionStart);
-		}
-
-		@Override
-		public void onItemRangeRemoved
-		    (int positionStart, int itemCount)
-		{
-		    m_layout_manager.smoothScrollToPosition
-			(m_recycler, null, positionStart - itemCount);
-		}
-	    });
 	m_layout_manager = new FoldersDrawerLinearLayoutManager(context);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
 	m_recycler.setAdapter(m_adapter);
