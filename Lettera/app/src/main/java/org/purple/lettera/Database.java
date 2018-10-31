@@ -65,9 +65,11 @@ public class Database extends SQLiteOpenHelper
 	{
 	    cursor = m_db.rawQuery
 		("SELECT email_account, " +
+		 "is_regular_folder, " +
 		 "message_count, " +
 		 "name, " +
-		 "new_message_count " +
+		 "new_message_count, " +
+		 "OID " +
 		 "FROM folders WHERE email_account = ? " +
 		 "ORDER BY LOWER(name)",
 		 new String[] {email_account});
@@ -81,9 +83,11 @@ public class Database extends SQLiteOpenHelper
 		    FolderElement folder_element = new FolderElement();
 
 		    folder_element.m_email_address = cursor.getString(0);
-		    folder_element.m_message_count = cursor.getInt(1);
-		    folder_element.m_name = cursor.getString(2);
-		    folder_element.m_new_message_count = cursor.getInt(3);
+		    folder_element.m_is_regular_folder = cursor.getInt(1);
+		    folder_element.m_message_count = cursor.getInt(2);
+		    folder_element.m_name = cursor.getString(3);
+		    folder_element.m_new_message_count = cursor.getInt(4);
+		    folder_element.m_oid = cursor.getInt(5);
 		    array_list.add(folder_element);
 		    cursor.moveToNext();
 		}
@@ -240,6 +244,7 @@ public class Database extends SQLiteOpenHelper
 	{
 	    cursor = m_db.rawQuery
 		("SELECT email_account, " +
+		 "is_regular_folder, " +
 		 "message_count, " +
 		 "name, " +
 		 "new_message_count, " +
@@ -254,10 +259,11 @@ public class Database extends SQLiteOpenHelper
 		FolderElement folder_element = new FolderElement();
 
 		folder_element.m_email_address = cursor.getString(0);
-		folder_element.m_message_count = cursor.getInt(1);
-		folder_element.m_name = cursor.getString(2);
-		folder_element.m_new_message_count = cursor.getInt(3);
-		folder_element.m_oid = cursor.getInt(4);
+		folder_element.m_is_regular_folder = cursor.getInt(1);
+		folder_element.m_message_count = cursor.getInt(2);
+		folder_element.m_name = cursor.getString(3);
+		folder_element.m_new_message_count = cursor.getInt(4);
+		folder_element.m_oid = cursor.getInt(5);
 
 		return folder_element;
 	    }
@@ -764,7 +770,7 @@ public class Database extends SQLiteOpenHelper
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    public void onUpgrade(SQLiteDatabase db, int old_version, int new_version)
     {
         onCreate(db);
     }
@@ -778,13 +784,27 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
+	    {
+		/*
+		** Artificial separator.
+		*/
+
+		FolderElement folder_element = new FolderElement();
+
+		folder_element.m_email_address =
+		    array_list.get(0).m_email_address;
+		folder_element.m_is_regular_folder = 1;
+		folder_element.m_name = "ZZZZZ";
+		array_list.add(folder_element);
+	    }
+
 	    for(FolderElement folder_element : array_list)
 	    {
 		if(folder_element == null)
 		    continue;
 
 		String name = folder_element.m_name.toLowerCase().trim();
-		int is_regular_folder = 1;
+		int is_regular_folder = 2;
 
 		if(name.contains("draft"))
 		    is_regular_folder = 0;
@@ -800,6 +820,8 @@ public class Database extends SQLiteOpenHelper
 		    is_regular_folder = 0;
 		else if(name.contains("trash"))
 		    is_regular_folder = 0;
+		else
+		    is_regular_folder = folder_element.m_is_regular_folder;
 
 		m_db.execSQL
 		    ("REPLACE INTO folders (" +

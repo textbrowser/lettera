@@ -34,11 +34,11 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import java.util.HashSet;
 
 public class FoldersDrawerAdapter extends RecyclerView.Adapter
-					  <FoldersDrawerAdapter.ViewHolder>
 {
     private abstract class IconsEnumerator
     {
@@ -52,7 +52,14 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	public final static int XYZ = 7;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
+    private abstract class ViewHolderTypeEnumerator
+    {
+	public final static int BUTTON1 = 0;
+	public final static int BUTTON2 = 2;
+	public final static int SEPARATOR = 1;
+    }
+
+    public class ViewHolderButton extends RecyclerView.ViewHolder
     {
 	private RadioButton m_button = null;
 
@@ -61,7 +68,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    return m_button;
 	}
 
-	public ViewHolder(RadioButton button, View parent)
+	public ViewHolderButton(RadioButton button, View parent)
 	{
 	    super(button);
 	    m_button = button;
@@ -145,6 +152,8 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		break;
 	    }
 
+	    final float density = m_button.getContext().getResources().
+		getDisplayMetrics().density;
 	    final int oid = folder_element.m_oid;
 
 	    m_button.setEllipsize(TextUtils.TruncateAt.END);
@@ -162,18 +171,48 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 			(Color.parseColor("#5e35b1"));
 		    m_selected_oid = oid;
 		    view.setBackgroundResource(R.drawable.folder_selection);
-		    view.setPadding(15, 15, 15, 15);
+		    view.setPaddingRelative
+			((int) (10 * density), // Start
+			 (int) (5 * density),  // Top
+			 (int) (10 * density), // End
+			 (int) (5 * density)); // Bottom
 		}
 	    });
-	    m_button.setPadding(15, 15, 15, 15);
+
+	    LinearLayout.LayoutParams layout_params =
+		new LinearLayout.LayoutParams
+		(LinearLayout.LayoutParams.MATCH_PARENT,
+		 LinearLayout.LayoutParams.WRAP_CONTENT);
+
+	    layout_params.setMargins
+		((int) (5 * density),  // Left
+                 (int) (5 * density),  // Top
+                 (int) (5 * density),  // Right
+                 (int) (5 * density)); // Bottom
+	    m_button.setLayoutParams(layout_params);
+	    m_button.setPaddingRelative
+                ((int) (10 * density), // Start
+                 (int) (5 * density),  // Top
+                 (int) (10 * density), // End
+                 (int) (5 * density)); // Bottom
 	    m_button.setText(string_buffer.toString());
 	    m_button.setTextColor(Color.BLACK);
-	    m_button.setVisibility(View.VISIBLE);
 
 	    if(m_selected_oid == -1 && name.equals("Inbox"))
 		m_button.performClick();
 	    else if(folder_element.m_oid == m_selected_oid)
 		m_button.performClick();
+	}
+    }
+
+    public class ViewHolderSeparator extends RecyclerView.ViewHolder
+    {
+	private View m_line = null;
+
+	public ViewHolderSeparator(View line, View parent)
+	{
+	    super(line);
+	    m_line = line;
 	}
     }
 
@@ -234,16 +273,36 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     }
 
     @Override
-    public FoldersDrawerAdapter.ViewHolder onCreateViewHolder
-	(ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder
+	(ViewGroup parent, int view_type)
     {
-	RadioButton button = new RadioButton(parent.getContext());
-	RecyclerView.LayoutParams layout_params = new RecyclerView.
-	    LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-			 ViewGroup.LayoutParams.WRAP_CONTENT);
+	switch(view_type)
+	{
+	case ViewHolderTypeEnumerator.BUTTON1:
+	case ViewHolderTypeEnumerator.BUTTON2:
+	    RadioButton button = new RadioButton(parent.getContext());
+	    RecyclerView.LayoutParams layout_params = new RecyclerView.
+		LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+			     ViewGroup.LayoutParams.WRAP_CONTENT);
 
-	button.setLayoutParams(layout_params);
-	return new ViewHolder(button, parent);
+	    button.setLayoutParams(layout_params);
+	    return new ViewHolderButton(button, parent);
+	case ViewHolderTypeEnumerator.SEPARATOR:
+	    View line = new View(parent.getContext());
+	    float density = parent.getContext().getResources().
+		getDisplayMetrics().density;
+
+	    line.setLayoutParams
+		(new LinearLayout.
+		 LayoutParams(LinearLayout.
+			      LayoutParams.MATCH_PARENT, (int) (1 * density)));
+	    line.setBackgroundColor(Color.parseColor("#1f000000"));
+	    return new ViewHolderSeparator(line, parent);
+	default:
+	    break;
+	}
+
+	return null;
     }
 
     @Override
@@ -253,25 +312,51 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     }
 
     @Override
+    public int getItemViewType(int position)
+    {
+	FolderElement folder_element = s_database.folder
+	    (m_email_address, position);
+
+	if(folder_element == null)
+	    return ViewHolderTypeEnumerator.BUTTON1;
+	else if(folder_element.m_is_regular_folder == 0)
+	    return ViewHolderTypeEnumerator.BUTTON1;
+	else if(folder_element.m_is_regular_folder == 2)
+	    return ViewHolderTypeEnumerator.BUTTON2;
+	else
+	    return ViewHolderTypeEnumerator.SEPARATOR;
+    }
+
+    @Override
     public void onBindViewHolder(ViewHolder view_holder, int position)
     {
 	if(view_holder == null)
 	    return;
 
-	if(!m_visible_buttons.contains(view_holder.button()))
-	    m_visible_buttons.add(view_holder.button());
+	switch(getItemViewType(position))
+	{
+	case ViewHolderTypeEnumerator.BUTTON1:
+	case ViewHolderTypeEnumerator.BUTTON2:
+	    ViewHolderButton view_holder_button = (ViewHolderButton)
+		view_holder;
 
-	FolderElement folder_element = s_database.folder
-	    (m_email_address, position);
+	    if(!m_visible_buttons.contains(view_holder_button.button()))
+		m_visible_buttons.add(view_holder_button.button());
 
-	view_holder.set_data(folder_element);
+	    FolderElement folder_element = s_database.folder
+		(m_email_address, position);
+
+	    view_holder_button.set_data(folder_element);
+	    break;
+	}
     }
 
     @Override
     public void onViewRecycled(ViewHolder view_holder)
     {
-	if(view_holder != null)
-	    m_visible_buttons.remove(view_holder.button());
+	if((ViewHolderButton) view_holder != null)
+	    m_visible_buttons.remove
+		(((ViewHolderButton) view_holder).button());
     }
 
     public void set_email_address(String email_address)
