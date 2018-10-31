@@ -52,10 +52,6 @@ public class FoldersDrawer
 	public void onLayoutChildren(RecyclerView.Recycler recycler,
 				     RecyclerView.State state)
 	{
-	    /*
-	    ** Android may terminate!
-	    */
-
 	    try
 	    {
 		super.onLayoutChildren(recycler, state);
@@ -191,12 +187,6 @@ public class FoldersDrawer
 
     public void update()
     {
-	try
-	{
-	    m_adapter.notifyDataSetChanged();
-	}
-	catch(Exception exception)
-	{
-	}
+	m_adapter.notifyDataSetChanged();
     }
 }
