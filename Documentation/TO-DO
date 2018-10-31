@@ -14,6 +14,7 @@ Completed Items
 11.  Restore personal key pairs.
 12.  Retain selected folder in folder drawer.
 13.  Save personal key pairs.
+14.  Separate standard folders from other folders.
 
 Future Items
 
@@ -26,5 +27,4 @@ Remaining Items
 3.   Index failure on Folders Drawer.
 4.   McEliece key generation, exchange, etc.
 5.   Offline and online design.
-6.   Separate standard folders from other folders.
-7.   Status bar on main activity.
+6.   Status bar on main activity.
