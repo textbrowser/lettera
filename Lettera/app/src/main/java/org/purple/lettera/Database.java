@@ -798,6 +798,8 @@ public class Database extends SQLiteOpenHelper
 		array_list.add(folder_element);
 	    }
 
+	    boolean insert_separator = false;
+
 	    for(FolderElement folder_element : array_list)
 	    {
 		if(folder_element == null)
@@ -822,6 +824,12 @@ public class Database extends SQLiteOpenHelper
 		    is_regular_folder = 0;
 		else
 		    is_regular_folder = folder_element.m_is_regular_folder;
+
+		if(is_regular_folder == 0)
+		    insert_separator = true;
+		else if(is_regular_folder == 1)
+		    if(!insert_separator)
+			continue;
 
 		m_db.execSQL
 		    ("REPLACE INTO folders (" +

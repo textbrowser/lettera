@@ -288,9 +288,6 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    button.setLayoutParams(layout_params);
 	    return new ViewHolderButton(button, parent);
 	case ViewHolderTypeEnumerator.SEPARATOR:
-	    if(m_visible_buttons.isEmpty())
-		return null;
-
 	    View line = new View(parent.getContext());
 	    float density = parent.getContext().getResources().
 		getDisplayMetrics().density;
