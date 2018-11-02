@@ -718,6 +718,7 @@ public class Database extends SQLiteOpenHelper
 	*/
 
 	str = "CREATE TABLE IF NOT EXISTS folders (" +
+	    "current_folder INTEGER NOT NULL DEFAULT 1, " +
 	    "email_account TEXT NOT NULL, " +
 	    "is_regular_folder INTEGER NOT NULL DEFAULT 1, " +
 	    "message_count INTEGER NOT NULL DEFAULT 0, " +
@@ -774,7 +775,8 @@ public class Database extends SQLiteOpenHelper
         onCreate(db);
     }
 
-    public void write_folders(ArrayList<FolderElement> array_list)
+    public void write_folders(ArrayList<FolderElement> array_list,
+			      String email_account)
     {
 	if(array_list == null || array_list.isEmpty() || m_db == null)
 	    return;
@@ -783,6 +785,14 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
+	    ContentValues values = new ContentValues();
+
+	    values.put("current_folder", 0);
+	    m_db.update("folders",
+			values,
+			"email_account = ?",
+			new String[] {email_account});
+
 	    {
 		/*
 		** Artificial separator.
@@ -790,8 +800,7 @@ public class Database extends SQLiteOpenHelper
 
 		FolderElement folder_element = new FolderElement();
 
-		folder_element.m_email_address =
-		    array_list.get(0).m_email_address;
+		folder_element.m_email_address = email_account;
 		folder_element.m_is_regular_folder = 1;
 		folder_element.m_name = "ZZZZZ";
 		array_list.add(folder_element);
@@ -832,13 +841,15 @@ public class Database extends SQLiteOpenHelper
 
 		m_db.execSQL
 		    ("REPLACE INTO folders (" +
+		     "current_folder, " +
 		     "email_account, " +
 		     "is_regular_folder, " +
 		     "message_count, " +
 		     "name, " +
 		     "new_message_count) VALUES " +
-		     "(?, ?, ?, ?, ?)",
-		     new String[] {folder_element.m_email_address,
+		     "(?, ?, ?, ?, ?, ?)",
+		     new String[] {String.valueOf(1),
+				   email_account,
 				   String.valueOf(is_regular_folder),
 				   String.valueOf(folder_element.
 						  m_message_count),
@@ -847,6 +858,9 @@ public class Database extends SQLiteOpenHelper
 						  m_new_message_count)});
 	    }
 
+	    m_db.delete("folders",
+			"current_folder = 0 AND email_account = ?",
+			new String[] {email_account});
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)

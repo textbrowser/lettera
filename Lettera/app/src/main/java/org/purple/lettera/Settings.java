@@ -172,55 +172,49 @@ public class Settings
 		}
 	    }
 
-	    try
+	    ((Activity) m_context).runOnUiThread(new Runnable()
 	    {
-		((Activity) m_context).runOnUiThread(new Runnable()
+		@Override
+		public void run()
 		{
-		    @Override
-		    public void run()
+		    try
 		    {
-			try
+			switch(m_protocol)
 			{
-			    switch(m_protocol)
-			    {
-			    case "imaps":
-				break;
-			    case "smtp":
-			    case "smtps":
-				break;
-			    default:
-				break;
-			    }
+			case "imaps":
+			    break;
+			case "smtp":
+			case "smtps":
+			    break;
+			default:
+			    break;
+			}
 
-			    if(m_dialog != null)
-				m_dialog.dismiss();
+			if(m_dialog != null)
+			    m_dialog.dismiss();
 
-			    if(m_error)
-				Windows.show_dialog
-				    (m_context,
-				     m_protocol.toUpperCase() + " test failed!",
-				     "Error");
-			    else
-				Windows.show_dialog
-				    (m_context,
-				     m_protocol.toUpperCase() +
-				     " test succeeded!",
-				     "Success");
-			}
-			catch(Exception exception)
-			{
-			}
-			finally
-			{
-			    if(m_dialog != null)
-				m_dialog.dismiss();
-			}
+			if(m_error)
+			    Windows.show_dialog
+				(m_context,
+				 m_protocol.toUpperCase() + " test failed!",
+				 "Error");
+			else
+			    Windows.show_dialog
+				(m_context,
+				 m_protocol.toUpperCase() +
+				 " test succeeded!",
+				 "Success");
 		    }
-		});
-	    }
-	    catch(Exception exception)
-	    {
-	    }
+		    catch(Exception exception)
+		    {
+		    }
+		    finally
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		}
+	    });
 	}
     }
 
@@ -263,87 +257,76 @@ public class Settings
 		m_error = true;
 	    }
 
-	    try
+	    ((Activity) m_context).runOnUiThread(new Runnable()
 	    {
-		((Activity) m_context).runOnUiThread(new Runnable()
+		@Override
+		public void run()
 		{
-		    @Override
-		    public void run()
-		    {
-			if(m_dialog != null)
-			    m_dialog.dismiss();
+		    if(m_dialog != null)
+			m_dialog.dismiss();
 
-			if(m_encryption_key_pair == null)
+		    if(m_encryption_key_pair == null)
+			m_encryption_key_data.setText
+			    ("SHA-1: " +
+			     Cryptography.sha_1_fingerprint(null));
+		    else
+		    {
+			if(m_database.save_pgp_key_pair(m_encryption_key_pair,
+							"encryption"))
+			{
+			    m_encryption_key_data.setText
+				(Cryptography.
+				 key_information(m_encryption_key_pair.
+						 getPublic()));
+			    m_pgp.set_encryption_key_pair
+				(m_encryption_key_pair);
+			}
+			else
+			{
 			    m_encryption_key_data.setText
 				("SHA-1: " +
 				 Cryptography.sha_1_fingerprint(null));
+			    m_error = true;
+			}
+		    }
+
+		    if(m_signature_key_pair == null)
+			m_signature_key_data.setText
+			    ("SHA-1: " +
+			     Cryptography.sha_1_fingerprint(null));
+		    else
+		    {
+			if(m_database.save_pgp_key_pair(m_signature_key_pair,
+							"signature"))
+			{
+			    m_pgp.set_signature_key_pair(m_signature_key_pair);
+			    m_signature_key_data.setText
+				(Cryptography.
+				 key_information(m_signature_key_pair.
+						 getPublic()));
+			}
 			else
 			{
-			    if(m_database.
-			       save_pgp_key_pair(m_encryption_key_pair,
-						 "encryption"))
-			    {
-				m_encryption_key_data.setText
-				    (Cryptography.
-				     key_information(m_encryption_key_pair.
-						     getPublic()));
-				m_pgp.set_encryption_key_pair
-				    (m_encryption_key_pair);
-			    }
-			    else
-			    {
-				m_encryption_key_data.setText
-				    ("SHA-1: " +
-				     Cryptography.sha_1_fingerprint(null));
-				m_error = true;
-			    }
-			}
-
-			if(m_signature_key_pair == null)
+			    m_error = true;
 			    m_signature_key_data.setText
 				("SHA-1: " +
 				 Cryptography.sha_1_fingerprint(null));
-			else
-			{
-			    if(m_database.
-			       save_pgp_key_pair(m_signature_key_pair,
-						 "signature"))
-			    {
-				m_pgp.set_signature_key_pair
-				    (m_signature_key_pair);
-				m_signature_key_data.setText
-				    (Cryptography.
-				     key_information(m_signature_key_pair.
-						     getPublic()));
-			    }
-			    else
-			    {
-				m_error = true;
-				m_signature_key_data.setText
-				    ("SHA-1: " +
-				     Cryptography.sha_1_fingerprint(null));
-			    }
-			}
-
-			if(!m_error)
-			    Windows.show_dialog
-				(m_context, "Key pairs generated!", "Success");
-			else
-			{
-			    m_database.delete("open_pgp");
-			    m_pgp.set_encryption_key_pair(null);
-			    m_pgp.set_signature_key_pair(null);
-			    Windows.show_dialog
-				(m_context,
-				 "Cannot generate key pairs!",
-				 "Error");
 			}
 		    }
-		});
-	    }
-	    catch(Exception exception)
-	    {
-	    }
+
+		    if(!m_error)
+			Windows.show_dialog
+			    (m_context, "Key pairs generated!", "Success");
+		    else
+		    {
+			m_database.delete("open_pgp");
+			m_pgp.set_encryption_key_pair(null);
+			m_pgp.set_signature_key_pair(null);
+			Windows.show_dialog
+			    (m_context, "Cannot generate key pairs!", "Error");
+		    }
+		}
+	    });
 	}
     }
 

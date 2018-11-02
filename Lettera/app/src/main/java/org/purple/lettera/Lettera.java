@@ -33,7 +33,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -83,23 +82,17 @@ public class Lettera extends AppCompatActivity
 		m_pgp.set_signature_key_pair(null);
 	    }
 
-	    try
+	    Lettera.this.runOnUiThread(new Runnable()
 	    {
-		Lettera.this.runOnUiThread(new Runnable()
+		@Override
+		public void run()
 		{
-		    @Override
-		    public void run()
-		    {
-			populate_folders_from_database();
+		    populate_folders_from_database();
 
-			if(m_dialog != null)
-			    m_dialog.dismiss();
-		    }
-		});
-	    }
-	    catch(Exception exception)
-	    {
-	    }
+		    if(m_dialog != null)
+			m_dialog.dismiss();
+		}
+	    });
 	}
     }
 
@@ -141,47 +134,35 @@ public class Lettera extends AppCompatActivity
 		if(mail.imap_connected())
 		    m_database.delete_folders(email_element.m_inbound_email);
 
-		m_database.write_folders(mail.folders());
+		m_database.write_folders
+		    (mail.folders(), email_element.m_inbound_email);
 		m_folder_names = mail.folder_names();
 	    }
 	    catch(Exception exception)
 	    {
 	    }
 
-	    try
+	    Lettera.this.runOnUiThread(new Runnable()
 	    {
-		Lettera.this.runOnUiThread(new Runnable()
+		@Override
+		public void run()
 		{
-		    @Override
-		    public void run()
+		    try
 		    {
-			ArrayAdapter<String> array_adapter = null;
-
-			if(m_folder_names == null || m_folder_names.isEmpty())
-			    array_adapter = new ArrayAdapter<>
-				(Lettera.this,
-				 android.R.layout.simple_spinner_item,
-				 new String[] {"(Empty)"});
-			else
-			    array_adapter = new ArrayAdapter<>
-				(Lettera.this,
-				 android.R.layout.simple_spinner_item,
-				 m_folder_names);
-
 			m_folders_drawer.set_email_address
 			    (m_database.
 			     settings_element("primary_email_account").
 			     m_value);
 			m_folders_drawer.update();
-
-			if(m_dialog != null)
-			    m_dialog.dismiss();
 		    }
-		});
-	    }
-	    catch(Exception exception)
-	    {
-	    }
+		    catch(Exception exception)
+		    {
+		    }
+
+		    if(m_dialog != null)
+			m_dialog.dismiss();
+		}
+	    });
 	}
     }
 
@@ -335,7 +316,8 @@ public class Lettera extends AppCompatActivity
 			    final ArrayList<FolderElement>
 				array_list = m_mail.folders();
 
-			    m_database.write_folders(array_list);
+			    m_database.write_folders
+				(array_list, m_mail.email_address());
 
 			    Lettera.this.runOnUiThread(new Runnable()
 			    {
