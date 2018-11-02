@@ -451,7 +451,6 @@ public class Database extends SQLiteOpenHelper
 	{
 	    ok = m_db.delete
 		("folders", "email_account = ?", new String[] {account}) > 0;
-
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
