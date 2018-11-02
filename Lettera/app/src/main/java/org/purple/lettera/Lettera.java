@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -334,7 +335,6 @@ public class Lettera extends AppCompatActivity
 			    final ArrayList<FolderElement>
 				array_list = m_mail.folders();
 
-			    m_database.delete_folders(m_mail.email_address());
 			    m_database.write_folders(array_list);
 
 			    Lettera.this.runOnUiThread(new Runnable()
