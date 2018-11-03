@@ -100,10 +100,12 @@ public class Lettera extends AppCompatActivity
     {
 	private ArrayList<String> m_folder_names = null;
 	private Dialog m_dialog = null;
+	private String m_folder_name = "";
 
-	private PopulateFolders(Dialog dialog)
+	private PopulateFolders(Dialog dialog, String folder_name)
 	{
 	    m_dialog = dialog;
+	    m_folder_name = folder_name;
 	}
 
 	@Override
@@ -130,12 +132,10 @@ public class Lettera extends AppCompatActivity
 		     email_element.m_proxy_user);
 
 		mail.connect_imap();
-
-		if(mail.imap_connected())
-		    m_database.delete_folders(email_element.m_inbound_email);
-
 		m_database.write_folders
 		    (mail.folders(), email_element.m_inbound_email);
+		m_database.write_messages
+		    (mail.folder(m_folder_name), email_element.m_inbound_email);
 		m_folder_names = mail.folder_names();
 	    }
 	    catch(Exception exception)
@@ -193,7 +193,9 @@ public class Lettera extends AppCompatActivity
 		 "Downloading e-mail folders and messages.\n" +
 		 "Please be patient.");
 
-	    Thread thread = new Thread(new PopulateFolders(dialog));
+	    Thread thread = new Thread
+		(new PopulateFolders(dialog,
+				     m_folders_drawer.selected_folder_name()));
 
 	    thread.start();
 	}

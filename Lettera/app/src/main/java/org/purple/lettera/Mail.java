@@ -27,12 +27,14 @@
 
 package org.purple.lettera;
 
+import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
 import javax.mail.Folder;
+import javax.mail.Message;
 import javax.mail.Session;
 
 public class Mail
@@ -173,6 +175,23 @@ public class Mail
 	}
     }
 
+    public IMAPFolder folder(String folder_name)
+    {
+	imap();
+
+	if(m_imap == null)
+	    return null;
+	else
+	    try
+	    {
+		return (IMAPFolder) m_imap.getFolder(folder_name);
+	    }
+	    catch(Exception exception)
+	    {
+		return null;
+	    }
+    }
+
     public IMAPStore imap()
     {
 	if(m_imap != null)
@@ -199,6 +218,33 @@ public class Mail
 	}
 
 	return m_imap;
+    }
+
+    public Message[] messages(String folder_name)
+    {
+	imap();
+
+	if(m_imap == null)
+	    return null;
+
+	Message messages[] = null;
+
+	try
+	{
+	    IMAPFolder folder = (IMAPFolder) m_imap.getFolder(folder_name);
+
+	    if(folder != null)
+	    {
+		folder.open(Folder.READ_ONLY);
+		messages = folder.getMessages();
+		folder.close();
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+
+	return messages;
     }
 
     public SMTPTransport smtp()

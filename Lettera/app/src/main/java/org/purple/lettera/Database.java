@@ -27,21 +27,24 @@
 
 package org.purple.lettera;
 
+import com.sun.mail.imap.IMAPFolder;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Base64;
+import android.util.Log;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import javax.mail.Folder;
 import javax.mail.Message;
 
 public class Database extends SQLiteOpenHelper
 {
     private SQLiteDatabase m_db = null;
     private final static String DATABASE_NAME = "lettera.db";
-    private final static int DATABASE_VERSION = 9;
+    private final static int DATABASE_VERSION = 1;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -561,7 +564,7 @@ public class Database extends SQLiteOpenHelper
 	}
 	catch(Exception exception)
 	{
-	    count = -1;
+	    count = 0;
 	}
 	finally
 	{
@@ -589,7 +592,7 @@ public class Database extends SQLiteOpenHelper
 	}
 	catch(Exception exception)
 	{
-	    count = -1;
+	    count = 0;
 	}
 	finally
 	{
@@ -771,7 +774,10 @@ public class Database extends SQLiteOpenHelper
 	    "received_date TEXT NOT NULL, " +
 	    "sent_date TEXT NOT NULL, " +
 	    "subject TEXT NOT NULL, " +
-	    "PRIMARY KEY (email_account, folder_name))";
+	    "uid BIGINT NOT NULL, " +
+	    "PRIMARY KEY (email_account, " +
+	    "folder_name, " +
+	    "uid))";
 
 	try
 	{
@@ -919,10 +925,29 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void write_messages(Message messages[], String email_account)
+    public void write_messages(IMAPFolder folder, String email_account)
     {
-	if(m_db == null || messages == null || messages.length == 0)
+	if(folder == null || m_db == null)
 	    return;
+
+	try
+	{
+	    folder.open(Folder.READ_ONLY);
+	}
+	catch(Exception exception)
+	{
+	    return;
+	}
+
+	Message messages[] = null;
+
+	try
+	{
+	    messages = folder.getMessages();
+	}
+	catch(Exception exception)
+	{
+	}
 
 	m_db.beginTransactionNonExclusive();
 
@@ -930,6 +955,39 @@ public class Database extends SQLiteOpenHelper
 	{
 	    for(int i = 0; i < messages.length; i++)
 	    {
+		Message message = messages[i];
+
+		if(message == null)
+		    continue;
+		else if(!message.isMimeType("text/plain"))
+		    continue;
+
+		try
+		{
+		    m_db.execSQL
+			("REPLACE INTO messages (" +
+			 "email_account, " +
+			 "folder_name, " +
+			 "from_address, " +
+			 "message, " +
+			 "received_date, " +
+			 "sent_date, " +
+			 "subject, " +
+			 "uid) VALUES " +
+			 "(?, ?, ?, ?, ?, ?, ?, ?)",
+			 new String[] {email_account,
+				       message.getFolder().getName(),
+				       message.getFrom().toString(),
+				       message.getContent().toString(),
+				       message.getReceivedDate().toString(),
+				       message.getSentDate().toString(),
+				       message.getSubject(),
+				       String.valueOf(folder.getUID(message))});
+		}
+		catch(Exception exception)
+		{
+		    Log.e("Database.write_messages()", exception.getMessage());
+		}
 	    }
 
 	    m_db.setTransactionSuccessful();
@@ -940,6 +998,14 @@ public class Database extends SQLiteOpenHelper
 	finally
 	{
 	    m_db.endTransaction();
+	}
+
+	try
+	{
+	    folder.close();
+	}
+	catch(Exception exception)
+	{
 	}
     }
 }

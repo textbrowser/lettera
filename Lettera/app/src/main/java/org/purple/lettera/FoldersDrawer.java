@@ -62,11 +62,11 @@ public class FoldersDrawer
 	}
     }
 
+    private FoldersDrawerAdapter m_adapter = null;
     private FoldersDrawerLinearLayoutManager m_layout_manager = null;
     private ImageButton m_close_button = null;
     private PopupWindow m_popup_window = null;
     private RecyclerView m_recycler = null;
-    private RecyclerView.Adapter m_adapter = null;
     private TextView m_email_address = null;
     private View m_parent = null;
     private View m_view = null;
@@ -128,6 +128,11 @@ public class FoldersDrawer
 	    });
     }
 
+    public String selected_folder_name()
+    {
+	return m_adapter.selected_folder_name();
+    }
+
     public void dismiss()
     {
 	m_popup_window.dismiss();
@@ -135,7 +140,7 @@ public class FoldersDrawer
 
     public void set_email_address(String email_address)
     {
-	((FoldersDrawerAdapter) m_adapter).set_email_address(email_address);
+	m_adapter.set_email_address(email_address);
 
 	if(email_address.trim().isEmpty())
 	    m_email_address.setText("e-mail@e-mail.org");
