@@ -41,7 +41,7 @@ public class Database extends SQLiteOpenHelper
 {
     private SQLiteDatabase m_db = null;
     private final static String DATABASE_NAME = "lettera.db";
-    private final static int DATABASE_VERSION = 8;
+    private final static int DATABASE_VERSION = 9;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -741,24 +741,6 @@ public class Database extends SQLiteOpenHelper
 	{
 	}
 
-	str = "CREATE TABLE IF NOT EXISTS letters (" +
-	    "email_account TEXT NOT NULL, " +
-	    "folder_name TEXT NOT NULL, " +
-	    "from_address TEXT NOT NULL, " +
-	    "message TEXT, " +
-	    "received_date TEXT NOT NULL, " +
-	    "sent_date TEXT NOT NULL, " +
-	    "subject TEXT NOT NULL, " +
-	    "PRIMARY KEY (email_account, folder_name))";
-
-	try
-	{
-	    db.execSQL(str);
-	}
-	catch(Exception exception)
-	{
-	}
-
 	/*
 	** Do not set DELETE CASCADE as email_accounts entries are
 	** prepared via REPLACE.
@@ -772,6 +754,24 @@ public class Database extends SQLiteOpenHelper
 	    "name TEXT NOT NULL, " +
 	    "new_message_count INTEGER NOT NULL DEFAULT 0, " +
 	    "PRIMARY KEY (email_account, name))";
+
+	try
+	{
+	    db.execSQL(str);
+	}
+	catch(Exception exception)
+	{
+	}
+
+	str = "CREATE TABLE IF NOT EXISTS messages (" +
+	    "email_account TEXT NOT NULL, " +
+	    "folder_name TEXT NOT NULL, " +
+	    "from_address TEXT NOT NULL, " +
+	    "message TEXT, " +
+	    "received_date TEXT NOT NULL, " +
+	    "sent_date TEXT NOT NULL, " +
+	    "subject TEXT NOT NULL, " +
+	    "PRIMARY KEY (email_account, folder_name))";
 
 	try
 	{
