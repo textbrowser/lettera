@@ -177,19 +177,19 @@ public class Mail
 
     public IMAPFolder folder(String folder_name)
     {
-	imap();
+	try
+	{
+	    IMAPFolder folder = (IMAPFolder) m_imap.getFolder(folder_name);
 
-	if(m_imap == null)
+	    if(folder == null)
+		return (IMAPFolder) m_imap.getDefaultFolder();
+	    else
+		return folder;
+	}
+	catch(Exception exception)
+	{
 	    return null;
-	else
-	    try
-	    {
-		return (IMAPFolder) m_imap.getFolder(folder_name);
-	    }
-	    catch(Exception exception)
-	    {
-		return null;
-	    }
+	}
     }
 
     public IMAPStore imap()
@@ -222,11 +222,6 @@ public class Mail
 
     public Message[] messages(String folder_name)
     {
-	imap();
-
-	if(m_imap == null)
-	    return null;
-
 	Message messages[] = null;
 
 	try

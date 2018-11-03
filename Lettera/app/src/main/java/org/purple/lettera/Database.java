@@ -28,6 +28,7 @@
 package org.purple.lettera;
 
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPMessage;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
