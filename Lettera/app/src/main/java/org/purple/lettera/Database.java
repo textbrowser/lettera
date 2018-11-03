@@ -35,6 +35,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Base64;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import javax.mail.Message;
 
 public class Database extends SQLiteOpenHelper
 {
@@ -571,6 +572,34 @@ public class Database extends SQLiteOpenHelper
 	return count;
     }
 
+    public int message_count(String email_account, String folder_name)
+    {
+	Cursor cursor = null;
+	int count = 0;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT COUNT(*) FROM messages WHERE " +
+		 "email_account = ? AND folder_name = ?",
+		 new String[] {email_account, folder_name});
+
+	    if(cursor != null && cursor.moveToFirst())
+		count = cursor.getInt(0);
+	}
+	catch(Exception exception)
+	{
+	    count = -1;
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return count;
+    }
+
     public static synchronized Database instance()
     {
 	return s_instance; // Should never be null.
@@ -879,6 +908,30 @@ public class Database extends SQLiteOpenHelper
 	    m_db.delete("folders",
 			"current_folder = 0 AND email_account = ?",
 			new String[] {email_account});
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+    }
+
+    public void write_messages(Message messages[], String email_account)
+    {
+	if(m_db == null || messages == null || messages.length == 0)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    for(int i = 0; i < messages.length; i++)
+	    {
+	    }
+
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
