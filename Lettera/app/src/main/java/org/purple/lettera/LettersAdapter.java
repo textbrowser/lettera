@@ -34,11 +34,31 @@ import android.view.ViewGroup;
 
 public class LettersAdapter extends RecyclerView.Adapter
 {
-    public class LettersViewHolder extends RecyclerView.ViewHolder
+    private abstract class ViewHolderTypeEnumerator
     {
-	public LettersViewHolder(View child, View parent)
+	public final static int MESSAGE = 0;
+	public final static int SEPARATOR = 1;
+    }
+
+    public class ViewHolderMessage extends RecyclerView.ViewHolder
+    {
+	private MessageItem m_message_item = null;
+
+	public ViewHolderMessage(MessageItem message_item)
 	{
-	    super(child);
+	    super(message_item.view());
+	    m_message_item = message_item;
+	}
+    }
+
+    public class ViewHolderSeparator extends RecyclerView.ViewHolder
+    {
+	private View m_line = null;
+
+	public ViewHolderSeparator(View line, View parent)
+	{
+	    super(line);
+	    m_line = line;
 	}
     }
 
@@ -51,16 +71,17 @@ public class LettersAdapter extends RecyclerView.Adapter
     }
 
     @Override
-    public LettersViewHolder onCreateViewHolder
+    public RecyclerView.ViewHolder onCreateViewHolder
 	(ViewGroup parent, int view_type)
     {
-	return null;
+	return new ViewHolderMessage
+	    (new MessageItem(parent.getContext(), parent));
     }
 
     @Override
     public int getItemCount()
     {
-	return 0;
+	return s_database.message_count(m_email_address, m_folder_name);
     }
 
     @Override

@@ -190,7 +190,8 @@ public class Lettera extends AppCompatActivity
 	    Windows.show_progress_dialog
 		(Lettera.this,
 		 dialog,
-		 "Downloading e-mail folders.\nPlease be patient.");
+		 "Downloading e-mail folders and messages.\n" +
+		 "Please be patient.");
 
 	    Thread thread = new Thread(new PopulateFolders(dialog));
 
@@ -313,11 +314,8 @@ public class Lettera extends AppCompatActivity
 
 			if(m_mail != null && m_mail.imap_connected())
 			{
-			    final ArrayList<FolderElement>
-				array_list = m_mail.folders();
-
 			    m_database.write_folders
-				(array_list, m_mail.email_address());
+				(m_mail.folders(), m_mail.email_address());
 
 			    Lettera.this.runOnUiThread(new Runnable()
 			    {

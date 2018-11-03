@@ -169,7 +169,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 			(s_selected_icons[view.getId()], 0, 0, 0);
 		    ((RadioButton) view).setTextColor
 			(Color.parseColor("#5e35b1"));
-		    m_selected_name = folder_name;
+		    m_selected_folder_name = folder_name;
 		    view.setBackgroundResource(R.drawable.folder_selection);
 		    view.setPaddingRelative
 			((int) (10 * density), // Start
@@ -198,9 +198,9 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    m_button.setText(string_buffer.toString());
 	    m_button.setTextColor(Color.BLACK);
 
-	    if(m_selected_name.isEmpty() && name.equals("Inbox"))
+	    if(m_selected_folder_name.isEmpty() && name.equals("Inbox"))
 		m_button.performClick();
-	    else if(folder_element.m_name.equals(m_selected_name))
+	    else if(folder_element.m_name.equals(m_selected_folder_name))
 		m_button.performClick();
 	}
     }
@@ -218,7 +218,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 
     private HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
     private String m_email_address = "";
-    private String m_selected_name = "";
+    private String m_selected_folder_name = "";
     private final static Database s_database = Database.instance();
     private final static int s_icons[] = new int[IconsEnumerator.XYZ + 1];
     private final static int s_selected_icons[] =
@@ -303,6 +303,11 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	}
 
 	return null;
+    }
+
+    public String selected_folder_name()
+    {
+	return m_selected_folder_name;
     }
 
     @Override
