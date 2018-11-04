@@ -99,7 +99,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    else
 		name = folder_element.m_name;
 
-	    string_buffer.append(name);
+	    string_buffer.append(folder_element.m_name);
 	    string_buffer.append(" (");
 	    string_buffer.append(folder_element.m_message_count);
 	    string_buffer.append(")");

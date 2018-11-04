@@ -70,6 +70,7 @@ public class Database extends SQLiteOpenHelper
 	{
 	    cursor = m_db.rawQuery
 		("SELECT email_account, " +
+		 "full_name, " +
 		 "is_regular_folder, " +
 		 "message_count, " +
 		 "name, " +
@@ -88,11 +89,12 @@ public class Database extends SQLiteOpenHelper
 		    FolderElement folder_element = new FolderElement();
 
 		    folder_element.m_email_address = cursor.getString(0);
-		    folder_element.m_is_regular_folder = cursor.getInt(1);
-		    folder_element.m_message_count = cursor.getInt(2);
-		    folder_element.m_name = cursor.getString(3);
-		    folder_element.m_new_message_count = cursor.getInt(4);
-		    folder_element.m_oid = cursor.getInt(5);
+		    folder_element.m_full_name = cursor.getString(1);
+		    folder_element.m_is_regular_folder = cursor.getInt(2);
+		    folder_element.m_message_count = cursor.getInt(3);
+		    folder_element.m_name = cursor.getString(4);
+		    folder_element.m_new_message_count = cursor.getInt(5);
+		    folder_element.m_oid = cursor.getInt(6);
 		    array_list.add(folder_element);
 		    cursor.moveToNext();
 		}
@@ -249,6 +251,7 @@ public class Database extends SQLiteOpenHelper
 	{
 	    cursor = m_db.rawQuery
 		("SELECT email_account, " +
+		 "full_name, " +
 		 "is_regular_folder, " +
 		 "message_count, " +
 		 "name, " +
@@ -264,12 +267,12 @@ public class Database extends SQLiteOpenHelper
 		FolderElement folder_element = new FolderElement();
 
 		folder_element.m_email_address = cursor.getString(0);
-		folder_element.m_is_regular_folder = cursor.getInt(1);
-		folder_element.m_message_count = cursor.getInt(2);
-		folder_element.m_name = cursor.getString(3);
-		folder_element.m_new_message_count = cursor.getInt(4);
-		folder_element.m_oid = cursor.getInt(5);
-
+		folder_element.m_full_name = cursor.getString(1);
+		folder_element.m_is_regular_folder = cursor.getInt(2);
+		folder_element.m_message_count = cursor.getInt(3);
+		folder_element.m_name = cursor.getString(4);
+		folder_element.m_new_message_count = cursor.getInt(5);
+		folder_element.m_oid = cursor.getInt(6);
 		return folder_element;
 	    }
 	}
@@ -323,6 +326,32 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	return null;
+    }
+
+    public String folder_full_name(String email_account, String folder_name)
+    {
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT full_name FROM folders WHERE " +
+		 "email_account = ? AND LOWER(name) = LOWER(?)",
+		 new String[] {email_account, folder_name});
+
+	    if(cursor != null && cursor.moveToFirst())
+		return cursor.getString(0);
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return "";
     }
 
     public String save_email(ContentValues content_values)
@@ -552,7 +581,6 @@ public class Database extends SQLiteOpenHelper
     public int folder_count(String email_account)
     {
 	Cursor cursor = null;
-	int count = 0;
 
 	try
 	{
@@ -561,11 +589,10 @@ public class Database extends SQLiteOpenHelper
 		 new String[] {email_account});
 
 	    if(cursor != null && cursor.moveToFirst())
-		count = cursor.getInt(0);
+		return cursor.getInt(0);
 	}
 	catch(Exception exception)
 	{
-	    count = 0;
 	}
 	finally
 	{
@@ -573,27 +600,25 @@ public class Database extends SQLiteOpenHelper
 		cursor.close();
 	}
 
-	return count;
+	return 0;
     }
 
     public int message_count(String email_account, String folder_name)
     {
 	Cursor cursor = null;
-	int count = 0;
 
 	try
 	{
 	    cursor = m_db.rawQuery
 		("SELECT COUNT(*) FROM messages WHERE " +
-		 "email_account = ? AND folder_name = ?",
+		 "email_account = ? AND folder_name = LOWER(?)",
 		 new String[] {email_account, folder_name});
 
 	    if(cursor != null && cursor.moveToFirst())
-		count = cursor.getInt(0);
+		return cursor.getInt(0);
 	}
 	catch(Exception exception)
 	{
-	    count = 0;
 	}
 	finally
 	{
@@ -601,7 +626,7 @@ public class Database extends SQLiteOpenHelper
 		cursor.close();
 	}
 
-	return count;
+	return 0;
     }
 
     public static synchronized Database instance()
@@ -630,6 +655,7 @@ public class Database extends SQLiteOpenHelper
 		{"contacts",
 		 "email_accounts",
 		 "folders",
+		 "messages",
 		 "open_pgp",
 		 "settings"};
 
@@ -753,6 +779,7 @@ public class Database extends SQLiteOpenHelper
 	str = "CREATE TABLE IF NOT EXISTS folders (" +
 	    "current_folder INTEGER NOT NULL DEFAULT 1, " +
 	    "email_account TEXT NOT NULL, " +
+	    "full_name TEXT NOT NULL, " +
 	    "is_regular_folder INTEGER NOT NULL DEFAULT 1, " +
 	    "message_count INTEGER NOT NULL DEFAULT 0, " +
 	    "name TEXT NOT NULL, " +
@@ -897,13 +924,15 @@ public class Database extends SQLiteOpenHelper
 		    ("REPLACE INTO folders (" +
 		     "current_folder, " +
 		     "email_account, " +
+		     "full_name, " +
 		     "is_regular_folder, " +
 		     "message_count, " +
 		     "name, " +
 		     "new_message_count) VALUES " +
-		     "(?, ?, ?, ?, ?, ?)",
+		     "(?, ?, ?, ?, ?, ?, ?)",
 		     new String[] {String.valueOf(1),
 				   email_account,
+				   folder_element.m_full_name,
 				   String.valueOf(is_regular_folder),
 				   String.valueOf(folder_element.
 						  m_message_count),
@@ -937,6 +966,7 @@ public class Database extends SQLiteOpenHelper
 	}
 	catch(Exception exception)
 	{
+	    Log.e("Database.write_messages()", exception.getMessage());
 	    return;
 	}
 
@@ -960,11 +990,40 @@ public class Database extends SQLiteOpenHelper
 
 		if(message == null)
 		    continue;
-		else if(!message.isMimeType("text/plain"))
-		    continue;
 
 		try
 		{
+		    String strings[] = new String[8];
+
+		    strings[0] = email_account;
+		    strings[1] = folder.getName().toLowerCase();
+
+		    if(message.getFrom() != null)
+			strings[2] = message.getFrom().toString();
+		    else
+			strings[2] = "unknown@unknown.org";
+
+		    if(message.getContent() != null)
+			strings[3] = message.getContent().toString().trim();
+		    else
+			strings[3] = "(empty)";
+
+		    if(message.getReceivedDate() != null)
+			strings[4] = message.getReceivedDate().toString();
+		    else
+			strings[4] = "01/01/1900";
+
+		    if(message.getSentDate() != null)
+			strings[5] = message.getSentDate().toString();
+		    else
+			strings[5] = "01/01/1900";
+
+		    if(message.getSubject() != null)
+			strings[6] = message.getSubject().trim();
+		    else
+			strings[6] = "(no subject)";
+
+		    strings[7] = String.valueOf(folder.getUID(message));
 		    m_db.execSQL
 			("REPLACE INTO messages (" +
 			 "email_account, " +
@@ -976,14 +1035,7 @@ public class Database extends SQLiteOpenHelper
 			 "subject, " +
 			 "uid) VALUES " +
 			 "(?, ?, ?, ?, ?, ?, ?, ?)",
-			 new String[] {email_account,
-				       message.getFolder().getName(),
-				       message.getFrom().toString(),
-				       message.getContent().toString(),
-				       message.getReceivedDate().toString(),
-				       message.getSentDate().toString(),
-				       message.getSubject(),
-				       String.valueOf(folder.getUID(message))});
+			 strings);
 		}
 		catch(Exception exception)
 		{

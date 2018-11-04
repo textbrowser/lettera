@@ -128,6 +128,11 @@ public class FoldersDrawer
 	    });
     }
 
+    public String email_address()
+    {
+	return m_email_address.getText().toString();
+    }
+
     public String selected_folder_name()
     {
 	return m_adapter.selected_folder_name();

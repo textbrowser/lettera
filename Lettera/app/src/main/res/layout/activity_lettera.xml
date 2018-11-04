@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <android.support.design.widget.AppBarLayout
@@ -97,27 +97,17 @@
                     android:background="@drawable/default_settings" />
 
             </LinearLayout>
+
         </android.support.design.widget.AppBarLayout>
 
-        <ScrollView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/messages"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:orientation="vertical"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/content"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-        </ScrollView>
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp" />
 
     </LinearLayout>
 

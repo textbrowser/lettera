@@ -27,6 +27,7 @@
 
 package org.purple.lettera;
 
+import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;
@@ -115,6 +116,7 @@ public class Mail
 		}
 
 		folder_element.m_email_address = m_inbound_email;
+		folder_element.m_full_name = folder.getFullName();
 		folder_element.m_name = folder.getName();
 		array_list.add(folder_element);
 	    }
@@ -179,12 +181,7 @@ public class Mail
     {
 	try
 	{
-	    IMAPFolder folder = (IMAPFolder) m_imap.getFolder(folder_name);
-
-	    if(folder == null)
-		return (IMAPFolder) m_imap.getDefaultFolder();
-	    else
-		return folder;
+	    return (IMAPFolder) m_imap.getFolder(folder_name);
 	}
 	catch(Exception exception)
 	{

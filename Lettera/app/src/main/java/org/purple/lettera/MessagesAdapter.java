@@ -27,12 +27,14 @@
 
 package org.purple.lettera;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class LettersAdapter extends RecyclerView.Adapter
+public class MessagesAdapter extends RecyclerView.Adapter
 {
     private abstract class ViewHolderTypeEnumerator
     {
@@ -62,12 +64,13 @@ public class LettersAdapter extends RecyclerView.Adapter
 	}
     }
 
+    private Database m_database = null;
     private String m_email_address = "";
     private String m_folder_name = "";
-    private final static Database s_database = Database.instance();
 
-    public LettersAdapter()
+    public MessagesAdapter(Context context)
     {
+	m_database = Database.instance(context);
     }
 
     @Override
@@ -81,7 +84,7 @@ public class LettersAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-	return s_database.message_count(m_email_address, m_folder_name);
+	return m_database.message_count(m_email_address, m_folder_name);
     }
 
     @Override

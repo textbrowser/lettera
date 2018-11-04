@@ -28,11 +28,15 @@
 package org.purple.lettera;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,6 +50,27 @@ import java.util.concurrent.TimeUnit;
 
 public class Lettera extends AppCompatActivity
 {
+    private class LetteraLinearLayoutManager extends LinearLayoutManager
+    {
+	LetteraLinearLayoutManager(Context context)
+	{
+	    super(context);
+	}
+
+	@Override
+	public void onLayoutChildren(RecyclerView.Recycler recycler,
+				     RecyclerView.State state)
+	{
+	    try
+	    {
+		super.onLayoutChildren(recycler, state);
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	}
+    }
+
     private class PopulateContainers implements Runnable
     {
 	private Dialog m_dialog = null;
@@ -98,7 +123,6 @@ public class Lettera extends AppCompatActivity
 
     private class PopulateFolders implements Runnable
     {
-	private ArrayList<String> m_folder_names = null;
 	private Dialog m_dialog = null;
 	private String m_folder_name = "";
 
@@ -136,7 +160,6 @@ public class Lettera extends AppCompatActivity
 		    (mail.folders(), email_element.m_inbound_email);
 		m_database.write_messages
 		    (mail.folder(m_folder_name), email_element.m_inbound_email);
-		m_folder_names = mail.folder_names();
 	    }
 	    catch(Exception exception)
 	    {
@@ -149,6 +172,7 @@ public class Lettera extends AppCompatActivity
 		{
 		    try
 		    {
+			m_adapter.notifyDataSetChanged();
 			m_folders_drawer.set_email_address
 			    (m_database.
 			     settings_element("primary_email_account").
@@ -174,6 +198,9 @@ public class Lettera extends AppCompatActivity
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private ImageButton m_folders_drawer_button = null;
+    private LetteraLinearLayoutManager m_layout_manager = null;
+    private MessagesAdapter m_adapter = null;
+    private RecyclerView m_recycler = null;
     private ScheduledExecutorService m_folders_drawer_scheduler = null;
     private Settings m_settings = null;
     private View m_vertical_separator = null;
@@ -195,7 +222,11 @@ public class Lettera extends AppCompatActivity
 
 	    Thread thread = new Thread
 		(new PopulateFolders(dialog,
-				     m_folders_drawer.selected_folder_name()));
+				     m_database.
+				     folder_full_name(m_folders_drawer.
+						      email_address(),
+						      m_folders_drawer.
+						      selected_folder_name())));
 
 	    thread.start();
 	}
@@ -214,6 +245,7 @@ public class Lettera extends AppCompatActivity
 	m_folders_drawer_button = (ImageButton) findViewById
 	    (R.id.folders_drawer_button);
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
+	m_recycler = (RecyclerView) findViewById(R.id.messages);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
 	m_vertical_separator = findViewById(R.id.vertical_separator);
     }
@@ -358,9 +390,16 @@ public class Lettera extends AppCompatActivity
 	*/
 
 	initialize_widget_members();
+	m_adapter = new MessagesAdapter(getApplicationContext());
 	m_database = Database.instance(getApplicationContext());
 	m_folders_drawer = new FoldersDrawer
 	    (Lettera.this, findViewById(R.id.main_layout));
+	m_layout_manager = new LetteraLinearLayoutManager
+	    (getApplicationContext());
+	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
+	m_recycler.setAdapter(m_adapter);
+	m_recycler.setLayoutManager(m_layout_manager);
+	m_recycler.setHasFixedSize(true);
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	new Handler().postDelayed(new Runnable()
 	{
@@ -389,7 +428,7 @@ public class Lettera extends AppCompatActivity
 	    }
 	}, 500);
 	prepare_button_listeners();
-	prepare_folders_widgets();
+	prepare_folders_and_messages_widgets();
 	prepare_generic_widgets();
 	prepare_icons();
 	prepare_schedulers();
@@ -427,13 +466,17 @@ public class Lettera extends AppCompatActivity
 	}
     }
 
-    public void prepare_folders_widgets()
+    public void prepare_folders_and_messages_widgets()
     {
 	SettingsElement settings_element = m_database.settings_element
 	    ("primary_email_account");
 
 	if(settings_element != null)
+	{
+	    m_adapter.set_email_address(settings_element.m_value);
+	    m_adapter.set_folder_name("Inbox");
 	    m_folders_drawer.set_email_address(settings_element.m_value);
+	}
     }
 
     public void prepare_generic_widgets()
