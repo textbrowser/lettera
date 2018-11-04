@@ -611,7 +611,7 @@ public class Database extends SQLiteOpenHelper
 	{
 	    cursor = m_db.rawQuery
 		("SELECT COUNT(*) FROM messages WHERE " +
-		 "email_account = ? AND folder_name = LOWER(?)",
+		 "email_account = ? AND LOWER(folder_name) = LOWER(?)",
 		 new String[] {email_account, folder_name});
 
 	    if(cursor != null && cursor.moveToFirst())
@@ -985,6 +985,15 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
+	    ContentValues values = new ContentValues();
+
+	    values.put("current_message", 0);
+	    m_db.update("messages",
+			values,
+			"email_account = ? AND LOWER(folder_name) = LOWER(?)",
+			new String[] {email_account,
+				      folder.getName()});
+
 	    for(int i = 0; i < messages.length; i++)
 	    {
 		Message message = messages[i];
@@ -994,39 +1003,41 @@ public class Database extends SQLiteOpenHelper
 
 		try
 		{
-		    String strings[] = new String[8];
+		    String strings[] = new String[9];
 
-		    strings[0] = email_account;
-		    strings[1] = folder.getName().toLowerCase();
+		    strings[0] = "1";
+		    strings[1] = email_account;
+		    strings[2] = folder.getName().toLowerCase();
 
 		    if(message.getFrom() != null)
-			strings[2] = message.getFrom().toString();
+			strings[3] = message.getFrom().toString();
 		    else
-			strings[2] = "unknown@unknown.org";
+			strings[3] = "unknown@unknown.org";
 
 		    if(message.getContent() != null)
-			strings[3] = message.getContent().toString().trim();
+			strings[4] = message.getContent().toString().trim();
 		    else
-			strings[3] = "(empty)";
+			strings[4] = "(empty)";
 
 		    if(message.getReceivedDate() != null)
-			strings[4] = message.getReceivedDate().toString();
-		    else
-			strings[4] = "01/01/1900";
-
-		    if(message.getSentDate() != null)
-			strings[5] = message.getSentDate().toString();
+			strings[5] = message.getReceivedDate().toString();
 		    else
 			strings[5] = "01/01/1900";
 
-		    if(message.getSubject() != null)
-			strings[6] = message.getSubject().trim();
+		    if(message.getSentDate() != null)
+			strings[6] = message.getSentDate().toString();
 		    else
-			strings[6] = "(no subject)";
+			strings[6] = "01/01/1900";
 
-		    strings[7] = String.valueOf(folder.getUID(message));
+		    if(message.getSubject() != null)
+			strings[7] = message.getSubject().trim();
+		    else
+			strings[7] = "(no subject)";
+
+		    strings[8] = String.valueOf(folder.getUID(message));
 		    m_db.execSQL
 			("REPLACE INTO messages (" +
+			 "current_message, " +
 			 "email_account, " +
 			 "folder_name, " +
 			 "from_address, " +
@@ -1035,7 +1046,7 @@ public class Database extends SQLiteOpenHelper
 			 "sent_date, " +
 			 "subject, " +
 			 "uid) VALUES " +
-			 "(?, ?, ?, ?, ?, ?, ?, ?)",
+			 "(?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			 strings);
 		}
 		catch(Exception exception)
@@ -1044,6 +1055,11 @@ public class Database extends SQLiteOpenHelper
 		}
 	    }
 
+	    m_db.delete("messages",
+			"current_message = 0 AND " +
+			"email_account = ? AND " +
+			"LOWER(folder_name) = LOWER(?)",
+			new String[] {email_account, folder.getName()});
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
