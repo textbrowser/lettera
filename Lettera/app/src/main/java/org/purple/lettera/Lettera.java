@@ -157,7 +157,7 @@ public class Lettera extends AppCompatActivity
 
 		mail.connect_imap();
 		m_database.write_folders
-		    (mail.folders(), email_element.m_inbound_email);
+		    (mail.folder_elements(), email_element.m_inbound_email);
 		m_database.write_messages
 		    (mail.folder(m_folder_name), email_element.m_inbound_email);
 	    }
@@ -349,7 +349,8 @@ public class Lettera extends AppCompatActivity
 			if(m_mail != null && m_mail.imap_connected())
 			{
 			    m_database.write_folders
-				(m_mail.folders(), m_mail.email_address());
+				(m_mail.folder_elements(),
+				 m_mail.email_address());
 
 			    Lettera.this.runOnUiThread(new Runnable()
 			    {

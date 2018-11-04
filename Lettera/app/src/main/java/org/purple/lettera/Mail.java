@@ -87,7 +87,7 @@ public class Mail
 	smtp();
     }
 
-    public ArrayList<FolderElement> folders()
+    public ArrayList<FolderElement> folder_elements()
     {
 	try
 	{
@@ -219,24 +219,40 @@ public class Mail
 
     public Message[] messages(String folder_name)
     {
+	IMAPFolder folder = null;
 	Message messages[] = null;
 
 	try
 	{
-	    IMAPFolder folder = (IMAPFolder) m_imap.getFolder(folder_name);
-
-	    if(folder != null)
-	    {
+	    if((folder = (IMAPFolder) m_imap.getFolder(folder_name)) == null)
+		return null;
+	    else
 		folder.open(Folder.READ_ONLY);
-		messages = folder.getMessages();
-		folder.close();
-	    }
+	}
+	catch(Exception exception)
+	{
+	    return null;
+	}
+
+	try
+	{
+	    return folder.getMessages();
 	}
 	catch(Exception exception)
 	{
 	}
+	finally
+	{
+	    try
+	    {
+		folder.close();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	}
 
-	return messages;
+	return null;
     }
 
     public SMTPTransport smtp()
