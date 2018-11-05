@@ -801,6 +801,7 @@ public class Database extends SQLiteOpenHelper
 	    "from_address TEXT NOT NULL, " +
 	    "message TEXT, " +
 	    "received_date TEXT NOT NULL, " +
+	    "received_date_unix_epoch BIGINT NOT NULL, " +
 	    "sent_date TEXT NOT NULL, " +
 	    "subject TEXT NOT NULL, " +
 	    "uid BIGINT NOT NULL, " +
@@ -1003,7 +1004,7 @@ public class Database extends SQLiteOpenHelper
 
 		try
 		{
-		    String strings[] = new String[9];
+		    String strings[] = new String[10];
 
 		    strings[0] = "1";
 		    strings[1] = email_account;
@@ -1020,21 +1021,28 @@ public class Database extends SQLiteOpenHelper
 			strings[4] = "(empty)";
 
 		    if(message.getReceivedDate() != null)
+		    {
 			strings[5] = message.getReceivedDate().toString();
+			strings[6] = String.valueOf
+			    (message.getReceivedDate().getTime());
+		    }
 		    else
-			strings[5] = "01/01/1900";
+		    {
+			strings[5] = "01/01/1970";
+			strings[6] = "0";
+		    }
 
 		    if(message.getSentDate() != null)
-			strings[6] = message.getSentDate().toString();
+			strings[7] = message.getSentDate().toString();
 		    else
-			strings[6] = "01/01/1900";
+			strings[7] = "01/01/1970";
 
 		    if(message.getSubject() != null)
-			strings[7] = message.getSubject().trim();
+			strings[8] = message.getSubject().trim();
 		    else
-			strings[7] = "(no subject)";
+			strings[8] = "(no subject)";
 
-		    strings[8] = String.valueOf(folder.getUID(message));
+		    strings[9] = String.valueOf(folder.getUID(message));
 		    m_db.execSQL
 			("REPLACE INTO messages (" +
 			 "current_message, " +
@@ -1043,10 +1051,11 @@ public class Database extends SQLiteOpenHelper
 			 "from_address, " +
 			 "message, " +
 			 "received_date, " +
+			 "received_date_unix_epoch, " +
 			 "sent_date, " +
 			 "subject, " +
 			 "uid) VALUES " +
-			 "(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			 strings);
 		}
 		catch(Exception exception)
