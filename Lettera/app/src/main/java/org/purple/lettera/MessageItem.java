@@ -32,12 +32,23 @@ import android.graphics.Canvas;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class MessageItem extends View
 {
     private Context m_context = null;
     private LayoutInflater m_inflater = null;
+    private TextView m_date = null;
+    private TextView m_from = null;
+    private TextView m_subject = null;
     private View m_view = null;
+
+    private void initialize_widget_members()
+    {
+	m_date = (TextView) m_view.findViewById(R.id.date);
+	m_from = (TextView) m_view.findViewById(R.id.from);
+	m_subject = (TextView) m_view.findViewById(R.id.subject);
+    }
 
     @Override
     protected void onDraw(Canvas canvas)
@@ -52,6 +63,7 @@ public class MessageItem extends View
 	m_inflater = (LayoutInflater) m_context.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 	m_view = m_inflater.inflate(R.layout.letter_line, view_group, false);
+	initialize_widget_members();
     }
 
     public View view()
@@ -62,6 +74,11 @@ public class MessageItem extends View
     public void set_data(MessageElement message_element)
     {
 	if(message_element == null)
+	{
+	    m_view.setVisibility(View.GONE);
 	    return;
+	}
+
+	m_view.setVisibility(View.VISIBLE);
     }
 }
