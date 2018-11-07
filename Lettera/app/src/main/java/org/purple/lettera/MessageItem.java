@@ -58,4 +58,10 @@ public class MessageItem extends View
     {
 	return m_view;
     }
+
+    public void set_data(MessageElement message_element)
+    {
+	if(message_element == null)
+	    return;
+    }
 }

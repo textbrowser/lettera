@@ -345,6 +345,9 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    ViewHolderButton view_holder_button = (ViewHolderButton)
 		view_holder;
 
+	    if(view_holder_button == null)
+		return;
+
 	    if(!m_visible_buttons.contains(view_holder_button.button()))
 		m_visible_buttons.add(view_holder_button.button());
 

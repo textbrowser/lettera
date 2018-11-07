@@ -94,7 +94,7 @@ public class Database extends SQLiteOpenHelper
 		    folder_element.m_message_count = cursor.getInt(3);
 		    folder_element.m_name = cursor.getString(4);
 		    folder_element.m_new_message_count = cursor.getInt(5);
-		    folder_element.m_oid = cursor.getInt(6);
+		    folder_element.m_oid = cursor.getLong(6);
 		    array_list.add(folder_element);
 		    cursor.moveToNext();
 		}
@@ -272,8 +272,60 @@ public class Database extends SQLiteOpenHelper
 		folder_element.m_message_count = cursor.getInt(3);
 		folder_element.m_name = cursor.getString(4);
 		folder_element.m_new_message_count = cursor.getInt(5);
-		folder_element.m_oid = cursor.getInt(6);
+		folder_element.m_oid = cursor.getLong(6);
 		return folder_element;
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return null;
+    }
+
+    public MessageElement message(String email_account,
+				  String folder_name,
+				  int position)
+    {
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT email_account, " + // 0
+		 "folder_name, " +          // 1
+		 "message, " +              // 2
+		 "received_date, " +        // 3
+		 "sent_date, " +            // 4
+		 "subject, " +              // 5
+		 "uid, " +                  // 6
+		 "OID " +                   // 7
+		 "FROM messages WHERE email_account = ? AND " +
+		 "LOWER(folder_name) = LOWER(?) " +
+		 "ORDER BY received_date_unix_epoch " +
+		 "LIMIT 1 OFFSET CAST(? AS INTEGER)",
+		 new String[] {email_account,
+			       folder_name,
+			       String.valueOf(position)});
+
+	    if(cursor != null && cursor.moveToFirst())
+	    {
+		MessageElement message_element = new MessageElement();
+
+		message_element.m_email_account = cursor.getString(0);
+		message_element.m_folder_name = cursor.getString(1);
+		message_element.m_message = cursor.getString(2);
+		message_element.m_oid = cursor.getLong(7);
+		message_element.m_received_date = cursor.getString(3);
+		message_element.m_sent_date = cursor.getString(4);
+		message_element.m_subject = cursor.getString(5);
+		message_element.m_uid = cursor.getLong(6);
+		return message_element;
 	    }
 	}
 	catch(Exception exception)

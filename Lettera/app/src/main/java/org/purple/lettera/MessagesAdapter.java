@@ -51,6 +51,12 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	    super(message_item.view());
 	    m_message_item = message_item;
 	}
+
+	public void set_data(MessageElement message_element)
+	{
+	    if(m_message_item != null)
+		m_message_item.set_data(message_element);
+	}
     }
 
     public class ViewHolderSeparator extends RecyclerView.ViewHolder
@@ -92,6 +98,17 @@ public class MessagesAdapter extends RecyclerView.Adapter
     {
 	if(view_holder == null)
 	    return;
+
+	ViewHolderMessage view_holder_message = (ViewHolderMessage)
+	    view_holder;
+
+	if(view_holder_message == null)
+	    return;
+
+	MessageElement message_element = m_database.message
+	    (m_email_address, m_folder_name, position);
+
+	view_holder_message.set_data(message_element);
     }
 
     public void set_email_address(String email_address)
