@@ -27,8 +27,6 @@
 
 package org.purple.lettera;
 
-import com.sun.mail.imap.IMAPFolder;
-import com.sun.mail.imap.IMAPMessage;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -36,10 +34,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Base64;
 import android.util.Log;
+import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPMessage;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
 
 public class Database extends SQLiteOpenHelper
 {
@@ -88,7 +89,7 @@ public class Database extends SQLiteOpenHelper
 		{
 		    FolderElement folder_element = new FolderElement();
 
-		    folder_element.m_email_address = cursor.getString(0);
+		    folder_element.m_email_account = cursor.getString(0);
 		    folder_element.m_full_name = cursor.getString(1);
 		    folder_element.m_is_regular_folder = cursor.getInt(2);
 		    folder_element.m_message_count = cursor.getInt(3);
@@ -266,7 +267,7 @@ public class Database extends SQLiteOpenHelper
 	    {
 		FolderElement folder_element = new FolderElement();
 
-		folder_element.m_email_address = cursor.getString(0);
+		folder_element.m_email_account = cursor.getString(0);
 		folder_element.m_full_name = cursor.getString(1);
 		folder_element.m_is_regular_folder = cursor.getInt(2);
 		folder_element.m_message_count = cursor.getInt(3);
@@ -299,12 +300,14 @@ public class Database extends SQLiteOpenHelper
 	    cursor = m_db.rawQuery
 		("SELECT email_account, " + // 0
 		 "folder_name, " +          // 1
-		 "message, " +              // 2
-		 "received_date, " +        // 3
-		 "sent_date, " +            // 4
-		 "subject, " +              // 5
-		 "uid, " +                  // 6
-		 "OID " +                   // 7
+		 "from_email_account, " +   // 2
+		 "from_name, " +            // 3
+		 "message, " +              // 4
+		 "received_date, " +        // 5
+		 "sent_date, " +            // 6
+		 "subject, " +              // 7
+		 "uid, " +                  // 8
+		 "OID " +                   // 9
 		 "FROM messages WHERE email_account = ? AND " +
 		 "LOWER(folder_name) = LOWER(?) " +
 		 "ORDER BY received_date_unix_epoch " +
@@ -319,12 +322,14 @@ public class Database extends SQLiteOpenHelper
 
 		message_element.m_email_account = cursor.getString(0);
 		message_element.m_folder_name = cursor.getString(1);
-		message_element.m_message = cursor.getString(2);
-		message_element.m_oid = cursor.getLong(7);
-		message_element.m_received_date = cursor.getString(3);
-		message_element.m_sent_date = cursor.getString(4);
-		message_element.m_subject = cursor.getString(5);
-		message_element.m_uid = cursor.getLong(6);
+		message_element.m_from_email_account = cursor.getString(2);
+		message_element.m_from_name = cursor.getString(3);
+		message_element.m_message = cursor.getString(4);
+		message_element.m_oid = cursor.getLong(9);
+		message_element.m_received_date = cursor.getString(5);
+		message_element.m_sent_date = cursor.getString(6);
+		message_element.m_subject = cursor.getString(7);
+		message_element.m_uid = cursor.getLong(8);
 		return message_element;
 	    }
 	}
@@ -850,7 +855,8 @@ public class Database extends SQLiteOpenHelper
 	    "current_message INTEGER NOT NULL DEFAULT 1, " +
 	    "email_account TEXT NOT NULL, " +
 	    "folder_name TEXT NOT NULL, " +
-	    "from_address TEXT NOT NULL, " +
+	    "from_email_account TEXT NOT NULL, " +
+	    "from_name TEXT NOT NULL, " +
 	    "message TEXT, " +
 	    "received_date TEXT NOT NULL, " +
 	    "received_date_unix_epoch BIGINT NOT NULL, " +
@@ -935,7 +941,7 @@ public class Database extends SQLiteOpenHelper
 
 		FolderElement folder_element = new FolderElement();
 
-		folder_element.m_email_address = email_account;
+		folder_element.m_email_account = email_account;
 		folder_element.m_is_regular_folder = 1;
 		folder_element.m_name = "ZZZZZ";
 		array_list.add(folder_element);
@@ -1056,58 +1062,80 @@ public class Database extends SQLiteOpenHelper
 
 		try
 		{
-		    String strings[] = new String[10];
+		    String strings[] = new String[11];
 
 		    strings[0] = "1";
 		    strings[1] = email_account;
 		    strings[2] = folder.getName().toLowerCase();
 
-		    if(message.getFrom() != null)
-			strings[3] = message.getFrom().toString();
+		    if(message.getFrom() != null &&
+		       message.getFrom().length != 0)
+		    {
+			InternetAddress internet_address = (InternetAddress)
+			    message.getFrom()[0];
+
+			if(internet_address != null)
+			{
+			    strings[3] = internet_address.getAddress();
+			    strings[4] = internet_address.getPersonal();
+			}
+			else
+			    strings[3] = strings[4] = "";
+
+			if(strings[3].isEmpty())
+			    strings[3] = "unknown@unknown.org";
+
+			if(strings[4].isEmpty())
+			    strings[4] = "(unknown)";
+		    }
 		    else
+		    {
 			strings[3] = "unknown@unknown.org";
+			strings[4] = "(unknown)";
+		    }
 
 		    if(message.getContent() != null)
-			strings[4] = message.getContent().toString().trim();
+			strings[5] = message.getContent().toString().trim();
 		    else
-			strings[4] = "(empty)";
+			strings[5] = "(empty)";
 
 		    if(message.getReceivedDate() != null)
 		    {
-			strings[5] = message.getReceivedDate().toString();
-			strings[6] = String.valueOf
+			strings[6] = message.getReceivedDate().toString();
+			strings[7] = String.valueOf
 			    (message.getReceivedDate().getTime());
 		    }
 		    else
 		    {
-			strings[5] = "01/01/1970";
-			strings[6] = "0";
+			strings[6] = "01/01/1970";
+			strings[7] = "0";
 		    }
 
 		    if(message.getSentDate() != null)
-			strings[7] = message.getSentDate().toString();
+			strings[8] = message.getSentDate().toString();
 		    else
-			strings[7] = "01/01/1970";
+			strings[8] = "01/01/1970";
 
 		    if(message.getSubject() != null)
-			strings[8] = message.getSubject().trim();
+			strings[9] = message.getSubject().trim();
 		    else
-			strings[8] = "(no subject)";
+			strings[9] = "(no subject)";
 
-		    strings[9] = String.valueOf(folder.getUID(message));
+		    strings[10] = String.valueOf(folder.getUID(message));
 		    m_db.execSQL
 			("REPLACE INTO messages (" +
 			 "current_message, " +
 			 "email_account, " +
 			 "folder_name, " +
-			 "from_address, " +
+			 "from_email_account, " +
+			 "from_name, " +
 			 "message, " +
 			 "received_date, " +
 			 "received_date_unix_epoch, " +
 			 "sent_date, " +
 			 "subject, " +
 			 "uid) VALUES " +
-			 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			 strings);
 		}
 		catch(Exception exception)

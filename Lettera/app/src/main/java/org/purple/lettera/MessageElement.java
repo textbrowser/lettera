@@ -31,7 +31,8 @@ public class MessageElement
 {
     public String m_email_account = "";
     public String m_folder_name = "";
-    public String m_from_address = "";
+    public String m_from_email_account = "";
+    public String m_from_name = "";
     public String m_message = "";
     public String m_received_date = "";
     public String m_sent_date = "";

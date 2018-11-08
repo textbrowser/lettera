@@ -29,14 +29,17 @@ package org.purple.lettera;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MessageItem extends View
 {
     private Context m_context = null;
+    private ImageView m_attachment = null;
     private LayoutInflater m_inflater = null;
     private TextView m_date = null;
     private TextView m_from = null;
@@ -45,6 +48,7 @@ public class MessageItem extends View
 
     private void initialize_widget_members()
     {
+	m_attachment = (ImageView) m_view.findViewById(R.id.attachment);
 	m_date = (TextView) m_view.findViewById(R.id.date);
 	m_from = (TextView) m_view.findViewById(R.id.from);
 	m_subject = (TextView) m_view.findViewById(R.id.subject);
@@ -79,6 +83,10 @@ public class MessageItem extends View
 	    return;
 	}
 
+	m_attachment.setVisibility(View.GONE);
+	m_date.setText(message_element.m_received_date);
+	m_from.setText(message_element.m_from_name);
+	m_subject.setText(message_element.m_subject);
 	m_view.setVisibility(View.VISIBLE);
     }
 }

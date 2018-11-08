@@ -398,6 +398,7 @@ public class Lettera extends AppCompatActivity
 	m_layout_manager = new LetteraLinearLayoutManager
 	    (getApplicationContext());
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
+	m_layout_manager.setReverseLayout(true);
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
