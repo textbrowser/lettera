@@ -179,8 +179,8 @@ public class Lettera extends AppCompatActivity
 			     settings_element("primary_email_account").
 			     m_value);
 			m_folders_drawer.update();
-			m_layout_manager.smoothScrollToPosition
-			    (m_recycler, null, m_adapter.getItemCount() - 1);
+			m_layout_manager.scrollToPosition
+			    (m_adapter.getItemCount() - 1);
 		    }
 		    catch(Exception exception)
 		    {
@@ -452,7 +452,7 @@ public class Lettera extends AppCompatActivity
 	    }
 	}, 500);
 	prepare_button_listeners();
-	prepare_folders_and_messages_widgets();
+	prepare_folders_and_messages_widgets("Inbox");
 	prepare_generic_widgets();
 	prepare_icons();
 	prepare_schedulers();
@@ -511,7 +511,7 @@ public class Lettera extends AppCompatActivity
 	}
     }
 
-    public void prepare_folders_and_messages_widgets()
+    public void prepare_folders_and_messages_widgets(String folder_name)
     {
 	SettingsElement settings_element = m_database.settings_element
 	    ("primary_email_account");
@@ -519,8 +519,20 @@ public class Lettera extends AppCompatActivity
 	if(settings_element != null)
 	{
 	    m_adapter.set_email_address(settings_element.m_value);
-	    m_adapter.set_folder_name("Inbox");
+
+	    if(!folder_name.isEmpty())
+		m_adapter.set_folder_name(folder_name);
+
 	    m_folders_drawer.set_email_address(settings_element.m_value);
+	}
+
+	try
+	{
+	    m_adapter.notifyDataSetChanged();
+	    m_layout_manager.scrollToPosition(m_adapter.getItemCount() - 1);
+	}
+	catch(Exception exception)
+	{
 	}
     }
 

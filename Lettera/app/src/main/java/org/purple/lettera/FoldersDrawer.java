@@ -62,6 +62,7 @@ public class FoldersDrawer
 	}
     }
 
+    private Context m_context = null;
     private FoldersDrawerAdapter m_adapter = null;
     private FoldersDrawerLinearLayoutManager m_layout_manager = null;
     private ImageButton m_close_button = null;
@@ -73,9 +74,10 @@ public class FoldersDrawer
 
     public FoldersDrawer(Context context, View parent)
     {
+	m_context = context;
 	m_parent = parent;
 
-	LayoutInflater inflater = (LayoutInflater) context.getSystemService
+	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 
 	m_view = inflater.inflate(R.layout.folders_drawer, null);
@@ -84,7 +86,7 @@ public class FoldersDrawer
 	** The cute popup.
 	*/
 
-	m_popup_window = new PopupWindow(context);
+	m_popup_window = new PopupWindow(m_context);
 	m_popup_window.setAttachedInDecor(true);
 	m_popup_window.setBackgroundDrawable(null);
 	m_popup_window.setContentView(m_view);
@@ -93,7 +95,7 @@ public class FoldersDrawer
 	m_popup_window.setOutsideTouchable(true);
 	m_popup_window.setWidth
 	    ((int) (0.80 *
-		    context.getResources().getDisplayMetrics().widthPixels));
+		    m_context.getResources().getDisplayMetrics().widthPixels));
 
 	/*
 	** Initialize other widgets.
@@ -101,7 +103,7 @@ public class FoldersDrawer
 
 	initialize_widget_members();
 	m_adapter = new FoldersDrawerAdapter();
-	m_layout_manager = new FoldersDrawerLinearLayoutManager(context);
+	m_layout_manager = new FoldersDrawerLinearLayoutManager(m_context);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
@@ -123,13 +125,7 @@ public class FoldersDrawer
 	    {
 		public void onClick(View view)
 		{
-		    try
-		    {
-			m_popup_window.dismiss();
-		    }
-		    catch(Exception exception)
-		    {
-		    }
+		    dismiss();
 		}
 	    });
     }
@@ -153,6 +149,10 @@ public class FoldersDrawer
 	catch(Exception exception)
 	{
 	}
+
+	if(m_context instanceof Lettera)
+	    ((Lettera) m_context).prepare_folders_and_messages_widgets
+		(selected_folder_name());
     }
 
     public void set_email_address(String email_address)
@@ -192,8 +192,7 @@ public class FoldersDrawer
 		    view = (View) m_popup_window.getContentView().getParent();
 	    }
 
-	    Context context = m_popup_window.getContentView().getContext();
-	    WindowManager window_manager = (WindowManager) context.
+	    WindowManager window_manager = (WindowManager) m_context.
 		getSystemService(Context.WINDOW_SERVICE);
 	    WindowManager.LayoutParams layout_params =
 		(WindowManager.LayoutParams) view.getLayoutParams();

@@ -483,7 +483,7 @@ public class Settings
 
 	    if(m_context instanceof Lettera)
 	    {
-		((Lettera) m_context).prepare_folders_and_messages_widgets();
+		((Lettera) m_context).prepare_folders_and_messages_widgets("");
 		((Lettera) m_context).prepare_generic_widgets();
 		((Lettera) m_context).prepare_icons();
 	    }
@@ -626,7 +626,7 @@ public class Settings
 		    {
 			((Lettera) m_context).populate_folders_from_database();
 			((Lettera) m_context).
-			    prepare_folders_and_messages_widgets();
+			    prepare_folders_and_messages_widgets("");
 		    }
 		}
 
