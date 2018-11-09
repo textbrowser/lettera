@@ -82,7 +82,7 @@ public abstract class Utilities
 		string_buffer.append
 		    (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM");
 	    }
-	    else
+	    else if(calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR))
 	    {
 		switch(calendar.get(Calendar.MONTH))
 		{
@@ -125,6 +125,14 @@ public abstract class Utilities
 		}
 
 		string_buffer.append(calendar.get(Calendar.DAY_OF_MONTH));
+	    }
+	    else
+	    {
+		string_buffer.append(calendar.get(Calendar.MONTH));
+		string_buffer.append("/");
+		string_buffer.append(calendar.get(Calendar.DAY_OF_MONTH));
+		string_buffer.append("/");
+		string_buffer.append(calendar.get(Calendar.YEAR));
 	    }
 	}
 	catch(Exception exception)
