@@ -348,8 +348,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    if(view_holder_button == null)
 		return;
 
-	    if(!m_visible_buttons.contains(view_holder_button.button()))
-		m_visible_buttons.add(view_holder_button.button());
+	    m_visible_buttons.add(view_holder_button.button());
 
 	    FolderElement folder_element = s_database.folder
 		(m_email_address, position);

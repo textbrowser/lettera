@@ -1062,10 +1062,8 @@ public class Database extends SQLiteOpenHelper
 			new String[] {email_account,
 				      folder.getName()});
 
-	    for(int i = 0; i < messages.length; i++)
+	    for(Message message : messages)
 	    {
-		Message message = messages[i];
-
 		if(message == null)
 		    continue;
 
