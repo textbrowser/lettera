@@ -27,7 +27,6 @@
 
 package org.purple.lettera;
 
-import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;

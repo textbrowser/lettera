@@ -35,7 +35,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Base64;
 import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
-import com.sun.mail.imap.IMAPMessage;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import javax.mail.FetchProfile;
@@ -43,7 +42,6 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.UIDFolder;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 public class Database extends SQLiteOpenHelper
 {
