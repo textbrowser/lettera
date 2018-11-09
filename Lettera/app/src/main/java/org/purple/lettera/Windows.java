@@ -62,7 +62,13 @@ public abstract class Windows
 		 {
 		     public void onClick(DialogInterface dialog, int which)
 		     {
-			 dialog.dismiss();
+			 try
+			 {
+			     dialog.dismiss();
+			 }
+			 catch(Exception exception)
+			 {
+			 }
 		     }
 		 });
 	    alert_dialog.setMessage(text);
@@ -97,9 +103,15 @@ public abstract class Windows
 	    dialog.setContentView(view);
 	    dialog.show();
 	}
-	catch(Exception exception)
+	catch(Exception exception_1)
 	{
-	    dialog.dismiss();
+	    try
+	    {
+		dialog.dismiss();
+	    }
+	    catch(Exception exception_2)
+	    {
+	    }
 	}
     }
 }

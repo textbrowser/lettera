@@ -179,6 +179,15 @@ public class Settings
 		{
 		    try
 		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+
+		    try
+		    {
 			switch(m_protocol)
 			{
 			case "imaps":
@@ -189,9 +198,6 @@ public class Settings
 			default:
 			    break;
 			}
-
-			if(m_dialog != null)
-			    m_dialog.dismiss();
 
 			if(m_error)
 			    Windows.show_dialog
@@ -207,11 +213,6 @@ public class Settings
 		    }
 		    catch(Exception exception)
 		    {
-		    }
-		    finally
-		    {
-			if(m_dialog != null)
-			    m_dialog.dismiss();
 		    }
 		}
 	    });
@@ -262,8 +263,14 @@ public class Settings
 		@Override
 		public void run()
 		{
-		    if(m_dialog != null)
-			m_dialog.dismiss();
+		    try
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 
 		    if(m_encryption_key_pair == null)
 			m_encryption_key_data.setText
@@ -668,10 +675,16 @@ public class Settings
 
 	    thread.start();
 	}
-	catch(Exception exception)
+	catch(Exception exception_1)
 	{
-	    if(dialog != null)
-		dialog.dismiss();
+	    try
+	    {
+		if(dialog != null)
+		    dialog.dismiss();
+	    }
+	    catch(Exception exception_2)
+	    {
+	    }
 	}
     }
 
@@ -1013,8 +1026,14 @@ public class Settings
 		    if(((Activity) m_context).isFinishing())
 			return;
 
-		    if(m_dialog != null)
-			m_dialog.dismiss();
+		    try
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 		}
 	    });
 
@@ -1350,10 +1369,16 @@ public class Settings
 
 	    thread.start();
 	}
-	catch(Exception exception)
+	catch(Exception exception_1)
 	{
-	    if(dialog != null)
-		dialog.dismiss();
+	    try
+	    {
+		if(dialog != null)
+		    dialog.dismiss();
+	    }
+	    catch(Exception exception_2)
+	    {
+	    }
 	}
     }
 
@@ -1383,10 +1408,16 @@ public class Settings
 
 	    thread.start();
 	}
-	catch(Exception exception)
+	catch(Exception exception_1)
 	{
-	    if(dialog != null)
-		dialog.dismiss();
+	    try
+	    {
+		if(dialog != null)
+		    dialog.dismiss();
+	    }
+	    catch(Exception exception_2)
+	    {
+	    }
 	}
     }
 

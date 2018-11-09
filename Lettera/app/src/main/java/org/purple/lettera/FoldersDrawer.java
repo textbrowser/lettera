@@ -123,7 +123,13 @@ public class FoldersDrawer
 	    {
 		public void onClick(View view)
 		{
-		    m_popup_window.dismiss();
+		    try
+		    {
+			m_popup_window.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 		}
 	    });
     }
@@ -140,7 +146,13 @@ public class FoldersDrawer
 
     public void dismiss()
     {
-	m_popup_window.dismiss();
+	try
+	{
+	    m_popup_window.dismiss();
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     public void set_email_address(String email_address)

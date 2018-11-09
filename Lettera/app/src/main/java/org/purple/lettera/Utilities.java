@@ -27,6 +27,9 @@
 
 package org.purple.lettera;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public abstract class Utilities
 {
     public static String bytes_to_hex(byte bytes[])
@@ -47,5 +50,87 @@ public abstract class Utilities
 	{
 	    return "";
 	}
+    }
+
+    public static String formatted_email_date(Date date)
+    {
+	if(date == null)
+	    return "";
+
+	StringBuffer string_buffer = new StringBuffer();
+
+	try
+	{
+	    Calendar calendar = Calendar.getInstance();
+	    Calendar today = Calendar.getInstance();
+
+	    calendar.setTime(date);
+	    today.set(Calendar.HOUR_OF_DAY, 0);
+	    today.set(Calendar.MILLISECOND, 0);
+	    today.set(Calendar.MINUTE, 0);
+	    today.set(Calendar.SECOND, 0);
+
+	    if(date.after(today.getTime()))
+	    {
+		string_buffer.append(calendar.get(Calendar.HOUR_OF_DAY));
+		string_buffer.append(":");
+		string_buffer.append
+		    (calendar.get(Calendar.MINUTE) < 10 ?
+		     "0" + calendar.get(Calendar.MINUTE) :
+		     calendar.get(Calendar.MINUTE));
+		string_buffer.append(" ");
+		string_buffer.append
+		    (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM");
+	    }
+	    else
+	    {
+		switch(calendar.get(Calendar.MONTH))
+		{
+		case Calendar.APRIL:
+		    string_buffer.append("Apr ");
+		    break;
+		case Calendar.AUGUST:
+		    string_buffer.append("Aug ");
+		    break;
+		case Calendar.DECEMBER:
+		    string_buffer.append("Dec ");
+		    break;
+		case Calendar.FEBRUARY:
+		    string_buffer.append("Feb ");
+		    break;
+		case Calendar.JANUARY:
+		    string_buffer.append("Jan ");
+		    break;
+		case Calendar.JULY:
+		    string_buffer.append("Jul ");
+		    break;
+		case Calendar.JUNE:
+		    string_buffer.append("Jun ");
+		    break;
+		case Calendar.MARCH:
+		    string_buffer.append("Mar ");
+		    break;
+		case Calendar.MAY:
+		    string_buffer.append("May ");
+		    break;
+		case Calendar.SEPTEMBER:
+		    string_buffer.append("Sep ");
+		    break;
+		case Calendar.OCTOBER:
+		    string_buffer.append("Oct ");
+		    break;
+		case Calendar.NOVEMBER:
+		    string_buffer.append("Nov ");
+		    break;
+		}
+
+		string_buffer.append(calendar.get(Calendar.DAY_OF_MONTH));
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+
+	return string_buffer.toString();
     }
 }

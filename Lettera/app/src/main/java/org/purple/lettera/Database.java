@@ -298,16 +298,17 @@ public class Database extends SQLiteOpenHelper
 	try
 	{
 	    cursor = m_db.rawQuery
-		("SELECT email_account, " + // 0
-		 "folder_name, " +          // 1
-		 "from_email_account, " +   // 2
-		 "from_name, " +            // 3
-		 "message, " +              // 4
-		 "received_date, " +        // 5
-		 "sent_date, " +            // 6
-		 "subject, " +              // 7
-		 "uid, " +                  // 8
-		 "OID " +                   // 9
+		("SELECT email_account, " +     // 0
+		 "folder_name, " +              // 1
+		 "from_email_account, " +       // 2
+		 "from_name, " +                // 3
+		 "message, " +                  // 4
+		 "received_date, " +            // 5
+		 "received_date_unix_epoch, " + // 6
+		 "sent_date, " +                // 7
+		 "subject, " +                  // 8
+		 "uid, " +                      // 9
+		 "OID " +                       // 10
 		 "FROM messages WHERE email_account = ? AND " +
 		 "LOWER(folder_name) = LOWER(?) " +
 		 "ORDER BY received_date_unix_epoch " +
@@ -325,11 +326,12 @@ public class Database extends SQLiteOpenHelper
 		message_element.m_from_email_account = cursor.getString(2);
 		message_element.m_from_name = cursor.getString(3);
 		message_element.m_message = cursor.getString(4);
-		message_element.m_oid = cursor.getLong(9);
+		message_element.m_oid = cursor.getLong(10);
 		message_element.m_received_date = cursor.getString(5);
-		message_element.m_sent_date = cursor.getString(6);
-		message_element.m_subject = cursor.getString(7);
-		message_element.m_uid = cursor.getLong(8);
+		message_element.m_received_date_unix_epoch = cursor.getLong(6);
+		message_element.m_sent_date = cursor.getString(7);
+		message_element.m_subject = cursor.getString(8);
+		message_element.m_uid = cursor.getLong(9);
 		return message_element;
 	    }
 	}

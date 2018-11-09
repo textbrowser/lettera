@@ -114,8 +114,14 @@ public class Lettera extends AppCompatActivity
 		{
 		    populate_folders_from_database();
 
-		    if(m_dialog != null)
-			m_dialog.dismiss();
+		    try
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 		}
 	    });
 	}
@@ -178,13 +184,21 @@ public class Lettera extends AppCompatActivity
 			     settings_element("primary_email_account").
 			     m_value);
 			m_folders_drawer.update();
+			m_layout_manager.smoothScrollToPosition
+			    (m_recycler, null, m_adapter.getItemCount() - 1);
 		    }
 		    catch(Exception exception)
 		    {
 		    }
 
-		    if(m_dialog != null)
-			m_dialog.dismiss();
+		    try
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 		}
 	    });
 	}
@@ -230,10 +244,16 @@ public class Lettera extends AppCompatActivity
 
 	    thread.start();
 	}
-	catch(Exception exception)
+	catch(Exception exception_1)
 	{
-	    if(dialog != null)
-		dialog.dismiss();
+	    try
+	    {
+		if(dialog != null)
+		    dialog.dismiss();
+	    }
+	    catch(Exception exception_2)
+	    {
+	    }
 	}
     }
 
@@ -423,10 +443,16 @@ public class Lettera extends AppCompatActivity
 
 		    thread.start();
 		}
-		catch(Exception exception)
+		catch(Exception exception_1)
 		{
-		    if(dialog != null)
-			dialog.dismiss();
+		    try
+		    {
+			if(dialog != null)
+			    dialog.dismiss();
+		    }
+		    catch(Exception exception_2)
+		    {
+		    }
 		}
 	    }
 	}, 500);
@@ -441,21 +467,42 @@ public class Lettera extends AppCompatActivity
     protected void onDestroy()
     {
 	super.onDestroy();
-	m_folders_drawer.dismiss();
+
+	try
+	{
+	    m_folders_drawer.dismiss();
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     @Override
     protected void onPause()
     {
 	super.onPause();
-	m_folders_drawer.dismiss();
+
+	try
+	{
+	    m_folders_drawer.dismiss();
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     @Override
     public void onConfigurationChanged(Configuration new_config)
     {
 	super.onConfigurationChanged(new_config);
-	m_folders_drawer.dismiss();
+
+	try
+	{
+	    m_folders_drawer.dismiss();
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     public void populate_folders_from_database()

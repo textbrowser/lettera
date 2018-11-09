@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.Date;
 
 public class MessageItem extends View
 {
@@ -84,7 +85,19 @@ public class MessageItem extends View
 	}
 
 	m_attachment.setVisibility(View.GONE);
-	m_date.setText(message_element.m_received_date);
+
+	try
+	{
+	    m_date.setText
+		(Utilities.
+		 formatted_email_date(new Date(message_element.
+					       m_received_date_unix_epoch)));
+	}
+	catch(Exception exception)
+	{
+	    m_date.setText(message_element.m_received_date);
+	}
+
 	m_from.setText(message_element.m_from_name);
 	m_subject.setText(message_element.m_subject);
 	m_view.setVisibility(View.VISIBLE);
