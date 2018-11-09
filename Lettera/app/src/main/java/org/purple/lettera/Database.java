@@ -1087,12 +1087,11 @@ public class Database extends SQLiteOpenHelper
 			    strings[4] = internet_address.getPersonal();
 			}
 
-
 			if(strings[3] == null || strings[3].isEmpty())
 			    strings[3] = "unknown@unknown.org";
 
 			if(strings[4] == null || strings[4].isEmpty())
-			    strings[4] = "(unknown)";
+			    strings[4] = strings[3];
 		    }
 		    else
 		    {
