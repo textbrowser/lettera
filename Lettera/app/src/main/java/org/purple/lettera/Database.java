@@ -38,9 +38,12 @@ import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import javax.mail.FetchProfile;
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.UIDFolder;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class Database extends SQLiteOpenHelper
 {
@@ -1037,6 +1040,12 @@ public class Database extends SQLiteOpenHelper
 	try
 	{
 	    messages = folder.getMessages();
+
+	    FetchProfile fetch_profile = new FetchProfile();
+
+	    fetch_profile.add(FetchProfile.Item.ENVELOPE);
+	    fetch_profile.add(UIDFolder.FetchProfileItem.UID);
+	    folder.fetch(messages, fetch_profile);
 	}
 	catch(Exception exception)
 	{
@@ -1081,13 +1090,12 @@ public class Database extends SQLiteOpenHelper
 			    strings[3] = internet_address.getAddress();
 			    strings[4] = internet_address.getPersonal();
 			}
-			else
-			    strings[3] = strings[4] = "";
 
-			if(strings[3].isEmpty())
+
+			if(strings[3] == null || strings[3].isEmpty())
 			    strings[3] = "unknown@unknown.org";
 
-			if(strings[4].isEmpty())
+			if(strings[4] == null || strings[4].isEmpty())
 			    strings[4] = "(unknown)";
 		    }
 		    else
@@ -1096,10 +1104,7 @@ public class Database extends SQLiteOpenHelper
 			strings[4] = "(unknown)";
 		    }
 
-		    if(message.getContent() != null)
-			strings[5] = message.getContent().toString().trim();
-		    else
-			strings[5] = "(empty)";
+		    strings[5] = "(empty)"; // Fetch the contents later.
 
 		    if(message.getReceivedDate() != null)
 		    {
