@@ -216,9 +216,9 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	}
     }
 
-    private HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
     private String m_email_address = "";
     private String m_selected_folder_name = "";
+    private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
     private final static Database s_database = Database.instance();
     private final static int s_icons[] = new int[IconsEnumerator.XYZ + 1];
     private final static int s_selected_icons[] =

@@ -23,8 +23,9 @@ Future Items
 Remaining Items
 
 1.   Background services.
-2.   Folder drawer.
-3.   Index failure on Folders Drawer.
-4.   McEliece key generation, exchange, etc.
-5.   Offline and online design.
-6.   Status bar on main activity.
+2.   Double-click event in Folder drawer.
+3.   Folder drawer.
+4.   Index failure on Folders Drawer.
+5.   McEliece key generation, exchange, etc.
+6.   Offline and online design.
+7.   Status bar on main activity.
