@@ -3,18 +3,19 @@ Completed Items
 1.   Denote primary e-mail account in Settings.
 2.   Folder drawer folders order. Sort by name.
 3.   Include algorithm information in Settings::Privacy.
-4.   Key generation.
-5.   Prepare application within a progress-dialog block.
-6.   Prepare drawer from database values.
-7.   Prepare e-mail folders on account change.
-8.   Proxies for e-mail.
-9.   Real-time changes of Outbound text if
+4.   Index failure on Folders Drawer.
+5.   Key generation.
+6.   Prepare application within a progress-dialog block.
+7.   Prepare drawer from database values.
+8.   Prepare e-mail folders on account change.
+9.   Proxies for e-mail.
+10.  Real-time changes of Outbound text if
      Like Inbound is enabled.
-10.  Remove folder spinner.
-11.  Restore personal key pairs.
-12.  Retain selected folder in folder drawer.
-13.  Save personal key pairs.
-14.  Separate standard folders from other folders.
+11.  Remove folder spinner.
+12.  Restore personal key pairs.
+13.  Retain selected folder in folder drawer.
+14.  Save personal key pairs.
+15.  Separate standard folders from other folders.
 
 Future Items
 
@@ -25,7 +26,7 @@ Remaining Items
 1.   Background services.
 2.   Double-click event in Folder drawer.
 3.   Folder drawer.
-4.   Index failure on Folders Drawer.
+4.   Horizontal and vertical message layouts.
 5.   McEliece key generation, exchange, etc.
 6.   Offline and online design.
 7.   Status bar on main activity.
