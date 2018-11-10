@@ -122,6 +122,8 @@ public abstract class Utilities
 		case Calendar.NOVEMBER:
 		    string_buffer.append("Nov ");
 		    break;
+		default:
+		    break;
 		}
 
 		string_buffer.append(calendar.get(Calendar.DAY_OF_MONTH));

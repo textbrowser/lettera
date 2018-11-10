@@ -355,6 +355,8 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 
 	    view_holder_button.set_data(folder_element);
 	    break;
+	default:
+	    break;
 	}
     }
 

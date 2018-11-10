@@ -116,6 +116,8 @@ public class Cryptography
 
 			break;
 		    }
+		    default:
+			break;
 		    }
 		}
 		catch(Exception exception)

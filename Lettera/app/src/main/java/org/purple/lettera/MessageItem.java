@@ -44,12 +44,14 @@ public class MessageItem extends View
     private TextView m_date = null;
     private TextView m_from = null;
     private TextView m_subject = null;
+    private View m_divider = null;
     private View m_view = null;
 
     private void initialize_widget_members()
     {
 	m_attachment = (ImageView) m_view.findViewById(R.id.attachment);
 	m_date = (TextView) m_view.findViewById(R.id.date);
+	m_divider = m_view.findViewById(R.id.divider);
 	m_from = (TextView) m_view.findViewById(R.id.from);
 	m_subject = (TextView) m_view.findViewById(R.id.subject);
     }
@@ -75,7 +77,7 @@ public class MessageItem extends View
 	return m_view;
     }
 
-    public void set_data(MessageElement message_element)
+    public void set_data(MessageElement message_element, boolean last_position)
     {
 	if(message_element == null)
 	{
@@ -97,6 +99,7 @@ public class MessageItem extends View
 	    m_date.setText(message_element.m_received_date);
 	}
 
+	m_divider.setVisibility(last_position ? View.GONE : View.VISIBLE);
 	m_from.setText(message_element.m_from_name);
 	m_subject.setText(message_element.m_subject);
 	m_view.setVisibility(View.VISIBLE);

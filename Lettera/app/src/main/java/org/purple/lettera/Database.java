@@ -228,6 +228,8 @@ public class Database extends SQLiteOpenHelper
 		    case 14:
 			email_element.m_oid = cursor.getLong(i);
 			break;
+		    default:
+			break;
 		    }
 
 		return email_element;
@@ -370,6 +372,8 @@ public class Database extends SQLiteOpenHelper
 			break;
 		    case 1:
 			settings_element.m_value = cursor.getString(i).trim();
+			break;
+		    default:
 			break;
 		    }
 

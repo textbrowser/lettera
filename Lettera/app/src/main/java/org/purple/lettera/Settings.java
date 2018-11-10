@@ -977,6 +977,8 @@ public class Settings
 	    m_network_button.setBackgroundResource(icon("network"));
 	    m_privacy_button.setBackgroundResource(icon("privacy_pressed"));
 	    break;
+	default:
+	    break;
 	}
     }
 

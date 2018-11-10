@@ -28,19 +28,15 @@
 package org.purple.lettera;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 public class MessagesAdapter extends RecyclerView.Adapter
 {
-    private abstract class ViewHolderTypeEnumerator
-    {
-	public final static int MESSAGE = 0;
-	public final static int SEPARATOR = 1;
-    }
-
     public class ViewHolderMessage extends RecyclerView.ViewHolder
     {
 	private MessageItem m_message_item = null;
@@ -51,10 +47,11 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	    m_message_item = message_item;
 	}
 
-	public void set_data(MessageElement message_element)
+	public void set_data(MessageElement message_element,
+			     boolean last_position)
 	{
 	    if(m_message_item != null)
-		m_message_item.set_data(message_element);
+		m_message_item.set_data(message_element, last_position);
 	}
     }
 
@@ -107,7 +104,8 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	MessageElement message_element = m_database.message
 	    (m_email_address, m_folder_name, position);
 
-	view_holder_message.set_data(message_element);
+	view_holder_message.set_data
+	    (message_element, position == 0);
     }
 
     public void set_email_address(String email_address)
