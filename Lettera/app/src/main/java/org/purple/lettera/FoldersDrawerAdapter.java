@@ -372,4 +372,9 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     {
 	m_email_address = email_address;
     }
+
+    public void set_selected_folder_name(String folder_name)
+    {
+	m_selected_folder_name = folder_name;
+    }
 }

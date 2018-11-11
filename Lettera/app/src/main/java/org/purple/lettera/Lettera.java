@@ -551,6 +551,8 @@ public class Lettera extends AppCompatActivity
 	    m_folders_drawer.set_email_address(settings_element.m_value);
 	}
 
+	m_folders_drawer.set_selected_folder_name(folder_name);
+
 	try
 	{
 	    m_adapter.notifyDataSetChanged();

@@ -177,6 +177,11 @@ public class FoldersDrawer
 	update();
     }
 
+    public void set_selected_folder_name(String folder_name)
+    {
+	m_adapter.set_selected_folder_name(folder_name);
+    }
+
     public void show()
     {
 	m_popup_window.showAsDropDown
