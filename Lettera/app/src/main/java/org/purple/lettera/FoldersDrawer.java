@@ -151,8 +151,12 @@ public class FoldersDrawer
 	}
 
 	if(m_context instanceof Lettera)
+	{
 	    ((Lettera) m_context).prepare_folders_and_messages_widgets
 		(selected_folder_name());
+	    ((Lettera) m_context).set_selected_folder_name
+		(selected_folder_name());
+	}
     }
 
     public void set_email_address(String email_address)

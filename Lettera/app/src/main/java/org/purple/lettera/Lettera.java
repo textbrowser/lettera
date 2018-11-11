@@ -176,8 +176,7 @@ public class Lettera extends AppCompatActivity
 			m_adapter.notifyDataSetChanged();
 			m_folders_drawer.set_email_address
 			    (m_database.
-			     settings_element("primary_email_account").
-			     m_value);
+			     settings_element("primary_email_account").m_value);
 			m_folders_drawer.update();
 			m_layout_manager.scrollToPosition
 			    (m_adapter.getItemCount() - 1);
@@ -212,9 +211,29 @@ public class Lettera extends AppCompatActivity
     private RecyclerView m_recycler = null;
     private ScheduledExecutorService m_folders_drawer_scheduler = null;
     private Settings m_settings = null;
+    private String m_selected_folder_name = "Inbox";
     private View m_vertical_separator = null;
+    private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
     private final int FOLDERS_DRAWER_INTERVAL = 10;
+
+    private String selected_folder_full_name()
+    {
+	synchronized(m_selected_folder_name_mutex)
+	{
+	    return m_database.folder_full_name
+		(m_database.settings_element("primary_email_account").m_value,
+		 m_selected_folder_name);
+	}
+    }
+
+    private String selected_folder_name()
+    {
+	synchronized(m_selected_folder_name_mutex)
+	{
+	    return m_selected_folder_name;
+	}
+    }
 
     private void download()
     {
@@ -230,12 +249,7 @@ public class Lettera extends AppCompatActivity
 		 "Please be patient.");
 
 	    Thread thread = new Thread
-		(new PopulateFolders(dialog,
-				     m_database.
-				     folder_full_name(m_folders_drawer.
-						      email_address(),
-						      m_folders_drawer.
-						      selected_folder_name())));
+		(new PopulateFolders(dialog, selected_folder_full_name()));
 
 	    thread.start();
 	}
@@ -366,12 +380,16 @@ public class Lettera extends AppCompatActivity
 			    m_database.write_folders
 				(m_mail.folder_elements(),
 				 m_mail.email_address());
+			    m_database.write_messages
+				(m_mail.folder(selected_folder_full_name()),
+				 m_mail.email_address());
 
 			    Lettera.this.runOnUiThread(new Runnable()
 			    {
 				@Override
 				public void run()
 				{
+				    m_adapter.notifyDataSetChanged();
 				    m_folders_drawer.update();
 				}
 			    });
@@ -582,6 +600,14 @@ public class Lettera extends AppCompatActivity
 	    m_settings_button.setBackgroundResource
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
+	}
+    }
+
+    void set_selected_folder_name(String folder_name)
+    {
+	synchronized(m_selected_folder_name_mutex)
+	{
+	    m_selected_folder_name = folder_name;
 	}
     }
 }
