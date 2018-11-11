@@ -72,7 +72,7 @@ public abstract class Utilities
 
 	    if(date.after(today.getTime()))
 	    {
-		string_buffer.append(calendar.get(Calendar.HOUR_OF_DAY));
+		string_buffer.append(calendar.get(Calendar.HOUR));
 		string_buffer.append(":");
 		string_buffer.append
 		    (calendar.get(Calendar.MINUTE) < 10 ?
