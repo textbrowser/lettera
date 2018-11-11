@@ -36,8 +36,9 @@
 
                 <TextView
                     android:id="@+id/date"
-                    android:layout_width="75dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".20"
                     android:ellipsize="end"
                     android:maxLines="1" />
 
