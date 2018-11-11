@@ -503,6 +503,25 @@ public class Database extends SQLiteOpenHelper
 	return "";
     }
 
+    public String save_setting(String key, String value)
+    {
+	ContentValues content_values = new ContentValues();
+
+	content_values.put("key", key);
+	content_values.put("value", value);
+	return save_setting(content_values);
+    }
+
+    public String setting(String key)
+    {
+	SettingsElement settings_element = settings_element(key);
+
+	if(settings_element != null)
+	    return settings_element.m_value;
+	else
+	    return "";
+    }
+
     public boolean delete_email_account(String account)
     {
 	if(m_db == null)

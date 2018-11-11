@@ -63,6 +63,7 @@ public class FoldersDrawer
     }
 
     private Context m_context = null;
+    private Database m_database = null;
     private FoldersDrawerAdapter m_adapter = null;
     private FoldersDrawerLinearLayoutManager m_layout_manager = null;
     private ImageButton m_close_button = null;
@@ -103,6 +104,7 @@ public class FoldersDrawer
 
 	initialize_widget_members();
 	m_adapter = new FoldersDrawerAdapter();
+	m_database = Database.instance(m_context);
 	m_layout_manager = new FoldersDrawerLinearLayoutManager(m_context);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
 	m_recycler.setAdapter(m_adapter);
@@ -142,20 +144,22 @@ public class FoldersDrawer
 
     public void dismiss()
     {
-	try
-	{
-	    m_popup_window.dismiss();
-	}
-	catch(Exception exception)
-	{
-	}
-
 	if(m_context instanceof Lettera)
 	{
 	    ((Lettera) m_context).prepare_folders_and_messages_widgets
 		(selected_folder_name());
 	    ((Lettera) m_context).set_selected_folder_name
 		(selected_folder_name());
+	}
+
+	m_database.save_setting("selected_folder_name", selected_folder_name());
+
+	try
+	{
+	    m_popup_window.dismiss();
+	}
+	catch(Exception exception)
+	{
 	}
     }
 

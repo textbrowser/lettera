@@ -211,7 +211,7 @@ public class Lettera extends AppCompatActivity
     private RecyclerView m_recycler = null;
     private ScheduledExecutorService m_folders_drawer_scheduler = null;
     private Settings m_settings = null;
-    private String m_selected_folder_name = "Inbox";
+    private String m_selected_folder_name = "";
     private View m_vertical_separator = null;
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
@@ -436,6 +436,11 @@ public class Lettera extends AppCompatActivity
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
+	m_selected_folder_name = m_database.setting("selected_folder_name");
+
+	if(m_selected_folder_name.isEmpty())
+	    m_selected_folder_name = "Inbox";
+
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	new Handler().postDelayed(new Runnable()
 	{
@@ -470,7 +475,7 @@ public class Lettera extends AppCompatActivity
 	    }
 	}, 500);
 	prepare_button_listeners();
-	prepare_folders_and_messages_widgets("Inbox");
+	prepare_folders_and_messages_widgets(m_selected_folder_name);
 	prepare_generic_widgets();
 	prepare_icons();
 	prepare_schedulers();
