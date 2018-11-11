@@ -150,7 +150,7 @@ public class Database extends SQLiteOpenHelper
 	return null;
     }
 
-    public EmailElement email_element(String account)
+    public EmailElement email_element(String email_account)
     {
 	Cursor cursor = null;
 
@@ -173,7 +173,7 @@ public class Database extends SQLiteOpenHelper
 		 "proxy_user, " +              // 13
 		 "OID " +                      // 14
 		 "FROM email_accounts WHERE email_account = ?",
-		 new String[] {account});
+		 new String[] {email_account});
 
 	    if(cursor != null && cursor.moveToFirst())
 	    {
@@ -522,7 +522,7 @@ public class Database extends SQLiteOpenHelper
 	    return "";
     }
 
-    public boolean delete_email_account(String account)
+    public boolean delete_email_account(String email_account)
     {
 	if(m_db == null)
 	    return false;
@@ -535,11 +535,17 @@ public class Database extends SQLiteOpenHelper
 	{
 	    ok = m_db.delete("email_accounts",
 			     "email_account = ?",
-			     new String[] {account}) > 0;
+			     new String[] {email_account}) > 0;
 
 	    if(ok)
+	    {
 		m_db.delete
-		    ("folders", "email_account = ?", new String[] {account});
+		    ("folders", "email_account = ?",
+		     new String[] {email_account});
+		m_db.delete
+		    ("messages", "email_account = ?",
+		     new String[] {email_account});
+	    }
 
 	    m_db.setTransactionSuccessful();
 	}
@@ -555,7 +561,7 @@ public class Database extends SQLiteOpenHelper
 	return ok;
     }
 
-    public boolean delete_folders(String account)
+    public boolean delete_folders(String email_account)
     {
 	if(m_db == null)
 	    return false;
@@ -567,7 +573,8 @@ public class Database extends SQLiteOpenHelper
 	try
 	{
 	    ok = m_db.delete
-		("folders", "email_account = ?", new String[] {account}) > 0;
+		("folders", "email_account = ?",
+		 new String[] {email_account}) > 0;
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
@@ -876,6 +883,11 @@ public class Database extends SQLiteOpenHelper
 	catch(Exception exception)
 	{
 	}
+
+	/*
+	** Do not set DELETE CASCADE as email_accounts entries are
+	** prepared via REPLACE.
+	*/
 
 	str = "CREATE TABLE IF NOT EXISTS messages (" +
 	    "content_downloaded INTEGER NOT NULL DEFAULT 0, " +
