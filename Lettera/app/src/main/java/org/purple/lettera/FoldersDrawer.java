@@ -152,7 +152,9 @@ public class FoldersDrawer
 		(selected_folder_name());
 	}
 
-	m_database.save_setting("selected_folder_name", selected_folder_name());
+	m_database.save_setting
+	    ("selected_folder_name_" + m_email_address.getText().toString(),
+	     selected_folder_name());
 
 	try
 	{

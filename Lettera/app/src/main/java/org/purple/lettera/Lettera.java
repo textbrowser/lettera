@@ -436,7 +436,9 @@ public class Lettera extends AppCompatActivity
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
-	m_selected_folder_name = m_database.setting("selected_folder_name");
+	m_selected_folder_name = m_database.setting
+	    ("selected_folder_name_" +
+	     m_database.setting("primary_email_account"));
 
 	if(m_selected_folder_name.isEmpty())
 	    m_selected_folder_name = "Inbox";
