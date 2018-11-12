@@ -116,5 +116,12 @@ public class MessagesAdapter extends RecyclerView.Adapter
     public void set_folder_name(String folder_name)
     {
 	m_folder_name = folder_name;
+
+	if(m_folder_name.isEmpty())
+	    m_folder_name = m_database.setting
+		("selected_folder_name_" + m_email_address);
+
+	if(m_folder_name.isEmpty())
+	    m_folder_name = "Inbox";
     }
 }

@@ -544,13 +544,10 @@ public class Lettera extends AppCompatActivity
 	if(settings_element != null)
 	{
 	    m_adapter.set_email_address(settings_element.m_value);
-
-	    if(!folder_name.isEmpty())
-		m_adapter.set_folder_name(folder_name);
-
 	    m_folders_drawer.set_email_address(settings_element.m_value);
 	}
 
+	m_adapter.set_folder_name(folder_name);
 	m_folders_drawer.set_selected_folder_name(folder_name);
 
 	try
