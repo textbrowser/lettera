@@ -139,8 +139,7 @@ public class Lettera extends AppCompatActivity
 	    try
 	    {
 		EmailElement email_element = m_database.email_element
-		    (m_database.settings_element("primary_email_account").
-		     m_value);
+		    (m_database.setting("primary_email_account"));
 		Mail mail = new Mail
 		    (email_element.m_inbound_address,
 		     email_element.m_inbound_email,
@@ -175,8 +174,7 @@ public class Lettera extends AppCompatActivity
 		    {
 			m_adapter.notifyDataSetChanged();
 			m_folders_drawer.set_email_address
-			    (m_database.
-			     settings_element("primary_email_account").m_value);
+			    (m_database.setting("primary_email_account"));
 			m_folders_drawer.update();
 			m_layout_manager.scrollToPosition
 			    (m_adapter.getItemCount() - 1);
@@ -222,7 +220,7 @@ public class Lettera extends AppCompatActivity
 	synchronized(m_selected_folder_name_mutex)
 	{
 	    return m_database.folder_full_name
-		(m_database.settings_element("primary_email_account").m_value,
+		(m_database.setting("primary_email_account"),
 		 m_selected_folder_name);
 	}
     }
@@ -339,8 +337,7 @@ public class Lettera extends AppCompatActivity
 		    try
 		    {
 			EmailElement email_element = m_database.email_element
-			    (m_database.
-			     settings_element("primary_email_account").m_value);
+			    (m_database.setting("primary_email_account"));
 
 			if(email_element == null)
 			    return;
