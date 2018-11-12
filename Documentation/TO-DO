@@ -1,32 +1,32 @@
 Completed Items
 
-1.   Denote primary e-mail account in Settings.
-2.   Folder drawer folders order. Sort by name.
-3.   Include algorithm information in Settings::Privacy.
-4.   Index failure on Folders Drawer.
-5.   Key generation.
-6.   Prepare application within a progress-dialog block.
-7.   Prepare drawer from database values.
-8.   Prepare e-mail folders on account change.
-9.   Proxies for e-mail.
-10.  Real-time changes of Outbound text if
-     Like Inbound is enabled.
-11.  Remove folder spinner.
-12.  Restore personal key pairs.
-13.  Retain selected folder in folder drawer.
-14.  Save personal key pairs.
-15.  Separate standard folders from other folders.
+- Denote primary e-mail account in Settings.
+- Folder drawer folders order. Sort by name.
+- Include algorithm information in Settings::Privacy.
+- Index failure on Folders Drawer.
+- Key generation.
+- Prepare application within a progress-dialog block.
+- Prepare drawer from database values.
+- Prepare e-mail folders on account change.
+- Proxies for e-mail.
+- Real-time changes of Outbound text if Like Inbound is enabled.
+- Remove folder spinner.
+- Restore personal key pairs.
+- Retain selected folder in Folders on device orientation change.
+- Retain selected folder in folder drawer.
+- Save personal key pairs.
+- Separate standard folders from other folders.
 
 Future Items
 
-1.   Encrypted database containers.
+- Encrypted database containers.
 
 Remaining Items
 
-1.   Background services.
-2.   Double-click event in Folder drawer.
-3.   Folder drawer.
-4.   McEliece key generation, exchange, etc.
-5.   Offline and online design.
-6.   Retain selected folder in Folders on device orientation change.
-7.   Status bar on main activity.
+- Background services.
+- Double-click event in Folder drawer.
+- Download message content on separate thread.
+- Folder drawer.
+- McEliece key generation, exchange, etc.
+- Offline and online design.
+- Status bar on main activity.
