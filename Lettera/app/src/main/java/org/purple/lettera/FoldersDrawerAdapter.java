@@ -257,6 +257,10 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     private void dismiss()
     {
 	if(m_folders_drawer != null)
+	    /*
+	    ** Display the selection and then close the Folders drawer.
+	    */
+
 	    new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
 	    {
 		@Override
