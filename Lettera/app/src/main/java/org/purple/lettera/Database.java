@@ -749,6 +749,7 @@ public class Database extends SQLiteOpenHelper
 		 "email_accounts",
 		 "folders",
 		 "messages",
+		 "messages_recipients",
 		 "open_pgp",
 		 "settings"};
 
@@ -908,6 +909,27 @@ public class Database extends SQLiteOpenHelper
 	    "PRIMARY KEY (email_account, " +
 	    "folder_name, " +
 	    "uid))";
+
+	try
+	{
+	    db.execSQL(str);
+	}
+	catch(Exception exception)
+	{
+	}
+
+	str = "CREATE TABLE IF NOT EXISTS messages_recipients (" +
+	    "email_account TEXT NOT NULL, " +
+	    "folder_name TEXT NOT NULL, " +
+	    "message_uid BIGINT NOT NULL, " +
+	    "recipient_email_account TEXT NOT NULL, " +
+	    "recipient_name TEXT NOT NULL, " +
+	    "recipient_type TEXT NOT NULL, " +
+	    "PRIMARY KEY (email_account, " +
+	    "folder_name, " +
+	    "message_uid, " +
+	    "recipient_email_account, " +
+	    "recipient_type))";
 
 	try
 	{
