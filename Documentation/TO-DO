@@ -1,8 +1,9 @@
 Completed Items
 
 - Denote primary e-mail account in Settings.
-- Double-click event in Folder drawer. Dismiss on click.
-- Folder drawer folders order. Sort by name.
+- Double-click event in Folders drawer. Dismiss on click.
+- Folders drawer folders order. Sort by name.
+- Folders drawer.
 - Include algorithm information in Settings::Privacy.
 - Index failure on Folders Drawer.
 - Key generation.
@@ -13,8 +14,8 @@ Completed Items
 - Real-time changes of Outbound text if Like Inbound is enabled.
 - Remove folder spinner.
 - Restore personal key pairs.
+- Retain selected folder in Folders drawer.
 - Retain selected folder in Folders on device orientation change.
-- Retain selected folder in folder drawer.
 - Save personal key pairs.
 - Separate standard folders from other folders.
 
@@ -26,7 +27,6 @@ Remaining Items
 
 - Background services.
 - Download message content on separate thread.
-- Folder drawer.
 - McEliece key generation, exchange, etc.
 - Offline and online design.
 - Status bar on main activity.
