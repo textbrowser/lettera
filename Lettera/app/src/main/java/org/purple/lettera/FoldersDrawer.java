@@ -103,7 +103,7 @@ public class FoldersDrawer
 	*/
 
 	initialize_widget_members();
-	m_adapter = new FoldersDrawerAdapter();
+	m_adapter = new FoldersDrawerAdapter(FoldersDrawer.this);
 	m_database = Database.instance(m_context);
 	m_layout_manager = new FoldersDrawerLinearLayoutManager(m_context);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);

@@ -1,6 +1,7 @@
 Completed Items
 
 - Denote primary e-mail account in Settings.
+- Double-click event in Folder drawer. Dismiss on click.
 - Folder drawer folders order. Sort by name.
 - Include algorithm information in Settings::Privacy.
 - Index failure on Folders Drawer.
@@ -24,7 +25,6 @@ Future Items
 Remaining Items
 
 - Background services.
-- Double-click event in Folder drawer.
 - Download message content on separate thread.
 - Folder drawer.
 - McEliece key generation, exchange, etc.

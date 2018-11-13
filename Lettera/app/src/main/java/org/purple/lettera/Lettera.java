@@ -32,6 +32,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -441,7 +442,7 @@ public class Lettera extends AppCompatActivity
 	    m_selected_folder_name = "Inbox";
 
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
-	new Handler().postDelayed(new Runnable()
+	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
 	{
 	    @Override
 	    public void run()

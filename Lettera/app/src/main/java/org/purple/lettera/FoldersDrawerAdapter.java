@@ -28,6 +28,8 @@
 package org.purple.lettera;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -62,6 +64,23 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     public class ViewHolderButton extends RecyclerView.ViewHolder
     {
 	private RadioButton m_button = null;
+
+	private void perform_click(String folder_name, View view, float density)
+	{
+	    if(view == null)
+		return;
+
+	    ((RadioButton) view).setCompoundDrawablesWithIntrinsicBounds
+		(s_selected_icons[view.getId()], 0, 0, 0);
+	    ((RadioButton) view).setTextColor(Color.parseColor("#5e35b1"));
+	    m_selected_folder_name = folder_name;
+	    view.setBackgroundResource(R.drawable.folder_selection);
+	    view.setPaddingRelative
+		((int) (10 * density), // Start
+		 (int) (5 * density),  // Top
+		 (int) (10 * density), // End
+		 (int) (5 * density)); // Bottom
+	}
 
 	public RadioButton button()
 	{
@@ -164,18 +183,8 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		public void onClick(View view)
 		{
 		    clicked();
-		    ((RadioButton) view).
-			setCompoundDrawablesWithIntrinsicBounds
-			(s_selected_icons[view.getId()], 0, 0, 0);
-		    ((RadioButton) view).setTextColor
-			(Color.parseColor("#5e35b1"));
-		    m_selected_folder_name = folder_name;
-		    view.setBackgroundResource(R.drawable.folder_selection);
-		    view.setPaddingRelative
-			((int) (10 * density), // Start
-			 (int) (5 * density),  // Top
-			 (int) (10 * density), // End
-			 (int) (5 * density)); // Bottom
+		    perform_click(folder_name, view, density);
+		    dismiss();
 		}
 	    });
 
@@ -199,9 +208,9 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    m_button.setTextColor(Color.BLACK);
 
 	    if(m_selected_folder_name.isEmpty() && name.equals("Inbox"))
-		m_button.performClick();
+		perform_click(folder_name, m_button, density);
 	    else if(folder_element.m_name.equals(m_selected_folder_name))
-		m_button.performClick();
+		perform_click(folder_name, m_button, density);
 	}
     }
 
@@ -216,6 +225,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	}
     }
 
+    private FoldersDrawer m_folders_drawer = null;
     private String m_email_address = "";
     private String m_selected_folder_name = "";
     private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
@@ -244,8 +254,22 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	}
     }
 
-    public FoldersDrawerAdapter()
+    private void dismiss()
     {
+	if(m_folders_drawer != null)
+	    new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+	    {
+		@Override
+		public void run()
+		{
+		    m_folders_drawer.dismiss();
+		}
+	    }, 250);
+    }
+
+    public FoldersDrawerAdapter(FoldersDrawer folders_drawer)
+    {
+	m_folders_drawer = folders_drawer;
 	s_icons[IconsEnumerator.DRAFTS] = R.drawable.drafts_folder;
 	s_icons[IconsEnumerator.IMPORTANT] = R.drawable.important_folder;
 	s_icons[IconsEnumerator.INBOX] = R.drawable.inbox_folder;
