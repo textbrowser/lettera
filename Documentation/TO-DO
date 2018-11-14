@@ -26,7 +26,8 @@ Future Items
 Remaining Items
 
 - Background services.
-- Download message content on separate thread.
+- Download message content on separate thread(s).
 - McEliece key generation, exchange, etc.
 - Offline and online design.
+- Retain selected messages.
 - Status bar on main activity.
