@@ -405,6 +405,7 @@ public class Lettera extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+	m_database = Database.instance(getApplicationContext());
 
 	/*
 	** JavaMail may open sockets on the main thread. StrictMode
@@ -423,7 +424,6 @@ public class Lettera extends AppCompatActivity
 
 	initialize_widget_members();
 	m_adapter = new MessagesAdapter(getApplicationContext());
-	m_database = Database.instance(getApplicationContext());
 	m_folders_drawer = new FoldersDrawer
 	    (Lettera.this, findViewById(R.id.main_layout));
 	m_layout_manager = new LetteraLinearLayoutManager

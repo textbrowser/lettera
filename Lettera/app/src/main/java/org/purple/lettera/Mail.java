@@ -39,6 +39,7 @@ import javax.mail.Session;
 
 public class Mail
 {
+    private Database m_database = null;
     private IMAPStore m_imap = null;
     private SMTPTransport m_smtp = null;
     private String m_inbound_address = "";
@@ -69,6 +70,7 @@ public class Mail
 		String proxy_type,
 		String proxy_user)
     {
+	m_database = Database.instance();
 	m_inbound_address = inbound_address;
 	m_inbound_email = inbound_email;
 	m_inbound_password = inbound_password;
@@ -139,7 +141,6 @@ public class Mail
 	    for(Folder folder : folders)
 	    {
 		int message_count = 0;
-		int new_message_count = 0;
 
 		try
 		{
@@ -147,16 +148,8 @@ public class Mail
 		}
 		catch(Exception exception)
 		{
-		    message_count = 0;
-		}
-
-		try
-		{
-		    new_message_count = folder.getNewMessageCount();
-		}
-		catch(Exception exception)
-		{
-		    new_message_count = 0;
+		    message_count = m_database.message_count
+			(m_inbound_email, folder.getName());
 		}
 
 		string_builder.setLength(0);
