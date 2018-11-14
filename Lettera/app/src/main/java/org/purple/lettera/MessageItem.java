@@ -48,6 +48,7 @@ public class MessageItem extends View
     private TextView m_subject = null;
     private View m_divider = null;
     private View m_view = null;
+    private long m_uid = 0;
 
     private void initialize_widget_members()
     {
@@ -106,6 +107,7 @@ public class MessageItem extends View
 	m_from.setText(message_element.m_from_name);
 	m_selected.setChecked(message_element.m_selected);
 	m_subject.setText(message_element.m_subject);
+	m_uid = message_element.m_uid;
 	m_view.setVisibility(View.VISIBLE);
     }
 }
