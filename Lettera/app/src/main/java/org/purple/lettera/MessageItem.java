@@ -32,12 +32,14 @@ import android.graphics.Canvas;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.Date;
 
 public class MessageItem extends View
 {
+    private CheckBox m_selected = null;
     private Context m_context = null;
     private ImageView m_attachment = null;
     private LayoutInflater m_inflater = null;
@@ -53,6 +55,7 @@ public class MessageItem extends View
 	m_date = (TextView) m_view.findViewById(R.id.date);
 	m_divider = m_view.findViewById(R.id.divider);
 	m_from = (TextView) m_view.findViewById(R.id.from);
+	m_selected = (CheckBox) m_view.findViewById(R.id.selected);
 	m_subject = (TextView) m_view.findViewById(R.id.subject);
     }
 
@@ -101,6 +104,7 @@ public class MessageItem extends View
 
 	m_divider.setVisibility(last_position ? View.GONE : View.VISIBLE);
 	m_from.setText(message_element.m_from_name);
+	m_selected.setChecked(message_element.m_selected);
 	m_subject.setText(message_element.m_subject);
 	m_view.setVisibility(View.VISIBLE);
     }

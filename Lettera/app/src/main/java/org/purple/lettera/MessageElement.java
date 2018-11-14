@@ -37,6 +37,7 @@ public class MessageElement
     public String m_received_date = "";
     public String m_sent_date = "";
     public String m_subject = "";
+    public boolean m_selected = false;
     public long m_oid = -1;
     public long m_received_date_unix_epoch = 0;
     public long m_uid = -1;

@@ -308,10 +308,11 @@ public class Database extends SQLiteOpenHelper
 		 "message, " +                  // 4
 		 "received_date, " +            // 5
 		 "received_date_unix_epoch, " + // 6
-		 "sent_date, " +                // 7
-		 "subject, " +                  // 8
-		 "uid, " +                      // 9
-		 "OID " +                       // 10
+		 "selected, " +                 // 7
+		 "sent_date, " +                // 8
+		 "subject, " +                  // 9
+		 "uid, " +                      // 10
+		 "OID " +                       // 11
 		 "FROM messages WHERE email_account = ? AND " +
 		 "LOWER(folder_name) = LOWER(?) " +
 		 "ORDER BY received_date_unix_epoch " +
@@ -329,12 +330,13 @@ public class Database extends SQLiteOpenHelper
 		message_element.m_from_email_account = cursor.getString(2);
 		message_element.m_from_name = cursor.getString(3);
 		message_element.m_message = cursor.getString(4);
-		message_element.m_oid = cursor.getLong(10);
+		message_element.m_oid = cursor.getLong(11);
 		message_element.m_received_date = cursor.getString(5);
 		message_element.m_received_date_unix_epoch = cursor.getLong(6);
-		message_element.m_sent_date = cursor.getString(7);
-		message_element.m_subject = cursor.getString(8);
-		message_element.m_uid = cursor.getLong(9);
+		message_element.m_selected = cursor.getInt(7) == 1;
+		message_element.m_sent_date = cursor.getString(8);
+		message_element.m_subject = cursor.getString(9);
+		message_element.m_uid = cursor.getLong(10);
 		return message_element;
 	    }
 	}
@@ -903,6 +905,7 @@ public class Database extends SQLiteOpenHelper
 	    "message TEXT, " +
 	    "received_date TEXT NOT NULL, " +
 	    "received_date_unix_epoch BIGINT NOT NULL, " +
+	    "selected INTEGER NOT NULL DEFAULT 0, " +
 	    "sent_date TEXT NOT NULL, " +
 	    "subject TEXT NOT NULL, " +
 	    "uid BIGINT NOT NULL, " +
@@ -1130,11 +1133,12 @@ public class Database extends SQLiteOpenHelper
 
 		try
 		{
-		    String strings[] = new String[11];
+		    ContentValues content_values = new ContentValues();
 
-		    strings[0] = "1";
-		    strings[1] = email_account;
-		    strings[2] = folder.getName().toLowerCase();
+		    content_values.put("current_message", "1");
+		    content_values.put("email_account", email_account);
+		    content_values.put
+			("folder_name", folder.getName().toLowerCase());
 
 		    if(message.getFrom() != null &&
 		       message.getFrom().length != 0)
@@ -1144,47 +1148,73 @@ public class Database extends SQLiteOpenHelper
 
 			if(internet_address != null)
 			{
-			    strings[3] = internet_address.getAddress();
-			    strings[4] = internet_address.getPersonal();
+			    if(internet_address.getAddress() == null ||
+			       internet_address.getAddress().isEmpty())
+				content_values.put
+				    ("from_email_account",
+				     "unknown@unknown.org");
+			    else
+				content_values.put
+				    ("from_email_account",
+				     internet_address.getAddress());
+
+			    if(internet_address.getPersonal() == null ||
+			       internet_address.getPersonal().isEmpty())
+				content_values.put("from_name", "(unknown)");
+			    else
+				content_values.put
+				    ("from_name",
+				     internet_address.getPersonal());
 			}
-
-			if(strings[3] == null || strings[3].isEmpty())
-			    strings[3] = "unknown@unknown.org";
-
-			if(strings[4] == null || strings[4].isEmpty())
-			    strings[4] = strings[3];
+			else
+			{
+			    content_values.put
+				("from_email_account", "unknown@unknown.org");
+			    content_values.put("from_name", "(unknown)");
+			}
 		    }
 		    else
 		    {
-			strings[3] = "unknown@unknown.org";
-			strings[4] = "(unknown)";
+			content_values.put
+			    ("from_email_account", "unknown@unknown.org");
+			content_values.put("from_name", "(unknown)");
 		    }
 
-		    strings[5] = "(empty)"; // Fetch the contents later.
+		    content_values.put
+			("message", "(empty)"); // Fetch contents later.
 
 		    if(message.getReceivedDate() != null)
 		    {
-			strings[6] = message.getReceivedDate().toString();
-			strings[7] = String.valueOf
-			    (message.getReceivedDate().getTime());
+			content_values.put
+			    ("received_date",
+			     message.getReceivedDate().toString());
+			content_values.put
+			    ("received_date_unix_epoch",
+			     String.valueOf(message.
+					    getReceivedDate().getTime()));
 		    }
 		    else
 		    {
-			strings[6] = "01/01/1970";
-			strings[7] = "0";
+			content_values.put("received_date", "01/01/1970");
+			content_values.put("received_date_unix_epoch", 0);
 		    }
 
+		    content_values.put("selected", "0");
+
 		    if(message.getSentDate() != null)
-			strings[8] = message.getSentDate().toString();
+			content_values.put
+			    ("sent_date", message.getSentDate().toString());
 		    else
-			strings[8] = "01/01/1970";
+			content_values.put("sent_date", "01/01/1970");
 
 		    if(message.getSubject() != null)
-			strings[9] = message.getSubject().trim();
+			content_values.put
+			    ("subject", message.getSubject().trim());
 		    else
-			strings[9] = "(no subject)";
+			content_values.put("subject", "(no subject)");
 
-		    strings[10] = String.valueOf(folder.getUID(message));
+		    content_values.put
+			("uid", String.valueOf(folder.getUID(message)));
 		    m_db.execSQL
 			("REPLACE INTO messages (" +
 			 "current_message, " +
@@ -1195,11 +1225,25 @@ public class Database extends SQLiteOpenHelper
 			 "message, " +
 			 "received_date, " +
 			 "received_date_unix_epoch, " +
+			 "selected, " +
 			 "sent_date, " +
 			 "subject, " +
 			 "uid) VALUES " +
-			 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-			 strings);
+			 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			 new String[]
+			    {content_values.getAsString("current_message"),
+			     content_values.getAsString("email_account"),
+			     content_values.getAsString("folder_name"),
+			     content_values.getAsString("from_email_account"),
+			     content_values.getAsString("from_name"),
+			     content_values.getAsString("message"),
+			     content_values.getAsString("received_date"),
+			     content_values.
+			     getAsString("received_date_unix_epoch"),
+			     content_values.getAsString("selected"),
+			     content_values.getAsString("sent_date"),
+			     content_values.getAsString("subject"),
+			     content_values.getAsString("uid")});
 		}
 		catch(Exception exception)
 		{
