@@ -40,6 +40,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -211,6 +212,8 @@ public class Lettera extends AppCompatActivity
     private ScheduledExecutorService m_folders_drawer_scheduler = null;
     private Settings m_settings = null;
     private String m_selected_folder_name = "";
+    private TextView m_current_folder = null;
+    private TextView m_items_count = null;
     private View m_vertical_separator = null;
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
@@ -269,9 +272,11 @@ public class Lettera extends AppCompatActivity
     {
 	m_compose_button = (Button) findViewById(R.id.compose_button);
 	m_contacts_button = (Button) findViewById(R.id.contacts_button);
+	m_current_folder = (TextView) findViewById(R.id.current_folder);
 	m_download_button = (Button) findViewById(R.id.download_button);
 	m_folders_drawer_button = (ImageButton) findViewById
 	    (R.id.folders_drawer_button);
+	m_items_count = (TextView) findViewById(R.id.message_count);
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
 	m_recycler = (RecyclerView) findViewById(R.id.messages);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
@@ -389,6 +394,8 @@ public class Lettera extends AppCompatActivity
 				{
 				    m_adapter.notifyDataSetChanged();
 				    m_folders_drawer.update();
+				    m_items_count.setText
+					("Items: " + m_adapter.getItemCount());
 				}
 			    });
 			}
@@ -546,7 +553,9 @@ public class Lettera extends AppCompatActivity
 	}
 
 	m_adapter.set_folder_name(folder_name);
+	m_current_folder.setText(folder_name);
 	m_folders_drawer.set_selected_folder_name(folder_name);
+	m_items_count.setText("Items: " + m_adapter.getItemCount());
 
 	try
 	{
@@ -555,6 +564,11 @@ public class Lettera extends AppCompatActivity
 	}
 	catch(Exception exception)
 	{
+	}
+
+	synchronized(m_selected_folder_name_mutex)
+	{
+	    m_selected_folder_name = folder_name;
 	}
     }
 
@@ -604,14 +618,6 @@ public class Lettera extends AppCompatActivity
 	    m_settings_button.setBackgroundResource
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
-	}
-    }
-
-    void set_selected_folder_name(String folder_name)
-    {
-	synchronized(m_selected_folder_name_mutex)
-	{
-	    m_selected_folder_name = folder_name;
 	}
     }
 }

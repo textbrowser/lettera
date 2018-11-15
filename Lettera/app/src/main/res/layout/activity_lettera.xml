@@ -101,6 +101,18 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <TextView
+            android:id="@+id/current_folder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="@string/inbox"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/messages"
             android:layout_width="match_parent"
@@ -115,23 +127,6 @@
             android:orientation="horizontal"
             android:paddingStart="15dp"
             android:paddingEnd="15dp">
-
-            <TextView
-                android:id="@+id/current_folder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/inbox"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:background="@android:color/white" />
 
             <TextView
                 android:id="@+id/message_count"

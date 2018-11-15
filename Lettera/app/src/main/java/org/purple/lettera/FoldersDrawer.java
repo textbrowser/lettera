@@ -145,12 +145,8 @@ public class FoldersDrawer
     public void dismiss()
     {
 	if(m_context instanceof Lettera)
-	{
 	    ((Lettera) m_context).prepare_folders_and_messages_widgets
 		(selected_folder_name());
-	    ((Lettera) m_context).set_selected_folder_name
-		(selected_folder_name());
-	}
 
 	m_database.save_setting
 	    ("selected_folder_name_" + m_email_address.getText().toString(),
