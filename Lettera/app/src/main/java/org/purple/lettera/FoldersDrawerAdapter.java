@@ -120,7 +120,9 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 
 	    string_buffer.append(folder_element.m_name);
 	    string_buffer.append(" (");
-	    string_buffer.append(folder_element.m_message_count);
+	    string_buffer.append
+		(m_database.message_count(folder_element.m_email_account,
+					  folder_element.m_name));
 	    string_buffer.append(")");
 	    m_button.setAllCaps(false);
 	    m_button.setBackgroundColor(Color.TRANSPARENT);
@@ -225,6 +227,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	}
     }
 
+    private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private String m_email_address = "";
     private String m_selected_folder_name = "";
@@ -273,6 +276,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 
     public FoldersDrawerAdapter(FoldersDrawer folders_drawer)
     {
+	m_database = Database.instance();
 	m_folders_drawer = folders_drawer;
 	s_icons[IconsEnumerator.DRAFTS] = R.drawable.drafts_folder;
 	s_icons[IconsEnumerator.IMPORTANT] = R.drawable.important_folder;

@@ -1160,7 +1160,10 @@ public class Database extends SQLiteOpenHelper
 
 			    if(internet_address.getPersonal() == null ||
 			       internet_address.getPersonal().isEmpty())
-				content_values.put("from_name", "(unknown)");
+				content_values.put
+				    ("from_name",
+				     content_values.
+				     getAsString("from_email_account"));
 			    else
 				content_values.put
 				    ("from_name",
