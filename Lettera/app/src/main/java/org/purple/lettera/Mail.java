@@ -140,22 +140,12 @@ public class Mail
 
 	    for(Folder folder : folders)
 	    {
-		int message_count = 0;
-
-		try
-		{
-		    message_count = folder.getMessageCount();
-		}
-		catch(Exception exception)
-		{
-		    message_count = m_database.message_count
-			(m_inbound_email, folder.getName());
-		}
-
 		string_builder.setLength(0);
 		string_builder.append(folder.getName());
 		string_builder.append(" (");
-		string_builder.append(message_count);
+		string_builder.append
+		    (m_database.
+		     message_count(m_inbound_email, folder.getName()));
 		string_builder.append(")");
 		array_list.add(string_builder.toString());
 	    }
