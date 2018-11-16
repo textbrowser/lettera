@@ -32,6 +32,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Base64;
 import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
@@ -1187,6 +1188,22 @@ public class Database extends SQLiteOpenHelper
 			new String[] {email_account,
 				      folder.getName()});
 
+	    SQLiteStatement sqlite_statement = m_db.compileStatement
+		("REPLACE INTO messages (" +
+		 "current_message, " +
+		 "email_account, " +
+		 "folder_name, " +
+		 "from_email_account, " +
+		 "from_name, " +
+		 "message, " +
+		 "received_date, " +
+		 "received_date_unix_epoch, " +
+		 "selected, " +
+		 "sent_date, " +
+		 "subject, " +
+		 "uid) VALUES " +
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
 	    for(Message message : messages)
 	    {
 		if(message == null)
@@ -1291,8 +1308,33 @@ public class Database extends SQLiteOpenHelper
 			content_values.put("subject", "(no subject)");
 
 		    content_values.put("uid", folder.getUID(message));
-		    m_db.replaceOrThrow
-			("messages", null, content_values);
+		    sqlite_statement.bindLong
+			(1, content_values.getAsLong("current_message"));
+		    sqlite_statement.bindString
+			(2, content_values.getAsString("email_account"));
+		    sqlite_statement.bindString
+			(3, content_values.getAsString("folder_name"));
+		    sqlite_statement.bindString
+			(4, content_values.getAsString("from_email_account"));
+		    sqlite_statement.bindString
+			(5, content_values.getAsString("from_name"));
+		    sqlite_statement.bindString
+			(6, content_values.getAsString("message"));
+		    sqlite_statement.bindString
+			(7, content_values.getAsString("received_date"));
+		    sqlite_statement.bindLong
+			(8,
+			 content_values.getAsLong("received_date_unix_epoch"));
+		    sqlite_statement.bindLong
+			(9, content_values.getAsLong("selected"));
+		    sqlite_statement.bindString
+			(10, content_values.getAsString("sent_date"));
+		    sqlite_statement.bindString
+			(11, content_values.getAsString("subject"));
+		    sqlite_statement.bindLong
+			(12, content_values.getAsLong("uid"));
+		    sqlite_statement.execute();
+		    sqlite_statement.clearBindings();
 		}
 		catch(Exception exception)
 		{
