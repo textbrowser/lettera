@@ -16,8 +16,10 @@ Completed Items
 - Restore personal key pairs.
 - Retain selected folder in Folders drawer.
 - Retain selected folder in Folders on device orientation change.
+- Retain selected messages.
 - Save personal key pairs.
 - Separate standard folders from other folders.
+- Status bar on main activity.
 
 Future Items
 
@@ -29,5 +31,3 @@ Remaining Items
 - Download message content on separate thread(s).
 - McEliece key generation, exchange, etc.
 - Offline and online design.
-- Retain selected messages.
-- Status bar on main activity.
