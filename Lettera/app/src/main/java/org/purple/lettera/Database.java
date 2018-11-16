@@ -505,25 +505,39 @@ public class Database extends SQLiteOpenHelper
 	else if(m_db == null)
 	    return "m_db is null on save_setting()";
 
-	m_db.beginTransactionNonExclusive();
+	final String key = content_values.getAsString("key");
+	final String value = content_values.getAsString("value");
+	Thread thread = new Thread
+	    (new Runnable()
+	    {
+		@Override
+		public void run()
+		{
+		    m_db.beginTransactionNonExclusive();
 
-	try
-	{
-	    m_db.execSQL
-		("REPLACE INTO settings (key_field, value) VALUES (?, ?)",
-		 new String[] {content_values.getAsString("key"),
-			       content_values.getAsString("value")});
-	    m_db.setTransactionSuccessful();
-	}
-	catch(Exception exception)
-	{
-	    return exception.getMessage();
-	}
-	finally
-	{
-	    m_db.endTransaction();
-	}
+		    try
+		    {
+			SQLiteStatement sqlite_statement =
+			    m_db.compileStatement
+			    ("REPLACE INTO settings (key_field, value) " +
+			     "VALUES (?, ?)");
 
+			sqlite_statement.bindString(1, key);
+			sqlite_statement.bindString(2, value);
+			sqlite_statement.execute();
+			m_db.setTransactionSuccessful();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		    finally
+		    {
+			m_db.endTransaction();
+		    }
+		}
+	    });
+
+	thread.start();
 	return "";
     }
 
