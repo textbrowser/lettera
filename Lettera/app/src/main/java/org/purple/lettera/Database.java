@@ -1037,17 +1037,17 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    ContentValues values = new ContentValues();
+	    SQLiteStatement sqlite_statement = m_db.compileStatement
+		("UPDATE messages SET selected = ? " +
+		 "WHERE email_account = ? AND " +
+		 "LOWER(folder_name) = LOWER(?) AND " +
+		 "uid = ?");
 
-	    values.put("selected", selected ? 1 : 0);
-	    m_db.update("messages",
-			values,
-			"email_account = ? AND " +
-			"LOWER(folder_name) = LOWER(?) AND " +
-			"uid = ?",
-			new String[] {email_account,
-				      folder_name,
-				      String.valueOf(uid)});
+	    sqlite_statement.bindLong(1, selected ? 1 : 0);
+	    sqlite_statement.bindString(2, email_account);
+	    sqlite_statement.bindString(3, folder_name);
+	    sqlite_statement.bindLong(4, uid);
+	    sqlite_statement.execute();
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
@@ -1193,11 +1193,11 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    ContentValues values = new ContentValues();
+	    ContentValues content_values = new ContentValues();
 
-	    values.put("current_message", 0);
+	    content_values.put("current_message", 0);
 	    m_db.update("messages",
-			values,
+			content_values,
 			"email_account = ? AND LOWER(folder_name) = LOWER(?)",
 			new String[] {email_account,
 				      folder.getName()});
@@ -1227,8 +1227,7 @@ public class Database extends SQLiteOpenHelper
 
 		try
 		{
-		    ContentValues content_values = new ContentValues();
-
+		    content_values.clear();
 		    content_values.put("current_message", 1);
 		    content_values.put("email_account", email_account);
 		    content_values.put
