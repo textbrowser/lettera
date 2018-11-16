@@ -1192,6 +1192,8 @@ public class Database extends SQLiteOpenHelper
 		if(message == null)
 		    continue;
 
+		Cursor cursor = null;
+
 		try
 		{
 		    ContentValues content_values = new ContentValues();
@@ -1263,7 +1265,20 @@ public class Database extends SQLiteOpenHelper
 			content_values.put("received_date_unix_epoch", 0);
 		    }
 
-		    content_values.put("selected", "0");
+		    cursor = m_db.rawQuery
+			("SELECT selected " +
+			 "FROM messages WHERE email_account = ? AND " +
+			 "LOWER(folder_name) = LOWER(?) AND " +
+			 "uid = ?",
+			 new String[] {email_account,
+				       folder.getName(),
+				       String.valueOf(folder.getUID(message))});
+
+		    if(cursor != null && cursor.moveToFirst())
+			content_values.put
+			    ("selected", String.valueOf(cursor.getInt(0)));
+		    else
+			content_values.put("selected", "0");
 
 		    if(message.getSentDate() != null)
 			content_values.put
@@ -1312,6 +1327,11 @@ public class Database extends SQLiteOpenHelper
 		catch(Exception exception)
 		{
 		    Log.e("Database.write_messages()", exception.getMessage());
+		}
+		finally
+		{
+		    if(cursor != null)
+			cursor.close();
 		}
 	    }
 
