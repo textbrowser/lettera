@@ -1198,7 +1198,7 @@ public class Database extends SQLiteOpenHelper
 		{
 		    ContentValues content_values = new ContentValues();
 
-		    content_values.put("current_message", "1");
+		    content_values.put("current_message", 1);
 		    content_values.put("email_account", email_account);
 		    content_values.put
 			("folder_name", folder.getName().toLowerCase());
@@ -1256,8 +1256,7 @@ public class Database extends SQLiteOpenHelper
 			     message.getReceivedDate().toString());
 			content_values.put
 			    ("received_date_unix_epoch",
-			     String.valueOf(message.
-					    getReceivedDate().getTime()));
+			     message.getReceivedDate().getTime());
 		    }
 		    else
 		    {
@@ -1275,10 +1274,9 @@ public class Database extends SQLiteOpenHelper
 				       String.valueOf(folder.getUID(message))});
 
 		    if(cursor != null && cursor.moveToFirst())
-			content_values.put
-			    ("selected", String.valueOf(cursor.getInt(0)));
+			content_values.put("selected", cursor.getInt(0));
 		    else
-			content_values.put("selected", "0");
+			content_values.put("selected", 0);
 
 		    if(message.getSentDate() != null)
 			content_values.put
@@ -1292,41 +1290,12 @@ public class Database extends SQLiteOpenHelper
 		    else
 			content_values.put("subject", "(no subject)");
 
-		    content_values.put
-			("uid", String.valueOf(folder.getUID(message)));
-		    m_db.execSQL
-			("REPLACE INTO messages (" +
-			 "current_message, " +
-			 "email_account, " +
-			 "folder_name, " +
-			 "from_email_account, " +
-			 "from_name, " +
-			 "message, " +
-			 "received_date, " +
-			 "received_date_unix_epoch, " +
-			 "selected, " +
-			 "sent_date, " +
-			 "subject, " +
-			 "uid) VALUES " +
-			 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-			 new String[]
-			    {content_values.getAsString("current_message"),
-			     content_values.getAsString("email_account"),
-			     content_values.getAsString("folder_name"),
-			     content_values.getAsString("from_email_account"),
-			     content_values.getAsString("from_name"),
-			     content_values.getAsString("message"),
-			     content_values.getAsString("received_date"),
-			     content_values.
-			     getAsString("received_date_unix_epoch"),
-			     content_values.getAsString("selected"),
-			     content_values.getAsString("sent_date"),
-			     content_values.getAsString("subject"),
-			     content_values.getAsString("uid")});
+		    content_values.put("uid", folder.getUID(message));
+		    m_db.replaceOrThrow
+			("messages", null, content_values);
 		}
 		catch(Exception exception)
 		{
-		    Log.e("Database.write_messages()", exception.getMessage());
 		}
 		finally
 		{
