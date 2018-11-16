@@ -66,6 +66,9 @@ public class Database extends SQLiteOpenHelper
 
     public ArrayList<FolderElement> folders(String email_account)
     {
+	if(m_db == null)
+	    return null;
+
 	Cursor cursor = null;
 
 	try
@@ -118,6 +121,9 @@ public class Database extends SQLiteOpenHelper
 
     public ArrayList<String> email_account_names()
     {
+	if(m_db == null)
+	    return null;
+
 	Cursor cursor = null;
 
 	try
@@ -152,6 +158,9 @@ public class Database extends SQLiteOpenHelper
 
     public EmailElement email_element(String email_account)
     {
+	if(m_db == null)
+	    return null;
+
 	Cursor cursor = null;
 
 	try
@@ -249,6 +258,9 @@ public class Database extends SQLiteOpenHelper
 
     public FolderElement folder(String email_account, int position)
     {
+	if(m_db == null)
+	    return null;
+
 	Cursor cursor = null;
 
 	try
@@ -296,6 +308,9 @@ public class Database extends SQLiteOpenHelper
 				  String folder_name,
 				  int position)
     {
+	if(m_db == null)
+	    return null;
+
 	Cursor cursor = null;
 
 	try
@@ -354,6 +369,9 @@ public class Database extends SQLiteOpenHelper
 
     public SettingsElement settings_element(String key)
     {
+	if(m_db == null)
+	    return null;
+
 	Cursor cursor = null;
 
 	try
@@ -396,6 +414,9 @@ public class Database extends SQLiteOpenHelper
 
     public String folder_full_name(String email_account, String folder_name)
     {
+	if(m_db == null)
+	    return "";
+
 	Cursor cursor = null;
 
 	try
@@ -675,6 +696,9 @@ public class Database extends SQLiteOpenHelper
 
     public int folder_count(String email_account)
     {
+	if(m_db == null)
+	    return 0;
+
 	Cursor cursor = null;
 
 	try
@@ -700,6 +724,9 @@ public class Database extends SQLiteOpenHelper
 
     public int message_count(String email_account, String folder_name)
     {
+	if(m_db == null)
+	    return 0;
+
 	Cursor cursor = null;
 
 	try
@@ -981,6 +1008,40 @@ public class Database extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int old_version, int new_version)
     {
         onCreate(db);
+    }
+
+    public void set_message_selected(String email_account,
+				     String folder_name,
+				     boolean selected,
+				     long uid)
+    {
+	if(m_db == null)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    ContentValues values = new ContentValues();
+
+	    values.put("selected", selected ? 1 : 0);
+	    m_db.update("messages",
+			values,
+			"email_account = ? AND " +
+			"LOWER(folder_name) = LOWER(?) AND " +
+			"uid = ?",
+			new String[] {email_account,
+				      folder_name,
+				      String.valueOf(uid)});
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
     }
 
     public void write_folders(ArrayList<FolderElement> array_list,

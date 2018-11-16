@@ -42,9 +42,12 @@ public class MessageItem extends View
 {
     final private Database m_database = Database.instance();
     private CheckBox m_selected = null;
+    private CompoundButton.OnCheckedChangeListener m_selected_listener = null;
     private Context m_context = null;
     private ImageView m_attachment = null;
     private LayoutInflater m_inflater = null;
+    private String m_email_account = "";
+    private String m_folder_name = "";
     private TextView m_date = null;
     private TextView m_from = null;
     private TextView m_subject = null;
@@ -64,15 +67,20 @@ public class MessageItem extends View
 
     private void prepare_listeners()
     {
-	m_selected.setOnCheckedChangeListener
-	    (new CompoundButton.OnCheckedChangeListener()
+	if(m_selected_listener == null)
+	    m_selected_listener = new CompoundButton.OnCheckedChangeListener()
 	    {
 		@Override
 		public void onCheckedChanged
 		    (CompoundButton button_view, boolean is_checked)
 		{
+		    m_database.set_message_selected
+			(m_email_account,
+			 m_folder_name,
+			 is_checked,
+			 m_uid);
 		}
-	    });
+	    };
     }
 
     @Override
@@ -120,8 +128,12 @@ public class MessageItem extends View
 	}
 
 	m_divider.setVisibility(last_position ? View.GONE : View.VISIBLE);
+	m_email_account = message_element.m_email_account;
+	m_folder_name = message_element.m_folder_name;
 	m_from.setText(message_element.m_from_name);
+	m_selected.setOnCheckedChangeListener(null);
 	m_selected.setChecked(message_element.m_selected);
+	m_selected.setOnCheckedChangeListener(m_selected_listener);
 	m_subject.setText(message_element.m_subject);
 	m_uid = message_element.m_uid;
 	m_view.setVisibility(View.VISIBLE);
