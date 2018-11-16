@@ -110,7 +110,7 @@ public class FoldersDrawer
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
-	prepare_button_listeners();
+	prepare_listeners();
     }
 
     private void initialize_widget_members()
@@ -120,7 +120,7 @@ public class FoldersDrawer
 	m_recycler = m_view.findViewById(R.id.recycler);
     }
 
-    private void prepare_button_listeners()
+    private void prepare_listeners()
     {
 	if(m_close_button != null && !m_close_button.hasOnClickListeners())
 	    m_close_button.setOnClickListener(new View.OnClickListener()

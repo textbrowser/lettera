@@ -33,12 +33,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.Date;
 
 public class MessageItem extends View
 {
+    final private Database m_database = Database.instance();
     private CheckBox m_selected = null;
     private Context m_context = null;
     private ImageView m_attachment = null;
@@ -60,6 +62,19 @@ public class MessageItem extends View
 	m_subject = (TextView) m_view.findViewById(R.id.subject);
     }
 
+    private void prepare_listeners()
+    {
+	m_selected.setOnCheckedChangeListener
+	    (new CompoundButton.OnCheckedChangeListener()
+	    {
+		@Override
+		public void onCheckedChanged
+		    (CompoundButton button_view, boolean is_checked)
+		{
+		}
+	    });
+    }
+
     @Override
     protected void onDraw(Canvas canvas)
     {
@@ -74,6 +89,7 @@ public class MessageItem extends View
 	    (Context.LAYOUT_INFLATER_SERVICE);
 	m_view = m_inflater.inflate(R.layout.letter_line, view_group, false);
 	initialize_widget_members();
+	prepare_listeners();
     }
 
     public View view()

@@ -283,7 +283,7 @@ public class Lettera extends AppCompatActivity
 	m_vertical_separator = findViewById(R.id.vertical_separator);
     }
 
-    private void prepare_button_listeners()
+    private void prepare_listeners()
     {
 	if(m_download_button != null && !m_download_button.
 	                                 hasOnClickListeners())
@@ -481,10 +481,10 @@ public class Lettera extends AppCompatActivity
 		}
 	    }
 	}, 500);
-	prepare_button_listeners();
 	prepare_folders_and_messages_widgets(m_selected_folder_name);
 	prepare_generic_widgets();
 	prepare_icons();
+	prepare_listeners();
 	prepare_schedulers();
     }
 
