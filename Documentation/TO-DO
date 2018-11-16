@@ -32,3 +32,4 @@ Remaining Items
 - Download message content on separate thread(s).
 - McEliece key generation, exchange, etc.
 - Offline and online design.
+- Performance degradation with folders having many messages (insert).
