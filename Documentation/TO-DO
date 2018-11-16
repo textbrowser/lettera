@@ -28,6 +28,7 @@ Future Items
 Remaining Items
 
 - Background services.
+- Deleted remote servers are also deleted locally.
 - Download message content on separate thread(s).
 - McEliece key generation, exchange, etc.
 - Offline and online design.
