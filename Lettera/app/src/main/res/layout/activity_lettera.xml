@@ -118,12 +118,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:orientation="horizontal"
             android:paddingStart="15dp"
             android:paddingEnd="15dp">
@@ -133,7 +139,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/items"
-                android:textColor="@android:color/white"
                 android:textSize="16sp" />
         </LinearLayout>
 

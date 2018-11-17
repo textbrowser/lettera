@@ -5,9 +5,11 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -15,519 +17,546 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/display_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_weight="0"
+                android:background="@drawable/default_display" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+            <Button
+                android:id="@+id/network_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_weight="0"
+                android:background="@drawable/default_network" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+            <Button
+                android:id="@+id/privacy_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_weight="0"
+                android:background="@drawable/default_privacy" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/display_button"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="0"
-                    android:background="@drawable/default_display" />
-
-                <Space
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0" />
-
-                <Button
-                    android:id="@+id/network_button"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="0"
-                    android:background="@drawable/default_network" />
-
-                <Space
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0" />
-
-                <Button
-                    android:id="@+id/privacy_button"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="0"
-                    android:background="@drawable/default_privacy" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/display_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/display"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.GridLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:columnCount="2"
-                    app:rowCount="2">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/color_theme" />
-
-                    <Spinner
-                        android:id="@+id/color_theme_spinner"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/e_mail_folders" />
-
-                    <Spinner
-                        android:id="@+id/email_folders"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/icon_theme" />
-
-                    <Spinner
-                        android:id="@+id/icon_theme_spinner"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content" />
-
-                </android.support.v7.widget.GridLayout>
-
-                <CheckBox
-                    android:id="@+id/show_vertical_separator_before_settings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/show_a_vertical_separator_before_the_settings_icon" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/network_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/network"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/accounts"
-                    android:textSize="20sp" />
-
                 <LinearLayout
+                    android:id="@+id/display_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <Spinner
-                        android:id="@+id/accounts_spinner"
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0" />
-
-                    <Button
-                        android:id="@+id/delete_account_button"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/delete" />
-
-                    <CheckBox
-                        android:id="@+id/delete_account_verify_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/inbound_imaps_server"
-                        android:textSize="20sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/inbound_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.70"
-                            android:ems="10"
-                            android:hint="@string/address"
-                            android:inputType="textPersonName"
-                            android:nextFocusDown="@id/inbound_port"
-                            android:importantForAutofill="no" tools:targetApi="o" />
-
-                        <EditText
-                            android:id="@+id/inbound_port"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.30"
-                            android:ems="10"
-                            android:hint="@string/port"
-                            android:inputType="number"
-                            android:text="@string/_993"
-                            android:importantForAutofill="no" tools:targetApi="o" />
-
-                    </LinearLayout>
-
-                    <EditText
-                        android:id="@+id/inbound_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/e_mail"
-                        android:inputType="textEmailAddress"
-                        android:importantForAutofill="no" tools:targetApi="o" />
-
-                    <EditText
-                        android:id="@+id/inbound_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/password"
-                        android:importantForAutofill="no"
-                        android:inputType="textPassword"
-                        tools:targetApi="o" />
-
-                    <CheckBox
-                        android:id="@+id/delete_on_server_checkbox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/delete_on_server" />
-
-                    <CheckBox
-                        android:id="@+id/primary_account_checkbox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/primary_account" />
-
-                    <Button
-                        android:id="@+id/test_inbound_button"
-                        style="@style/Widget.AppCompat.Button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/test" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/outbound_smtps_server"
-                        android:textSize="20sp" />
-
-                    <Switch
-                        android:id="@+id/outbound_as_inbound"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/like_inbound" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/outbound_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.70"
-                            android:ems="10"
-                            android:hint="@string/address"
-                            android:inputType="textPersonName"
-                            android:nextFocusDown="@id/outbound_port"
-                            android:importantForAutofill="no" tools:targetApi="o" />
-
-                        <EditText
-                            android:id="@+id/outbound_port"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.30"
-                            android:ems="10"
-                            android:hint="@string/port"
-                            android:inputType="number"
-                            android:text="@string/_587"
-                            android:importantForAutofill="no" tools:targetApi="o" />
-
-                    </LinearLayout>
-
-                    <EditText
-                        android:id="@+id/outbound_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/e_mail"
-                        android:inputType="textEmailAddress"
-                        android:importantForAutofill="no" tools:targetApi="o" />
-
-                    <EditText
-                        android:id="@+id/outbound_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/password"
-                        android:inputType="textPassword"
-                        android:importantForAutofill="no" tools:targetApi="o" />
-
-                    <Button
-                        android:id="@+id/test_outbound_button"
-                        style="@style/Widget.AppCompat.Button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/test" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/proxy"
-                        android:textSize="20sp" />
+                        android:text="@string/display"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
 
                     <android.support.v7.widget.GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:columnCount="2"
-                        app:rowCount="3">
+                        app:rowCount="2">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/type"
-                            app:layout_columnWeight="0.70" />
+                            android:text="@string/color_theme" />
 
                         <Spinner
-                            android:id="@+id/proxy_type_spinner"
-                            android:layout_width="0dp"
+                            android:id="@+id/color_theme_spinner"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_columnWeight="0.30" />
+                            android:text="@string/e_mail_folders" />
+
+                        <Spinner
+                            android:id="@+id/email_folders"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/icon_theme" />
+
+                        <Spinner
+                            android:id="@+id/icon_theme_spinner"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content" />
+
+                    </android.support.v7.widget.GridLayout>
+
+                    <CheckBox
+                        android:id="@+id/show_vertical_separator_before_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/show_a_vertical_separator_before_the_settings_icon" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/network_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/network"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/accounts"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/accounts_spinner"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0" />
+
+                        <Button
+                            android:id="@+id/delete_account_button"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="@string/delete" />
+
+                        <CheckBox
+                            android:id="@+id/delete_account_verify_checkbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inbound_imaps_server"
+                            android:textSize="20sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/inbound_address"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.70"
+                                android:ems="10"
+                                android:hint="@string/address"
+                                android:importantForAutofill="no"
+                                android:inputType="textPersonName"
+                                android:nextFocusDown="@id/inbound_port"
+                                tools:targetApi="o" />
+
+                            <EditText
+                                android:id="@+id/inbound_port"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.30"
+                                android:ems="10"
+                                android:hint="@string/port"
+                                android:importantForAutofill="no"
+                                android:inputType="number"
+                                android:text="@string/_993"
+                                tools:targetApi="o" />
+
+                        </LinearLayout>
 
                         <EditText
-                            android:id="@+id/proxy_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/inbound_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
                             android:ems="10"
-                            android:hint="@string/address"
-                            android:inputType="textPersonName"
-                            android:nextFocusDown="@id/proxy_port"
-                            app:layout_columnWeight="0.70"
-                            android:importantForAutofill="no" tools:targetApi="o" />
+                            android:hint="@string/e_mail"
+                            android:importantForAutofill="no"
+                            android:inputType="textEmailAddress"
+                            tools:targetApi="o" />
 
                         <EditText
-                            android:id="@+id/proxy_port"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="@string/port"
-                            android:inputType="number"
-                            android:nextFocusDown="@id/proxy_user"
-                            app:layout_columnWeight="0.30"
-                            android:importantForAutofill="no" tools:targetApi="o" />
-
-                        <EditText
-                            android:id="@+id/proxy_user"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="@string/user"
-                            android:inputType="textPersonName"
-                            android:nextFocusDown="@id/proxy_password"
-                            app:layout_columnWeight="0.70"
-                            android:importantForAutofill="no" tools:targetApi="o" />
-
-                        <EditText
-                            android:id="@+id/proxy_password"
-                            android:layout_width="0dp"
+                            android:id="@+id/inbound_password"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="@string/password"
+                            android:importantForAutofill="no"
                             android:inputType="textPassword"
-                            app:layout_columnWeight="0.30"
-                            android:importantForAutofill="no" tools:targetApi="o" />
-                    </android.support.v7.widget.GridLayout>
+                            tools:targetApi="o" />
+
+                        <CheckBox
+                            android:id="@+id/delete_on_server_checkbox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/delete_on_server" />
+
+                        <CheckBox
+                            android:id="@+id/primary_account_checkbox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/primary_account" />
+
+                        <Button
+                            android:id="@+id/test_inbound_button"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/test" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/outbound_smtps_server"
+                            android:textSize="20sp" />
+
+                        <Switch
+                            android:id="@+id/outbound_as_inbound"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/like_inbound" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/outbound_address"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.70"
+                                android:ems="10"
+                                android:hint="@string/address"
+                                android:importantForAutofill="no"
+                                android:inputType="textPersonName"
+                                android:nextFocusDown="@id/outbound_port"
+                                tools:targetApi="o" />
+
+                            <EditText
+                                android:id="@+id/outbound_port"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.30"
+                                android:ems="10"
+                                android:hint="@string/port"
+                                android:importantForAutofill="no"
+                                android:inputType="number"
+                                android:text="@string/_587"
+                                tools:targetApi="o" />
+
+                        </LinearLayout>
+
+                        <EditText
+                            android:id="@+id/outbound_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="@string/e_mail"
+                            android:importantForAutofill="no"
+                            android:inputType="textEmailAddress"
+                            tools:targetApi="o" />
+
+                        <EditText
+                            android:id="@+id/outbound_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/password"
+                            android:importantForAutofill="no"
+                            android:inputType="textPassword"
+                            tools:targetApi="o" />
+
+                        <Button
+                            android:id="@+id/test_outbound_button"
+                            style="@style/Widget.AppCompat.Button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/test" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/proxy"
+                            android:textSize="20sp" />
+
+                        <android.support.v7.widget.GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:columnCount="2"
+                            app:rowCount="3">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:text="@string/type"
+                                app:layout_columnWeight="0.70" />
+
+                            <Spinner
+                                android:id="@+id/proxy_type_spinner"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                app:layout_columnWeight="0.30" />
+
+                            <EditText
+                                android:id="@+id/proxy_address"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/address"
+                                android:importantForAutofill="no"
+                                android:inputType="textPersonName"
+                                android:nextFocusDown="@id/proxy_port"
+                                app:layout_columnWeight="0.70"
+                                tools:targetApi="o" />
+
+                            <EditText
+                                android:id="@+id/proxy_port"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/port"
+                                android:importantForAutofill="no"
+                                android:inputType="number"
+                                android:nextFocusDown="@id/proxy_user"
+                                app:layout_columnWeight="0.30"
+                                tools:targetApi="o" />
+
+                            <EditText
+                                android:id="@+id/proxy_user"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/user"
+                                android:importantForAutofill="no"
+                                android:inputType="textPersonName"
+                                android:nextFocusDown="@id/proxy_password"
+                                app:layout_columnWeight="0.70"
+                                tools:targetApi="o" />
+
+                            <EditText
+                                android:id="@+id/proxy_password"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/password"
+                                android:importantForAutofill="no"
+                                android:inputType="textPassword"
+                                app:layout_columnWeight="0.30"
+                                tools:targetApi="o" />
+                        </android.support.v7.widget.GridLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/privacy_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/privacy"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
                 <LinearLayout
+                    android:id="@+id/privacy_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/encryption_key" />
-
-                    <Spinner
-                        android:id="@+id/encryption_key_spinner"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/encryption_key_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/digest"
-                    android:textIsSelectable="true" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/signature_key" />
-
-                    <Spinner
-                        android:id="@+id/signature_key_spinner"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/signature_key_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/digest"
-                    android:textIsSelectable="true" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/generate_keys_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/generate" />
-
-                    <CheckBox
-                        android:id="@+id/generate_keys_checkbox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0" />
+                        android:text="@string/privacy"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="@string/encryption_key" />
+
+                        <Spinner
+                            android:id="@+id/encryption_key_spinner"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/encryption_key_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/digest"
+                        android:textIsSelectable="true" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="@string/signature_key" />
+
+                        <Spinner
+                            android:id="@+id/signature_key_spinner"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/signature_key_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/digest"
+                        android:textIsSelectable="true" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/generate_keys_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="@string/generate" />
+
+                        <CheckBox
+                            android:id="@+id/generate_keys_checkbox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
+        </ScrollView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
-                android:orientation="horizontal">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
 
-                <Button
-                    android:id="@+id/apply_button"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/apply" />
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
-                <Button
-                    android:id="@+id/close_button"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/close" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/apply_button"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/apply" />
 
+            <Button
+                android:id="@+id/close_button"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/close" />
         </LinearLayout>
-    </ScrollView>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
