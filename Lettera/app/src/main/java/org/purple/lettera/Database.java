@@ -329,7 +329,8 @@ public class Database extends SQLiteOpenHelper
 		 "subject, " +                  // 9
 		 "uid, " +                      // 10
 		 "OID " +                       // 11
-		 "FROM messages WHERE email_account = ? AND " +
+		 "FROM messages INDEXED BY messages_received_date_unix_epoch " +
+		 "WHERE email_account = ? AND " +
 		 "LOWER(folder_name) = LOWER(?) " +
 		 "ORDER BY received_date_unix_epoch " +
 		 "LIMIT 1 OFFSET CAST(? AS INTEGER)",
@@ -954,6 +955,17 @@ public class Database extends SQLiteOpenHelper
 	    "PRIMARY KEY (email_account, " +
 	    "folder_name, " +
 	    "uid))";
+
+	try
+	{
+	    db.execSQL(str);
+	}
+	catch(Exception exception)
+	{
+	}
+
+	str = "CREATE INDEX IF NOT EXISTS messages_received_date_unix_epoch " +
+	    "ON messages (received_date_unix_epoch)";
 
 	try
 	{
