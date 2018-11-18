@@ -29,8 +29,9 @@ Future Items
 Remaining Items
 
 - Background services.
-- Deleted remote servers are also deleted locally.
+- Deleted remote folders are also deleted locally.
 - Download message content on separate thread(s).
+- Fast SQLite sort.
 - McEliece key generation, exchange, etc.
 - Offline and online design.
 - Performance degradation with folders having many messages (insert).
