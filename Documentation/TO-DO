@@ -3,11 +3,13 @@ Completed Items
 - Denote primary e-mail account in Settings.
 - Double-click event in Folders drawer. Dismiss on click.
 - Download folder messages incrementally.
+- Fast SQLite sort.
 - Folders drawer folders order. Sort by name.
 - Folders drawer.
 - Include algorithm information in Settings::Privacy.
 - Index failure on Folders Drawer.
 - Key generation.
+- Performance degradation with folders having many messages (class cursor).
 - Prepare application within a progress-dialog block.
 - Prepare drawer from database values.
 - Prepare e-mail folders on account change.
@@ -31,7 +33,5 @@ Remaining Items
 - Background services.
 - Deleted remote folders are also deleted locally.
 - Download message content on separate thread(s).
-- Fast SQLite sort.
 - McEliece key generation, exchange, etc.
 - Offline and online design.
-- Performance degradation with folders having many messages (insert).

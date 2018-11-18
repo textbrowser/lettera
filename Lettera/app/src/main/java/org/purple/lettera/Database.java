@@ -46,7 +46,11 @@ import javax.mail.internet.InternetAddress;
 
 public class Database extends SQLiteOpenHelper
 {
+    private Cursor m_read_message_cursor = null;
     private SQLiteDatabase m_db = null;
+    private String m_read_message_cursor_email_account = "";
+    private String m_read_message_cursor_folder_name = "";
+    private final Object m_read_message_cursor_mutex = new Object();
     private final static String DATABASE_NAME = "lettera.db";
     private final static int DATABASE_VERSION = 1;
     private static Database s_instance = null;
@@ -312,49 +316,73 @@ public class Database extends SQLiteOpenHelper
 	if(m_db == null)
 	    return null;
 
-	Cursor cursor = null;
-
 	try
 	{
-	    cursor = m_db.rawQuery
-		("SELECT email_account, " +     // 0
-		 "folder_name, " +              // 1
-		 "from_email_account, " +       // 2
-		 "from_name, " +                // 3
-		 "message, " +                  // 4
-		 "received_date, " +            // 5
-		 "received_date_unix_epoch, " + // 6
-		 "selected, " +                 // 7
-		 "sent_date, " +                // 8
-		 "subject, " +                  // 9
-		 "uid, " +                      // 10
-		 "OID " +                       // 11
-		 "FROM messages INDEXED BY messages_received_date_unix_epoch " +
-		 "WHERE email_account = ? AND " +
-		 "LOWER(folder_name) = LOWER(?) " +
-		 "ORDER BY received_date_unix_epoch " +
-		 "LIMIT 1 OFFSET CAST(? AS INTEGER)",
-		 new String[] {email_account,
-			       folder_name,
-			       String.valueOf(position)});
-
-	    if(cursor != null && cursor.moveToFirst())
+	    synchronized(m_read_message_cursor_mutex)
 	    {
-		MessageElement message_element = new MessageElement();
+		if(m_read_message_cursor != null)
+		    if(email_account != m_read_message_cursor_email_account ||
+		       folder_name != m_read_message_cursor_folder_name)
+		    {
+			m_read_message_cursor.close();
+			m_read_message_cursor = null;
+		    }
 
-		message_element.m_email_account = cursor.getString(0);
-		message_element.m_folder_name = cursor.getString(1);
-		message_element.m_from_email_account = cursor.getString(2);
-		message_element.m_from_name = cursor.getString(3);
-		message_element.m_message = cursor.getString(4);
-		message_element.m_oid = cursor.getLong(11);
-		message_element.m_received_date = cursor.getString(5);
-		message_element.m_received_date_unix_epoch = cursor.getLong(6);
-		message_element.m_selected = cursor.getInt(7) == 1;
-		message_element.m_sent_date = cursor.getString(8);
-		message_element.m_subject = cursor.getString(9);
-		message_element.m_uid = cursor.getLong(10);
-		return message_element;
+		if(m_read_message_cursor == null)
+		{
+		    m_read_message_cursor = m_db.rawQuery
+			("SELECT email_account, " +     // 0
+			 "folder_name, " +              // 1
+			 "from_email_account, " +       // 2
+			 "from_name, " +                // 3
+			 "message, " +                  // 4
+			 "received_date, " +            // 5
+			 "received_date_unix_epoch, " + // 6
+			 "selected, " +                 // 7
+			 "sent_date, " +                // 8
+			 "subject, " +                  // 9
+			 "uid, " +                      // 10
+			 "OID " +                       // 11
+			 "FROM messages " +
+			 "INDEXED BY messages_received_date_unix_epoch " +
+			 "WHERE email_account = ? AND " +
+			 "LOWER(folder_name) = LOWER(?) " +
+			 "ORDER BY received_date_unix_epoch",
+			 new String[] {email_account, folder_name});
+		    m_read_message_cursor_email_account = email_account;
+		    m_read_message_cursor_folder_name = folder_name;
+		}
+
+		if(m_read_message_cursor != null &&
+		   m_read_message_cursor.moveToPosition(position))
+		{
+		    MessageElement message_element = new MessageElement();
+
+		    message_element.m_email_account = m_read_message_cursor.
+			getString(0);
+		    message_element.m_folder_name = m_read_message_cursor.
+			getString(1);
+		    message_element.m_from_email_account =
+			m_read_message_cursor.getString(2);
+		    message_element.m_from_name = m_read_message_cursor.
+			getString(3);
+		    message_element.m_message = m_read_message_cursor.
+			getString(4);
+		    message_element.m_oid = m_read_message_cursor.
+			getLong(11);
+		    message_element.m_received_date = m_read_message_cursor.
+			getString(5);
+		    message_element.m_received_date_unix_epoch =
+			m_read_message_cursor.getLong(6);
+		    message_element.m_selected =
+			m_read_message_cursor.getInt(7) == 1;
+		    message_element.m_sent_date = m_read_message_cursor.
+			getString(8);
+		    message_element.m_subject = m_read_message_cursor.
+			getString(9);
+		    message_element.m_uid = m_read_message_cursor.getLong(10);
+		    return message_element;
+		}
 	    }
 	}
 	catch(Exception exception)
@@ -362,8 +390,6 @@ public class Database extends SQLiteOpenHelper
 	}
 	finally
 	{
-	    if(cursor != null)
-		cursor.close();
 	}
 
 	return null;
@@ -1177,11 +1203,21 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
+	    if((folder.getType() & Folder.HOLDS_MESSAGES) == 0)
+		return;
+	}
+	catch(Exception exception)
+	{
+	}
+
+	try
+	{
 	    folder.open(Folder.READ_ONLY);
 	}
 	catch(Exception exception)
 	{
-	    Log.e("Database.write_messages()", exception.getMessage());
+	    Log.e("Database.write_messages()",
+		  exception.getMessage() + " (" + folder.getName() + ")");
 	    return;
 	}
 
@@ -1200,6 +1236,8 @@ public class Database extends SQLiteOpenHelper
 	catch(Exception exception)
 	{
 	}
+
+	int count = message_count(email_account, folder.getName());
 
 	m_db.beginTransactionNonExclusive();
 
@@ -1385,6 +1423,16 @@ public class Database extends SQLiteOpenHelper
 	{
 	    m_db.endTransaction();
 	}
+
+	if(count != message_count(email_account, folder.getName()))
+	    synchronized(m_read_message_cursor_mutex)
+	    {
+		if(m_read_message_cursor != null)
+		{
+		    m_read_message_cursor.close();
+		    m_read_message_cursor = null;
+		}
+	    }
 
 	try
 	{
