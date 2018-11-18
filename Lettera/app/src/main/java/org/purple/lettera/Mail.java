@@ -128,32 +128,15 @@ public class Mail
 	}
     }
 
-    public ArrayList<String> folder_names()
+    public ArrayList<String> folder_full_names()
     {
 	try
 	{
 	    ArrayList<String> array_list = new ArrayList<> ();
 	    Folder folders[] = m_imap.getDefaultFolder().list("*");
-	    StringBuilder string_builder = new StringBuilder();
 
 	    for(Folder folder : folders)
-	    {
-		string_builder.setLength(0);
-		string_builder.append(folder.getName());
-		string_builder.append(" (");
-
-		try
-		{
-		    string_builder.append(folder.getMessageCount());
-		}
-		catch(Exception exception)
-		{
-		    string_builder.append(0);
-		}
-
-		string_builder.append(")");
-		array_list.add(string_builder.toString());
-	    }
+		array_list.add(folder.getFullName());
 
 	    Collections.sort(array_list);
 	    return array_list;

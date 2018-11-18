@@ -41,6 +41,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -217,7 +218,7 @@ public class Lettera extends AppCompatActivity
     private View m_vertical_separator = null;
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
-    private final int FOLDERS_DRAWER_INTERVAL = 10;
+    private final int FOLDERS_DRAWER_INTERVAL = 5;
 
     private String selected_folder_full_name()
     {
@@ -335,6 +336,7 @@ public class Lettera extends AppCompatActivity
 		newSingleThreadScheduledExecutor();
 	    m_folders_drawer_scheduler.scheduleAtFixedRate(new Runnable()
 	    {
+		private ArrayList<String> m_folder_names = null;
 		private Mail m_mail = null;
 
 		@Override
@@ -386,6 +388,19 @@ public class Lettera extends AppCompatActivity
 			    m_database.write_messages
 				(m_mail.folder(selected_folder_full_name()),
 				 m_mail.email_address());
+
+			    if(m_folder_names == null ||
+			       m_folder_names.isEmpty())
+				m_folder_names = m_mail.folder_full_names();
+
+			    if(m_folder_names != null &&
+			       m_folder_names.size() > 0)
+			    {
+				m_database.write_messages
+				    (m_mail.folder(m_folder_names.get(0)),
+				     m_mail.email_address());
+				m_folder_names.remove(0);
+			    }
 
 			    Lettera.this.runOnUiThread(new Runnable()
 			    {
