@@ -568,10 +568,13 @@ public class Lettera extends AppCompatActivity
 	    m_folders_drawer.set_email_address(settings_element.m_value);
 	}
 
-	m_adapter.set_folder_name(folder_name);
-	m_current_folder.setText(folder_name);
-	m_folders_drawer.set_selected_folder_name(folder_name);
-	m_items_count.setText("Items: " + m_adapter.getItemCount());
+	if(!folder_name.isEmpty())
+	{
+	    m_adapter.set_folder_name(folder_name);
+	    m_current_folder.setText(folder_name);
+	    m_folders_drawer.set_selected_folder_name(folder_name);
+	    m_items_count.setText("Items: " + m_adapter.getItemCount());
+	}
 
 	try
 	{
@@ -582,10 +585,11 @@ public class Lettera extends AppCompatActivity
 	{
 	}
 
-	synchronized(m_selected_folder_name_mutex)
-	{
-	    m_selected_folder_name = folder_name;
-	}
+	if(!folder_name.isEmpty())
+	    synchronized(m_selected_folder_name_mutex)
+	    {
+		m_selected_folder_name = folder_name;
+	    }
     }
 
     public void prepare_generic_widgets()
