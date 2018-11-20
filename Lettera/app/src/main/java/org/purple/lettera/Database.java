@@ -316,13 +316,15 @@ public class Database extends SQLiteOpenHelper
 	if(m_db == null)
 	    return null;
 
-	try
+	synchronized(m_read_message_cursor_mutex)
 	{
-	    synchronized(m_read_message_cursor_mutex)
+	    try
 	    {
 		if(m_read_message_cursor != null)
-		    if(email_account != m_read_message_cursor_email_account ||
-		       folder_name != m_read_message_cursor_folder_name)
+		    if(!email_account.
+		       equals(m_read_message_cursor_email_account) ||
+		       !folder_name.
+		       equals(m_read_message_cursor_folder_name))
 		    {
 			m_read_message_cursor.close();
 			m_read_message_cursor = null;
@@ -384,12 +386,16 @@ public class Database extends SQLiteOpenHelper
 		    return message_element;
 		}
 	    }
-	}
-	catch(Exception exception)
-	{
-	}
-	finally
-	{
+	    catch(Exception exception)
+	    {
+		if(m_read_message_cursor != null)
+		    m_read_message_cursor.close();
+
+		m_read_message_cursor = null;
+	    }
+	    finally
+	    {
+	    }
 	}
 
 	return null;
@@ -626,6 +632,16 @@ public class Database extends SQLiteOpenHelper
 	    m_db.endTransaction();
 	}
 
+	synchronized(m_read_message_cursor_mutex)
+	{
+	    if(m_read_message_cursor_email_account.equals(email_account))
+		if(m_read_message_cursor != null)
+		{
+		    m_read_message_cursor.close();
+		    m_read_message_cursor = null;
+		}
+	}
+
 	return ok;
     }
 
@@ -842,6 +858,14 @@ public class Database extends SQLiteOpenHelper
 	{
 	    m_db.endTransaction();
 	}
+
+	synchronized(m_read_message_cursor_mutex)
+	{
+	    if(m_read_message_cursor != null)
+		m_read_message_cursor.close();
+
+	    m_read_message_cursor = null;
+	}
     }
 
     public void delete(String table)
@@ -863,6 +887,15 @@ public class Database extends SQLiteOpenHelper
 	{
 	    m_db.endTransaction();
 	}
+
+	if(table.equals("messages"))
+	    synchronized(m_read_message_cursor_mutex)
+	    {
+		if(m_read_message_cursor != null)
+		    m_read_message_cursor.close();
+
+		m_read_message_cursor = null;
+	    }
     }
 
     @Override
@@ -1237,7 +1270,18 @@ public class Database extends SQLiteOpenHelper
 	{
 	}
 
-	int count = message_count(email_account, folder.getName());
+	boolean current_folder = false;
+	int count = 0;
+
+	synchronized(m_read_message_cursor_mutex)
+	{
+	    current_folder = m_read_message_cursor_email_account.
+		equals(email_account) &&
+		m_read_message_cursor_folder_name.equals(folder.getName());
+	}
+
+	if(current_folder)
+	    count = message_count(email_account, folder.getName());
 
 	m_db.beginTransactionNonExclusive();
 
@@ -1424,15 +1468,15 @@ public class Database extends SQLiteOpenHelper
 	    m_db.endTransaction();
 	}
 
-	if(count != message_count(email_account, folder.getName()))
-	    synchronized(m_read_message_cursor_mutex)
-	    {
-		if(m_read_message_cursor != null)
+	if(current_folder)
+	    if(count != message_count(email_account, folder.getName()))
+		synchronized(m_read_message_cursor_mutex)
 		{
-		    m_read_message_cursor.close();
+		    if(m_read_message_cursor != null)
+			m_read_message_cursor.close();
+
 		    m_read_message_cursor = null;
 		}
-	    }
 
 	try
 	{
