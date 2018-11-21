@@ -179,6 +179,8 @@ public class Lettera extends AppCompatActivity
 			m_folders_drawer.set_email_address
 			    (m_database.setting("primary_email_account"));
 			m_folders_drawer.update();
+			m_items_count.setText
+			    ("Items: " + m_adapter.getItemCount());
 			m_layout_manager.scrollToPosition
 			    (m_adapter.getItemCount() - 1);
 		    }
