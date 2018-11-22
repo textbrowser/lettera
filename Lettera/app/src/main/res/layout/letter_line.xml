@@ -35,7 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
                 android:ellipsize="end"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textAlignment="viewEnd" />
 
             <CheckBox
                 android:id="@+id/selected"
