@@ -144,7 +144,10 @@ public class MessageItem extends View
 	m_folder_name = message_element.m_folder_name;
 	m_from.setText(message_element.m_from_name);
 	m_selected.setOnCheckedChangeListener(null);
-	m_selected.setChecked(message_element.m_selected);
+	m_selected.setChecked
+	    (m_database.message_selected(message_element.m_email_account,
+					 message_element.m_folder_name,
+					 message_element.m_uid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
 	m_subject.setText(message_element.m_subject);
 	m_uid = message_element.m_uid;

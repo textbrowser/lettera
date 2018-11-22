@@ -340,11 +340,10 @@ public class Database extends SQLiteOpenHelper
 			 "message, " +                  // 4
 			 "received_date, " +            // 5
 			 "received_date_unix_epoch, " + // 6
-			 "selected, " +                 // 7
-			 "sent_date, " +                // 8
-			 "subject, " +                  // 9
-			 "uid, " +                      // 10
-			 "OID " +                       // 11
+			 "sent_date, " +                // 7
+			 "subject, " +                  // 8
+			 "uid, " +                      // 9
+			 "OID " +                       // 10
 			 "FROM messages " +
 			 "INDEXED BY messages_received_date_unix_epoch " +
 			 "WHERE email_account = ? AND " +
@@ -371,18 +370,16 @@ public class Database extends SQLiteOpenHelper
 		    message_element.m_message = m_read_message_cursor.
 			getString(4);
 		    message_element.m_oid = m_read_message_cursor.
-			getLong(11);
+			getLong(10);
 		    message_element.m_received_date = m_read_message_cursor.
 			getString(5);
 		    message_element.m_received_date_unix_epoch =
 			m_read_message_cursor.getLong(6);
-		    message_element.m_selected =
-			m_read_message_cursor.getInt(7) == 1;
 		    message_element.m_sent_date = m_read_message_cursor.
-			getString(8);
+			getString(7);
 		    message_element.m_subject = m_read_message_cursor.
-			getString(9);
-		    message_element.m_uid = m_read_message_cursor.getLong(10);
+			getString(8);
+		    message_element.m_uid = m_read_message_cursor.getLong(9);
 		    return message_element;
 		}
 	    }
@@ -671,6 +668,41 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	return ok;
+    }
+
+    public boolean message_selected(String email_account,
+				    String folder_name,
+				    long uid)
+    {
+	if(m_db == null)
+	    return false;
+
+	Cursor cursor = null;
+
+	try
+	{
+	    cursor = m_db.rawQuery
+		("SELECT selected FROM messages " +
+		 "WHERE email_account = ? AND " +
+		 "LOWER(folder_name) = LOWER(?) AND " +
+		 "uid = ?",
+		 new String[] {email_account,
+			       folder_name,
+			       String.valueOf(uid)});
+
+	    if(cursor != null && cursor.moveToFirst())
+		return cursor.getInt(0) == 1;
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return false;
     }
 
     public boolean save_pgp_key_pair(KeyPair key_pair,
