@@ -33,5 +33,8 @@ Remaining Items
 - Background services.
 - Deleted remote folders are also deleted locally.
 - Download message content on separate thread(s).
+- Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
+- New messages notifications.
 - Offline and online design.
+- Select-all action.
