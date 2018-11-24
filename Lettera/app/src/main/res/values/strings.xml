@@ -44,4 +44,6 @@
     <string name="todo">TODO</string>
     <string name="inbox">Inbox</string>
     <string name="items">Items</string>
+    <string name="top">Top</string>
+    <string name="bottom">Bottom</string>
 </resources>

@@ -113,14 +113,40 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/messages"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:scrollbars="vertical">
+            android:layout_weight="1">
 
-        </android.support.v7.widget.RecyclerView>
+            <ImageButton
+                android:id="@+id/scroll_top"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/top"
+                app:srcCompat="@drawable/scroll_to_top" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/messages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <ImageButton
+                android:id="@+id/scroll_bottom"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/bottom"
+                app:srcCompat="@drawable/scroll_to_bottom" />
+
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
