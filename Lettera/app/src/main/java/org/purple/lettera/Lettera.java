@@ -37,6 +37,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -183,6 +184,8 @@ public class Lettera extends AppCompatActivity
 			    ("Items: " + m_adapter.getItemCount());
 			m_layout_manager.scrollToPosition
 			    (m_adapter.getItemCount() - 1);
+			show_scroll_bottom();
+			show_scroll_top();
 		    }
 		    catch(Exception exception)
 		    {
@@ -209,6 +212,8 @@ public class Lettera extends AppCompatActivity
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private ImageButton m_folders_drawer_button = null;
+    private ImageButton m_scroll_bottom = null;
+    private ImageButton m_scroll_top = null;
     private LetteraLinearLayoutManager m_layout_manager = null;
     private MessagesAdapter m_adapter = null;
     private RecyclerView m_recycler = null;
@@ -238,6 +243,17 @@ public class Lettera extends AppCompatActivity
 	{
 	    return m_selected_folder_name;
 	}
+    }
+
+    private boolean can_scroll_bottom()
+    {
+	return m_layout_manager.findFirstCompletelyVisibleItemPosition() > 0;
+    }
+
+    private boolean can_scroll_top()
+    {
+	return m_layout_manager.findLastCompletelyVisibleItemPosition() <
+	    m_adapter.getItemCount() - 1;
     }
 
     private void download()
@@ -282,6 +298,8 @@ public class Lettera extends AppCompatActivity
 	m_items_count = (TextView) findViewById(R.id.message_count);
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
 	m_recycler = (RecyclerView) findViewById(R.id.messages);
+	m_scroll_bottom = (ImageButton) findViewById(R.id.scroll_bottom);
+	m_scroll_top = (ImageButton) findViewById(R.id.scroll_top);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
 	m_vertical_separator = findViewById(R.id.vertical_separator);
     }
@@ -459,6 +477,8 @@ public class Lettera extends AppCompatActivity
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
+	m_scroll_bottom.setVisibility(View.GONE);
+	m_scroll_top.setVisibility(View.GONE);
 	m_selected_folder_name = m_database.setting
 	    ("selected_folder_name_" +
 	     m_database.setting("primary_email_account"));
@@ -592,6 +612,9 @@ public class Lettera extends AppCompatActivity
 	    {
 		m_selected_folder_name = folder_name;
 	    }
+
+	show_scroll_bottom();
+	show_scroll_top();
     }
 
     public void prepare_generic_widgets()
@@ -641,5 +664,31 @@ public class Lettera extends AppCompatActivity
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
 	}
+    }
+
+    private void show_scroll_bottom()
+    {
+	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_scroll_bottom.setVisibility
+		    (can_scroll_bottom() ? View.VISIBLE : View.GONE);
+	    }
+	}, 500);
+    }
+
+    private void show_scroll_top()
+    {
+	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_scroll_top.setVisibility
+		    (can_scroll_top() ? View.VISIBLE : View.GONE);
+	    }
+	}, 500);
     }
 }
