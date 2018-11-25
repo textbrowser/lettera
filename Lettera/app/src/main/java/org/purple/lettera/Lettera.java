@@ -312,7 +312,7 @@ public class Lettera extends AppCompatActivity
 	    {
 		public void onClick(View view)
 		{
-		    if(Lettera.this.isFinishing() || m_settings == null)
+		    if(Lettera.this.isFinishing())
 			return;
 
 		    download();
@@ -321,8 +321,8 @@ public class Lettera extends AppCompatActivity
 
 	if(m_folders_drawer_button != null && !m_folders_drawer_button.
 	                                       hasOnClickListeners())
-	    m_folders_drawer_button.
-		setOnClickListener(new View.OnClickListener()
+	    m_folders_drawer_button.setOnClickListener
+		(new View.OnClickListener()
 	    {
 		public void onClick(View view)
 		{
@@ -333,6 +333,34 @@ public class Lettera extends AppCompatActivity
 		}
 	    });
 
+	if(m_scroll_bottom != null && !m_scroll_bottom.hasOnClickListeners())
+	    m_scroll_bottom.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing())
+			return;
+
+		    m_layout_manager.scrollToPosition(0);
+		    show_scroll_bottom();
+		    show_scroll_top();
+		}
+	    });
+
+	if(m_scroll_top != null && !m_scroll_top.hasOnClickListeners())
+	    m_scroll_top.setOnClickListener(new View.OnClickListener()
+	    {
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing())
+			return;
+
+		    m_layout_manager.scrollToPosition
+			(m_adapter.getItemCount() - 1);
+		    show_scroll_bottom();
+		    show_scroll_top();
+		}
+	    });
 
 	if(m_settings_button != null && !m_settings_button.
 	                                 hasOnClickListeners())
