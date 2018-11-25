@@ -705,6 +705,14 @@ public class Lettera extends AppCompatActivity
 		    (can_scroll_bottom() ? View.VISIBLE : View.GONE);
 	    }
 	}, 500);
+	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_scroll_bottom.setVisibility(View.GONE);
+	    }
+	}, 3000);
     }
 
     private void show_scroll_top()
@@ -718,5 +726,13 @@ public class Lettera extends AppCompatActivity
 		    (can_scroll_top() ? View.VISIBLE : View.GONE);
 	    }
 	}, 500);
+	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_scroll_top.setVisibility(View.GONE);
+	    }
+	}, 3000);
     }
 }
