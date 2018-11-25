@@ -68,20 +68,6 @@ public class Lettera extends AppCompatActivity
 	    {
 	    }
 	}
-
-	@Override
-	public void onScrollStateChanged(int state)
-	{
-	    switch(state)
-	    {
-            case RecyclerView.SCROLL_STATE_DRAGGING:
-	    case RecyclerView.SCROLL_STATE_IDLE:
-	    case RecyclerView.SCROLL_STATE_SETTLING:
-		show_scroll_bottom();
-		show_scroll_top();
-                break;
-	    }
-	}
     }
 
     private class PopulateContainers implements Runnable
@@ -239,8 +225,8 @@ public class Lettera extends AppCompatActivity
     private View m_vertical_separator = null;
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
-    private final int FOLDERS_DRAWER_INTERVAL = 5;
-    private final long HIDE_SCROLL_TO_BUTTON_DELAY = 3000;
+    private final int FOLDERS_DRAWER_INTERVAL = 7500;
+    private final long HIDE_SCROLL_TO_BUTTON_DELAY = 5000;
 
     private String selected_folder_full_name()
     {
@@ -482,7 +468,7 @@ public class Lettera extends AppCompatActivity
 		    {
 		    }
 		}
-	    }, 5, FOLDERS_DRAWER_INTERVAL, TimeUnit.SECONDS);
+	    }, 5, FOLDERS_DRAWER_INTERVAL, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -517,6 +503,24 @@ public class Lettera extends AppCompatActivity
 	m_layout_manager.setReverseLayout(true);
 	m_layout_manager.setSmoothScrollbarEnabled(true);
 	m_layout_manager.setStackFromEnd(true);
+	m_recycler.addOnScrollListener
+	    (new RecyclerView.OnScrollListener()
+	    {
+		public void onScrollStateChanged
+		    (RecyclerView recycler_view, int new_state)
+		{
+		    if(new_state == RecyclerView.SCROLL_STATE_IDLE)
+		    {
+		    }
+		}
+
+		public void onScrolled
+		    (RecyclerView recycler_view, int dx, int dy)
+		{
+		    m_scroll_bottom.setVisibility(View.VISIBLE);
+		    m_scroll_top.setVisibility(View.VISIBLE);
+		}
+	    });
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
