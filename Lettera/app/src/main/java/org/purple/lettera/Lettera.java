@@ -517,8 +517,13 @@ public class Lettera extends AppCompatActivity
 		public void onScrolled
 		    (RecyclerView recycler_view, int dx, int dy)
 		{
-		    m_scroll_bottom.setVisibility(View.VISIBLE);
-		    m_scroll_top.setVisibility(View.VISIBLE);
+		    if(dy == 0)
+			return;
+
+		    m_scroll_bottom.setVisibility
+			(can_scroll_bottom() ? View.VISIBLE : View.GONE);
+		    m_scroll_top.setVisibility
+			(can_scroll_top() ? View.VISIBLE : View.GONE);
 		}
 	    });
 	m_recycler.setAdapter(m_adapter);
