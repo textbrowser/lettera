@@ -68,6 +68,20 @@ public class Lettera extends AppCompatActivity
 	    {
 	    }
 	}
+
+	@Override
+	public void onScrollStateChanged(int state)
+	{
+	    switch(state)
+	    {
+            case RecyclerView.SCROLL_STATE_DRAGGING:
+	    case RecyclerView.SCROLL_STATE_IDLE:
+	    case RecyclerView.SCROLL_STATE_SETTLING:
+		show_scroll_bottom();
+		show_scroll_top();
+                break;
+	    }
+	}
     }
 
     private class PopulateContainers implements Runnable
@@ -226,6 +240,7 @@ public class Lettera extends AppCompatActivity
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
     private final int FOLDERS_DRAWER_INTERVAL = 5;
+    private final long HIDE_SCROLL_TO_BUTTON_DELAY = 3000;
 
     private String selected_folder_full_name()
     {
@@ -696,7 +711,7 @@ public class Lettera extends AppCompatActivity
 
     private void show_scroll_bottom()
     {
-	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+	new Handler(Looper.getMainLooper()).post(new Runnable()
 	{
 	    @Override
 	    public void run()
@@ -704,20 +719,12 @@ public class Lettera extends AppCompatActivity
 		m_scroll_bottom.setVisibility
 		    (can_scroll_bottom() ? View.VISIBLE : View.GONE);
 	    }
-	}, 500);
-	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
-	{
-	    @Override
-	    public void run()
-	    {
-		m_scroll_bottom.setVisibility(View.GONE);
-	    }
-	}, 3000);
+	});
     }
 
     private void show_scroll_top()
     {
-	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+	new Handler(Looper.getMainLooper()).post(new Runnable()
 	{
 	    @Override
 	    public void run()
@@ -725,14 +732,6 @@ public class Lettera extends AppCompatActivity
 		m_scroll_top.setVisibility
 		    (can_scroll_top() ? View.VISIBLE : View.GONE);
 	    }
-	}, 500);
-	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
-	{
-	    @Override
-	    public void run()
-	    {
-		m_scroll_top.setVisibility(View.GONE);
-	    }
-	}, 3000);
+	});
     }
 }
