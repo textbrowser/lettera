@@ -118,6 +118,14 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/messages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical">
+
+            </android.support.v7.widget.RecyclerView>
+
             <ImageButton
                 android:id="@+id/scroll_top"
                 android:layout_width="32dp"
@@ -127,14 +135,6 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/top"
                 app:srcCompat="@drawable/scroll_to_top" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/messages"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical">
-
-            </android.support.v7.widget.RecyclerView>
 
             <ImageButton
                 android:id="@+id/scroll_bottom"
