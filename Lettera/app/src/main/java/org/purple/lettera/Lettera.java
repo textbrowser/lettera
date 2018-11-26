@@ -184,8 +184,8 @@ public class Lettera extends AppCompatActivity
 			    ("Items: " + m_adapter.getItemCount());
 			m_layout_manager.scrollToPosition
 			    (m_adapter.getItemCount() - 1);
-			show_scroll_bottom();
-			show_scroll_top();
+			m_scroll_bottom.setVisibility(View.GONE);
+			m_scroll_top.setVisibility(View.GONE);
 		    }
 		    catch(Exception exception)
 		    {
@@ -211,12 +211,14 @@ public class Lettera extends AppCompatActivity
     private Button m_settings_button = null;
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
+    private Handler m_scroll_hander = null;
     private ImageButton m_folders_drawer_button = null;
     private ImageButton m_scroll_bottom = null;
     private ImageButton m_scroll_top = null;
     private LetteraLinearLayoutManager m_layout_manager = null;
     private MessagesAdapter m_adapter = null;
     private RecyclerView m_recycler = null;
+    private Runnable m_scroll_runnable = null;
     private ScheduledExecutorService m_folders_drawer_scheduler = null;
     private Settings m_settings = null;
     private String m_selected_folder_name = "";
@@ -226,7 +228,7 @@ public class Lettera extends AppCompatActivity
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
     private final int FOLDERS_DRAWER_INTERVAL = 7500;
-    private final long HIDE_SCROLL_TO_BUTTON_DELAY = 5000;
+    private final long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
 
     private String selected_folder_full_name()
     {
@@ -343,8 +345,9 @@ public class Lettera extends AppCompatActivity
 			return;
 
 		    m_layout_manager.scrollToPosition(0);
-		    show_scroll_bottom();
-		    show_scroll_top();
+		    m_scroll_hander.removeCallbacks(m_scroll_runnable);
+		    m_scroll_hander.postDelayed
+			(m_scroll_runnable, HIDE_SCROLL_TO_BUTTON_DELAY);
 		}
 	    });
 
@@ -358,8 +361,9 @@ public class Lettera extends AppCompatActivity
 
 		    m_layout_manager.scrollToPosition
 			(m_adapter.getItemCount() - 1);
-		    show_scroll_bottom();
-		    show_scroll_top();
+		    m_scroll_hander.removeCallbacks(m_scroll_runnable);
+		    m_scroll_hander.postDelayed
+			(m_scroll_runnable, HIDE_SCROLL_TO_BUTTON_DELAY);
 		}
 	    });
 
@@ -511,25 +515,39 @@ public class Lettera extends AppCompatActivity
 		{
 		    if(new_state == RecyclerView.SCROLL_STATE_IDLE)
 		    {
+			m_scroll_hander.removeCallbacks(m_scroll_runnable);
+			m_scroll_hander.postDelayed
+			    (m_scroll_runnable, HIDE_SCROLL_TO_BUTTON_DELAY);
 		    }
 		}
 
 		public void onScrolled
 		    (RecyclerView recycler_view, int dx, int dy)
 		{
-		    if(dy == 0)
-			return;
+		    if(can_scroll_bottom() && dy != 0)
+			m_scroll_bottom.setVisibility(View.VISIBLE);
 
-		    m_scroll_bottom.setVisibility
-			(can_scroll_bottom() ? View.VISIBLE : View.GONE);
-		    m_scroll_top.setVisibility
-			(can_scroll_top() ? View.VISIBLE : View.GONE);
+		    if(can_scroll_top() && dy != 0)
+			m_scroll_top.setVisibility(View.VISIBLE);
+
+		    if(dy != 0)
+			m_scroll_hander.removeCallbacks(m_scroll_runnable);
 		}
 	    });
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
 	m_scroll_bottom.setVisibility(View.GONE);
+	m_scroll_hander = new Handler(Looper.getMainLooper());
+	m_scroll_runnable = new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_scroll_bottom.setVisibility(View.GONE);
+		m_scroll_top.setVisibility(View.GONE);
+	    }
+	};
 	m_scroll_top.setVisibility(View.GONE);
 	m_selected_folder_name = m_database.setting
 	    ("selected_folder_name_" +
@@ -665,8 +683,8 @@ public class Lettera extends AppCompatActivity
 		m_selected_folder_name = folder_name;
 	    }
 
-	show_scroll_bottom();
-	show_scroll_top();
+	m_scroll_bottom.setVisibility(View.GONE);
+	m_scroll_top.setVisibility(View.GONE);
     }
 
     public void prepare_generic_widgets()
@@ -716,31 +734,5 @@ public class Lettera extends AppCompatActivity
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
 	}
-    }
-
-    private void show_scroll_bottom()
-    {
-	new Handler(Looper.getMainLooper()).post(new Runnable()
-	{
-	    @Override
-	    public void run()
-	    {
-		m_scroll_bottom.setVisibility
-		    (can_scroll_bottom() ? View.VISIBLE : View.GONE);
-	    }
-	});
-    }
-
-    private void show_scroll_top()
-    {
-	new Handler(Looper.getMainLooper()).post(new Runnable()
-	{
-	    @Override
-	    public void run()
-	    {
-		m_scroll_top.setVisibility
-		    (can_scroll_top() ? View.VISIBLE : View.GONE);
-	    }
-	});
     }
 }

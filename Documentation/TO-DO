@@ -21,6 +21,7 @@ Completed Items
 - Retain selected folder in Folders on device orientation change.
 - Retain selected messages.
 - Save personal key pairs.
+- Scroll-to-bottom, scroll-to-top message icons.
 - Separate standard folders from other folders.
 - Status bar on main activity.
 
@@ -38,5 +39,4 @@ Remaining Items
 - McEliece key generation, exchange, etc.
 - New messages notifications.
 - Offline and online design.
-- Scroll-to-bottom, scroll-to-top message icons.
 - Select-all action.
