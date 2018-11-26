@@ -127,17 +127,13 @@ public class MessageItem extends View
 
 	m_attachment.setVisibility(View.GONE);
 
-	try
-	{
-	    m_date.setText
-		(Utilities.
-		 formatted_email_date(new Date(message_element.
-					       m_received_date_unix_epoch)));
-	}
-	catch(Exception exception)
-	{
+	String string = Utilities.formatted_email_date
+	    (new Date(message_element.m_received_date_unix_epoch));
+
+	if(string.isEmpty())
 	    m_date.setText(message_element.m_received_date);
-	}
+	else
+	    m_date.setText(string);
 
 	m_divider.setVisibility(last_position ? View.GONE : View.VISIBLE);
 	m_email_account = message_element.m_email_account;
