@@ -345,6 +345,7 @@ public class Lettera extends AppCompatActivity
 			return;
 
 		    m_layout_manager.scrollToPosition(0);
+		    m_scroll_bottom.setVisibility(View.GONE);
 		    m_scroll_hander.removeCallbacks(m_scroll_runnable);
 		    m_scroll_hander.postDelayed
 			(m_scroll_runnable, HIDE_SCROLL_TO_BUTTON_DELAY);
@@ -364,6 +365,7 @@ public class Lettera extends AppCompatActivity
 		    m_scroll_hander.removeCallbacks(m_scroll_runnable);
 		    m_scroll_hander.postDelayed
 			(m_scroll_runnable, HIDE_SCROLL_TO_BUTTON_DELAY);
+		    m_scroll_top.setVisibility(View.GONE);
 		}
 	    });
 
