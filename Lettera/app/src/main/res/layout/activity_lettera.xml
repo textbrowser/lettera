@@ -105,10 +105,10 @@
             android:id="@+id/current_folder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
+            android:ellipsize="middle"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
+            android:singleLine="true"
             android:text="@string/inbox"
             android:textSize="18sp"
             android:textStyle="bold" />

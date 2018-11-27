@@ -179,7 +179,6 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 
 	    m_button.setEllipsize(TextUtils.TruncateAt.MIDDLE);
 	    m_button.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-	    m_button.setMaxLines(1);
 	    m_button.setOnClickListener(new View.OnClickListener()
 	    {
 		public void onClick(View view)
@@ -189,6 +188,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		    dismiss();
 		}
 	    });
+	    m_button.setSingleLine(true);
 
 	    LinearLayout.LayoutParams layout_params =
 		new LinearLayout.LayoutParams
