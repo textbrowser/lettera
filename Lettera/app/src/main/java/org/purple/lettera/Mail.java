@@ -97,22 +97,9 @@ public class Mail
 	    {
 		FolderElement folder_element = new FolderElement();
 
-		try
-		{
-		    folder_element.m_message_count = folder.getMessageCount();
-		}
-		catch(Exception exception)
-		{
-		}
-
-		try
-		{
-		    folder_element.m_new_message_count =
-			folder.getNewMessageCount();
-		}
-		catch(Exception exception)
-		{
-		}
+		/*
+		** Ignore message counts.
+		*/
 
 		folder_element.m_email_account = m_inbound_email;
 		folder_element.m_full_name = folder.getFullName();
