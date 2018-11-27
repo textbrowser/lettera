@@ -130,12 +130,12 @@ public class Lettera extends AppCompatActivity
     private class PopulateFolders implements Runnable
     {
 	private Dialog m_dialog = null;
-	private String m_folder_name = "";
+	private String m_folder_full_name = "";
 
-	private PopulateFolders(Dialog dialog, String folder_name)
+	private PopulateFolders(Dialog dialog, String folder_full_name)
 	{
 	    m_dialog = dialog;
-	    m_folder_name = folder_name;
+	    m_folder_full_name = folder_full_name;
 	}
 
 	@Override
@@ -164,7 +164,8 @@ public class Lettera extends AppCompatActivity
 		m_database.write_folders
 		    (mail.folder_elements(), email_element.m_inbound_email);
 		m_database.write_messages
-		    (mail.folder(m_folder_name), email_element.m_inbound_email);
+		    (mail.folder(m_folder_full_name),
+		     email_element.m_inbound_email);
 	    }
 	    catch(Exception exception)
 	    {
@@ -187,6 +188,7 @@ public class Lettera extends AppCompatActivity
 			    (m_adapter.getItemCount() - 1);
 			m_scroll_bottom.setVisibility(View.GONE);
 			m_scroll_top.setVisibility(View.GONE);
+			prepare_current_folder_text(selected_folder_name());
 		    }
 		    catch(Exception exception)
 		    {
@@ -308,6 +310,15 @@ public class Lettera extends AppCompatActivity
 	m_settings_button = (Button) findViewById(R.id.settings_button);
 	m_status_bar = (LinearLayout) findViewById(R.id.status_bar);
 	m_vertical_separator = findViewById(R.id.vertical_separator);
+    }
+
+    private void prepare_current_folder_text(String folder_name)
+    {
+	if(m_database.setting("show_status_bar").equals("true"))
+	    m_current_folder.setText(folder_name);
+	else
+	    m_current_folder.setText
+		(folder_name + " (" + m_adapter.getItemCount() + ")");
     }
 
     private void prepare_listeners()
@@ -487,6 +498,8 @@ public class Lettera extends AppCompatActivity
 				    m_folders_drawer.update();
 				    m_items_count.setText
 					("Items: " + m_adapter.getItemCount());
+				    prepare_current_folder_text
+					(selected_folder_name());
 				}
 			    });
 			}
@@ -686,7 +699,6 @@ public class Lettera extends AppCompatActivity
 	if(!folder_name.isEmpty())
 	{
 	    m_adapter.set_folder_name(folder_name);
-	    m_current_folder.setText(folder_name);
 	    m_folders_drawer.set_selected_folder_name(folder_name);
 	    m_items_count.setText("Items: " + m_adapter.getItemCount());
 	}
@@ -708,6 +720,7 @@ public class Lettera extends AppCompatActivity
 
 	m_scroll_bottom.setVisibility(View.GONE);
 	m_scroll_top.setVisibility(View.GONE);
+	prepare_current_folder_text(m_selected_folder_name);
     }
 
     public void prepare_generic_widgets()
