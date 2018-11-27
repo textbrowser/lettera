@@ -41,6 +41,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -216,6 +217,7 @@ public class Lettera extends AppCompatActivity
     private ImageButton m_scroll_bottom = null;
     private ImageButton m_scroll_top = null;
     private LetteraLinearLayoutManager m_layout_manager = null;
+    private LinearLayout m_status_bar = null;
     private MessagesAdapter m_adapter = null;
     private RecyclerView m_recycler = null;
     private Runnable m_scroll_runnable = null;
@@ -304,6 +306,7 @@ public class Lettera extends AppCompatActivity
 	m_scroll_bottom = (ImageButton) findViewById(R.id.scroll_bottom);
 	m_scroll_top = (ImageButton) findViewById(R.id.scroll_top);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
+	m_status_bar = (LinearLayout) findViewById(R.id.status_bar);
 	m_vertical_separator = findViewById(R.id.vertical_separator);
     }
 
@@ -709,13 +712,12 @@ public class Lettera extends AppCompatActivity
 
     public void prepare_generic_widgets()
     {
-	SettingsElement settings_element = m_database.settings_element
-	    ("show_vertical_separator_before_settings");
-
-	if(settings_element == null || settings_element.m_value.equals("true"))
-	    m_vertical_separator.setVisibility(View.VISIBLE);
-	else
-	    m_vertical_separator.setVisibility(View.GONE);
+	m_status_bar.setVisibility
+	    (m_database.setting("show_status_bar").equals("true") ?
+	     View.VISIBLE : View.GONE);
+	m_vertical_separator.setVisibility
+	    (m_database.setting("show_vertical_separator_before_settings").
+	     equals("true") ? View.VISIBLE : View.GONE);
     }
 
     public void prepare_icons()

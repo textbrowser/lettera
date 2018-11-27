@@ -9,6 +9,7 @@ Completed Items
 - Include algorithm information in Settings::Privacy.
 - Index failure on Folders Drawer.
 - Key generation.
+- Optional status bar.
 - Performance degradation with folders having many messages (class cursor).
 - Prepare application within a progress-dialog block.
 - Prepare drawer from database values.
@@ -39,5 +40,4 @@ Remaining Items
 - McEliece key generation, exchange, etc.
 - New messages notifications.
 - Offline and online design.
-- Optional status bar.
 - Select-all action.

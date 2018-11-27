@@ -140,6 +140,13 @@
                         android:checked="true"
                         android:text="@string/show_a_vertical_separator_before_the_settings_icon" />
 
+                    <CheckBox
+                        android:id="@+id/show_status_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/show_status_bar_on_main_activity" />
+
                 </LinearLayout>
 
                 <LinearLayout
