@@ -1128,6 +1128,47 @@ public class Database extends SQLiteOpenHelper
         onCreate(db);
     }
 
+    public void purge_dangling()
+    {
+	if(m_db == null)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    String strings[] = new String[]
+	    {
+		"DELETE FROM contacts WHERE email_account NOT IN " +
+		"(SELECT email_account FROM email_accounts)",
+		"DELETE FROM folders WHERE email_account NOT IN " +
+		"(SELECT email_account FROM email_accounts)",
+		"DELETE FROM messages WHERE email_account NOT IN " +
+		"(SELECT email_account FROM email_accounts)",
+		"DELETE FROM messages_recipients WHERE email_account NOT IN " +
+		"(SELECT email_account FROM email_accounts)"
+	    };
+
+	    for(String string : strings)
+		try
+		{
+		    m_db.execSQL(string);
+		}
+		catch(Exception exception)
+		{
+		}
+
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+    }
+
     public void set_message_selected(String email_account,
 				     String folder_name,
 				     boolean selected,

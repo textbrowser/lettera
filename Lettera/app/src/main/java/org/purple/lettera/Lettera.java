@@ -83,6 +83,8 @@ public class Lettera extends AppCompatActivity
 	@Override
 	public void run()
 	{
+	    m_database.purge_dangling();
+
 	    try
 	    {
 		byte bytes[][] = m_database.read_pgp_pair("encryption");
