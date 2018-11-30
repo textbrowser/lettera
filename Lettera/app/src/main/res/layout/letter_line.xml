@@ -52,6 +52,14 @@
             android:ellipsize="end"
             android:maxLines="1" />
 
+        <TextView
+            android:id="@+id/summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@android:color/darker_gray" />
+
         <ImageView
             android:id="@+id/attachment"
             android:layout_width="24dp"

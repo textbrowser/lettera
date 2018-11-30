@@ -51,6 +51,7 @@ public class MessageItem extends View
     private TextView m_date = null;
     private TextView m_from = null;
     private TextView m_subject = null;
+    private TextView m_summary = null;
     private View m_divider = null;
     private View m_view = null;
     private long m_uid = 0;
@@ -63,6 +64,7 @@ public class MessageItem extends View
 	m_from = (TextView) m_view.findViewById(R.id.from);
 	m_selected = (CheckBox) m_view.findViewById(R.id.selected);
 	m_subject = (TextView) m_view.findViewById(R.id.subject);
+	m_summary = (TextView) m_view.findViewById(R.id.summary);
     }
 
     private void prepare_listeners()
@@ -129,6 +131,7 @@ public class MessageItem extends View
 
 	String string = Utilities.formatted_email_date
 	    (new Date(message_element.m_received_date_unix_epoch));
+	int length = Math.max(128, message_element.m_message.length());
 
 	if(string.isEmpty())
 	    m_date.setText(message_element.m_received_date);
@@ -146,6 +149,12 @@ public class MessageItem extends View
 					 message_element.m_uid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
 	m_subject.setText(message_element.m_subject);
+	m_summary.setText
+	    (message_element.m_content_downloaded ?
+	     message_element.m_message.substring(0, length) : "");
+	m_summary.setVisibility
+	    (message_element.m_content_downloaded ? View.VISIBLE : View.GONE);
+
 	m_uid = message_element.m_uid;
 	m_view.setVisibility(View.VISIBLE);
     }

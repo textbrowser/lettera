@@ -333,17 +333,18 @@ public class Database extends SQLiteOpenHelper
 		if(m_read_message_cursor == null)
 		{
 		    m_read_message_cursor = m_db.rawQuery
-			("SELECT email_account, " +     // 0
-			 "folder_name, " +              // 1
-			 "from_email_account, " +       // 2
-			 "from_name, " +                // 3
-			 "message, " +                  // 4
-			 "received_date, " +            // 5
-			 "received_date_unix_epoch, " + // 6
-			 "sent_date, " +                // 7
-			 "subject, " +                  // 8
-			 "uid, " +                      // 9
-			 "OID " +                       // 10
+			("SELECT content_downloaded, " +  // 0
+			 "email_account, " +              // 1
+			 "folder_name, " +                // 2
+			 "from_email_account, " +         // 3
+			 "from_name, " +                  // 4
+			 "message, " +                    // 5
+			 "received_date, " +              // 6
+			 "received_date_unix_epoch, " +   // 7
+			 "sent_date, " +                  // 8
+			 "subject, " +                    // 9
+			 "uid, " +                        // 10
+			 "OID " +                         // 11
 			 "FROM messages " +
 			 "INDEXED BY messages_received_date_unix_epoch " +
 			 "WHERE email_account = ? AND " +
@@ -359,27 +360,29 @@ public class Database extends SQLiteOpenHelper
 		{
 		    MessageElement message_element = new MessageElement();
 
+		    message_element.m_content_downloaded =
+			m_read_message_cursor.getInt(0) == 1;
 		    message_element.m_email_account = m_read_message_cursor.
-			getString(0);
-		    message_element.m_folder_name = m_read_message_cursor.
 			getString(1);
+		    message_element.m_folder_name = m_read_message_cursor.
+			getString(2);
 		    message_element.m_from_email_account =
-			m_read_message_cursor.getString(2);
+			m_read_message_cursor.getString(3);
 		    message_element.m_from_name = m_read_message_cursor.
-			getString(3);
-		    message_element.m_message = m_read_message_cursor.
 			getString(4);
-		    message_element.m_oid = m_read_message_cursor.
-			getLong(10);
-		    message_element.m_received_date = m_read_message_cursor.
+		    message_element.m_message = m_read_message_cursor.
 			getString(5);
+		    message_element.m_oid = m_read_message_cursor.
+			getLong(11);
+		    message_element.m_received_date = m_read_message_cursor.
+			getString(6);
 		    message_element.m_received_date_unix_epoch =
-			m_read_message_cursor.getLong(6);
+			m_read_message_cursor.getLong(7);
 		    message_element.m_sent_date = m_read_message_cursor.
-			getString(7);
-		    message_element.m_subject = m_read_message_cursor.
 			getString(8);
-		    message_element.m_uid = m_read_message_cursor.getLong(9);
+		    message_element.m_subject = m_read_message_cursor.
+			getString(9);
+		    message_element.m_uid = m_read_message_cursor.getLong(10);
 		    return message_element;
 		}
 	    }
@@ -1371,6 +1374,7 @@ public class Database extends SQLiteOpenHelper
 
 	    SQLiteStatement sqlite_statement = m_db.compileStatement
 		("REPLACE INTO messages (" +
+		 "content_downloaded, " +
 		 "current_message, " +
 		 "email_account, " +
 		 "folder_name, " +
@@ -1383,7 +1387,7 @@ public class Database extends SQLiteOpenHelper
 		 "sent_date, " +
 		 "subject, " +
 		 "uid) VALUES " +
-		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 	    for(Message message : messages)
 	    {
@@ -1443,8 +1447,27 @@ public class Database extends SQLiteOpenHelper
 			content_values.put("from_name", "(unknown)");
 		    }
 
-		    content_values.put
-			("message", "(empty)"); // Fetch contents later.
+		    if(message.getContentType() == null ||
+		       message.isMimeType("text/plain"))
+		    {
+			content_values.put
+			    ("content_downloaded", 1);
+
+			if(message.getContent() != null &&
+			   message.getContent().toString() != null &&
+			   message.getContent().toString().trim().length() > 0)
+			    content_values.put
+				("message",
+				 message.getContent().toString().trim());
+			else
+			    content_values.put("message", "(empty)");
+		    }
+		    else
+		    {
+			content_values.put("content_downloaded", 0);
+			content_values.put
+			    ("message", "(empty)"); // Fetch contents later.
+		    }
 
 		    if(message.getReceivedDate() != null)
 		    {
@@ -1489,30 +1512,32 @@ public class Database extends SQLiteOpenHelper
 
 		    content_values.put("uid", folder.getUID(message));
 		    sqlite_statement.bindLong
-			(1, content_values.getAsLong("current_message"));
-		    sqlite_statement.bindString
-			(2, content_values.getAsString("email_account"));
-		    sqlite_statement.bindString
-			(3, content_values.getAsString("folder_name"));
-		    sqlite_statement.bindString
-			(4, content_values.getAsString("from_email_account"));
-		    sqlite_statement.bindString
-			(5, content_values.getAsString("from_name"));
-		    sqlite_statement.bindString
-			(6, content_values.getAsString("message"));
-		    sqlite_statement.bindString
-			(7, content_values.getAsString("received_date"));
+			(1, content_values.getAsLong("content_downloaded"));
 		    sqlite_statement.bindLong
-			(8,
+			(2, content_values.getAsLong("current_message"));
+		    sqlite_statement.bindString
+			(3, content_values.getAsString("email_account"));
+		    sqlite_statement.bindString
+			(4, content_values.getAsString("folder_name"));
+		    sqlite_statement.bindString
+			(5, content_values.getAsString("from_email_account"));
+		    sqlite_statement.bindString
+			(6, content_values.getAsString("from_name"));
+		    sqlite_statement.bindString
+			(7, content_values.getAsString("message"));
+		    sqlite_statement.bindString
+			(8, content_values.getAsString("received_date"));
+		    sqlite_statement.bindLong
+			(9,
 			 content_values.getAsLong("received_date_unix_epoch"));
 		    sqlite_statement.bindLong
-			(9, content_values.getAsLong("selected"));
+			(10, content_values.getAsLong("selected"));
 		    sqlite_statement.bindString
-			(10, content_values.getAsString("sent_date"));
+			(11, content_values.getAsString("sent_date"));
 		    sqlite_statement.bindString
-			(11, content_values.getAsString("subject"));
+			(12, content_values.getAsString("subject"));
 		    sqlite_statement.bindLong
-			(12, content_values.getAsLong("uid"));
+			(13, content_values.getAsLong("uid"));
 		    sqlite_statement.execute();
 		    sqlite_statement.clearBindings();
 		}
