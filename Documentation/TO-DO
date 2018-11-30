@@ -9,7 +9,7 @@ Completed Items
 - Include algorithm information in Settings::Privacy.
 - Index failure on Folders Drawer.
 - Key generation.
-- Optional status bar.
+- Optional status bar on main activity.
 - Performance degradation with folders having many messages (class cursor).
 - Prepare application within a progress-dialog block.
 - Prepare drawer from database values.
@@ -24,7 +24,6 @@ Completed Items
 - Save personal key pairs.
 - Scroll-to-bottom, scroll-to-top message icons.
 - Separate standard folders from other folders.
-- Status bar on main activity.
 
 Future Items
 
