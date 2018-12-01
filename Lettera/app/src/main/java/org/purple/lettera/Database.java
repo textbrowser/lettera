@@ -871,6 +871,7 @@ public class Database extends SQLiteOpenHelper
 		 "email_accounts",
 		 "folders",
 		 "messages",
+		 "messages_attachments",
 		 "messages_recipients",
 		 "open_pgp",
 		 "settings"};
@@ -946,7 +947,7 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    db.execSQL("PRAGMA secure_delete = True", null);
+	    db.execSQL("PRAGMA secure_delete = True");
 	}
 	catch(Exception exception)
 	{
@@ -1147,6 +1148,8 @@ public class Database extends SQLiteOpenHelper
 		"DELETE FROM folders WHERE email_account NOT IN " +
 		"(SELECT email_account FROM email_accounts)",
 		"DELETE FROM messages WHERE email_account NOT IN " +
+		"(SELECT email_account FROM email_accounts)",
+		"DELETE FROM messages_attachments WHERE email_account NOT IN " +
 		"(SELECT email_account FROM email_accounts)",
 		"DELETE FROM messages_recipients WHERE email_account NOT IN " +
 		"(SELECT email_account FROM email_accounts)"
