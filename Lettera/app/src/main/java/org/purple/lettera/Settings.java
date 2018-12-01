@@ -441,7 +441,7 @@ public class Settings
 	    content_values.put("key", "email_folders");
 	    content_values.put
 		("value", m_email_folders_spinner.getSelectedItem().toString());
-	    error = m_database.save_setting(content_values);
+	    error = m_database.save_setting(content_values, false);
 
 	    if(!error.isEmpty())
 	    {
@@ -455,7 +455,7 @@ public class Settings
 	    content_values.put("key", "show_status_bar");
 	    content_values.put
 		("value", m_show_status_bar.isChecked() ? "true" : "false");
-	    error = m_database.save_setting(content_values);
+	    error = m_database.save_setting(content_values, true);
 
 	    if(!error.isEmpty())
 	    {
@@ -472,7 +472,7 @@ public class Settings
 		("value",
 		 m_show_vertical_separator_before_settings_checkbox.
 		 isChecked() ? "true" : "false");
-	    error = m_database.save_setting(content_values);
+	    error = m_database.save_setting(content_values, true);
 
 	    if(!error.isEmpty())
 	    {
@@ -486,7 +486,7 @@ public class Settings
 	    content_values.put("key", "icon_theme");
 	    content_values.put
 		("value", m_icon_theme_spinner.getSelectedItem().toString());
-	    error = m_database.save_setting(content_values);
+	    error = m_database.save_setting(content_values, true);
 
 	    if(!error.isEmpty())
 	    {
@@ -635,7 +635,7 @@ public class Settings
 		    content_values.put("key", "primary_email_account");
 		    content_values.put
 			("value", m_inbound_email.getText().toString().trim());
-		    m_database.save_setting(content_values);
+		    m_database.save_setting(content_values, true);
 
 		    if(m_context instanceof Lettera)
 			((Lettera) m_context).populate_folders_from_database();
@@ -907,7 +907,7 @@ public class Settings
 
 		content_values.put("key", "primary_email_account");
 		content_values.put("value", email_element.m_inbound_email);
-		m_database.save_setting(content_values);
+		m_database.save_setting(content_values, true);
 	    }
 
 	    m_delete_on_server_checkbox.setChecked

@@ -531,7 +531,7 @@ public class Database extends SQLiteOpenHelper
 	return "";
     }
 
-    public String save_setting(ContentValues content_values)
+    public String save_setting(ContentValues content_values, boolean join)
     {
 	if(content_values == null || content_values.size() == 0)
 	    return "empty container on save_setting()";
@@ -571,16 +571,26 @@ public class Database extends SQLiteOpenHelper
 	    });
 
 	thread.start();
+
+	if(join)
+	    try
+	    {
+		thread.join();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
 	return "";
     }
 
-    public String save_setting(String key, String value)
+    public String save_setting(String key, String value, boolean join)
     {
 	ContentValues content_values = new ContentValues();
 
 	content_values.put("key", key);
 	content_values.put("value", value);
-	return save_setting(content_values);
+	return save_setting(content_values, join);
     }
 
     public String setting(String key)
