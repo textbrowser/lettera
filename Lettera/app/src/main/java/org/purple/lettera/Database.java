@@ -1216,11 +1216,11 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    ContentValues values = new ContentValues();
+	    ContentValues content_values = new ContentValues();
 
-	    values.put("current_folder", 0);
+	    content_values.put("current_folder", 0);
 	    m_db.update("folders",
-			values,
+			content_values,
 			"email_account = ?",
 			new String[] {email_account});
 
@@ -1395,6 +1395,42 @@ public class Database extends SQLiteOpenHelper
 		    continue;
 
 		Cursor cursor = null;
+		long uid = 0;
+
+		try
+		{
+		    uid = folder.getUID(message);
+		    cursor = m_db.rawQuery
+			("SELECT content_downloaded, selected " +
+			 "FROM messages WHERE email_account = ? AND " +
+			 "LOWER(folder_name) = LOWER(?) AND " +
+			 "uid = ?",
+			 new String[] {email_account,
+				       folder.getName(),
+				       String.valueOf(uid)});
+
+		    if(cursor != null && cursor.moveToFirst())
+			if(cursor.getInt(0) == 1)
+			{
+			    cursor.close();
+			    content_values.clear();
+			    content_values.put("current_message", 1);
+
+			    if(m_db.
+			       update("messages",
+				      content_values,
+				      "email_account = ? AND " +
+				      "LOWER(folder_name) = LOWER(?) AND " +
+				      "uid = ?",
+				      new String[] {email_account,
+						    folder.getName(),
+						    String.valueOf(uid)}) > 0)
+				continue;
+			}
+		}
+		catch(Exception exception)
+		{
+		}
 
 		try
 		{
@@ -1484,17 +1520,8 @@ public class Database extends SQLiteOpenHelper
 			content_values.put("received_date_unix_epoch", 0);
 		    }
 
-		    cursor = m_db.rawQuery
-			("SELECT selected " +
-			 "FROM messages WHERE email_account = ? AND " +
-			 "LOWER(folder_name) = LOWER(?) AND " +
-			 "uid = ?",
-			 new String[] {email_account,
-				       folder.getName(),
-				       String.valueOf(folder.getUID(message))});
-
-		    if(cursor != null && cursor.moveToFirst())
-			content_values.put("selected", cursor.getInt(0));
+		    if(cursor != null)
+			content_values.put("selected", cursor.getInt(1));
 		    else
 			content_values.put("selected", 0);
 
@@ -1510,7 +1537,7 @@ public class Database extends SQLiteOpenHelper
 		    else
 			content_values.put("subject", "(no subject)");
 
-		    content_values.put("uid", folder.getUID(message));
+		    content_values.put("uid", uid);
 		    sqlite_statement.bindLong
 			(1, content_values.getAsLong("content_downloaded"));
 		    sqlite_statement.bindLong
