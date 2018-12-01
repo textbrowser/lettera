@@ -151,7 +151,7 @@ public class FoldersDrawer
 	m_database.save_setting
 	    ("selected_folder_name_" + m_email_address.getText().toString(),
 	     selected_folder_name(),
-	     true);
+	     false);
 
 	try
 	{

@@ -122,6 +122,6 @@ public class MessagesAdapter extends RecyclerView.Adapter
 		("selected_folder_name_" + m_email_address);
 
 	if(m_folder_name.isEmpty())
-	    m_folder_name = "Inbox";
+	    m_folder_name = "INBOX";
     }
 }

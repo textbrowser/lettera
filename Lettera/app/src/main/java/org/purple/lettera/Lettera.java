@@ -592,7 +592,7 @@ public class Lettera extends AppCompatActivity
 	     m_database.setting("primary_email_account"));
 
 	if(m_selected_folder_name.isEmpty())
-	    m_selected_folder_name = "Inbox";
+	    m_selected_folder_name = "INBOX";
 
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()

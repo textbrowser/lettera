@@ -907,7 +907,7 @@ public class Settings
 
 		content_values.put("key", "primary_email_account");
 		content_values.put("value", email_element.m_inbound_email);
-		m_database.save_setting(content_values, true);
+		m_database.save_setting(content_values, false);
 	    }
 
 	    m_delete_on_server_checkbox.setChecked

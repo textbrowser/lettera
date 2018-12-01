@@ -1070,7 +1070,7 @@ public class Database extends SQLiteOpenHelper
 	    "attachment_name, " +
 	    "email_account, " +
 	    "folder_name, " +
-	    "message_uid)";
+	    "message_uid))";
 
 	try
 	{
@@ -1436,7 +1436,6 @@ public class Database extends SQLiteOpenHelper
 		    if(cursor != null && cursor.moveToFirst())
 			if(cursor.getInt(0) == 1)
 			{
-			    cursor.close();
 			    content_values.clear();
 			    content_values.put("current_message", 1);
 
@@ -1449,7 +1448,10 @@ public class Database extends SQLiteOpenHelper
 				      new String[] {email_account,
 						    folder.getName(),
 						    String.valueOf(uid)}) > 0)
+			    {
+				cursor.close();
 				continue;
+			    }
 			}
 		}
 		catch(Exception exception)
