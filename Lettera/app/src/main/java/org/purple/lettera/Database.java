@@ -1005,11 +1005,6 @@ public class Database extends SQLiteOpenHelper
 	{
 	}
 
-	/*
-	** Do not set DELETE CASCADE as email_accounts entries are
-	** prepared via REPLACE.
-	*/
-
 	str = "CREATE TABLE IF NOT EXISTS folders (" +
 	    "current_folder INTEGER NOT NULL DEFAULT 1, " +
 	    "email_account TEXT NOT NULL, " +
@@ -1028,11 +1023,6 @@ public class Database extends SQLiteOpenHelper
 	{
 	}
 
-	/*
-	** Do not set DELETE CASCADE as email_accounts entries are
-	** prepared via REPLACE.
-	*/
-
 	str = "CREATE TABLE IF NOT EXISTS messages (" +
 	    "content_downloaded INTEGER NOT NULL DEFAULT 0, " +
 	    "current_message INTEGER NOT NULL DEFAULT 1, " +
@@ -1050,6 +1040,27 @@ public class Database extends SQLiteOpenHelper
 	    "PRIMARY KEY (email_account, " +
 	    "folder_name, " +
 	    "uid))";
+
+	try
+	{
+	    db.execSQL(str);
+	}
+	catch(Exception exception)
+	{
+	}
+
+	str = "CREATE TABLE IF NOT EXISTS messages_attachments (" +
+	    "attachment BLOB NOT NULL, " +
+	    "attachment_id TEXT NOT NULL, " +
+	    "attachment_name TEXT NOT NULL, " +
+	    "email_account TEXT NOT NULL, " +
+	    "folder_name TEXT NOT NULL, " +
+	    "message_uid BIGINT NOT NULL, " +
+	    "PRIMARY KEY (attachment_id, " +
+	    "attachment_name, " +
+	    "email_account, " +
+	    "folder_name, " +
+	    "message_uid)";
 
 	try
 	{
