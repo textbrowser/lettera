@@ -1383,8 +1383,6 @@ public class Database extends SQLiteOpenHelper
 	if(current_folder)
 	    count = message_count(email_account, folder.getName());
 
-	m_db.beginTransactionNonExclusive();
-
 	try
 	{
 	    ContentValues content_values = new ContentValues();
@@ -1419,6 +1417,7 @@ public class Database extends SQLiteOpenHelper
 		    continue;
 
 		Cursor cursor = null;
+		int selected = 0;
 		long uid = 0;
 
 		try
@@ -1434,6 +1433,7 @@ public class Database extends SQLiteOpenHelper
 				       String.valueOf(uid)});
 
 		    if(cursor != null && cursor.moveToFirst())
+		    {
 			if(cursor.getInt(0) == 1)
 			{
 			    content_values.clear();
@@ -1453,9 +1453,17 @@ public class Database extends SQLiteOpenHelper
 				continue;
 			    }
 			}
+
+			selected = cursor.getInt(1);
+		    }
 		}
 		catch(Exception exception)
 		{
+		}
+		finally
+		{
+		    if(cursor != null)
+			cursor.close();
 		}
 
 		try
@@ -1546,10 +1554,7 @@ public class Database extends SQLiteOpenHelper
 			content_values.put("received_date_unix_epoch", 0);
 		    }
 
-		    if(cursor != null)
-			content_values.put("selected", cursor.getInt(1));
-		    else
-			content_values.put("selected", 0);
+		    content_values.put("selected", selected);
 
 		    if(message.getSentDate() != null)
 			content_values.put
@@ -1597,11 +1602,6 @@ public class Database extends SQLiteOpenHelper
 		catch(Exception exception)
 		{
 		}
-		finally
-		{
-		    if(cursor != null)
-			cursor.close();
-		}
 	    }
 
 	    m_db.delete("messages",
@@ -1609,14 +1609,9 @@ public class Database extends SQLiteOpenHelper
 			"email_account = ? AND " +
 			"LOWER(folder_name) = LOWER(?)",
 			new String[] {email_account, folder.getName()});
-	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
 	{
-	}
-	finally
-	{
-	    m_db.endTransaction();
 	}
 
 	if(current_folder)

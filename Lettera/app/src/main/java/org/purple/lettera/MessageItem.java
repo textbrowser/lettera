@@ -131,7 +131,7 @@ public class MessageItem extends View
 
 	String string = Utilities.formatted_email_date
 	    (new Date(message_element.m_received_date_unix_epoch));
-	int length = Math.max(128, message_element.m_message.length());
+	int length = Math.min(128, message_element.m_message.length());
 
 	if(string.isEmpty())
 	    m_date.setText(message_element.m_received_date);
