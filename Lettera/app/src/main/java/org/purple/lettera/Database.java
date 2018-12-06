@@ -627,8 +627,16 @@ public class Database extends SQLiteOpenHelper
 		    ("messages", "email_account = ?",
 		     new String[] {email_account});
 		m_db.delete
+		    ("messages_attachments", "email_account = ?",
+		     new String[] {email_account});
+		m_db.delete
+		    ("messages_recipients", "email_account = ?",
+		     new String[] {email_account});
+		m_db.delete
 		    ("settings", "key = ?",
 		     new String[] {"selected_folder_name_" + email_account});
+		m_db.delete
+		    ("settings", "value = ", new String[] {email_account});
 	    }
 
 	    m_db.setTransactionSuccessful();

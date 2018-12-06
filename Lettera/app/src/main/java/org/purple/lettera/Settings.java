@@ -799,8 +799,7 @@ public class Settings
 	}
 	else
 	{
-	    m_delete_account_button.setEnabled
-		(m_delete_account_verify_checkbox.isChecked());
+	    m_delete_account_button.setEnabled(false);
 	    m_delete_account_verify_checkbox.setEnabled(true);
 	}
 
