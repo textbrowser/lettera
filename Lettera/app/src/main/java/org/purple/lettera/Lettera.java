@@ -437,7 +437,15 @@ public class Lettera extends AppCompatActivity
 			    (m_database.setting("primary_email_account"));
 
 			if(email_element == null)
+			{
+			    if(m_mail != null)
+			    {
+				m_mail.disconnect();
+				m_mail = null;
+			    }
+
 			    return;
+			}
 
 			if(m_mail != null)
 			{
