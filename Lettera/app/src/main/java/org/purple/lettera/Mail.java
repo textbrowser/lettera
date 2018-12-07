@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.Properties;
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.mail.Session;
 
 public class Mail
@@ -54,6 +56,28 @@ public class Mail
     private String m_proxy_port = "";
     private String m_proxy_type = "";
     private String m_proxy_user = "";
+
+    private static void multipart_recursive
+	(Part part, StringBuffer string_buffer) throws Exception
+    {
+	if(part == null || string_buffer == null)
+	    return;
+
+	if(part.isMimeType("message/rfc822"))
+	    multipart_recursive((Part) part.getContent(), string_buffer);
+	else if(part.isMimeType("multipart/*"))
+	{
+	    Multipart multipart = (Multipart) part.getContent();
+
+	    if(multipart == null)
+		return;
+
+	    for(int i = 0; i < multipart.getCount(); i++)
+		multipart_recursive(multipart.getBodyPart(i), string_buffer);
+	}
+	else if(part.isMimeType("text/plain"))
+	    string_buffer.append((String) part.getContent());
+    }
 
     public Mail(String inbound_address,
 		String inbound_email,
@@ -357,6 +381,25 @@ public class Mail
 	    }
 
 	return properties;
+    }
+
+    public static String multipart(Message message)
+    {
+	if(message == null)
+	    return "";
+
+	try
+	{
+	    StringBuffer string_buffer = new StringBuffer();
+
+	    multipart_recursive(message, string_buffer);
+	    return string_buffer.toString();
+	}
+	catch(Exception exception)
+	{
+	}
+
+	return "";
     }
 
     public void connect()

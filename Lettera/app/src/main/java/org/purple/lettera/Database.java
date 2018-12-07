@@ -1540,6 +1540,17 @@ public class Database extends SQLiteOpenHelper
 			else
 			    content_values.put("message", "(empty)");
 		    }
+		    else if(message.isMimeType("multipart/*"))
+		    {
+			content_values.put("content_downloaded", 1);
+
+			String string = Mail.multipart(message);
+
+			if(string.isEmpty())
+			    content_values.put("message", "(empty)");
+			else
+			    content_values.put("message", string);
+		    }
 		    else
 		    {
 			content_values.put("content_downloaded", 0);
