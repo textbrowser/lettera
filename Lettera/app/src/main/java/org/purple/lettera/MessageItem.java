@@ -152,8 +152,12 @@ public class MessageItem extends View
 	m_summary.setText
 	    (message_element.m_content_downloaded ?
 	     message_element.m_message.substring(0, length) : "");
-	m_summary.setVisibility
-	    (message_element.m_content_downloaded ? View.VISIBLE : View.GONE);
+
+	if(!message_element.m_content_downloaded ||
+	   message_element.m_message.equals("(empty)"))
+	    m_summary.setVisibility(View.GONE);
+	else
+	    m_summary.setVisibility(View.VISIBLE);
 
 	m_uid = message_element.m_uid;
 	m_view.setVisibility(View.VISIBLE);
