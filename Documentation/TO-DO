@@ -3,6 +3,7 @@ Completed Items
 - Denote primary e-mail account in Settings.
 - Double-click event in Folders drawer. Dismiss on click.
 - Download folder messages incrementally.
+- Download message content on separate thread(s).
 - Fast SQLite sort.
 - Folders drawer folders order. Sort by name.
 - Folders drawer.
@@ -33,7 +34,6 @@ Remaining Items
 
 - Background services.
 - Deleted remote folders are also deleted locally.
-- Download message content on separate thread(s).
 - Empty trash with confirmation.
 - Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
