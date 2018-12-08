@@ -39,4 +39,5 @@ Remaining Items
 - McEliece key generation, exchange, etc.
 - New messages notifications.
 - Offline and online design.
+- Parse recipients.
 - Select-all action.
