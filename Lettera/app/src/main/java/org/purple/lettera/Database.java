@@ -1649,4 +1649,50 @@ public class Database extends SQLiteOpenHelper
 	{
 	}
     }
+
+    public void write_recipient(InternetAddress internet_address,
+				String email_account,
+				String folder_name,
+				long message_uid)
+    {
+	if(internet_address == null || m_db == null)
+	    return;
+
+	try
+	{
+	    String recipient_email_account = "unknown@unknown.org";
+	    String recipient_name = "";
+	    String recipient_type = "TO";
+
+	    if(!(internet_address.getAddress() == null ||
+		 internet_address.getAddress().isEmpty()))
+		recipient_email_account = internet_address.getAddress();
+
+	    if(!(internet_address.getPersonal() == null ||
+		 internet_address.getPersonal().isEmpty()))
+		recipient_name = internet_address.getPersonal();
+	    else
+		recipient_name = recipient_email_account;
+
+	    if(!(internet_address.getType() == null ||
+		 internet_address.getType().isEmpty()))
+		recipient_type = internet_address.getType();
+
+	    m_db.execSQL
+		("REPLACE INTO messages_recipients (" +
+		 "email_account, " +
+		 "folder_name, " +
+		 "message_uid, " +
+		 "recipient_email_account, " +
+		 "recipient_name, " +
+		 "recipient_type) VALUES " +
+		 "(?, ?, ?, ?, ?, ?)",
+		 new String[] {email_account,
+			       folder_name,
+			       String.valueOf(message_uid)});
+	}
+	catch(Exception exception)
+	{
+	}
+    }
 }
