@@ -53,6 +53,7 @@ public class Database extends SQLiteOpenHelper
     private String m_read_message_cursor_folder_name = "";
     private final Object m_read_message_cursor_mutex = new Object();
     private final static String DATABASE_NAME = "lettera.db";
+    private final static String UNKNOWN_EMAIL = "unknown@unknown.org";
     private final static int DATABASE_VERSION = 1;
     private static Database s_instance = null;
 
@@ -1497,8 +1498,7 @@ public class Database extends SQLiteOpenHelper
 			    if(internet_address.getAddress() == null ||
 			       internet_address.getAddress().isEmpty())
 				content_values.put
-				    ("from_email_account",
-				     "unknown@unknown.org");
+				    ("from_email_account", UNKNOWN_EMAIL);
 			    else
 				content_values.put
 				    ("from_email_account",
@@ -1518,14 +1518,13 @@ public class Database extends SQLiteOpenHelper
 			else
 			{
 			    content_values.put
-				("from_email_account", "unknown@unknown.org");
+				("from_email_account", UNKNOWN_EMAIL);
 			    content_values.put("from_name", "(unknown)");
 			}
 		    }
 		    else
 		    {
-			content_values.put
-			    ("from_email_account", "unknown@unknown.org");
+			content_values.put("from_email_account", UNKNOWN_EMAIL);
 			content_values.put("from_name", "(unknown)");
 		    }
 
@@ -1672,7 +1671,7 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    String recipient_email_account = "unknown@unknown.org";
+	    String recipient_email_account = UNKNOWN_EMAIL;
 	    String recipient_name = "";
 	    String recipient_type = "TO";
 
@@ -1701,7 +1700,10 @@ public class Database extends SQLiteOpenHelper
 		 "(?, ?, ?, ?, ?, ?)",
 		 new String[] {email_account,
 			       folder_name,
-			       String.valueOf(message_uid)});
+			       String.valueOf(message_uid),
+			       recipient_email_account,
+			       recipient_name,
+			       recipient_type});
 	}
 	catch(Exception exception)
 	{
