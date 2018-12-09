@@ -373,7 +373,7 @@ public class Database extends SQLiteOpenHelper
 		    message_element.m_from_name = m_read_message_cursor.
 			getString(4);
 		    message_element.m_message = m_read_message_cursor.
-			getString(5);
+			getString(5).trim();
 		    message_element.m_oid = m_read_message_cursor.
 			getLong(11);
 		    message_element.m_received_date = m_read_message_cursor.
@@ -383,7 +383,7 @@ public class Database extends SQLiteOpenHelper
 		    message_element.m_sent_date = m_read_message_cursor.
 			getString(8);
 		    message_element.m_subject = m_read_message_cursor.
-			getString(9);
+			getString(9).trim();
 		    message_element.m_uid = m_read_message_cursor.getLong(10);
 		    return message_element;
 		}
@@ -1531,8 +1531,7 @@ public class Database extends SQLiteOpenHelper
 		    if(message.getContentType() == null ||
 		       message.isMimeType("text/plain"))
 		    {
-			content_values.put
-			    ("content_downloaded", 1);
+			content_values.put("content_downloaded", 1);
 
 			if(message.getContent() != null &&
 			   message.getContent().toString() != null &&
@@ -1541,22 +1540,18 @@ public class Database extends SQLiteOpenHelper
 				("message",
 				 message.getContent().toString().trim());
 			else
-			    content_values.put("message", "(empty)");
+			    content_values.put("message", " ");
 		    }
 		    else
 		    {
+			content_values.put("content_downloaded", 1);
+
 			String string = Mail.multipart(message).trim();
 
 			if(string.isEmpty())
-			{
-			    content_values.put("content_downloaded", 0);
-			    content_values.put("message", "(empty)");
-			}
+			    content_values.put("message", " ");
 			else
-			{
-			    content_values.put("content_downloaded", 1);
 			    content_values.put("message", string);
-			}
 		    }
 
 		    if(message.getReceivedDate() != null)
