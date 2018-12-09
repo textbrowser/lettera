@@ -131,7 +131,7 @@ public class MessageItem extends View
 
 	String string = Utilities.formatted_email_date
 	    (new Date(message_element.m_received_date_unix_epoch));
-	int length = Math.min(128, message_element.m_message.length());
+	int length = Math.min(128, message_element.m_message.trim().length());
 
 	if(string.isEmpty())
 	    m_date.setText(message_element.m_received_date);
@@ -151,14 +151,8 @@ public class MessageItem extends View
 	m_subject.setText(message_element.m_subject);
 	m_summary.setText
 	    (message_element.m_content_downloaded ?
-	     message_element.m_message.substring(0, length) : "");
-
-	if(!message_element.m_content_downloaded ||
-	   message_element.m_message.equals("(empty)"))
-	    m_summary.setVisibility(View.GONE);
-	else
-	    m_summary.setVisibility(View.VISIBLE);
-
+	     message_element.m_message.trim().substring(0, length) : "");
+	m_summary.setVisibility(length == 0 ? View.GONE : View.VISIBLE);
 	m_uid = message_element.m_uid;
 	m_view.setVisibility(View.VISIBLE);
     }

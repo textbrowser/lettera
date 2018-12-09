@@ -98,7 +98,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    if(folder_element == null || m_button == null)
 		return;
 
-	    String name = folder_element.m_name.toLowerCase().trim();
+	    String name = folder_element.m_name.toLowerCase();
 	    StringBuffer string_buffer = new StringBuffer();
 
 	    if(name.contains("draft"))

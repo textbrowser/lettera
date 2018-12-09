@@ -71,6 +71,51 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
+    private void write_recipient(InternetAddress internet_address,
+				 String email_account,
+				 String folder_name,
+				 String recipient_type,
+				 long message_uid)
+    {
+	if(internet_address == null || m_db == null)
+	    return;
+
+	try
+	{
+	    String recipient_email_account = UNKNOWN_EMAIL;
+	    String recipient_name = "";
+
+	    if(!(internet_address.getAddress() == null ||
+		 internet_address.getAddress().isEmpty()))
+		recipient_email_account = internet_address.getAddress();
+
+	    if(!(internet_address.getPersonal() == null ||
+		 internet_address.getPersonal().isEmpty()))
+		recipient_name = internet_address.getPersonal();
+	    else
+		recipient_name = recipient_email_account;
+
+	    m_db.execSQL
+		("REPLACE INTO messages_recipients (" +
+		 "email_account, " +
+		 "folder_name, " +
+		 "message_uid, " +
+		 "recipient_email_account, " +
+		 "recipient_name, " +
+		 "recipient_type) VALUES " +
+		 "(?, ?, ?, ?, ?, ?)",
+		 new String[] {email_account,
+			       folder_name,
+			       String.valueOf(message_uid),
+			       recipient_email_account,
+			       recipient_name,
+			       recipient_type});
+	}
+	catch(Exception exception)
+	{
+	}
+    }
+
     public ArrayList<FolderElement> folders(String email_account)
     {
 	if(m_db == null)
@@ -424,7 +469,7 @@ public class Database extends SQLiteOpenHelper
 		    switch(i)
 		    {
 		    case 0:
-			settings_element.m_key = key;
+			settings_element.m_key = key.trim();
 			break;
 		    case 1:
 			settings_element.m_value = cursor.getString(i).trim();
@@ -1280,7 +1325,7 @@ public class Database extends SQLiteOpenHelper
 		if(folder_element == null)
 		    continue;
 
-		String name = folder_element.m_name.toLowerCase().trim();
+		String name = folder_element.m_name.toLowerCase();
 		int is_regular_folder = 2;
 
 		if(name.contains("draft"))
@@ -1670,51 +1715,6 @@ public class Database extends SQLiteOpenHelper
 	try
 	{
 	    folder.close();
-	}
-	catch(Exception exception)
-	{
-	}
-    }
-
-    public void write_recipient(InternetAddress internet_address,
-				String email_account,
-				String folder_name,
-				String recipient_type,
-				long message_uid)
-    {
-	if(internet_address == null || m_db == null)
-	    return;
-
-	try
-	{
-	    String recipient_email_account = UNKNOWN_EMAIL;
-	    String recipient_name = "";
-
-	    if(!(internet_address.getAddress() == null ||
-		 internet_address.getAddress().isEmpty()))
-		recipient_email_account = internet_address.getAddress();
-
-	    if(!(internet_address.getPersonal() == null ||
-		 internet_address.getPersonal().isEmpty()))
-		recipient_name = internet_address.getPersonal();
-	    else
-		recipient_name = recipient_email_account;
-
-	    m_db.execSQL
-		("REPLACE INTO messages_recipients (" +
-		 "email_account, " +
-		 "folder_name, " +
-		 "message_uid, " +
-		 "recipient_email_account, " +
-		 "recipient_name, " +
-		 "recipient_type) VALUES " +
-		 "(?, ?, ?, ?, ?, ?)",
-		 new String[] {email_account,
-			       folder_name,
-			       String.valueOf(message_uid),
-			       recipient_email_account,
-			       recipient_name,
-			       recipient_type});
 	}
 	catch(Exception exception)
 	{
