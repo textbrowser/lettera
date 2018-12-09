@@ -1386,7 +1386,9 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void write_messages(IMAPFolder folder, String email_account)
+    public void write_messages(IMAPFolder folder,
+			       String email_account,
+			       boolean force_update)
     {
 	if(folder == null || m_db == null)
 	    return;
@@ -1491,7 +1493,7 @@ public class Database extends SQLiteOpenHelper
 
 		    if(cursor != null && cursor.moveToFirst())
 		    {
-			if(cursor.getInt(0) == 1)
+			if(cursor.getInt(0) == 1 && !force_update)
 			{
 			    content_values.clear();
 			    content_values.put("current_message", 1);

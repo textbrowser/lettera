@@ -77,6 +77,13 @@ public class Mail
 	}
 	else if(part.isMimeType("text/plain"))
 	    string_buffer.append((String) part.getContent());
+	else
+	{
+	    Object object = part.getContent();
+
+	    if(object instanceof String)
+		string_buffer.append((String) object);
+	}
     }
 
     public Mail(String inbound_address,
