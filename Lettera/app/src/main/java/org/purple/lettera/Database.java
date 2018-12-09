@@ -38,6 +38,7 @@ import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import javax.mail.Address;
 import javax.mail.FetchProfile;
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -1426,11 +1427,11 @@ public class Database extends SQLiteOpenHelper
 
 		Cursor cursor = null;
 		int selected = 0;
-		long uid = 0;
+		long message_uid = 0;
 
 		try
 		{
-		    uid = folder.getUID(message);
+		    message_uid = folder.getUID(message);
 		    cursor = m_db.rawQuery
 			("SELECT content_downloaded, selected " +
 			 "FROM messages WHERE email_account = ? AND " +
@@ -1438,7 +1439,7 @@ public class Database extends SQLiteOpenHelper
 			 "uid = ?",
 			 new String[] {email_account,
 				       folder.getName(),
-				       String.valueOf(uid)});
+				       String.valueOf(message_uid)});
 
 		    if(cursor != null && cursor.moveToFirst())
 		    {
@@ -1455,7 +1456,8 @@ public class Database extends SQLiteOpenHelper
 				      "uid = ?",
 				      new String[] {email_account,
 						    folder.getName(),
-						    String.valueOf(uid)}) > 0)
+						    String.
+						    valueOf(message_uid)}) > 0)
 			    {
 				cursor.close();
 				continue;
@@ -1585,7 +1587,7 @@ public class Database extends SQLiteOpenHelper
 		    else
 			content_values.put("subject", "(no subject)");
 
-		    content_values.put("uid", uid);
+		    content_values.put("uid", message_uid);
 		    sqlite_statement.bindLong
 			(1, content_values.getAsLong("content_downloaded"));
 		    sqlite_statement.bindLong
@@ -1614,6 +1616,14 @@ public class Database extends SQLiteOpenHelper
 		    sqlite_statement.bindLong
 			(13, content_values.getAsLong("uid"));
 		    sqlite_statement.execute();
+
+		    if(message.getAllRecipients() != null)
+			for(Address address : message.getAllRecipients())
+			    write_recipient((InternetAddress) address,
+					    email_account,
+					    folder.getName(),
+					    message_uid);
+
 		    sqlite_statement.clearBindings();
 		}
 		catch(Exception exception)
