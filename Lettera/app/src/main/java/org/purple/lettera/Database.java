@@ -533,37 +533,12 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    m_db.execSQL
-		("REPLACE INTO email_accounts (" +
-		 "delete_on_server, " +
-		 "email_account, " +
-		 "in_address, " +
-		 "in_password, " +
-		 "in_port, " +
-		 "out_address, " +
-		 "out_email, " +
-		 "out_password, " +
-		 "out_port, " +
-		 "proxy_address, " +
-		 "proxy_password, " +
-		 "proxy_port, " +
-		 "proxy_type, " +
-		 "proxy_user) VALUES " +
-		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-		 new String[] {content_values.getAsString("delete_on_server"),
-			       content_values.getAsString("email_account"),
-			       content_values.getAsString("in_address"),
-			       content_values.getAsString("in_password"),
-			       content_values.getAsString("in_port"),
-			       content_values.getAsString("out_address"),
-			       content_values.getAsString("out_email"),
-			       content_values.getAsString("out_password"),
-			       content_values.getAsString("out_port"),
-			       content_values.getAsString("proxy_address"),
-			       content_values.getAsString("proxy_password"),
-			       content_values.getAsString("proxy_port"),
-			       content_values.getAsString("proxy_type"),
-			       content_values.getAsString("proxy_user")});
+	    m_db.insert("email_accounts", null, content_values);
+	    m_db.update("email_accounts",
+			content_values,
+			"email_account = ?",
+			new String[] {content_values.
+				      getAsString("email_account")});
 	    m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
@@ -1080,6 +1055,8 @@ public class Database extends SQLiteOpenHelper
 	    "message_count INTEGER NOT NULL DEFAULT 0, " +
 	    "name TEXT NOT NULL, " +
 	    "new_message_count INTEGER NOT NULL DEFAULT 0, " +
+	    "FOREIGN KEY (email_account) REFERENCES " +
+	    "email_accounts (email_account) ON DELETE CASCADE, " +
 	    "PRIMARY KEY (email_account, name))";
 
 	try
@@ -1104,6 +1081,8 @@ public class Database extends SQLiteOpenHelper
 	    "sent_date TEXT NOT NULL, " +
 	    "subject TEXT NOT NULL, " +
 	    "uid BIGINT NOT NULL, " +
+	    "FOREIGN KEY (email_account) REFERENCES " +
+	    "email_accounts (email_account) ON DELETE CASCADE, " +
 	    "PRIMARY KEY (email_account, " +
 	    "folder_name, " +
 	    "uid))";
@@ -1123,6 +1102,8 @@ public class Database extends SQLiteOpenHelper
 	    "email_account TEXT NOT NULL, " +
 	    "folder_name TEXT NOT NULL, " +
 	    "message_uid BIGINT NOT NULL, " +
+	    "FOREIGN KEY (email_account) REFERENCES " +
+	    "email_accounts (email_account) ON DELETE CASCADE, " +
 	    "PRIMARY KEY (attachment_id, " +
 	    "attachment_name, " +
 	    "email_account, " +
@@ -1155,6 +1136,8 @@ public class Database extends SQLiteOpenHelper
 	    "recipient_email_account TEXT NOT NULL, " +
 	    "recipient_name TEXT NOT NULL, " +
 	    "recipient_type TEXT NOT NULL, " +
+	    "FOREIGN KEY (email_account) REFERENCES " +
+	    "email_accounts (email_account) ON DELETE CASCADE, " +
 	    "PRIMARY KEY (email_account, " +
 	    "folder_name, " +
 	    "message_uid, " +
