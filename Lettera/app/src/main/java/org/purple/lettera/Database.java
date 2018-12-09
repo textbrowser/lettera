@@ -1618,11 +1618,31 @@ public class Database extends SQLiteOpenHelper
 			(13, content_values.getAsLong("uid"));
 		    sqlite_statement.execute();
 
-		    if(message.getAllRecipients() != null)
-			for(Address address : message.getAllRecipients())
+		    if(message.getRecipients(Message.RecipientType.BCC) != null)
+			for(Address address :
+			    message.getRecipients(Message.RecipientType.BCC))
 			    write_recipient((InternetAddress) address,
 					    email_account,
 					    folder.getName(),
+					    "BCC",
+					    message_uid);
+
+		    if(message.getRecipients(Message.RecipientType.CC) != null)
+			for(Address address :
+			    message.getRecipients(Message.RecipientType.CC))
+			    write_recipient((InternetAddress) address,
+					    email_account,
+					    folder.getName(),
+					    "CC",
+					    message_uid);
+
+		    if(message.getRecipients(Message.RecipientType.TO) != null)
+			for(Address address :
+			    message.getRecipients(Message.RecipientType.TO))
+			    write_recipient((InternetAddress) address,
+					    email_account,
+					    folder.getName(),
+					    "TO",
 					    message_uid);
 
 		    sqlite_statement.clearBindings();
@@ -1664,6 +1684,7 @@ public class Database extends SQLiteOpenHelper
     public void write_recipient(InternetAddress internet_address,
 				String email_account,
 				String folder_name,
+				String recipient_type,
 				long message_uid)
     {
 	if(internet_address == null || m_db == null)
@@ -1673,7 +1694,6 @@ public class Database extends SQLiteOpenHelper
 	{
 	    String recipient_email_account = UNKNOWN_EMAIL;
 	    String recipient_name = "";
-	    String recipient_type = "TO";
 
 	    if(!(internet_address.getAddress() == null ||
 		 internet_address.getAddress().isEmpty()))
@@ -1684,10 +1704,6 @@ public class Database extends SQLiteOpenHelper
 		recipient_name = internet_address.getPersonal();
 	    else
 		recipient_name = recipient_email_account;
-
-	    if(!(internet_address.getType() == null ||
-		 internet_address.getType().isEmpty()))
-		recipient_type = internet_address.getType();
 
 	    m_db.execSQL
 		("REPLACE INTO messages_recipients (" +
