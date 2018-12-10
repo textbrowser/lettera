@@ -11,6 +11,7 @@ Completed Items
 - Index failure on Folders Drawer.
 - Key generation.
 - Optional status bar on main activity.
+- Parse recipients.
 - Performance degradation with folders having many messages (class cursor).
 - Prepare application within a progress-dialog block.
 - Prepare drawer from database values.
@@ -37,7 +38,6 @@ Remaining Items
 - Empty trash with confirmation.
 - Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
-- New messages notifications.
+- New-message notifications.
 - Offline and online design.
-- Parse recipients.
 - Select-all action.
