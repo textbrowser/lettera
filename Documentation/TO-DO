@@ -41,3 +41,8 @@ Remaining Items
 - McEliece key generation, exchange, etc.
 - New-message notifications.
 - Offline and online design.
+- What's a deleted message?
+  Do not display locally-deleted messages unless they're in Trash.
+  Expunge locally-deleted messages from the server if configured to do so.
+  In addition to Trash content, display locally-deleted messages.
+  Mark locally-deleted messages (set deleted to 1 in the database).
