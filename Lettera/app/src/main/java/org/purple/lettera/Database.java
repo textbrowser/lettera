@@ -1070,6 +1070,7 @@ public class Database extends SQLiteOpenHelper
 	str = "CREATE TABLE IF NOT EXISTS messages (" +
 	    "content_downloaded INTEGER NOT NULL DEFAULT 0, " +
 	    "current_message INTEGER NOT NULL DEFAULT 1, " +
+	    "deleted INTEGER NOT NULL DEFAULT 0, " +
 	    "email_account TEXT NOT NULL, " +
 	    "folder_name TEXT NOT NULL, " +
 	    "from_email_account TEXT NOT NULL, " +
