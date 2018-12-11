@@ -36,6 +36,7 @@ Remaining Items
 
 - Background services.
 - Deleted remote folders are also deleted locally.
+- Denote messages which have not been read.
 - Empty trash with confirmation.
 - Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.

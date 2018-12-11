@@ -1075,6 +1075,7 @@ public class Database extends SQLiteOpenHelper
 	    "folder_name TEXT NOT NULL, " +
 	    "from_email_account TEXT NOT NULL, " +
 	    "from_name TEXT NOT NULL, " +
+	    "has_been_read INTEGER NOT NULL DEFAULT 0, " +
 	    "message TEXT, " +
 	    "received_date TEXT NOT NULL, " +
 	    "received_date_unix_epoch BIGINT NOT NULL, " +
