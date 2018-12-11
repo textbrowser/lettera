@@ -83,6 +83,11 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	    (new MessageItem(parent.getContext(), parent));
     }
 
+    public String folder_name()
+    {
+	return m_folder_name;
+    }
+
     @Override
     public int getItemCount()
     {

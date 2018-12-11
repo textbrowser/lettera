@@ -725,9 +725,13 @@ public class Lettera extends AppCompatActivity
 
     public void prepare_folders_and_messages_widgets(String folder_name)
     {
-	m_all_checkbox.setOnCheckedChangeListener(null);
-	m_all_checkbox.setChecked(false);
-	m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
+	if(!folder_name.equals(m_adapter.folder_name()) &&
+	   !folder_name.isEmpty())
+	{
+	    m_all_checkbox.setOnCheckedChangeListener(null);
+	    m_all_checkbox.setChecked(false);
+	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
+	}
 
 	SettingsElement settings_element = m_database.settings_element
 	    ("primary_email_account");
