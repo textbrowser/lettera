@@ -218,6 +218,8 @@ public class Lettera extends AppCompatActivity
     private Button m_messaging_button = null;
     private Button m_settings_button = null;
     private CheckBox m_all_checkbox = null;
+    private CompoundButton.OnCheckedChangeListener
+	m_all_checkbox_listener = null;
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private Handler m_scroll_hander = null;
@@ -330,8 +332,10 @@ public class Lettera extends AppCompatActivity
 
     private void prepare_listeners()
     {
-	m_all_checkbox.setOnCheckedChangeListener
-	    (new CompoundButton.OnCheckedChangeListener()
+	if(m_all_checkbox_listener == null)
+	{
+	    m_all_checkbox_listener =
+		new CompoundButton.OnCheckedChangeListener()
 	    {
 		@Override
 		public void onCheckedChanged
@@ -343,7 +347,9 @@ public class Lettera extends AppCompatActivity
 			 is_checked);
 		    m_adapter.notifyDataSetChanged();
 		}
-	    });
+	    };
+	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
+	}
 
 	if(m_download_button != null && !m_download_button.
 	                                 hasOnClickListeners())
@@ -719,6 +725,10 @@ public class Lettera extends AppCompatActivity
 
     public void prepare_folders_and_messages_widgets(String folder_name)
     {
+	m_all_checkbox.setOnCheckedChangeListener(null);
+	m_all_checkbox.setChecked(false);
+	m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
+
 	SettingsElement settings_element = m_database.settings_element
 	    ("primary_email_account");
 
