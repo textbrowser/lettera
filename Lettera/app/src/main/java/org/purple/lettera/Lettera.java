@@ -40,6 +40,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -215,6 +217,7 @@ public class Lettera extends AppCompatActivity
     private Button m_download_button = null;
     private Button m_messaging_button = null;
     private Button m_settings_button = null;
+    private CheckBox m_all_checkbox = null;
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private Handler m_scroll_hander = null;
@@ -299,6 +302,7 @@ public class Lettera extends AppCompatActivity
 
     private void initialize_widget_members()
     {
+	m_all_checkbox = (CheckBox) findViewById(R.id.all_checkbox);
 	m_compose_button = (Button) findViewById(R.id.compose_button);
 	m_contacts_button = (Button) findViewById(R.id.contacts_button);
 	m_current_folder = (TextView) findViewById(R.id.current_folder);
@@ -326,6 +330,21 @@ public class Lettera extends AppCompatActivity
 
     private void prepare_listeners()
     {
+	m_all_checkbox.setOnCheckedChangeListener
+	    (new CompoundButton.OnCheckedChangeListener()
+	    {
+		@Override
+		public void onCheckedChanged
+		    (CompoundButton button_view, boolean is_checked)
+		{
+		    m_database.select_all
+			(m_database.setting("primary_email_account"),
+			 selected_folder_name(),
+			 is_checked);
+		    m_adapter.notifyDataSetChanged();
+		}
+	    });
+
 	if(m_download_button != null && !m_download_button.
 	                                 hasOnClickListeners())
 	    m_download_button.setOnClickListener(new View.OnClickListener()

@@ -1236,6 +1236,37 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
+    public void select_all(String email_account,
+			   String folder_name,
+			   boolean selected)
+    {
+	if(m_db == null)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    SQLiteStatement sqlite_statement = m_db.compileStatement
+		("UPDATE messages SET selected = ? " +
+		 "WHERE email_account = ? AND " +
+		 "LOWER(folder_name) = LOWER(?)");
+
+	    sqlite_statement.bindLong(1, selected ? 1 : 0);
+	    sqlite_statement.bindString(2, email_account);
+	    sqlite_statement.bindString(3, folder_name);
+	    sqlite_statement.execute();
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+    }
+
     public void set_message_selected(String email_account,
 				     String folder_name,
 				     boolean selected,

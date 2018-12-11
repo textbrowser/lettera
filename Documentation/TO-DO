@@ -25,6 +25,7 @@ Completed Items
 - Retain selected messages.
 - Save personal key pairs.
 - Scroll-to-bottom, scroll-to-top message icons.
+- Select-all action.
 - Separate standard folders from other folders.
 
 Future Items
@@ -40,4 +41,3 @@ Remaining Items
 - McEliece key generation, exchange, etc.
 - New-message notifications.
 - Offline and online design.
-- Select-all action.
