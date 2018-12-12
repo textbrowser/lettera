@@ -538,6 +538,13 @@ public class Database extends SQLiteOpenHelper
 	try
 	{
 	    m_db.insert("email_accounts", null, content_values);
+	}
+	catch(Exception exception)
+	{
+	}
+
+	try
+	{
 	    m_db.update("email_accounts",
 			content_values,
 			"email_account = ?",
@@ -1406,9 +1413,7 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void write_messages(IMAPFolder folder,
-			       String email_account,
-			       boolean force_update)
+    public void write_messages(IMAPFolder folder, String email_account)
     {
 	if(folder == null || m_db == null)
 	    return;
@@ -1513,7 +1518,7 @@ public class Database extends SQLiteOpenHelper
 
 		    if(cursor != null && cursor.moveToFirst())
 		    {
-			if(cursor.getInt(0) == 1 && !force_update)
+			if(cursor.getInt(0) == 1)
 			{
 			    content_values.clear();
 			    content_values.put("current_message", 1);
