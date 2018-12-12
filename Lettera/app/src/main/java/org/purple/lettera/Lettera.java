@@ -182,14 +182,14 @@ public class Lettera extends AppCompatActivity
 		{
 		    try
 		    {
-			m_adapter.notifyDataSetChanged();
+			m_messages_adapter.notifyDataSetChanged();
 			m_folders_drawer.set_email_address
 			    (m_database.setting("primary_email_account"));
 			m_folders_drawer.update();
 			m_items_count.setText
-			    ("Items: " + m_adapter.getItemCount());
+			    ("Items: " + m_messages_adapter.getItemCount());
 			m_layout_manager.scrollToPosition
-			    (m_adapter.getItemCount() - 1);
+			    (m_messages_adapter.getItemCount() - 1);
 			m_scroll_bottom.setVisibility(View.GONE);
 			m_scroll_top.setVisibility(View.GONE);
 			prepare_current_folder_text(selected_folder_name());
@@ -227,7 +227,7 @@ public class Lettera extends AppCompatActivity
     private ImageButton m_scroll_top = null;
     private LetteraLinearLayoutManager m_layout_manager = null;
     private LinearLayout m_status_bar = null;
-    private MessagesAdapter m_adapter = null;
+    private MessagesAdapter m_messages_adapter = null;
     private RecyclerView m_recycler = null;
     private Runnable m_scroll_runnable = null;
     private ScheduledExecutorService m_folders_drawer_scheduler = null;
@@ -240,6 +240,7 @@ public class Lettera extends AppCompatActivity
     private final PGP m_pgp = PGP.instance();
     private final int FOLDERS_DRAWER_INTERVAL = 7500;
     private final long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
+    public final static String NONE_FOLDER = "(None)";
 
     private String selected_folder_full_name()
     {
@@ -267,7 +268,7 @@ public class Lettera extends AppCompatActivity
     private boolean can_scroll_top()
     {
 	return m_layout_manager.findLastCompletelyVisibleItemPosition() <
-	    m_adapter.getItemCount() - 1;
+	    m_messages_adapter.getItemCount() - 1;
     }
 
     private void download()
@@ -326,7 +327,7 @@ public class Lettera extends AppCompatActivity
 	    m_current_folder.setText(folder_name);
 	else
 	    m_current_folder.setText
-		(folder_name + " (" + m_adapter.getItemCount() + ")");
+		(folder_name + " (" + m_messages_adapter.getItemCount() + ")");
     }
 
     private void prepare_listeners()
@@ -344,7 +345,7 @@ public class Lettera extends AppCompatActivity
 			(m_database.setting("primary_email_account"),
 			 selected_folder_name(),
 			 is_checked);
-		    m_adapter.notifyDataSetChanged();
+		    m_messages_adapter.notifyDataSetChanged();
 		}
 	    };
 	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
@@ -411,7 +412,7 @@ public class Lettera extends AppCompatActivity
 			return;
 
 		    m_layout_manager.scrollToPosition
-			(m_adapter.getItemCount() - 1);
+			(m_messages_adapter.getItemCount() - 1);
 		    m_scroll_hander.removeCallbacks(m_scroll_runnable);
 		    m_scroll_hander.postDelayed
 			(m_scroll_runnable, HIDE_SCROLL_TO_BUTTON_DELAY);
@@ -529,10 +530,11 @@ public class Lettera extends AppCompatActivity
 				@Override
 				public void run()
 				{
-				    m_adapter.notifyDataSetChanged();
+				    m_messages_adapter.notifyDataSetChanged();
 				    m_folders_drawer.update();
 				    m_items_count.setText
-					("Items: " + m_adapter.getItemCount());
+					("Items: " +
+					 m_messages_adapter.getItemCount());
 				    prepare_current_folder_text
 					(selected_folder_name());
 				}
@@ -569,7 +571,7 @@ public class Lettera extends AppCompatActivity
 	*/
 
 	initialize_widget_members();
-	m_adapter = new MessagesAdapter(getApplicationContext());
+	m_messages_adapter = new MessagesAdapter(getApplicationContext());
 	m_folders_drawer = new FoldersDrawer
 	    (Lettera.this, findViewById(R.id.main_layout));
 	m_layout_manager = new LetteraLinearLayoutManager
@@ -605,7 +607,7 @@ public class Lettera extends AppCompatActivity
 			m_scroll_hander.removeCallbacks(m_scroll_runnable);
 		}
 	    });
-	m_recycler.setAdapter(m_adapter);
+	m_recycler.setAdapter(m_messages_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
 	m_scroll_bottom.setVisibility(View.GONE);
@@ -628,7 +630,7 @@ public class Lettera extends AppCompatActivity
 		 m_database.setting("primary_email_account"));
 
 	    if(m_selected_folder_name.isEmpty())
-		m_selected_folder_name = "INBOX";
+		m_selected_folder_name = NONE_FOLDER;
 	}
 
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
@@ -706,7 +708,7 @@ public class Lettera extends AppCompatActivity
 	     m_database.setting("primary_email_account"));
 
 	if(folder_name.isEmpty())
-	    folder_name = "INBOX";
+	    folder_name = NONE_FOLDER;
 
 	prepare_folders_and_messages_widgets(folder_name);
     }
@@ -738,7 +740,7 @@ public class Lettera extends AppCompatActivity
 
     public void prepare_folders_and_messages_widgets(String folder_name)
     {
-	if(!folder_name.equals(m_adapter.folder_name()) &&
+	if(!folder_name.equals(m_messages_adapter.folder_name()) &&
 	   !folder_name.isEmpty())
 	{
 	    m_all_checkbox.setOnCheckedChangeListener(null);
@@ -748,20 +750,22 @@ public class Lettera extends AppCompatActivity
 
 	String setting = m_database.setting("primary_email_account");
 
-	m_adapter.set_email_address(setting);
 	m_folders_drawer.set_email_address(setting);
+	m_messages_adapter.set_email_address(setting);
 
 	if(!folder_name.isEmpty())
 	{
-	    m_adapter.set_folder_name(folder_name);
 	    m_folders_drawer.set_selected_folder_name(folder_name);
-	    m_items_count.setText("Items: " + m_adapter.getItemCount());
+	    m_messages_adapter.set_folder_name(folder_name);
+	    m_items_count.setText
+		("Items: " + m_messages_adapter.getItemCount());
 	}
 
 	try
 	{
-	    m_adapter.notifyDataSetChanged();
-	    m_layout_manager.scrollToPosition(m_adapter.getItemCount() - 1);
+	    m_messages_adapter.notifyDataSetChanged();
+	    m_layout_manager.scrollToPosition
+		(m_messages_adapter.getItemCount() - 1);
 	}
 	catch(Exception exception)
 	{

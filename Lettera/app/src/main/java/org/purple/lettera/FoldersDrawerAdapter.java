@@ -106,7 +106,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    else if(name.contains("important"))
 		name = "Important";
 	    else if(name.contains("inbox"))
-		name = "INBOX";
+		name = "Inbox";
 	    else if(name.contains("sent"))
 		name = "Sent";
 	    else if(name.contains("spam"))
@@ -141,7 +141,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		    (R.drawable.important_folder, 0, 0, 0);
 		m_button.setId(IconsEnumerator.IMPORTANT);
 		break;
-	    case "INBOX":
+	    case "Inbox":
 		m_button.setCompoundDrawablesWithIntrinsicBounds
 		    (R.drawable.inbox_folder, 0, 0, 0);
 		m_button.setId(IconsEnumerator.INBOX);
@@ -209,9 +209,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    m_button.setText(string_buffer.toString());
 	    m_button.setTextColor(Color.BLACK);
 
-	    if(m_selected_folder_name.isEmpty() && name.equals("INBOX"))
-		perform_click(folder_name, m_button, density);
-	    else if(folder_element.m_name.equals(m_selected_folder_name))
+	    if(folder_element.m_name.equals(m_selected_folder_name))
 		perform_click(folder_name, m_button, density);
 	}
     }
@@ -414,6 +412,6 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		("selected_folder_name_" + m_email_address);
 
 	if(m_selected_folder_name.isEmpty())
-	    m_selected_folder_name = "INBOX";
+	    m_selected_folder_name = Lettera.NONE_FOLDER;
     }
 }
