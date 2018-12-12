@@ -897,6 +897,19 @@ public class Database extends SQLiteOpenHelper
 	return 0;
     }
 
+    public int message_count_cursor(String email_account, String folder_name)
+    {
+	synchronized(m_read_message_cursor_mutex)
+	{
+	    if(m_read_message_cursor != null &&
+	       m_read_message_cursor_email_account.equals(email_account) &&
+	       m_read_message_cursor_folder_name.equals(folder_name))
+		return m_read_message_cursor.getCount();
+	    else
+		return message_count(email_account, folder_name);
+	}
+    }
+
     public static synchronized Database instance()
     {
 	return s_instance; // Should never be null.

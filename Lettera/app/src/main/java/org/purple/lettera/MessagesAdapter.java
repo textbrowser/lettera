@@ -91,7 +91,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-	return m_database.message_count(m_email_address, m_folder_name);
+	return m_database.message_count_cursor(m_email_address, m_folder_name);
     }
 
     @Override
@@ -109,8 +109,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	MessageElement message_element = m_database.message
 	    (m_email_address, m_folder_name, position);
 
-	view_holder_message.set_data
-	    (message_element, position == 0);
+	view_holder_message.set_data(message_element, position == 0);
     }
 
     public void set_email_address(String email_address)

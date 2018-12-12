@@ -121,8 +121,8 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    string_buffer.append(folder_element.m_name);
 	    string_buffer.append(" (");
 	    string_buffer.append
-		(m_database.message_count(folder_element.m_email_account,
-					  folder_element.m_name));
+		(m_database.message_count_cursor(folder_element.m_email_account,
+						 folder_element.m_name));
 	    string_buffer.append(")");
 	    m_button.setAllCaps(false);
 	    m_button.setBackgroundColor(Color.TRANSPARENT);
