@@ -385,13 +385,14 @@ public class Database extends SQLiteOpenHelper
 			 "folder_name, " +                // 2
 			 "from_email_account, " +         // 3
 			 "from_name, " +                  // 4
-			 "message, " +                    // 5
-			 "received_date, " +              // 6
-			 "received_date_unix_epoch, " +   // 7
-			 "sent_date, " +                  // 8
-			 "subject, " +                    // 9
-			 "uid, " +                        // 10
-			 "OID " +                         // 11
+			 "has_been_read, " +              // 5
+			 "message, " +                    // 6
+			 "oid, " +                        // 7
+			 "received_date, " +              // 8
+			 "received_date_unix_epoch, " +   // 9
+			 "sent_date, " +                  // 10
+			 "subject, " +                    // 11
+			 "uid " +                         // 12
 			 "FROM messages " +
 			 "INDEXED BY messages_received_date_unix_epoch " +
 			 "WHERE email_account = ? AND " +
@@ -406,30 +407,33 @@ public class Database extends SQLiteOpenHelper
 		   m_read_message_cursor.moveToPosition(position))
 		{
 		    MessageElement message_element = new MessageElement();
+		    int i = 0;
 
 		    message_element.m_content_downloaded =
-			m_read_message_cursor.getInt(0) == 1;
+			m_read_message_cursor.getInt(i++) == 1;
 		    message_element.m_email_account = m_read_message_cursor.
-			getString(1);
+			getString(i++);
 		    message_element.m_folder_name = m_read_message_cursor.
-			getString(2);
+			getString(i++);
 		    message_element.m_from_email_account =
-			m_read_message_cursor.getString(3);
+			m_read_message_cursor.getString(i++);
 		    message_element.m_from_name = m_read_message_cursor.
-			getString(4);
+			getString(i++);
+		    message_element.m_has_been_read = m_read_message_cursor.
+			getLong(i++) == 1;
 		    message_element.m_message = m_read_message_cursor.
-			getString(5).trim();
+			getString(i++).trim();
 		    message_element.m_oid = m_read_message_cursor.
-			getLong(11);
+			getLong(i++);
 		    message_element.m_received_date = m_read_message_cursor.
-			getString(6);
+			getString(i++);
 		    message_element.m_received_date_unix_epoch =
-			m_read_message_cursor.getLong(7);
+			m_read_message_cursor.getLong(i++);
 		    message_element.m_sent_date = m_read_message_cursor.
-			getString(8);
+			getString(i++);
 		    message_element.m_subject = m_read_message_cursor.
-			getString(9).trim();
-		    message_element.m_uid = m_read_message_cursor.getLong(10);
+			getString(i++).trim();
+		    message_element.m_uid = m_read_message_cursor.getLong(i++);
 		    return message_element;
 		}
 	    }
@@ -655,11 +659,11 @@ public class Database extends SQLiteOpenHelper
 		    ("messages_recipients", "email_account = ?",
 		     new String[] {email_account});
 		m_db.delete
-		    ("settings", "key = ?",
+		    ("settings", "key_field = ?",
 		     new String[] {"selected_folder_name_" + email_account});
 		m_db.delete
 		    ("settings",
-		     "key = ? AND value = ?",
+		     "key_field = ? AND value = ?",
 		     new String[] {"primary_email_account", email_account});
 	    }
 
@@ -1675,6 +1679,7 @@ public class Database extends SQLiteOpenHelper
 		    sqlite_statement.bindLong
 			(13, content_values.getAsLong("uid"));
 		    sqlite_statement.execute();
+		    sqlite_statement.clearBindings();
 
 		    if(message.getRecipients(Message.RecipientType.BCC) != null)
 			for(Address address :
@@ -1702,8 +1707,6 @@ public class Database extends SQLiteOpenHelper
 					    folder.getName(),
 					    "TO",
 					    message_uid);
-
-		    sqlite_statement.clearBindings();
 		}
 		catch(Exception exception)
 		{

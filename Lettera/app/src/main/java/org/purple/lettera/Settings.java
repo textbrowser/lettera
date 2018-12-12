@@ -1071,6 +1071,9 @@ public class Settings
 			    m_delete_account_verify_checkbox.setChecked(false);
 			    populate_accounts_spinner();
 			    populate_network();
+
+			    if(m_context instanceof Lettera)
+				((Lettera) m_context).email_account_deleted();
 			}
 		    }
 		});

@@ -623,12 +623,16 @@ public class Lettera extends AppCompatActivity
 	    }
 	};
 	m_scroll_top.setVisibility(View.GONE);
-	m_selected_folder_name = m_database.setting
-	    ("selected_folder_name_" +
-	     m_database.setting("primary_email_account"));
 
-	if(m_selected_folder_name.isEmpty())
-	    m_selected_folder_name = "INBOX";
+	synchronized(m_selected_folder_name_mutex)
+	{
+	    m_selected_folder_name = m_database.setting
+		("selected_folder_name_" +
+		 m_database.setting("primary_email_account"));
+
+	    if(m_selected_folder_name.isEmpty())
+		m_selected_folder_name = "INBOX";
+	}
 
 	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
@@ -663,7 +667,7 @@ public class Lettera extends AppCompatActivity
 		}
 	    }
 	}, 500);
-	prepare_folders_and_messages_widgets(m_selected_folder_name);
+	prepare_folders_and_messages_widgets(selected_folder_name());
 	prepare_generic_widgets();
 	prepare_icons();
 	prepare_listeners();
@@ -696,6 +700,18 @@ public class Lettera extends AppCompatActivity
 	catch(Exception exception)
 	{
 	}
+    }
+
+    public void email_account_deleted()
+    {
+	String folder_name = m_database.setting
+	    ("selected_folder_name_" +
+	     m_database.setting("primary_email_account"));
+
+	if(folder_name.isEmpty())
+	    folder_name = "INBOX";
+
+	prepare_folders_and_messages_widgets(folder_name);
     }
 
     @Override
@@ -733,14 +749,10 @@ public class Lettera extends AppCompatActivity
 	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
 	}
 
-	SettingsElement settings_element = m_database.settings_element
-	    ("primary_email_account");
+	String setting = m_database.setting("primary_email_account");
 
-	if(settings_element != null)
-	{
-	    m_adapter.set_email_address(settings_element.m_value);
-	    m_folders_drawer.set_email_address(settings_element.m_value);
-	}
+	m_adapter.set_email_address(setting);
+	m_folders_drawer.set_email_address(setting);
 
 	if(!folder_name.isEmpty())
 	{
@@ -766,7 +778,7 @@ public class Lettera extends AppCompatActivity
 
 	m_scroll_bottom.setVisibility(View.GONE);
 	m_scroll_top.setVisibility(View.GONE);
-	prepare_current_folder_text(m_selected_folder_name);
+	prepare_current_folder_text(selected_folder_name());
     }
 
     public void prepare_generic_widgets()

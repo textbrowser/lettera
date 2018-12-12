@@ -116,6 +116,9 @@ public class MessagesAdapter extends RecyclerView.Adapter
     public void set_email_address(String email_address)
     {
 	m_email_address = email_address;
+
+	if(m_email_address.isEmpty())
+	    m_email_address = "e-mail@e-mail.org";
     }
 
     public void set_folder_name(String folder_name)
