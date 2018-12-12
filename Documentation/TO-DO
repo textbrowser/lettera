@@ -1,6 +1,7 @@
 Completed Items
 
 - Denote primary e-mail account in Settings.
+- Discover proper inbox. (None) folder will suffice.
 - Double-click event in Folders drawer. Dismiss on click.
 - Download folder messages incrementally.
 - Download message content on separate thread(s).
@@ -37,11 +38,10 @@ Remaining Items
 - Background services.
 - Deleted remote folders are also deleted locally.
 - Denote messages which have not been read.
-- Discover proper inbox.
 - Empty trash with confirmation.
 - Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
-- New-message notifications.
+- New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
