@@ -657,7 +657,10 @@ public class Settings
 		if(m_context instanceof Lettera)
 		{
 		    ((Lettera) m_context).
-			prepare_folders_and_messages_widgets("");
+			prepare_folders_and_messages_widgets
+			(m_database.
+			 setting("selected_folder_name_" +
+				 m_database.setting("primary_email_account")));
 		    ((Lettera) m_context).prepare_generic_widgets();
 		    ((Lettera) m_context).prepare_icons();
 		}
@@ -878,6 +881,8 @@ public class Settings
 	SettingsElement settings_element = m_database.settings_element
 	    ("primary_email_account");
 
+	m_delete_account_verify_checkbox.setChecked(false);
+	m_outbound_as_inbound.setChecked(false);
 	m_proxy_type_spinner.setAdapter(array_adapter);
 
 	if(email_element == null)
