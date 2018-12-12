@@ -29,6 +29,7 @@ package org.purple.lettera;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,10 +139,16 @@ public class MessageItem extends View
 	else
 	    m_date.setText(string);
 
+	m_date.setTypeface
+	    (null,
+	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
 	m_divider.setVisibility(last_position ? View.GONE : View.VISIBLE);
 	m_email_account = message_element.m_email_account;
 	m_folder_name = message_element.m_folder_name;
 	m_from.setText(message_element.m_from_name);
+	m_from.setTypeface
+	    (null,
+	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
 	m_selected.setOnCheckedChangeListener(null);
 	m_selected.setChecked
 	    (m_database.message_selected(message_element.m_email_account,
@@ -149,6 +156,9 @@ public class MessageItem extends View
 					 message_element.m_uid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
 	m_subject.setText(message_element.m_subject);
+	m_subject.setTypeface
+	    (null,
+	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
 	m_summary.setText
 	    (message_element.m_content_downloaded ?
 	     message_element.m_message.trim().substring(0, length) : "");
