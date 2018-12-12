@@ -47,5 +47,5 @@ Remaining Items
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
   Expunge locally-deleted messages from the server if configured to do so.
-  In addition to Trash content, display locally-deleted messages.
+  In addition to Trash content, display locally-deleted messages in Trash.
   Mark locally-deleted messages (set deleted to 1 in the database).
