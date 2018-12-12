@@ -33,7 +33,5 @@ public class FolderElement
     public String m_full_name = "";
     public String m_name = "";
     public int m_is_regular_folder = 2;
-    public int m_message_count = 0;
-    public int m_new_message_count = 0;
     public long m_oid = -1;
 }

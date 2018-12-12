@@ -129,9 +129,7 @@ public class Database extends SQLiteOpenHelper
 		("SELECT email_account, " +
 		 "full_name, " +
 		 "is_regular_folder, " +
-		 "message_count, " +
 		 "name, " +
-		 "new_message_count, " +
 		 "OID " +
 		 "FROM folders WHERE email_account = ? " +
 		 "ORDER BY LOWER(name)",
@@ -148,10 +146,8 @@ public class Database extends SQLiteOpenHelper
 		    folder_element.m_email_account = cursor.getString(0);
 		    folder_element.m_full_name = cursor.getString(1);
 		    folder_element.m_is_regular_folder = cursor.getInt(2);
-		    folder_element.m_message_count = cursor.getInt(3);
-		    folder_element.m_name = cursor.getString(4);
-		    folder_element.m_new_message_count = cursor.getInt(5);
-		    folder_element.m_oid = cursor.getLong(6);
+		    folder_element.m_name = cursor.getString(3);
+		    folder_element.m_oid = cursor.getLong(4);
 		    array_list.add(folder_element);
 		    cursor.moveToNext();
 		}
@@ -321,9 +317,7 @@ public class Database extends SQLiteOpenHelper
 		("SELECT email_account, " +
 		 "full_name, " +
 		 "is_regular_folder, " +
-		 "message_count, " +
 		 "name, " +
-		 "new_message_count, " +
 		 "OID " +
 		 "FROM folders WHERE email_account = ? " +
 		 "ORDER BY is_regular_folder, LOWER(name) " +
@@ -337,10 +331,8 @@ public class Database extends SQLiteOpenHelper
 		folder_element.m_email_account = cursor.getString(0);
 		folder_element.m_full_name = cursor.getString(1);
 		folder_element.m_is_regular_folder = cursor.getInt(2);
-		folder_element.m_message_count = cursor.getInt(3);
-		folder_element.m_name = cursor.getString(4);
-		folder_element.m_new_message_count = cursor.getInt(5);
-		folder_element.m_oid = cursor.getLong(6);
+		folder_element.m_name = cursor.getString(3);
+		folder_element.m_oid = cursor.getLong(4);
 		return folder_element;
 	    }
 	}
@@ -1076,9 +1068,7 @@ public class Database extends SQLiteOpenHelper
 	    "email_account TEXT NOT NULL, " +
 	    "full_name TEXT NOT NULL, " +
 	    "is_regular_folder INTEGER NOT NULL DEFAULT 1, " +
-	    "message_count INTEGER NOT NULL DEFAULT 0, " +
 	    "name TEXT NOT NULL, " +
-	    "new_message_count INTEGER NOT NULL DEFAULT 0, " +
 	    "FOREIGN KEY (email_account) REFERENCES " +
 	    "email_accounts (email_account) ON DELETE CASCADE, " +
 	    "PRIMARY KEY (email_account, name))";
@@ -1397,19 +1387,13 @@ public class Database extends SQLiteOpenHelper
 		     "email_account, " +
 		     "full_name, " +
 		     "is_regular_folder, " +
-		     "message_count, " +
-		     "name, " +
-		     "new_message_count) VALUES " +
-		     "(?, ?, ?, ?, ?, ?, ?)",
+		     "name) VALUES " +
+		     "(?, ?, ?, ?, ?)",
 		     new String[] {String.valueOf(1),
 				   email_account,
 				   folder_element.m_full_name,
 				   String.valueOf(is_regular_folder),
-				   String.valueOf(folder_element.
-						  m_message_count),
-				   folder_element.m_name,
-				   String.valueOf(folder_element.
-						  m_new_message_count)});
+				   folder_element.m_name});
 	    }
 
 	    m_db.delete("folders",
