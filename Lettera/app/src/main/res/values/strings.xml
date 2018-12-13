@@ -47,5 +47,4 @@
     <string name="top">Top</string>
     <string name="bottom">Bottom</string>
     <string name="show_status_bar_on_main_activity">Show status bar on main activity.</string>
-    <string name="all">All</string>
 </resources>
