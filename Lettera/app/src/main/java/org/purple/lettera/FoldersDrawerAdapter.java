@@ -127,7 +127,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    m_button.setAllCaps(false);
 	    m_button.setBackgroundColor(Color.TRANSPARENT);
 	    m_button.setButtonDrawable(null);
-	    m_button.setCompoundDrawablePadding(100);
+	    m_button.setCompoundDrawablePadding(15);
 
 	    switch(name)
 	    {
