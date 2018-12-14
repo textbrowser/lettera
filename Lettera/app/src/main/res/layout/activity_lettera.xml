@@ -124,14 +124,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/delete"
-                app:srcCompat="@drawable/trash_folder" />
+            <Button
+                android:id="@+id/delete_button"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/trash_folder" />
 
         </LinearLayout>
 
