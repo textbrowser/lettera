@@ -137,6 +137,14 @@
                 android:background="@drawable/trash_folder"
                 android:gravity="center" />
 
+            <Button
+                android:id="@+id/move_to_folder"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/move_to_folder"
+                android:gravity="center" />
+
         </LinearLayout>
 
         <View
