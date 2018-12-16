@@ -314,6 +314,7 @@ public class Lettera extends AppCompatActivity
     private void initialize_widget_members()
     {
 	m_all_checkbox = (CheckBox) findViewById(R.id.all_checkbox);
+	m_artificial_button = (Button) findViewById(R.id.artificial_button);
 	m_compose_button = (Button) findViewById(R.id.compose_button);
 	m_contacts_button = (Button) findViewById(R.id.contacts_button);
 	m_current_folder = (TextView) findViewById(R.id.current_folder);
@@ -577,7 +578,6 @@ public class Lettera extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-	m_artificial_button = new Button(Lettera.this);
 	m_database = Database.instance(getApplicationContext());
 
 	/*
@@ -630,7 +630,7 @@ public class Lettera extends AppCompatActivity
 			{
 			    view.setBackgroundColor(Color.WHITE);
 			}
-		    }, 500);
+		    }, 150);
 		}
 	    }));
 	m_recycler.addOnScrollListener
