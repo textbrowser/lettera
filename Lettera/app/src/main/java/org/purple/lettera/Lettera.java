@@ -30,6 +30,7 @@ package org.purple.lettera;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +39,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -211,6 +213,13 @@ public class Lettera extends AppCompatActivity
 	}
     }
 
+    public interface MessageClickListener
+    {
+	void onClick(View view, int position);
+	void onLongClick(View view, int position);
+    }
+
+    private Button m_artificial_button = null;
     private Button m_compose_button = null;
     private Button m_contacts_button = null;
     private Button m_download_button = null;
@@ -351,10 +360,21 @@ public class Lettera extends AppCompatActivity
 	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
 	}
 
+	if(m_artificial_button != null && !m_artificial_button.
+	                                   hasOnClickListeners())
+	    m_artificial_button.setOnClickListener(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		}
+	    });
+
 	if(m_download_button != null && !m_download_button.
 	                                 hasOnClickListeners())
 	    m_download_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(Lettera.this.isFinishing())
@@ -369,6 +389,7 @@ public class Lettera extends AppCompatActivity
 	    m_folders_drawer_button.setOnClickListener
 		(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(Lettera.this.isFinishing() || m_folders_drawer == null)
@@ -381,6 +402,7 @@ public class Lettera extends AppCompatActivity
 	if(m_scroll_bottom != null && !m_scroll_bottom.hasOnClickListeners())
 	    m_scroll_bottom.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(Lettera.this.isFinishing())
@@ -406,6 +428,7 @@ public class Lettera extends AppCompatActivity
 	if(m_scroll_top != null && !m_scroll_top.hasOnClickListeners())
 	    m_scroll_top.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(Lettera.this.isFinishing())
@@ -433,6 +456,7 @@ public class Lettera extends AppCompatActivity
 	                                 hasOnClickListeners())
 	    m_settings_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(Lettera.this.isFinishing() || m_settings == null)
@@ -553,6 +577,7 @@ public class Lettera extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+	m_artificial_button = new Button(Lettera.this);
 	m_database = Database.instance(getApplicationContext());
 
 	/*
@@ -580,6 +605,34 @@ public class Lettera extends AppCompatActivity
 	m_layout_manager.setReverseLayout(true);
 	m_layout_manager.setSmoothScrollbarEnabled(true);
 	m_layout_manager.setStackFromEnd(true);
+	m_recycler.addOnItemTouchListener
+	    (new
+	     MessagesRecyclerTouchListener(Lettera.this,
+					   m_recycler,
+					   new MessagesRecyclerTouchListener.
+					   ClickListener()
+	    {
+		@Override
+		public void onClick(View view, int position)
+		{
+		}
+
+		@Override
+		public void onLongClick(final View view, int position)
+		{
+		    m_artificial_button.performClick();
+		    view.setBackgroundColor(Color.parseColor("#90caf9"));
+		    new Handler(Looper.getMainLooper()).
+			postDelayed(new Runnable()
+		    {
+			@Override
+			public void run()
+			{
+			    view.setBackgroundColor(Color.WHITE);
+			}
+		    }, 500);
+		}
+	    }));
 	m_recycler.addOnScrollListener
 	    (new RecyclerView.OnScrollListener()
 	    {

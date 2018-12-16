@@ -181,6 +181,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    m_button.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 	    m_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    clicked();

@@ -125,6 +125,7 @@ public class FoldersDrawer
 	if(m_close_button != null && !m_close_button.hasOnClickListeners())
 	    m_close_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    dismiss();

@@ -1031,6 +1031,7 @@ public class Settings
 	if(!m_apply_button.hasOnClickListeners())
 	    m_apply_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(((Activity) m_context).isFinishing())
@@ -1043,6 +1044,7 @@ public class Settings
 	if(!m_close_button.hasOnClickListeners())
 	    m_close_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(((Activity) m_context).isFinishing())
@@ -1063,6 +1065,7 @@ public class Settings
 	    m_delete_account_button.setOnClickListener
 		(new View.OnClickListener()
 		{
+		    @Override
 		    public void onClick(View view)
 		    {
 			if(((Activity) m_context).isFinishing())
@@ -1101,6 +1104,7 @@ public class Settings
 	if(!m_display_button.hasOnClickListeners())
 	    m_display_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(((Activity) m_context).isFinishing())
@@ -1113,6 +1117,7 @@ public class Settings
 	if(!m_generate_keys_button.hasOnClickListeners())
 	    m_generate_keys_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(((Activity) m_context).isFinishing())
@@ -1209,6 +1214,7 @@ public class Settings
 	if(!m_network_button.hasOnClickListeners())
 	    m_network_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(((Activity) m_context).isFinishing())
@@ -1235,6 +1241,7 @@ public class Settings
 	if(!m_privacy_button.hasOnClickListeners())
 	    m_privacy_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(((Activity) m_context).isFinishing())
@@ -1247,6 +1254,7 @@ public class Settings
 	if(!m_test_inbound_button.hasOnClickListeners())
 	    m_test_inbound_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(((Activity) m_context).isFinishing())
@@ -1259,6 +1267,7 @@ public class Settings
 	if(!m_test_outbound_button.hasOnClickListeners())
 	    m_test_outbound_button.setOnClickListener(new View.OnClickListener()
 	    {
+		@Override
 		public void onClick(View view)
 		{
 		    if(((Activity) m_context).isFinishing())

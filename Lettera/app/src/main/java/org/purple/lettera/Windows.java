@@ -60,6 +60,7 @@ public abstract class Windows
 		 "Close",
 		 new DialogInterface.OnClickListener()
 		 {
+		     @Override
 		     public void onClick(DialogInterface dialog, int which)
 		     {
 			 try
