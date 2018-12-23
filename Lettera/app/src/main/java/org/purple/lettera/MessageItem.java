@@ -75,10 +75,8 @@ public class MessageItem extends View
 	    {
 		@Override
 		public void onCheckedChanged
-		    (CompoundButton button_view, boolean is_checked)
+		    (CompoundButton button_view, final boolean is_checked)
 		{
-		    final boolean selected = is_checked;
-
 		    Thread thread = new Thread
 			(new Runnable()
 			{
@@ -88,7 +86,7 @@ public class MessageItem extends View
 				m_database.set_message_selected
 				    (m_email_account,
 				     m_folder_name,
-				     selected,
+				     is_checked,
 				     m_uid);
 			    }
 			});

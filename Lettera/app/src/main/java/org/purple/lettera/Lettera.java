@@ -349,27 +349,22 @@ public class Lettera extends AppCompatActivity
 	    {
 		@Override
 		public void onCheckedChanged
-		    (CompoundButton button_view, boolean is_checked)
+		    (CompoundButton button_view, final boolean is_checked)
 		{
-		    m_all_checkbox.setEnabled(false);
-
-		    final boolean state = is_checked;
-
 		    new Handler
 			(Looper.getMainLooper()).postDelayed(new Runnable()
 		    {
 			@Override
 			public void run()
 			{
-			    m_all_checkbox.setEnabled(true);
 			    m_database.select_all
 				(Lettera.this,
 				 m_messages_adapter,
 				 m_database.setting("primary_email_account"),
 				 selected_folder_name(),
-				 state);
+				 is_checked);
 			}
-		    }, 250);
+		    }, 750);
 		}
 	    };
 	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
