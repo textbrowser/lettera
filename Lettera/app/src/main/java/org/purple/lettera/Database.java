@@ -27,6 +27,7 @@
 
 package org.purple.lettera;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -1252,35 +1253,56 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void select_all(String email_account,
-			   String folder_name,
-			   boolean selected)
+    public void select_all(final Context context,
+			   final MessagesAdapter messages_adapter,
+			   final String email_account,
+			   final String folder_name,
+			   final boolean selected)
     {
 	if(m_db == null)
 	    return;
 
-	m_db.beginTransactionNonExclusive();
+	Thread thread = new Thread(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_db.beginTransactionNonExclusive();
 
-	try
-	{
-	    SQLiteStatement sqlite_statement = m_db.compileStatement
-		("UPDATE messages SET selected = ? " +
-		 "WHERE email_account = ? AND " +
-		 "LOWER(folder_name) = LOWER(?)");
+		try
+		{
+		    SQLiteStatement sqlite_statement = m_db.compileStatement
+			("UPDATE messages SET selected = ? " +
+			 "WHERE email_account = ? AND " +
+			 "LOWER(folder_name) = LOWER(?)");
 
-	    sqlite_statement.bindLong(1, selected ? 1 : 0);
-	    sqlite_statement.bindString(2, email_account);
-	    sqlite_statement.bindString(3, folder_name);
-	    sqlite_statement.execute();
-	    m_db.setTransactionSuccessful();
-	}
-	catch(Exception exception)
-	{
-	}
-	finally
-	{
-	    m_db.endTransaction();
-	}
+		    sqlite_statement.bindLong(1, selected ? 1 : 0);
+		    sqlite_statement.bindString(2, email_account);
+		    sqlite_statement.bindString(3, folder_name);
+		    sqlite_statement.execute();
+		    m_db.setTransactionSuccessful();
+		}
+		catch(Exception exception)
+		{
+		}
+		finally
+		{
+		    m_db.endTransaction();
+		}
+
+		if(context != null && messages_adapter != null)
+		    ((Activity) context).runOnUiThread(new Runnable()
+		    {
+			@Override
+			public void run()
+			{
+			    messages_adapter.notifyDataSetChanged();
+			}
+		    });
+	    }
+	});
+
+	thread.start();
     }
 
     public void set_message_selected(String email_account,
