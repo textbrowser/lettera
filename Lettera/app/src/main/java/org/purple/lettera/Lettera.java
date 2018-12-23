@@ -351,6 +351,8 @@ public class Lettera extends AppCompatActivity
 		public void onCheckedChanged
 		    (CompoundButton button_view, boolean is_checked)
 		{
+		    m_all_checkbox.setEnabled(false);
+
 		    final boolean state = is_checked;
 
 		    new Handler
@@ -359,6 +361,7 @@ public class Lettera extends AppCompatActivity
 			@Override
 			public void run()
 			{
+			    m_all_checkbox.setEnabled(true);
 			    m_database.select_all
 				(Lettera.this,
 				 m_messages_adapter,
