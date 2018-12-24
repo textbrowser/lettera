@@ -63,7 +63,7 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/default_compose" />
 
                 <Button
@@ -71,7 +71,7 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/default_contacts" />
 
                 <Button
@@ -79,21 +79,21 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/default_download" />
 
                 <Button
                     android:id="@+id/messaging_button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/default_messaging" />
 
                 <View
                     android:id="@+id/vertical_separator"
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="0"
                     android:background="@android:color/white" />
 
@@ -134,13 +134,15 @@
             <CheckBox
                 android:id="@+id/all_checkbox"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp" />
 
             <Button
                 android:id="@+id/delete_button"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/trash_folder"
                 android:gravity="center" />
 

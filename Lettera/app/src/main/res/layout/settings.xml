@@ -32,6 +32,7 @@
                 android:id="@+id/display_button"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="0"
                 android:background="@drawable/default_display" />
 
@@ -44,6 +45,7 @@
                 android:id="@+id/network_button"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="0"
                 android:background="@drawable/default_network" />
 
