@@ -36,6 +36,7 @@ Future Items
 
 Remaining Items
 
+- Allow cancellation of downloads.
 - Background services.
 - Deleted remote folders are also deleted locally.
 - Empty trash with confirmation.
