@@ -34,7 +34,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Windows
 {
@@ -81,8 +83,10 @@ public abstract class Windows
 	}
     }
 
-    public static void show_progress_dialog
-	(Context context, Dialog dialog, String text)
+    public static void show_progress_dialog(final AtomicBoolean interrupt,
+					    Context context,
+					    Dialog dialog,
+					    String text)
     {
 	if(context == null ||
 	   dialog == null ||
@@ -99,6 +103,20 @@ public abstract class Windows
 		(Context.LAYOUT_INFLATER_SERVICE);
 	    View view = inflater.inflate(R.layout.progress, null);
 
+	    if(interrupt != null)
+		((Button) view.findViewById(R.id.interrupt)).
+		    setOnClickListener(new View.OnClickListener()
+	        {
+		    @Override
+		    public void onClick(View view)
+		    {
+			interrupt.set(true);
+			view.findViewById(R.id.interrupt).setEnabled(false);
+		    }
+		});
+
+	    ((Button) view.findViewById(R.id.interrupt)).setVisibility
+		(interrupt == null ? View.GONE : View.VISIBLE);
 	    ((TextView) view.findViewById(R.id.text)).setText(text);
 	    dialog.setCancelable(false);
 	    dialog.setContentView(view);

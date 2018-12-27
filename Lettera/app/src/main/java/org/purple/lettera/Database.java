@@ -39,6 +39,7 @@ import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.mail.Address;
 import javax.mail.FetchProfile;
 import javax.mail.Folder;
@@ -1432,7 +1433,9 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void write_messages(IMAPFolder folder, String email_account)
+    public void write_messages(AtomicBoolean interrupt,
+			       IMAPFolder folder,
+			       String email_account)
     {
 	if(folder == null || m_db == null)
 	    return;
@@ -1516,6 +1519,9 @@ public class Database extends SQLiteOpenHelper
 
 	    for(Message message : messages)
 	    {
+		if(interrupt.get())
+		    break;
+
 		if(message == null)
 		    continue;
 

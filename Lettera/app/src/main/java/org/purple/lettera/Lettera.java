@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Lettera extends AppCompatActivity
 {
@@ -168,9 +169,11 @@ public class Lettera extends AppCompatActivity
 
 		mail.connect_imap();
 		m_database.write_folders
-		    (mail.folder_elements(), email_element.m_inbound_email);
+		    (mail.folder_elements(m_download_interrupted),
+		     email_element.m_inbound_email);
 		m_database.write_messages
-		    (mail.folder(m_folder_full_name),
+		    (m_download_interrupted,
+		     mail.folder(m_folder_full_name),
 		     email_element.m_inbound_email);
 	    }
 	    catch(Exception exception)
@@ -219,6 +222,7 @@ public class Lettera extends AppCompatActivity
 	void onLongClick(View view, int position);
     }
 
+    private AtomicBoolean m_download_interrupted = new AtomicBoolean(false);
     private Button m_artificial_button = null;
     private Button m_compose_button = null;
     private Button m_contacts_button = null;
@@ -282,13 +286,16 @@ public class Lettera extends AppCompatActivity
 
     private void download()
     {
+	m_download_interrupted.set(false);
+
 	Dialog dialog = null;
 
 	try
 	{
 	    dialog = new Dialog(Lettera.this);
 	    Windows.show_progress_dialog
-		(Lettera.this,
+		(m_download_interrupted,
+		 Lettera.this,
 		 dialog,
 		 "Downloading e-mail folders and messages.\n" +
 		 "Please be patient.");
@@ -486,6 +493,7 @@ public class Lettera extends AppCompatActivity
 	    m_folders_drawer_scheduler.scheduleAtFixedRate(new Runnable()
 	    {
 		private ArrayList<String> m_folder_names = null;
+		private AtomicBoolean m_interrupted = new AtomicBoolean(false);
 		private Mail m_mail = null;
 
 		@Override
@@ -540,10 +548,11 @@ public class Lettera extends AppCompatActivity
 			if(m_mail != null && m_mail.imap_connected())
 			{
 			    m_database.write_folders
-				(m_mail.folder_elements(),
+				(m_mail.folder_elements(m_interrupted),
 				 m_mail.email_address());
 			    m_database.write_messages
-				(m_mail.folder(selected_folder_full_name()),
+				(m_interrupted,
+				 m_mail.folder(selected_folder_full_name()),
 				 m_mail.email_address());
 
 			    if(m_folder_names == null ||
@@ -554,7 +563,8 @@ public class Lettera extends AppCompatActivity
 			       m_folder_names.size() > 0)
 			    {
 				m_database.write_messages
-				    (m_mail.folder(m_folder_names.get(0)),
+				    (m_interrupted,
+				     m_mail.folder(m_folder_names.get(0)),
 				     m_mail.email_address());
 				m_folder_names.remove(0);
 			    }
@@ -707,7 +717,8 @@ public class Lettera extends AppCompatActivity
 		{
 		    dialog = new Dialog(Lettera.this);
 		    Windows.show_progress_dialog
-			(Lettera.this,
+			(null,
+			 Lettera.this,
 			 dialog,
 			 "Initializing Lettera.\nPlease be patient.");
 

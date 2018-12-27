@@ -33,6 +33,7 @@ import com.sun.mail.smtp.SMTPTransport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.Multipart;
@@ -117,7 +118,7 @@ public class Mail
 	smtp();
     }
 
-    public ArrayList<FolderElement> folder_elements()
+    public ArrayList<FolderElement> folder_elements(AtomicBoolean interrupt)
     {
 	try
 	{
@@ -126,6 +127,9 @@ public class Mail
 
 	    for(Folder folder : folders)
 	    {
+		if(interrupt.get())
+		    break;
+
 		FolderElement folder_element = new FolderElement();
 
 		/*

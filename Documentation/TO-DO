@@ -39,6 +39,7 @@ Remaining Items
 - Allow cancellation of downloads.
 - Background services.
 - Deleted remote folders are also deleted locally.
+- Display percent downloaded in dialog.
 - Empty trash with confirmation.
 - Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
