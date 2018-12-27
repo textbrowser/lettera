@@ -1,5 +1,6 @@
 Completed Items
 
+- Allow cancellation of downloads.
 - Denote messages which have not been read.
 - Denote primary e-mail account in Settings.
 - Discover proper inbox. (None) folder will suffice.
@@ -36,7 +37,6 @@ Future Items
 
 Remaining Items
 
-- Allow cancellation of downloads.
 - Background services.
 - Deleted remote folders are also deleted locally.
 - Display percent downloaded in dialog.
