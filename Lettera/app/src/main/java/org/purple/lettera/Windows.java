@@ -110,6 +110,7 @@ public abstract class Windows
 		    @Override
 		    public void onClick(View view)
 		    {
+			((Button) view).setText("INTERRUPTING...");
 			interrupt.set(true);
 			view.findViewById(R.id.interrupt).setEnabled(false);
 		    }
