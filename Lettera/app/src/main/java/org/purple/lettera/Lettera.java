@@ -226,6 +226,7 @@ public class Lettera extends AppCompatActivity
     private Button m_artificial_button = null;
     private Button m_compose_button = null;
     private Button m_contacts_button = null;
+    private Button m_delete_button = null;
     private Button m_download_button = null;
     private Button m_messaging_button = null;
     private Button m_settings_button = null;
@@ -325,6 +326,7 @@ public class Lettera extends AppCompatActivity
 	m_compose_button = (Button) findViewById(R.id.compose_button);
 	m_contacts_button = (Button) findViewById(R.id.contacts_button);
 	m_current_folder = (TextView) findViewById(R.id.current_folder);
+	m_delete_button = (Button) findViewById(R.id.delete_button);
 	m_download_button = (Button) findViewById(R.id.download_button);
 	m_folders_drawer_button = (ImageButton) findViewById
 	    (R.id.folders_drawer_button);
@@ -384,6 +386,23 @@ public class Lettera extends AppCompatActivity
 		@Override
 		public void onClick(View view)
 		{
+		}
+	    });
+
+	if(m_delete_button != null && !m_delete_button.hasOnClickListeners())
+	    m_delete_button.setOnClickListener(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing())
+			return;
+
+		    m_database.delete_selected
+			(Lettera.this,
+			 m_messages_adapter,
+			 m_database.setting("primary_email_account"),
+			 selected_folder_name());
 		}
 	    });
 

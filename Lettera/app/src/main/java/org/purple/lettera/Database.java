@@ -994,6 +994,57 @@ public class Database extends SQLiteOpenHelper
 	    }
     }
 
+    public void delete_selected(final Lettera lettera,
+				final MessagesAdapter messages_adapter,
+				final String email_account,
+				final String folder_name)
+    {
+	if(m_db == null)
+	    return;
+
+	Thread thread = new Thread(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_db.beginTransactionNonExclusive();
+
+		try
+		{
+		    SQLiteStatement sqlite_statement = m_db.compileStatement
+			("UPDATE messages SET deleted = 1 " +
+			 "WHERE email_account = ? AND " +
+			 "LOWER(folder_name) = LOWER(?) AND " +
+			 "selected = 1");
+
+		    sqlite_statement.bindString(1, email_account);
+		    sqlite_statement.bindString(2, folder_name);
+		    sqlite_statement.execute();
+		    m_db.setTransactionSuccessful();
+		}
+		catch(Exception exception)
+		{
+		}
+		finally
+		{
+		    m_db.endTransaction();
+		}
+
+		if(messages_adapter != null)
+		    lettera.runOnUiThread(new Runnable()
+		    {
+			@Override
+			public void run()
+			{
+			    messages_adapter.notifyDataSetChanged();
+			}
+		    });
+	    }
+	});
+
+	thread.start();
+    }
+
     @Override
     public void onConfigure(SQLiteDatabase db)
     {
@@ -1254,7 +1305,7 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void select_all(final Context context,
+    public void select_all(final Lettera lettera,
 			   final MessagesAdapter messages_adapter,
 			   final String email_account,
 			   final String folder_name,
@@ -1291,8 +1342,8 @@ public class Database extends SQLiteOpenHelper
 		    m_db.endTransaction();
 		}
 
-		if(context != null && messages_adapter != null)
-		    ((Activity) context).runOnUiThread(new Runnable()
+		if(messages_adapter != null)
+		    lettera.runOnUiThread(new Runnable()
 		    {
 			@Override
 			public void run()
