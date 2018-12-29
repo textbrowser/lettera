@@ -191,8 +191,6 @@ public class Lettera extends AppCompatActivity
 			m_folders_drawer.set_email_address
 			    (m_database.setting("primary_email_account"));
 			m_folders_drawer.update();
-			m_items_count.setText
-			    ("Items: " + m_messages_adapter.getItemCount());
 			m_layout_manager.scrollToPosition
 			    (m_messages_adapter.getItemCount() - 1);
 			m_scroll_bottom.setVisibility(View.GONE);
@@ -338,15 +336,6 @@ public class Lettera extends AppCompatActivity
 	m_settings_button = (Button) findViewById(R.id.settings_button);
 	m_status_bar = (LinearLayout) findViewById(R.id.status_bar);
 	m_vertical_separator = findViewById(R.id.vertical_separator);
-    }
-
-    private void prepare_current_folder_text(String folder_name)
-    {
-	if(m_database.setting("show_status_bar").equals("true"))
-	    m_current_folder.setText(folder_name);
-	else
-	    m_current_folder.setText
-		(folder_name + " (" + m_messages_adapter.getItemCount() + ")");
     }
 
     private void prepare_listeners()
@@ -595,9 +584,6 @@ public class Lettera extends AppCompatActivity
 				{
 				    m_messages_adapter.notifyDataSetChanged();
 				    m_folders_drawer.update();
-				    m_items_count.setText
-					("Items: " +
-					 m_messages_adapter.getItemCount());
 				    prepare_current_folder_text
 					(selected_folder_name());
 				}
@@ -805,6 +791,11 @@ public class Lettera extends AppCompatActivity
 	prepare_folders_and_messages_widgets(folder_name);
     }
 
+    public void messages_deleted()
+    {
+	m_messages_adapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onConfigurationChanged(Configuration new_config)
     {
@@ -828,6 +819,17 @@ public class Lettera extends AppCompatActivity
 	catch(Exception exception)
 	{
 	}
+    }
+
+    public void prepare_current_folder_text(String folder_name)
+    {
+	if(m_database.setting("show_status_bar").equals("true"))
+	    m_current_folder.setText(folder_name);
+	else
+	    m_current_folder.setText
+		(folder_name + " (" + m_messages_adapter.getItemCount() + ")");
+
+	m_items_count.setText("Items: " + m_messages_adapter.getItemCount());
     }
 
     public void prepare_folders_and_messages_widgets(String folder_name)

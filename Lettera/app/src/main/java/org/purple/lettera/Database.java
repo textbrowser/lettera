@@ -373,26 +373,35 @@ public class Database extends SQLiteOpenHelper
 
 		if(m_read_message_cursor == null)
 		{
+		    String string = "SELECT " +
+			"content_downloaded, " +         // 0
+			"email_account, " +              // 1
+			"folder_name, " +                // 2
+			"from_email_account, " +         // 3
+			"from_name, " +                  // 4
+			"has_been_read, " +              // 5
+			"message, " +                    // 6
+			"oid, " +                        // 7
+			"received_date, " +              // 8
+			"received_date_unix_epoch, " +   // 9
+			"sent_date, " +                  // 10
+			"subject, " +                    // 11
+			"uid " +                         // 12
+			"FROM messages " +
+			"INDEXED BY messages_received_date_unix_epoch ";
+
+		    if(folder_name.toLowerCase().equals("trash"))
+			string +=
+			    "WHERE deleted = 1 OR (email_account = ? AND " +
+			    "LOWER(folder_name) = LOWER(?)) ";
+		    else
+			string +=
+			    "WHERE deleted = 0 AND email_account = ? AND " +
+			    "LOWER(folder_name) = LOWER(?) ";
+
+		    string += "ORDER BY received_date_unix_epoch";
 		    m_read_message_cursor = m_db.rawQuery
-			("SELECT content_downloaded, " +  // 0
-			 "email_account, " +              // 1
-			 "folder_name, " +                // 2
-			 "from_email_account, " +         // 3
-			 "from_name, " +                  // 4
-			 "has_been_read, " +              // 5
-			 "message, " +                    // 6
-			 "oid, " +                        // 7
-			 "received_date, " +              // 8
-			 "received_date_unix_epoch, " +   // 9
-			 "sent_date, " +                  // 10
-			 "subject, " +                    // 11
-			 "uid " +                         // 12
-			 "FROM messages " +
-			 "INDEXED BY messages_received_date_unix_epoch " +
-			 "WHERE email_account = ? AND " +
-			 "LOWER(folder_name) = LOWER(?) " +
-			 "ORDER BY received_date_unix_epoch",
-			 new String[] {email_account, folder_name});
+			(string, new String[] {email_account, folder_name});
 		    m_read_message_cursor_email_account = email_account;
 		    m_read_message_cursor_folder_name = folder_name;
 		}
@@ -720,6 +729,50 @@ public class Database extends SQLiteOpenHelper
 	return ok;
     }
 
+    public boolean delete_messages(String email_account)
+    {
+	if(m_db == null)
+	    return false;
+
+	boolean ok = false;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    ok = m_db.delete
+		("messages", "email_account = ?",
+		 new String[] {email_account}) > 0;
+	    m_db.delete
+		("messages_attachments", "email_account = ?",
+		 new String[] {email_account});
+	    m_db.delete
+		("messages_recipients", "email_account = ?",
+		 new String[] {email_account});
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	    ok = false;
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+
+	synchronized(m_read_message_cursor_mutex)
+	{
+	    if(m_read_message_cursor_email_account.equals(email_account))
+		if(m_read_message_cursor != null)
+		{
+		    m_read_message_cursor.close();
+		    m_read_message_cursor = null;
+		}
+	}
+
+	return ok;
+    }
+
     public boolean message_selected(String email_account,
 				    String folder_name,
 				    long uid)
@@ -871,10 +924,18 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    cursor = m_db.rawQuery
-		("SELECT COUNT(*) FROM messages WHERE " +
-		 "email_account = ? AND LOWER(folder_name) = LOWER(?)",
-		 new String[] {email_account, folder_name});
+	    if(folder_name.toLowerCase().equals("trash"))
+		cursor = m_db.rawQuery
+		    ("SELECT COUNT(*) FROM messages WHERE " +
+		     "deleted = 1 OR " +
+		     "(email_account = ? AND LOWER(folder_name) = LOWER(?))",
+		     new String[] {email_account, folder_name});
+	    else
+		cursor = m_db.rawQuery
+		    ("SELECT COUNT(*) FROM messages WHERE " +
+		     "deleted = 0 AND " +
+		     "email_account = ? AND LOWER(folder_name) = LOWER(?)",
+		     new String[] {email_account, folder_name});
 
 	    if(cursor != null && cursor.moveToFirst())
 		return cursor.getInt(0);
@@ -961,6 +1022,8 @@ public class Database extends SQLiteOpenHelper
 		m_read_message_cursor.close();
 
 	    m_read_message_cursor = null;
+	    m_read_message_cursor_email_account = "";
+	    m_read_message_cursor_folder_name = "";
 	}
     }
 
@@ -1012,7 +1075,8 @@ public class Database extends SQLiteOpenHelper
 		try
 		{
 		    SQLiteStatement sqlite_statement = m_db.compileStatement
-			("UPDATE messages SET deleted = 1 " +
+			("UPDATE messages SET deleted = 1, " +
+			 "selected = 0 " +
 			 "WHERE email_account = ? AND " +
 			 "LOWER(folder_name) = LOWER(?) AND " +
 			 "selected = 1");
@@ -1030,12 +1094,25 @@ public class Database extends SQLiteOpenHelper
 		    m_db.endTransaction();
 		}
 
+		synchronized(m_read_message_cursor_mutex)
+		{
+		    if(m_read_message_cursor != null &&
+		       m_read_message_cursor_email_account.
+		       equals(email_account) &&
+		       m_read_message_cursor_folder_name.equals(folder_name))
+		    {
+			m_read_message_cursor.close();
+			m_read_message_cursor = null;
+		    }
+		}
+
 		if(messages_adapter != null)
 		    lettera.runOnUiThread(new Runnable()
 		    {
 			@Override
 			public void run()
 			{
+			    lettera.prepare_current_folder_text(folder_name);
 			    messages_adapter.notifyDataSetChanged();
 			}
 		    });
@@ -1584,7 +1661,7 @@ public class Database extends SQLiteOpenHelper
 		{
 		    message_uid = folder.getUID(message);
 		    cursor = m_db.rawQuery
-			("SELECT content_downloaded, selected " +
+			("SELECT content_downloaded, deleted, selected " +
 			 "FROM messages WHERE email_account = ? AND " +
 			 "LOWER(folder_name) = LOWER(?) AND " +
 			 "uid = ?",
@@ -1614,8 +1691,13 @@ public class Database extends SQLiteOpenHelper
 				continue;
 			    }
 			}
+			else if(cursor.getInt(1) == 1)
+			{
+			    cursor.close();
+			    continue;
+			}
 
-			selected = cursor.getInt(1);
+			selected = cursor.getInt(2);
 		    }
 		}
 		catch(Exception exception)
