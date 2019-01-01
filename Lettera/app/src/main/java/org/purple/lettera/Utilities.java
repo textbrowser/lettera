@@ -132,7 +132,7 @@ public abstract class Utilities
 	    }
 	    else
 	    {
-		string_buffer.append(calendar.get(Calendar.MONTH));
+		string_buffer.append(calendar.get(Calendar.MONTH) + 1);
 		string_buffer.append("/");
 		string_buffer.append(calendar.get(Calendar.DAY_OF_MONTH));
 		string_buffer.append("/");
