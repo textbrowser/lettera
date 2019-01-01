@@ -118,7 +118,9 @@ public class MessageItem extends View
 	return m_view;
     }
 
-    public void set_data(MessageElement message_element, boolean last_position)
+    public void set_data(MessageElement message_element,
+			 String folder_name,
+			 boolean last_position)
     {
 	if(message_element == null)
 	{
@@ -142,7 +144,7 @@ public class MessageItem extends View
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
 	m_divider.setVisibility(last_position ? View.GONE : View.VISIBLE);
 	m_email_account = message_element.m_email_account;
-	m_folder_name = message_element.m_folder_name;
+	m_folder_name = folder_name;
 	m_from.setText(message_element.m_from_name);
 	m_from.setTypeface
 	    (null,
@@ -150,7 +152,7 @@ public class MessageItem extends View
 	m_selected.setOnCheckedChangeListener(null);
 	m_selected.setChecked
 	    (m_database.message_selected(message_element.m_email_account,
-					 message_element.m_folder_name,
+					 folder_name,
 					 message_element.m_uid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
 	m_subject.setText(message_element.m_subject);

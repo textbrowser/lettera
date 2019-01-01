@@ -391,12 +391,10 @@ public class Database extends SQLiteOpenHelper
 			"INDEXED BY messages_received_date_unix_epoch ";
 
 		    if(folder_name.toLowerCase().equals("trash"))
-			string +=
-			    "WHERE email_account = ? AND " +
+			string += "WHERE email_account = ? AND " +
 			    "(LOWER(folder_name) = LOWER(?) OR deleted = 1) ";
 		    else
-			string +=
-			    "WHERE deleted = 0 AND " +
+			string += "WHERE deleted = 0 AND " +
 			    "email_account = ? AND " +
 			    "LOWER(folder_name) = LOWER(?) ";
 
@@ -1087,12 +1085,22 @@ public class Database extends SQLiteOpenHelper
 
 		try
 		{
-		    SQLiteStatement sqlite_statement = m_db.compileStatement
-			("UPDATE messages SET deleted = 1, " +
-			 "selected = 0 " +
-			 "WHERE email_account = ? AND " +
-			 "LOWER(folder_name) = LOWER(?) AND " +
-			 "selected = 1");
+		    SQLiteStatement sqlite_statement = null;
+
+		    if(folder_name.toLowerCase().equals("trash"))
+			sqlite_statement = m_db.compileStatement
+			    ("UPDATE messages SET deleted = 1, " +
+			     "selected = 0 " +
+			     "WHERE email_account = ? AND " +
+			     "(LOWER(folder_name) = LOWER(?) OR " +
+			     "deleted = 1) AND selected = 1");
+		    else
+			sqlite_statement = m_db.compileStatement
+			    ("UPDATE messages SET deleted = 1, " +
+			     "selected = 0 " +
+			     "WHERE email_account = ? AND " +
+			     "LOWER(folder_name) = LOWER(?) AND " +
+			     "selected = 1");
 
 		    sqlite_statement.bindString(1, email_account);
 		    sqlite_statement.bindString(2, folder_name);
@@ -1413,10 +1421,18 @@ public class Database extends SQLiteOpenHelper
 
 		try
 		{
-		    SQLiteStatement sqlite_statement = m_db.compileStatement
-			("UPDATE messages SET selected = ? " +
-			 "WHERE email_account = ? AND " +
-			 "LOWER(folder_name) = LOWER(?)");
+		    SQLiteStatement sqlite_statement = null;
+
+		    if(folder_name.toLowerCase().equals("trash"))
+			sqlite_statement = m_db.compileStatement
+			    ("UPDATE messages SET selected = ? " +
+			     "WHERE email_account = ? AND " +
+			     "(LOWER(folder_name) = LOWER(?) OR deleted = 1)");
+		    else
+			sqlite_statement = m_db.compileStatement
+			    ("UPDATE messages SET selected = ? " +
+			     "WHERE email_account = ? AND " +
+			     "LOWER(folder_name) = LOWER(?)");
 
 		    sqlite_statement.bindLong(1, selected ? 1 : 0);
 		    sqlite_statement.bindString(2, email_account);
@@ -1459,11 +1475,20 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    SQLiteStatement sqlite_statement = m_db.compileStatement
-		("UPDATE messages SET selected = ? " +
-		 "WHERE email_account = ? AND " +
-		 "LOWER(folder_name) = LOWER(?) AND " +
-		 "uid = ?");
+	    SQLiteStatement sqlite_statement = null;
+
+	    if(folder_name.toLowerCase().equals("trash"))
+		sqlite_statement = m_db.compileStatement
+		    ("UPDATE messages SET selected = ? " +
+		     "WHERE email_account = ? AND " +
+		     "(LOWER(folder_name) = LOWER(?) OR deleted = 1) AND " +
+		     "uid = ?");
+	    else
+		sqlite_statement = m_db.compileStatement
+		    ("UPDATE messages SET selected = ? " +
+		     "WHERE email_account = ? AND " +
+		     "LOWER(folder_name) = LOWER(?) AND " +
+		     "uid = ?");
 
 	    sqlite_statement.bindLong(1, selected ? 1 : 0);
 	    sqlite_statement.bindString(2, email_account);

@@ -48,10 +48,12 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	}
 
 	public void set_data(MessageElement message_element,
+			     String folder_name,
 			     boolean last_position)
 	{
 	    if(m_message_item != null)
-		m_message_item.set_data(message_element, last_position);
+		m_message_item.set_data
+		    (message_element, folder_name, last_position);
 	}
     }
 
@@ -109,7 +111,8 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	MessageElement message_element = m_database.message
 	    (m_email_address, m_folder_name, position);
 
-	view_holder_message.set_data(message_element, position == 0);
+	view_holder_message.set_data
+	    (message_element, m_folder_name, position == 0);
     }
 
     public void set_email_address(String email_address)
