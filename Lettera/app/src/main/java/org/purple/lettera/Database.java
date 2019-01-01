@@ -392,11 +392,12 @@ public class Database extends SQLiteOpenHelper
 
 		    if(folder_name.toLowerCase().equals("trash"))
 			string +=
-			    "WHERE deleted = 1 OR (email_account = ? AND " +
-			    "LOWER(folder_name) = LOWER(?)) ";
+			    "WHERE email_account = ? AND " +
+			    "(LOWER(folder_name) = LOWER(?) OR deleted = 1) ";
 		    else
 			string +=
-			    "WHERE deleted = 0 AND email_account = ? AND " +
+			    "WHERE deleted = 0 AND " +
+			    "email_account = ? AND " +
 			    "LOWER(folder_name) = LOWER(?) ";
 
 		    string += "ORDER BY received_date_unix_epoch";
@@ -784,14 +785,25 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    cursor = m_db.rawQuery
-		("SELECT selected FROM messages " +
-		 "WHERE email_account = ? AND " +
-		 "LOWER(folder_name) = LOWER(?) AND " +
-		 "uid = ?",
-		 new String[] {email_account,
-			       folder_name,
-			       String.valueOf(uid)});
+	    if(folder_name.toLowerCase().equals("trash"))
+		cursor = m_db.rawQuery
+		    ("SELECT selected FROM messages " +
+		     "WHERE email_account = ? AND " +
+		     "(LOWER(folder_name) = LOWER(?) OR deleted = 1) AND " +
+		     "uid = ?",
+		     new String[] {email_account,
+				   folder_name,
+				   String.valueOf(uid)});
+	    else
+		cursor = m_db.rawQuery
+		    ("SELECT selected FROM messages " +
+		     "WHERE deleted = 0 AND " +
+		     "email_account = ? AND " +
+		     "LOWER(folder_name) = LOWER(?) AND " +
+		     "uid = ?",
+		     new String[] {email_account,
+				   folder_name,
+				   String.valueOf(uid)});
 
 	    if(cursor != null && cursor.moveToFirst())
 		return cursor.getInt(0) == 1;
@@ -927,14 +939,15 @@ public class Database extends SQLiteOpenHelper
 	    if(folder_name.toLowerCase().equals("trash"))
 		cursor = m_db.rawQuery
 		    ("SELECT COUNT(*) FROM messages WHERE " +
-		     "deleted = 1 OR " +
-		     "(email_account = ? AND LOWER(folder_name) = LOWER(?))",
+		     "email_account = ? AND " +
+		     "(LOWER(folder_name) = LOWER(?) OR deleted = 1)",
 		     new String[] {email_account, folder_name});
 	    else
 		cursor = m_db.rawQuery
 		    ("SELECT COUNT(*) FROM messages WHERE " +
 		     "deleted = 0 AND " +
-		     "email_account = ? AND LOWER(folder_name) = LOWER(?)",
+		     "email_account = ? AND " +
+		     "LOWER(folder_name) = LOWER(?)",
 		     new String[] {email_account, folder_name});
 
 	    if(cursor != null && cursor.moveToFirst())
