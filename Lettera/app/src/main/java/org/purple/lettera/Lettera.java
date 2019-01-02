@@ -794,6 +794,7 @@ public class Lettera extends AppCompatActivity
     public void messages_deleted()
     {
 	m_messages_adapter.notifyDataSetChanged();
+	prepare_current_folder_text(selected_folder_name());
     }
 
     @Override

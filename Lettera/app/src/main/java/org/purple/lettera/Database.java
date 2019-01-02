@@ -1454,6 +1454,7 @@ public class Database extends SQLiteOpenHelper
 			@Override
 			public void run()
 			{
+			    lettera.prepare_current_folder_text(folder_name);
 			    messages_adapter.notifyDataSetChanged();
 			}
 		    });
