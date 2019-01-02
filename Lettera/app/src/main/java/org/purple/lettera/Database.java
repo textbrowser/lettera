@@ -1638,8 +1638,20 @@ public class Database extends SQLiteOpenHelper
 	    fetch_profile.add(UIDFolder.FetchProfileItem.UID);
 	    folder.fetch(messages, fetch_profile);
 	}
-	catch(Exception exception)
+	catch(Exception exception1)
 	{
+	    Log.e("Database.write_messages()",
+		  exception1.getMessage() + " (" + folder.getName() + ")");
+
+	    try
+	    {
+		folder.close();
+	    }
+	    catch(Exception exception2)
+	    {
+	    }
+
+	    return;
 	}
 
 	boolean current_folder = false;
