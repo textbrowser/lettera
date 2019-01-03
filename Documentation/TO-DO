@@ -1,6 +1,8 @@
 Completed Items
 
 - Allow cancellation of downloads.
+- Checkboxes are too near pushbuttons. Maintain a safe distance between
+  important pushbuttons and their verification checkboxes.
 - Denote messages which have not been read.
 - Denote primary e-mail account in Settings.
 - Discover proper inbox. (None) folder will suffice.
@@ -38,9 +40,8 @@ Future Items
 Remaining Items
 
 - Background services.
-- Checkboxes are too near pushbuttons.
 - Deleted remote folders are also deleted locally.
-- Display percent downloaded in dialog.
+- Display percent-downloaded in dialog.
 - Empty trash with confirmation.
 - Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
