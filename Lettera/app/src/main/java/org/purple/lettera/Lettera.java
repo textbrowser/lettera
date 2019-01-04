@@ -227,6 +227,7 @@ public class Lettera extends AppCompatActivity
     private Button m_delete_button = null;
     private Button m_download_button = null;
     private Button m_messaging_button = null;
+    private Button m_move_to_folder_button = null;
     private Button m_settings_button = null;
     private CheckBox m_all_checkbox = null;
     private CompoundButton.OnCheckedChangeListener
@@ -330,6 +331,7 @@ public class Lettera extends AppCompatActivity
 	    (R.id.folders_drawer_button);
 	m_items_count = (TextView) findViewById(R.id.message_count);
 	m_messaging_button = (Button) findViewById(R.id.messaging_button);
+	m_move_to_folder_button = (Button) findViewById(R.id.move_to_folder);
 	m_recycler = (RecyclerView) findViewById(R.id.messages);
 	m_scroll_bottom = (ImageButton) findViewById(R.id.scroll_bottom);
 	m_scroll_top = (ImageButton) findViewById(R.id.scroll_top);
@@ -421,6 +423,24 @@ public class Lettera extends AppCompatActivity
 			return;
 
 		    m_folders_drawer.show();
+		}
+	    });
+
+	if(m_move_to_folder_button != null && !m_move_to_folder_button.
+	                                       hasOnClickListeners())
+	    m_move_to_folder_button.setOnClickListener
+		(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing() || m_folders_drawer == null)
+			return;
+
+		    MoveMessages move_messages = new MoveMessages
+			(Lettera.this, "", "", findViewById(R.id.main_layout));
+
+		    move_messages.show();
 		}
 	    });
 

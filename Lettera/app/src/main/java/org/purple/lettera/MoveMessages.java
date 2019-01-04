@@ -82,7 +82,7 @@ public class MoveMessages
 	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 
-	m_view = inflater.inflate(R.layout.folders_drawer, null);
+	m_view = inflater.inflate(R.layout.folders_drawer_move, null);
 
 	/*
 	** The cute popup.
