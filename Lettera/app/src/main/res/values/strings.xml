@@ -49,4 +49,5 @@
     <string name="show_status_bar_on_main_activity">Show status bar on main activity.</string>
     <string name="interrupt">Interrupt</string>
     <string name="remove_local_messages">Remove Local Messages</string>
+    <string name="move_to">Move to:</string>
 </resources>
