@@ -41,8 +41,12 @@ Remaining Items
 
 - Background services.
 - Deleted remote folders are also deleted locally.
+- Denote read messages.
+- Display a message's origin in Trash.
 - Display percent-downloaded in dialog.
 - Empty trash with confirmation.
+- Ignore incoming messages if the messages exist in other folders
+  (a move).
 - Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
