@@ -48,7 +48,7 @@ Remaining Items
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - Reset of Network widgets in Settings.
-- Simple version of folders drawer for moving messages.
+- Simple version of folders drawer for moving messages. Ignore current folder.
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
   Expunge locally-deleted messages from the server if configured to do so.

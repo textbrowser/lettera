@@ -118,57 +118,6 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public ArrayList<FolderElement> folders(String email_account)
-    {
-	if(m_db == null)
-	    return null;
-
-	Cursor cursor = null;
-
-	try
-	{
-	    cursor = m_db.rawQuery
-		("SELECT email_account, " +
-		 "full_name, " +
-		 "is_regular_folder, " +
-		 "name, " +
-		 "OID " +
-		 "FROM folders WHERE email_account = ? " +
-		 "ORDER BY LOWER(name)",
-		 new String[] {email_account});
-
-	    if(cursor != null && cursor.moveToFirst())
-	    {
-		ArrayList<FolderElement> array_list = new ArrayList<> ();
-
-		while(!cursor.isAfterLast())
-		{
-		    FolderElement folder_element = new FolderElement();
-
-		    folder_element.m_email_account = cursor.getString(0);
-		    folder_element.m_full_name = cursor.getString(1);
-		    folder_element.m_is_regular_folder = cursor.getInt(2);
-		    folder_element.m_name = cursor.getString(3);
-		    folder_element.m_oid = cursor.getLong(4);
-		    array_list.add(folder_element);
-		    cursor.moveToNext();
-		}
-
-		return array_list;
-	    }
-	}
-	catch(Exception exception)
-	{
-	}
-	finally
-	{
-	    if(cursor != null)
-		cursor.close();
-	}
-
-	return null;
-    }
-
     public ArrayList<String> email_account_names()
     {
 	if(m_db == null)
@@ -897,7 +846,7 @@ public class Database extends SQLiteOpenHelper
 	return null;
     }
 
-    public int folder_count(String email_account)
+    public int folder_count(String email_account, String folder_name)
     {
 	if(m_db == null)
 	    return 0;
@@ -907,8 +856,9 @@ public class Database extends SQLiteOpenHelper
 	try
 	{
 	    cursor = m_db.rawQuery
-		("SELECT COUNT(*) FROM folders WHERE email_account = ?",
-		 new String[] {email_account});
+		("SELECT COUNT(*) FROM folders WHERE email_account = ? AND " +
+		 "name NOT IN (?)",
+		 new String[] {email_account, folder_name});
 
 	    if(cursor != null && cursor.moveToFirst())
 		return cursor.getInt(0);

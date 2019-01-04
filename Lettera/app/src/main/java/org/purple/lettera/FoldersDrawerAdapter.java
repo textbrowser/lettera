@@ -344,7 +344,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-	return s_database.folder_count(m_email_address);
+	return s_database.folder_count(m_email_address, "");
     }
 
     @Override

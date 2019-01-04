@@ -73,7 +73,6 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	    ((RadioButton) view).setCompoundDrawablesWithIntrinsicBounds
 		(s_selected_icons[view.getId()], 0, 0, 0);
 	    ((RadioButton) view).setTextColor(Color.parseColor("#5e35b1"));
-	    m_selected_folder_name = folder_name;
 	    view.setBackgroundResource(R.drawable.folder_selection);
 	    view.setPaddingRelative
 		((int) (10 * density), // Start
@@ -209,9 +208,6 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
                  (int) (5 * density)); // Bottom
 	    m_button.setText(string_buffer.toString());
 	    m_button.setTextColor(Color.BLACK);
-
-	    if(folder_element.m_name.equals(m_selected_folder_name))
-		perform_click(folder_name, m_button, density);
 	}
     }
 
@@ -227,6 +223,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
     }
 
     private Database m_database = null;
+    private String m_current_folder = "";
     private String m_email_address = "";
     private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
     private final static Database s_database = Database.instance();
@@ -254,8 +251,25 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	}
     }
 
-    public MoveMessagesAdapter(String email_address)
+    private void dismiss()
     {
+	/*
+	** Display the selection and then close the dialog.
+	*/
+
+	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+	    }
+	}, 250);
+    }
+
+
+    public MoveMessagesAdapter(String current_folder, String email_address)
+    {
+	m_current_folder = current_folder;
 	m_database = Database.instance();
 	m_email_address = email_address;
 	s_icons[IconsEnumerator.DRAFTS] = R.drawable.drafts_folder;
@@ -320,7 +334,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-	return s_database.folder_count(m_email_address);
+	return s_database.folder_count(m_email_address, m_current_folder);
     }
 
     @Override
