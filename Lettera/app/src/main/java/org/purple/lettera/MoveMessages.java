@@ -28,16 +28,13 @@
 package org.purple.lettera;
 
 import android.content.Context;
-import android.os.Build;
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 public class MoveMessages
 {
@@ -90,14 +87,10 @@ public class MoveMessages
 
 	m_popup_window = new PopupWindow(m_context);
 	m_popup_window.setAttachedInDecor(true);
-	m_popup_window.setBackgroundDrawable(null);
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
-	m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
 	m_popup_window.setOutsideTouchable(true);
-	m_popup_window.setWidth
-	    ((int) (0.80 *
-		    m_context.getResources().getDisplayMetrics().widthPixels));
+	m_popup_window.setWidth(m_parent.getWidth() / 3);
 
 	/*
 	** Initialize other widgets.
@@ -129,42 +122,34 @@ public class MoveMessages
 	}
     }
 
-    public void show()
+    public void show(View view)
     {
-	m_popup_window.showAsDropDown
-	    (m_parent, 0, 0, Gravity.LEFT | Gravity.TOP);
-
-	try
+	if(view == null)
+	    m_popup_window.showAtLocation
+		(m_parent, Gravity.LEFT | Gravity.TOP, 0, 0);
+	else
 	{
-	    View view;
+	    int location[] = new int[2];
 
-	    if(m_popup_window.getBackground() == null)
+	    try
 	    {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		    view = (View) m_popup_window.getContentView().getParent();
-		else
-		    view = m_popup_window.getContentView();
+		view.getLocationOnScreen(location);
 	    }
-	    else
+	    catch(Exception npe)
 	    {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-		    view = (View) m_popup_window.getContentView().getParent().
-			getParent();
-		else
-		    view = (View) m_popup_window.getContentView().getParent();
+		m_popup_window.showAtLocation
+		    (m_parent, Gravity.LEFT | Gravity.TOP, 0, 0);
+		return;
 	    }
 
-	    WindowManager window_manager = (WindowManager) m_context.
-		getSystemService(Context.WINDOW_SERVICE);
-	    WindowManager.LayoutParams layout_params =
-		(WindowManager.LayoutParams) view.getLayoutParams();
+	    Rect rect = new Rect();
 
-	    layout_params.dimAmount = 0.5f;
-	    layout_params.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-	    window_manager.updateViewLayout(view, layout_params);
-	}
-	catch(Exception exception)
-	{
+	    rect.left = location[0];
+	    rect.top = location[1];
+	    rect.bottom = rect.top + view.getHeight();
+	    rect.right = rect.left + view.getWidth();
+	    m_popup_window.showAtLocation
+		(view, Gravity.LEFT | Gravity.TOP, rect.left, rect.bottom);
 	}
     }
 }

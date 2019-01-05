@@ -443,7 +443,7 @@ public class Lettera extends AppCompatActivity
 			 selected_folder_name(),
 			 findViewById(R.id.main_layout));
 
-		    move_messages.show();
+		    move_messages.show(m_move_to_folder_button);
 		}
 	    });
 
