@@ -144,7 +144,9 @@ public class MoveMessages
 
 	    Rect rect = new Rect();
 
-	    rect.left = location[0];
+	    rect.left = location[0] -
+		m_popup_window.getWidth() +
+		view.getWidth();
 	    rect.top = location[1];
 	    rect.bottom = rect.top + view.getHeight();
 	    rect.right = rect.left + view.getWidth();
