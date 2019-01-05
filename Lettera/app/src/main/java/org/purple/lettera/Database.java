@@ -931,6 +931,46 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
+    public int messages_selected(String email_account, String folder_name)
+    {
+	if(m_db == null)
+	    return 0;
+
+	Cursor cursor = null;
+
+	try
+	{
+	    if(folder_name.toLowerCase().equals("trash"))
+		cursor = m_db.rawQuery
+		    ("SELECT COUNT(*) FROM messages WHERE " +
+		     "email_account = ? AND " +
+		     "(LOWER(folder_name) = LOWER(?) OR deleted = 1) AND " +
+		     "selected = 1",
+		     new String[] {email_account, folder_name});
+	    else
+		cursor = m_db.rawQuery
+		    ("SELECT COUNT(*) FROM messages WHERE " +
+		     "deleted = 0 AND " +
+		     "email_account = ? AND " +
+		     "LOWER(folder_name) = LOWER(?) AND " +
+		     "selected = 1",
+		     new String[] {email_account, folder_name});
+
+	    if(cursor != null && cursor.moveToFirst())
+		return cursor.getInt(0);
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return 0;
+    }
+
     public static synchronized Database instance()
     {
 	return s_instance; // Should never be null.

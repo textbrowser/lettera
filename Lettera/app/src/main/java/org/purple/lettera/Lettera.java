@@ -437,9 +437,17 @@ public class Lettera extends AppCompatActivity
 		    if(Lettera.this.isFinishing() || m_folders_drawer == null)
 			return;
 
+		    String email_account = m_database.setting
+			("primary_email_account");
+
+		    if(m_database.
+		       messages_selected(email_account,
+					 selected_folder_name()) == 0)
+			return;
+
 		    MoveMessages move_messages = new MoveMessages
 			(Lettera.this,
-			 m_database.setting("primary_email_account"),
+			 email_account,
 			 selected_folder_name(),
 			 findViewById(R.id.main_layout));
 
