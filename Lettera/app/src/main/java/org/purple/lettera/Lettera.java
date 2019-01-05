@@ -389,10 +389,18 @@ public class Lettera extends AppCompatActivity
 		    if(Lettera.this.isFinishing())
 			return;
 
+		    String email_account = m_database.setting
+			("primary_email_account");
+
+		    if(m_database.
+		       messages_selected(email_account,
+					 selected_folder_name()) == 0)
+			return;
+
 		    m_database.delete_selected
 			(Lettera.this,
 			 m_messages_adapter,
-			 m_database.setting("primary_email_account"),
+			 email_account,
 			 selected_folder_name());
 		}
 	    });
