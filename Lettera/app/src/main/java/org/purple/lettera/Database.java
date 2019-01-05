@@ -255,7 +255,9 @@ public class Database extends SQLiteOpenHelper
 	return null;
     }
 
-    public FolderElement folder(String email_account, int position)
+    public FolderElement folder(String email_account,
+				String folder_name,
+				int position)
     {
 	if(m_db == null)
 	    return null;
@@ -270,10 +272,13 @@ public class Database extends SQLiteOpenHelper
 		 "is_regular_folder, " +
 		 "name, " +
 		 "OID " +
-		 "FROM folders WHERE email_account = ? " +
+		 "FROM folders WHERE email_account = ? AND " +
+		 "name NOT IN (?) " +
 		 "ORDER BY is_regular_folder, LOWER(name) " +
 		 "LIMIT 1 OFFSET CAST(? AS INTEGER)",
-		 new String[] {email_account, String.valueOf(position)});
+		 new String[] {email_account,
+			       folder_name,
+			       String.valueOf(position)});
 
 	    if(cursor != null && cursor.moveToFirst())
 	    {

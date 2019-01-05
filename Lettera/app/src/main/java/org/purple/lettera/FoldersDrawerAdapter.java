@@ -351,7 +351,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     public int getItemViewType(int position)
     {
 	FolderElement folder_element = s_database.folder
-	    (m_email_address, position);
+	    (m_email_address, "", position);
 
 	if(folder_element == null)
 	    return ViewHolderTypeEnumerator.BUTTON1;
@@ -382,7 +382,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    m_visible_buttons.add(view_holder_button.button());
 
 	    FolderElement folder_element = s_database.folder
-		(m_email_address, position);
+		(m_email_address, "", position);
 
 	    view_holder_button.set_data(folder_element);
 	    break;

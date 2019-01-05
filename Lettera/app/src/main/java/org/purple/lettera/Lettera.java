@@ -438,7 +438,10 @@ public class Lettera extends AppCompatActivity
 			return;
 
 		    MoveMessages move_messages = new MoveMessages
-			(Lettera.this, "", "", findViewById(R.id.main_layout));
+			(Lettera.this,
+			 m_database.setting("primary_email_account"),
+			 selected_folder_name(),
+			 findViewById(R.id.main_layout));
 
 		    move_messages.show();
 		}
