@@ -151,7 +151,7 @@ public class Lettera extends AppCompatActivity
 	    try
 	    {
 		EmailElement email_element = m_database.email_element
-		    (m_database.setting("primary_email_account"));
+		    (email_account());
 		Mail mail = new Mail
 		    (email_element.m_inbound_address,
 		     email_element.m_inbound_email,
@@ -188,8 +188,7 @@ public class Lettera extends AppCompatActivity
 		    try
 		    {
 			m_messages_adapter.notifyDataSetChanged();
-			m_folders_drawer.set_email_address
-			    (m_database.setting("primary_email_account"));
+			m_folders_drawer.set_email_address(email_account());
 			m_folders_drawer.update();
 			m_layout_manager.scrollToPosition
 			    (m_messages_adapter.getItemCount() - 1);
@@ -255,13 +254,17 @@ public class Lettera extends AppCompatActivity
     private final long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
     public final static String NONE_FOLDER = "(None)";
 
+    private String email_account()
+    {
+	return m_database.setting("primary_email_account");
+    }
+
     private String selected_folder_full_name()
     {
 	synchronized(m_selected_folder_name_mutex)
 	{
 	    return m_database.folder_full_name
-		(m_database.setting("primary_email_account"),
-		 m_selected_folder_name);
+		(email_account(), m_selected_folder_name);
 	}
     }
 
@@ -360,7 +363,7 @@ public class Lettera extends AppCompatActivity
 			    m_database.select_all
 				(Lettera.this,
 				 m_messages_adapter,
-				 m_database.setting("primary_email_account"),
+				 email_account(),
 				 selected_folder_name(),
 				 is_checked);
 			}
@@ -389,8 +392,7 @@ public class Lettera extends AppCompatActivity
 		    if(Lettera.this.isFinishing())
 			return;
 
-		    String email_account = m_database.setting
-			("primary_email_account");
+		    String email_account = email_account();
 
 		    if(m_database.
 		       messages_selected(email_account,
@@ -445,8 +447,7 @@ public class Lettera extends AppCompatActivity
 		    if(Lettera.this.isFinishing() || m_folders_drawer == null)
 			return;
 
-		    String email_account = m_database.setting
-			("primary_email_account");
+		    String email_account = email_account();
 
 		    if(m_database.
 		       messages_selected(email_account,
@@ -549,7 +550,7 @@ public class Lettera extends AppCompatActivity
 		    try
 		    {
 			EmailElement email_element = m_database.email_element
-			    (m_database.setting("primary_email_account"));
+			    (email_account());
 
 			if(email_element == null)
 			{
@@ -742,8 +743,7 @@ public class Lettera extends AppCompatActivity
 	synchronized(m_selected_folder_name_mutex)
 	{
 	    m_selected_folder_name = m_database.setting
-		("selected_folder_name_" +
-		 m_database.setting("primary_email_account"));
+		("selected_folder_name_" + email_account());
 
 	    if(m_selected_folder_name.isEmpty())
 		m_selected_folder_name = NONE_FOLDER;
@@ -821,8 +821,7 @@ public class Lettera extends AppCompatActivity
     public void email_account_deleted()
     {
 	String folder_name = m_database.setting
-	    ("selected_folder_name_" +
-	     m_database.setting("primary_email_account"));
+	    ("selected_folder_name_" + email_account());
 
 	if(folder_name.isEmpty())
 	    folder_name = NONE_FOLDER;
@@ -882,10 +881,10 @@ public class Lettera extends AppCompatActivity
 	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
 	}
 
-	String setting = m_database.setting("primary_email_account");
+	String email_account = email_account();
 
-	m_folders_drawer.set_email_address(setting);
-	m_messages_adapter.set_email_address(setting);
+	m_folders_drawer.set_email_address(email_account);
+	m_messages_adapter.set_email_address(email_account);
 
 	if(!folder_name.isEmpty())
 	{
