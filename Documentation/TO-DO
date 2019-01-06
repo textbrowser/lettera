@@ -3,6 +3,7 @@ Completed Items
 - Allow cancellation of downloads.
 - Checkboxes are too near pushbuttons. Maintain a safe distance between
   important pushbuttons and their verification checkboxes.
+- Confirmation required when removing items.
 - Denote messages which have not been read.
 - Denote primary e-mail account in Settings.
 - Discover proper inbox. (None) folder will suffice.
