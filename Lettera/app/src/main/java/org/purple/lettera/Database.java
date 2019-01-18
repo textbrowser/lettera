@@ -1597,7 +1597,8 @@ public class Database extends SQLiteOpenHelper
 
     public void write_messages(AtomicBoolean interrupt,
 			       IMAPFolder folder,
-			       String email_account)
+			       String email_account,
+			       boolean enable_database_transaction)
     {
 	if(folder == null || m_db == null)
 	    return;
@@ -1662,6 +1663,9 @@ public class Database extends SQLiteOpenHelper
 
 	if(current_folder)
 	    count = message_count(email_account, folder.getName());
+
+	if(enable_database_transaction)
+	    m_db.beginTransactionNonExclusive();
 
 	try
 	{
@@ -1927,9 +1931,17 @@ public class Database extends SQLiteOpenHelper
 			"email_account = ? AND " +
 			"LOWER(folder_name) = LOWER(?)",
 			new String[] {email_account, folder.getName()});
+
+	    if(enable_database_transaction)
+		m_db.setTransactionSuccessful();
 	}
 	catch(Exception exception)
 	{
+	}
+	finally
+	{
+	    if(enable_database_transaction)
+		m_db.endTransaction();
 	}
 
 	if(current_folder)

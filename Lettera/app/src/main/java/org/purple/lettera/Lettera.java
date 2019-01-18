@@ -174,7 +174,8 @@ public class Lettera extends AppCompatActivity
 		m_database.write_messages
 		    (m_download_interrupted,
 		     mail.folder(m_folder_full_name),
-		     email_element.m_inbound_email);
+		     email_element.m_inbound_email,
+		     true);
 	    }
 	    catch(Exception exception)
 	    {
@@ -601,7 +602,8 @@ public class Lettera extends AppCompatActivity
 			    m_database.write_messages
 				(m_interrupted,
 				 m_mail.folder(selected_folder_full_name()),
-				 m_mail.email_address());
+				 m_mail.email_address(),
+				 true);
 
 			    if(m_folder_names == null ||
 			       m_folder_names.isEmpty())
@@ -613,7 +615,8 @@ public class Lettera extends AppCompatActivity
 				m_database.write_messages
 				    (m_interrupted,
 				     m_mail.folder(m_folder_names.get(0)),
-				     m_mail.email_address());
+				     m_mail.email_address(),
+				     false);
 				m_folder_names.remove(0);
 			    }
 
