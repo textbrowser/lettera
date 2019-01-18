@@ -616,7 +616,7 @@ public class Lettera extends AppCompatActivity
 				(m_interrupted,
 				 m_mail.folder(selected_folder_full_name()),
 				 m_mail.email_address(),
-				 true);
+				 false);
 
 			    if(m_folder_names == null ||
 			       m_folder_names.isEmpty())
