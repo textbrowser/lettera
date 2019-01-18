@@ -420,7 +420,7 @@ public class Lettera extends AppCompatActivity
 		    Windows.show_prompt_dialog
 			(Lettera.this,
 			 listener,
-			 "Move the selected messages to the Trash folder?",
+			 "Move the selected message(s) to the Trash folder?",
 			 confirmed);
 		}
 	    });
