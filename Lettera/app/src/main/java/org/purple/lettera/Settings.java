@@ -677,10 +677,10 @@ public class Settings
 	{
 	    dialog = new Dialog(m_lettera);
 	    Windows.show_progress_dialog
-		(null,
-		 m_lettera,
+		(m_lettera,
 		 dialog,
-		 "Generating key pairs.\nPlease be patient.");
+		 "Generating key pairs.\nPlease be patient.",
+		 null);
 
 	    Thread thread = new Thread
 		(new GenerateKeyPairs(dialog,
@@ -1424,7 +1424,7 @@ public class Settings
 	{
 	    dialog = new Dialog(m_lettera);
 	    Windows.show_progress_dialog
-		(null, m_lettera, dialog, "Testing IMAPS.\nPlease be patient.");
+		(m_lettera, dialog, "Testing IMAPS.\nPlease be patient.", null);
 
 	    Thread thread = new Thread
 		(new EmailTest(dialog,
@@ -1463,7 +1463,7 @@ public class Settings
 	{
 	    dialog = new Dialog(m_lettera);
 	    Windows.show_progress_dialog
-		(null, m_lettera, dialog, "Testing SMTPS.\nPlease be patient.");
+		(m_lettera, dialog, "Testing SMTPS.\nPlease be patient.", null);
 
 	    Thread thread = new Thread
 		(new EmailTest(dialog,

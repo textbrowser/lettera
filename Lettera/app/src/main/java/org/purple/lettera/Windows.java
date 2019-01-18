@@ -83,10 +83,10 @@ public abstract class Windows
 	}
     }
 
-    public static void show_progress_dialog(final AtomicBoolean interrupt,
-					    Context context,
+    public static void show_progress_dialog(Context context,
 					    Dialog dialog,
-					    String text)
+					    String text,
+					    final AtomicBoolean interrupt)
     {
 	if(context == null ||
 	   dialog == null ||
@@ -139,7 +139,8 @@ public abstract class Windows
     public static void show_prompt_dialog
 	(Context context,
 	 DialogInterface.OnCancelListener cancel_listener,
-	 String prompt)
+	 String prompt,
+	 final AtomicBoolean confirmed)
     {
 	if(context == null ||
 	   cancel_listener == null ||
@@ -178,6 +179,9 @@ public abstract class Windows
 		     {
 			 try
 			 {
+			     if(confirmed != null)
+				 confirmed.set(true);
+
 			     dialog.cancel();
 			 }
 			 catch(Exception exception)

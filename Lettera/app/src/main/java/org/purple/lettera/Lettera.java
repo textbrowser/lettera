@@ -299,11 +299,11 @@ public class Lettera extends AppCompatActivity
 	{
 	    dialog = new Dialog(Lettera.this);
 	    Windows.show_progress_dialog
-		(m_download_interrupted,
-		 Lettera.this,
+		(Lettera.this,
 		 dialog,
 		 "Downloading e-mail folders and messages.\n" +
-		 "Please be patient.");
+		 "Please be patient.",
+		 m_download_interrupted);
 
 	    Thread thread = new Thread
 		(new PopulateFolders(dialog, selected_folder_full_name()));
@@ -401,23 +401,27 @@ public class Lettera extends AppCompatActivity
 					 selected_folder_name()) == 0)
 			return;
 
+		    final AtomicBoolean confirmed = new AtomicBoolean(false);
+
 		    DialogInterface.OnCancelListener listener =
 			new DialogInterface.OnCancelListener()
 		    {
 			public void onCancel(DialogInterface dialog)
 			{
-			    m_database.delete_selected
-				(Lettera.this,
-				 m_messages_adapter,
-				 email_account,
-				 selected_folder_name());
+			    if(confirmed.get())
+				m_database.delete_selected
+				    (Lettera.this,
+				     m_messages_adapter,
+				     email_account,
+				     selected_folder_name());
 			}
 		    };
 
 		    Windows.show_prompt_dialog
 			(Lettera.this,
 			 listener,
-			 "Move the selected messages to the Trash folder?");
+			 "Move the selected messages to the Trash folder?",
+			 confirmed);
 		}
 	    });
 
@@ -777,10 +781,10 @@ public class Lettera extends AppCompatActivity
 		{
 		    dialog = new Dialog(Lettera.this);
 		    Windows.show_progress_dialog
-			(null,
-			 Lettera.this,
+			(Lettera.this,
 			 dialog,
-			 "Initializing Lettera.\nPlease be patient.");
+			 "Initializing Lettera.\nPlease be patient.",
+			 null);
 
 		    Thread thread = new Thread(new PopulateContainers(dialog));
 
