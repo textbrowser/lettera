@@ -395,6 +395,7 @@ public class Lettera extends AppCompatActivity
 			return;
 
 		    final String email_account = email_account();
+		    final String folder_name = selected_folder_name();
 
 		    if(m_database.
 		       messages_selected(email_account,
@@ -413,15 +414,22 @@ public class Lettera extends AppCompatActivity
 				    (Lettera.this,
 				     m_messages_adapter,
 				     email_account,
-				     selected_folder_name());
+				     folder_name);
 			}
 		    };
 
-		    Windows.show_prompt_dialog
-			(Lettera.this,
-			 listener,
-			 "Move the selected message(s) to the Trash folder?",
-			 confirmed);
+		    if(folder_name.toLowerCase().equals("trash"))
+			Windows.show_prompt_dialog
+			    (Lettera.this,
+			     listener,
+			     "Archive the selected message(s) in Lettera?",
+			     confirmed);
+		    else
+			Windows.show_prompt_dialog
+			    (Lettera.this,
+			     listener,
+			     "Delete the selected message(s)?",
+			     confirmed);
 		}
 	    });
 
