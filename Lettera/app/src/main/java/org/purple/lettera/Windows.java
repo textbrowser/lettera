@@ -135,4 +135,63 @@ public abstract class Windows
 	    }
 	}
     }
+
+    public static void show_prompt_dialog
+	(Context context,
+	 DialogInterface.OnCancelListener cancel_listener,
+	 String prompt)
+    {
+	if(context == null ||
+	   cancel_listener == null ||
+	   prompt == null ||
+	   prompt.trim().isEmpty())
+	    return;
+
+	try
+	{
+	    if(((Activity) context).isFinishing())
+		return;
+
+	    AlertDialog alert_dialog = new AlertDialog.Builder
+		(context).create();
+
+	    alert_dialog.setButton
+		(AlertDialog.BUTTON_NEGATIVE, "No",
+		 new DialogInterface.OnClickListener()
+		 {
+		     public void onClick(DialogInterface dialog, int which)
+		     {
+			 try
+			 {
+			     dialog.dismiss();
+			 }
+			 catch(Exception exception)
+			 {
+			 }
+		     }
+		 });
+	    alert_dialog.setButton
+		(AlertDialog.BUTTON_POSITIVE, "Yes",
+		 new DialogInterface.OnClickListener()
+		 {
+		     public void onClick(DialogInterface dialog, int which)
+		     {
+			 try
+			 {
+			     dialog.cancel();
+			 }
+			 catch(Exception exception)
+			 {
+			 }
+		     }
+		 });
+	    alert_dialog.setMessage(prompt);
+	    alert_dialog.setOnCancelListener(cancel_listener);
+	    alert_dialog.setTitle("Confirmation");
+	    alert_dialog.show();
+	}
+	catch(Exception exception)
+	{
+	}
+    }
 }

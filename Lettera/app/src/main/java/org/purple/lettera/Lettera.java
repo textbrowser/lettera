@@ -29,6 +29,7 @@ package org.purple.lettera;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -393,18 +394,30 @@ public class Lettera extends AppCompatActivity
 		    if(Lettera.this.isFinishing())
 			return;
 
-		    String email_account = email_account();
+		    final String email_account = email_account();
 
 		    if(m_database.
 		       messages_selected(email_account,
 					 selected_folder_name()) == 0)
 			return;
 
-		    m_database.delete_selected
+		    DialogInterface.OnCancelListener listener =
+			new DialogInterface.OnCancelListener()
+		    {
+			public void onCancel(DialogInterface dialog)
+			{
+			    m_database.delete_selected
+				(Lettera.this,
+				 m_messages_adapter,
+				 email_account,
+				 selected_folder_name());
+			}
+		    };
+
+		    Windows.show_prompt_dialog
 			(Lettera.this,
-			 m_messages_adapter,
-			 email_account,
-			 selected_folder_name());
+			 listener,
+			 "Move the selected messages to the Trash folder?");
 		}
 	    });
 
