@@ -49,6 +49,13 @@ import javax.mail.internet.InternetAddress;
 
 public class Database extends SQLiteOpenHelper
 {
+    private abstract class DeletedEnumerator
+    {
+	public final static int ARCHIVED = 2;
+	public final static int DELETED = 1;
+	public final static int NOT_DELETED = 0;
+    }
+
     private Cursor m_read_message_cursor = null;
     private SQLiteDatabase m_db = null;
     private String m_read_message_cursor_email_account = "";
