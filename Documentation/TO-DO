@@ -41,6 +41,7 @@ Future Items
 
 Remaining Items
 
+- Account removal should be enveloped within a progress dialog.
 - Background services.
 - Deleted remote folders are also deleted locally.
 - Denote read messages.
@@ -52,6 +53,7 @@ Remaining Items
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
+- Removal of local messages should be enveloped within a progress dialog.
 - Reset of Network widgets in Settings.
 - Simple version of folders drawer for moving messages. Ignore current folder.
 - What's a deleted message?

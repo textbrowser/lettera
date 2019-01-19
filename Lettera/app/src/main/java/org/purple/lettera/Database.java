@@ -696,48 +696,40 @@ public class Database extends SQLiteOpenHelper
 	if(m_db == null)
 	    return false;
 
-	Thread thread = new Thread(new Runnable()
+	m_db.beginTransactionNonExclusive();
+
+	try
 	{
-	    @Override
-	    public void run()
-	    {
-		m_db.beginTransactionNonExclusive();
+	    m_db.delete
+		("messages", "email_account = ?",
+		 new String[] {email_account});
+	    m_db.delete
+		("messages_attachments", "email_account = ?",
+		 new String[] {email_account});
+	    m_db.delete
+		("messages_recipients", "email_account = ?",
+		 new String[] {email_account});
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	    return false;
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
 
-		try
+	synchronized(m_read_message_cursor_mutex)
+	{
+	    if(m_read_message_cursor_email_account.equals(email_account))
+		if(m_read_message_cursor != null)
 		{
-		    m_db.delete
-			("messages", "email_account = ?",
-			 new String[] {email_account});
-		    m_db.delete
-			("messages_attachments", "email_account = ?",
-			 new String[] {email_account});
-		    m_db.delete
-			("messages_recipients", "email_account = ?",
-			 new String[] {email_account});
-		    m_db.setTransactionSuccessful();
+		    m_read_message_cursor.close();
+		    m_read_message_cursor = null;
 		}
-		catch(Exception exception)
-		{
-		}
-		finally
-		{
-		    m_db.endTransaction();
-		}
+	}
 
-		synchronized(m_read_message_cursor_mutex)
-		{
-		    if(m_read_message_cursor_email_account.
-		       equals(email_account))
-			if(m_read_message_cursor != null)
-			{
-			    m_read_message_cursor.close();
-			    m_read_message_cursor = null;
-			}
-		}
-	    }
-	});
-
-	thread.start();
 	return true;
     }
 
@@ -1747,10 +1739,8 @@ public class Database extends SQLiteOpenHelper
 		    cursor = m_db.rawQuery
 			("SELECT content_downloaded, deleted, selected " +
 			 "FROM messages WHERE email_account = ? AND " +
-			 "LOWER(folder_name) = LOWER(?) AND " +
 			 "uid = ?",
 			 new String[] {email_account,
-				       folder.getName(),
 				       String.valueOf(message_uid)});
 
 		    if(cursor != null && cursor.moveToFirst())
