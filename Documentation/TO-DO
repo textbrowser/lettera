@@ -14,6 +14,7 @@ Completed Items
 - Fast SQLite sort.
 - Folders drawer folders order. Sort by name.
 - Folders drawer.
+- Ignore incoming messages if the messages exist in other folders (a move).
 - Include algorithm information in Settings::Privacy.
 - Index failure on Folders Drawer.
 - Key generation.
@@ -47,8 +48,6 @@ Remaining Items
 - Denote read messages.
 - Display a message's origin in Trash.
 - Display percent-downloaded in dialog.
-- Ignore incoming messages if the messages exist in other folders
-  (a move).
 - Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?

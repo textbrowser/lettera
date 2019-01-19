@@ -1769,6 +1769,10 @@ public class Database extends SQLiteOpenHelper
 			}
 			else if(cursor.getInt(1) != DeletedEnumerator.NOMINAL)
 			{
+			    /*
+			    ** Ignore this message!
+			    */
+
 			    cursor.close();
 			    continue;
 			}
