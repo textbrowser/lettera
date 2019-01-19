@@ -53,7 +53,7 @@ public class Database extends SQLiteOpenHelper
     {
 	public final static int ARCHIVED = 2;
 	public final static int DELETED = 1;
-	public final static int NOT_DELETED = 0;
+	public final static int NOMINAL = 0;
     }
 
     private Cursor m_read_message_cursor = null;
@@ -353,10 +353,13 @@ public class Database extends SQLiteOpenHelper
 
 		    if(folder_name.toLowerCase().equals("trash"))
 			string += "WHERE email_account = ? AND " +
-			    "(LOWER(folder_name) = LOWER(?) OR deleted = 1) ";
+			    "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+			    DeletedEnumerator.DELETED +
+			    ")";
 		    else
-			string += "WHERE deleted = 0 AND " +
-			    "email_account = ? AND " +
+			string += "WHERE deleted = " +
+			    DeletedEnumerator.NOMINAL +
+			    " AND email_account = ? AND " +
 			    "LOWER(folder_name) = LOWER(?) ";
 
 		    string += "ORDER BY received_date_unix_epoch";
@@ -748,16 +751,18 @@ public class Database extends SQLiteOpenHelper
 		cursor = m_db.rawQuery
 		    ("SELECT selected FROM messages " +
 		     "WHERE email_account = ? AND " +
-		     "(LOWER(folder_name) = LOWER(?) OR deleted = 1) AND " +
-		     "uid = ?",
+		     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+		     DeletedEnumerator.DELETED +
+		     ") AND uid = ?",
 		     new String[] {email_account,
 				   folder_name,
 				   String.valueOf(uid)});
 	    else
 		cursor = m_db.rawQuery
 		    ("SELECT selected FROM messages " +
-		     "WHERE deleted = 0 AND " +
-		     "email_account = ? AND " +
+		     "WHERE deleted = " +
+		     DeletedEnumerator.NOMINAL +
+		     " AND email_account = ? AND " +
 		     "LOWER(folder_name) = LOWER(?) AND " +
 		     "uid = ?",
 		     new String[] {email_account,
@@ -900,13 +905,16 @@ public class Database extends SQLiteOpenHelper
 		cursor = m_db.rawQuery
 		    ("SELECT COUNT(*) FROM messages WHERE " +
 		     "email_account = ? AND " +
-		     "(LOWER(folder_name) = LOWER(?) OR deleted = 1)",
+		     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+		     DeletedEnumerator.DELETED +
+		     ")",
 		     new String[] {email_account, folder_name});
 	    else
 		cursor = m_db.rawQuery
 		    ("SELECT COUNT(*) FROM messages WHERE " +
-		     "deleted = 0 AND " +
-		     "email_account = ? AND " +
+		     "deleted = " +
+		     DeletedEnumerator.NOMINAL +
+		     " AND email_account = ? AND " +
 		     "LOWER(folder_name) = LOWER(?)",
 		     new String[] {email_account, folder_name});
 
@@ -951,14 +959,16 @@ public class Database extends SQLiteOpenHelper
 		cursor = m_db.rawQuery
 		    ("SELECT COUNT(*) FROM messages WHERE " +
 		     "email_account = ? AND " +
-		     "(LOWER(folder_name) = LOWER(?) OR deleted = 1) AND " +
-		     "selected = 1",
+		     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+		     DeletedEnumerator.DELETED +
+		     ") AND selected = 1",
 		     new String[] {email_account, folder_name});
 	    else
 		cursor = m_db.rawQuery
 		    ("SELECT COUNT(*) FROM messages WHERE " +
-		     "deleted = 0 AND " +
-		     "email_account = ? AND " +
+		     "deleted = " +
+		     DeletedEnumerator.NOMINAL +
+		     " AND email_account = ? AND " +
 		     "LOWER(folder_name) = LOWER(?) AND " +
 		     "selected = 1",
 		     new String[] {email_account, folder_name});
@@ -1091,15 +1101,19 @@ public class Database extends SQLiteOpenHelper
 
 		    if(folder_name.toLowerCase().equals("trash"))
 			sqlite_statement = m_db.compileStatement
-			    ("UPDATE messages SET deleted = 1, " +
+			    ("UPDATE messages SET deleted = " +
+			     DeletedEnumerator.ARCHIVED +
+			     "folder_name = 'Lettera-Archived', " +
 			     "selected = 0 " +
 			     "WHERE email_account = ? AND " +
-			     "(LOWER(folder_name) = LOWER(?) OR " +
-			     "deleted = 1) AND selected = 1");
+			     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+			     DeletedEnumerator.DELETED +
+			     ") AND selected = 1");
 		    else
 			sqlite_statement = m_db.compileStatement
-			    ("UPDATE messages SET deleted = 1, " +
-			     "selected = 0 " +
+			    ("UPDATE messages SET deleted = " +
+			     DeletedEnumerator.DELETED +
+			     ", selected = 0 " +
 			     "WHERE email_account = ? AND " +
 			     "LOWER(folder_name) = LOWER(?) AND " +
 			     "selected = 1");
@@ -1237,8 +1251,9 @@ public class Database extends SQLiteOpenHelper
 	str = "CREATE TABLE IF NOT EXISTS messages (" +
 	    "content_downloaded INTEGER NOT NULL DEFAULT 0, " +
 	    "current_message INTEGER NOT NULL DEFAULT 1, " +
-	    "deleted INTEGER NOT NULL DEFAULT 0, " +
-	    "email_account TEXT NOT NULL, " +
+	    "deleted INTEGER NOT NULL DEFAULT " +
+	    DeletedEnumerator.NOMINAL +
+	    ", email_account TEXT NOT NULL, " +
 	    "folder_name TEXT NOT NULL, " +
 	    "from_email_account TEXT NOT NULL, " +
 	    "from_name TEXT NOT NULL, " +
@@ -1429,11 +1444,15 @@ public class Database extends SQLiteOpenHelper
 			sqlite_statement = m_db.compileStatement
 			    ("UPDATE messages SET selected = ? " +
 			     "WHERE email_account = ? AND " +
-			     "(LOWER(folder_name) = LOWER(?) OR deleted = 1)");
+			     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+			     DeletedEnumerator.DELETED +
+			     ")");
 		    else
 			sqlite_statement = m_db.compileStatement
 			    ("UPDATE messages SET selected = ? " +
-			     "WHERE email_account = ? AND " +
+			     "WHERE deleted = " +
+			     DeletedEnumerator.NOMINAL +
+			     " AND email_account = ? AND " +
 			     "LOWER(folder_name) = LOWER(?)");
 
 		    sqlite_statement.bindLong(1, selected ? 1 : 0);
@@ -1484,13 +1503,16 @@ public class Database extends SQLiteOpenHelper
 		sqlite_statement = m_db.compileStatement
 		    ("UPDATE messages SET selected = ? " +
 		     "WHERE email_account = ? AND " +
-		     "(LOWER(folder_name) = LOWER(?) OR deleted = 1) AND " +
-		     "uid = ?");
+		     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+		     DeletedEnumerator.DELETED +
+		     ") AND uid = ?");
 	    else
 		sqlite_statement = m_db.compileStatement
 		    ("UPDATE messages SET selected = ? " +
-		     "WHERE email_account = ? AND " +
-		     "LOWER(folder_name) = LOWER(?) AND " +
+		     "WHERE deleted = " +
+		     DeletedEnumerator.NOMINAL +
+		     " AND email_account = ? " +
+		     "AND LOWER(folder_name) = LOWER(?) AND " +
 		     "uid = ?");
 
 	    sqlite_statement.bindLong(1, selected ? 1 : 0);
@@ -1748,7 +1770,7 @@ public class Database extends SQLiteOpenHelper
 				continue;
 			    }
 			}
-			else if(cursor.getInt(1) == 1)
+			else if(cursor.getInt(1) != DeletedEnumerator.NOMINAL)
 			{
 			    cursor.close();
 			    continue;
