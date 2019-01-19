@@ -64,6 +64,7 @@ public class Database extends SQLiteOpenHelper
     private final static String DATABASE_NAME = "lettera.db";
     private final static String UNKNOWN_EMAIL = "unknown@unknown.org";
     private final static int DATABASE_VERSION = 1;
+    private final static int MESSAGE_DOWNLOAD_TIME = 10000; // 10 Seconds
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -1720,6 +1721,7 @@ public class Database extends SQLiteOpenHelper
 		 "subject, " +
 		 "uid) VALUES " +
 		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	    long start_time = 0;
 
 	    for(Message message : messages)
 	    {
@@ -1782,6 +1784,13 @@ public class Database extends SQLiteOpenHelper
 		    if(cursor != null)
 			cursor.close();
 		}
+
+		if(start_time == 0)
+		    start_time = System.currentTimeMillis();
+
+		if(System.currentTimeMillis() - start_time >
+		   MESSAGE_DOWNLOAD_TIME)
+		    break;
 
 		try
 		{
