@@ -651,20 +651,27 @@ public class Lettera extends AppCompatActivity
 			    if(m_folder_names != null &&
 			       m_folder_names.size() > 0)
 			    {
-				Lettera.this.runOnUiThread(new Runnable()
-				{
-				    @Override
-				    public void run()
+				final String folder_name =
+				    m_mail.
+				    folder(m_folder_names.get(0)) != null ?
+				    m_mail.folder(m_folder_names.get(0)).
+				    getName() : "";
+
+				if(!folder_name.isEmpty())
+				    Lettera.this.runOnUiThread(new Runnable()
 				    {
-					m_items_count.setText
-					    ("Items: " +
-					     m_messages_adapter.getItemCount() +
-					     " (Downloading " +
-					     m_mail.folder(m_folder_names.
-							   get(0)).getName() +
-					     ".)");
-				    }
-				});
+					@Override
+					public void run()
+					{
+					    m_items_count.setText
+						("Items: " +
+						 m_messages_adapter.
+						 getItemCount() +
+						 " (Downloading " +
+						 folder_name +
+						 ".)");
+					}
+				    });
 
 				m_database.write_messages
 				    (m_interrupted,

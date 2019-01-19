@@ -1715,7 +1715,10 @@ public class Database extends SQLiteOpenHelper
 	    content_values.put("current_message", 0);
 	    m_db.update("messages",
 			content_values,
-			"email_account = ? AND LOWER(folder_name) = LOWER(?)",
+			"deleted = " +
+			DeletedEnumerator.NOMINAL +
+			" AND email_account = ? AND " +
+			"LOWER(folder_name) = LOWER(?)",
 			new String[] {email_account,
 				      folder.getName()});
 
@@ -1723,6 +1726,7 @@ public class Database extends SQLiteOpenHelper
 		("REPLACE INTO messages (" +
 		 "content_downloaded, " +
 		 "current_message, " +
+		 "deleted, " +
 		 "email_account, " +
 		 "folder_name, " +
 		 "from_email_account, " +
@@ -1734,7 +1738,7 @@ public class Database extends SQLiteOpenHelper
 		 "sent_date, " +
 		 "subject, " +
 		 "uid) VALUES " +
-		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    long start_time = 0;
 
 	    for(Message message : messages)
@@ -1746,6 +1750,7 @@ public class Database extends SQLiteOpenHelper
 		    continue;
 
 		Cursor cursor = null;
+		int deleted = DeletedEnumerator.NOMINAL;
 		int selected = 0;
 		long message_uid = 0;
 
@@ -1755,8 +1760,10 @@ public class Database extends SQLiteOpenHelper
 		    cursor = m_db.rawQuery
 			("SELECT content_downloaded, deleted, selected " +
 			 "FROM messages WHERE email_account = ? AND " +
+			 "LOWER(folder_name) = LOWER(?) AND " +
 			 "uid = ?",
 			 new String[] {email_account,
+				       folder.getName(),
 				       String.valueOf(message_uid)});
 
 		    if(cursor != null && cursor.moveToFirst())
@@ -1782,16 +1789,7 @@ public class Database extends SQLiteOpenHelper
 			    }
 			}
 
-			if(cursor.getInt(1) != DeletedEnumerator.NOMINAL)
-			{
-			    /*
-			    ** Ignore this message!
-			    */
-
-			    cursor.close();
-			    continue;
-			}
-
+			deleted = cursor.getInt(1);
 			selected = cursor.getInt(2);
 		    }
 		}
@@ -1815,6 +1813,7 @@ public class Database extends SQLiteOpenHelper
 		{
 		    content_values.clear();
 		    content_values.put("current_message", 1);
+		    content_values.put("deleted", deleted);
 		    content_values.put("email_account", email_account);
 		    content_values.put
 			("folder_name", folder.getName().toLowerCase());
@@ -1920,29 +1919,31 @@ public class Database extends SQLiteOpenHelper
 			(1, content_values.getAsLong("content_downloaded"));
 		    sqlite_statement.bindLong
 			(2, content_values.getAsLong("current_message"));
-		    sqlite_statement.bindString
-			(3, content_values.getAsString("email_account"));
-		    sqlite_statement.bindString
-			(4, content_values.getAsString("folder_name"));
-		    sqlite_statement.bindString
-			(5, content_values.getAsString("from_email_account"));
-		    sqlite_statement.bindString
-			(6, content_values.getAsString("from_name"));
-		    sqlite_statement.bindString
-			(7, content_values.getAsString("message"));
-		    sqlite_statement.bindString
-			(8, content_values.getAsString("received_date"));
 		    sqlite_statement.bindLong
-			(9,
+			(3, content_values.getAsLong("deleted"));
+		    sqlite_statement.bindString
+			(4, content_values.getAsString("email_account"));
+		    sqlite_statement.bindString
+			(5, content_values.getAsString("folder_name"));
+		    sqlite_statement.bindString
+			(6, content_values.getAsString("from_email_account"));
+		    sqlite_statement.bindString
+			(7, content_values.getAsString("from_name"));
+		    sqlite_statement.bindString
+			(8, content_values.getAsString("message"));
+		    sqlite_statement.bindString
+			(9, content_values.getAsString("received_date"));
+		    sqlite_statement.bindLong
+			(10,
 			 content_values.getAsLong("received_date_unix_epoch"));
 		    sqlite_statement.bindLong
-			(10, content_values.getAsLong("selected"));
+			(11, content_values.getAsLong("selected"));
 		    sqlite_statement.bindString
-			(11, content_values.getAsString("sent_date"));
+			(12, content_values.getAsString("sent_date"));
 		    sqlite_statement.bindString
-			(12, content_values.getAsString("subject"));
+			(13, content_values.getAsString("subject"));
 		    sqlite_statement.bindLong
-			(13, content_values.getAsLong("uid"));
+			(14, content_values.getAsLong("uid"));
 		    sqlite_statement.execute();
 		    sqlite_statement.clearBindings();
 
