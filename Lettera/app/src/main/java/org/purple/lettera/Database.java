@@ -354,7 +354,9 @@ public class Database extends SQLiteOpenHelper
 
 		    if(folder_name.toLowerCase().equals("trash"))
 			string += "WHERE email_account = ? AND " +
-			    "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+			    "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
+			    DeletedEnumerator.ARCHIVED +
+			    ") OR deleted = " +
 			    DeletedEnumerator.DELETED +
 			    ")";
 		    else
@@ -749,7 +751,9 @@ public class Database extends SQLiteOpenHelper
 		cursor = m_db.rawQuery
 		    ("SELECT selected FROM messages " +
 		     "WHERE email_account = ? AND " +
-		     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+		     "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
+		     DeletedEnumerator.ARCHIVED +
+		     ") OR deleted = " +
 		     DeletedEnumerator.DELETED +
 		     ") AND uid = ?",
 		     new String[] {email_account,
@@ -903,7 +907,9 @@ public class Database extends SQLiteOpenHelper
 		cursor = m_db.rawQuery
 		    ("SELECT COUNT(*) FROM messages WHERE " +
 		     "email_account = ? AND " +
-		     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+		     "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
+		     DeletedEnumerator.ARCHIVED +
+		     ") OR deleted = " +
 		     DeletedEnumerator.DELETED +
 		     ")",
 		     new String[] {email_account, folder_name});
@@ -957,7 +963,9 @@ public class Database extends SQLiteOpenHelper
 		cursor = m_db.rawQuery
 		    ("SELECT COUNT(*) FROM messages WHERE " +
 		     "email_account = ? AND " +
-		     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+		     "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
+		     DeletedEnumerator.ARCHIVED +
+		     ") OR deleted = " +
 		     DeletedEnumerator.DELETED +
 		     ") AND selected = 1",
 		     new String[] {email_account, folder_name});
@@ -1101,10 +1109,11 @@ public class Database extends SQLiteOpenHelper
 			sqlite_statement = m_db.compileStatement
 			    ("UPDATE messages SET deleted = " +
 			     DeletedEnumerator.ARCHIVED +
-			     ", folder_name = 'Lettera-Archived', " +
-			     "selected = 0 " +
+			     ", selected = 0 " +
 			     "WHERE email_account = ? AND " +
-			     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+			     "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
+			     DeletedEnumerator.ARCHIVED +
+			     ") OR deleted = " +
 			     DeletedEnumerator.DELETED +
 			     ") AND selected = 1");
 		    else
@@ -1148,6 +1157,7 @@ public class Database extends SQLiteOpenHelper
 			public void run()
 			{
 			    lettera.prepare_current_folder_text(folder_name);
+			    lettera.update_folders_drawer();
 			    messages_adapter.notifyDataSetChanged();
 			}
 		    });
@@ -1442,7 +1452,9 @@ public class Database extends SQLiteOpenHelper
 			sqlite_statement = m_db.compileStatement
 			    ("UPDATE messages SET selected = ? " +
 			     "WHERE email_account = ? AND " +
-			     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+			     "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
+			     DeletedEnumerator.ARCHIVED +
+			     ") OR deleted = " +
 			     DeletedEnumerator.DELETED +
 			     ")");
 		    else
@@ -1501,7 +1513,9 @@ public class Database extends SQLiteOpenHelper
 		sqlite_statement = m_db.compileStatement
 		    ("UPDATE messages SET selected = ? " +
 		     "WHERE email_account = ? AND " +
-		     "(LOWER(folder_name) = LOWER(?) OR deleted = " +
+		     "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
+		     DeletedEnumerator.ARCHIVED +
+		     ") OR deleted = " +
 		     DeletedEnumerator.DELETED +
 		     ") AND uid = ?");
 	    else
@@ -1767,7 +1781,8 @@ public class Database extends SQLiteOpenHelper
 				continue;
 			    }
 			}
-			else if(cursor.getInt(1) != DeletedEnumerator.NOMINAL)
+
+			if(cursor.getInt(1) != DeletedEnumerator.NOMINAL)
 			{
 			    /*
 			    ** Ignore this message!

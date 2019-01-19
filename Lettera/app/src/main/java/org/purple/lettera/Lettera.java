@@ -888,6 +888,11 @@ public class Lettera extends AppCompatActivity
 
     public void messages_deleted()
     {
+	/*
+	** All of the messages have been deleted.
+	*/
+
+	m_folders_drawer.update();
 	m_messages_adapter.notifyDataSetChanged();
 	prepare_current_folder_text(selected_folder_name());
     }
@@ -1018,5 +1023,10 @@ public class Lettera extends AppCompatActivity
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
 	}
+    }
+
+    public void update_folders_drawer()
+    {
+	m_folders_drawer.update();
     }
 }
