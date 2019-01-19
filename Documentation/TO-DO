@@ -10,6 +10,7 @@ Completed Items
 - Double-click event in Folders drawer. Dismiss on click.
 - Download folder messages incrementally.
 - Download message content on separate thread(s).
+- Empty trash with confirmation.
 - Fast SQLite sort.
 - Folders drawer folders order. Sort by name.
 - Folders drawer.
@@ -45,7 +46,6 @@ Remaining Items
 - Denote read messages.
 - Display a message's origin in Trash.
 - Display percent-downloaded in dialog.
-- Empty trash with confirmation.
 - Ignore incoming messages if the messages exist in other folders
   (a move).
 - Locally-deleted messages must remain hidden after their remote copies arrive.
