@@ -539,35 +539,34 @@ public class Database extends SQLiteOpenHelper
 
 	final String key = content_values.getAsString("key");
 	final String value = content_values.getAsString("value");
-	Thread thread = new Thread
-	    (new Runnable()
+	Thread thread = new Thread(new Runnable()
+	{
+	    @Override
+	    public void run()
 	    {
-		@Override
-		public void run()
+		m_db.beginTransactionNonExclusive();
+
+		try
 		{
-		    m_db.beginTransactionNonExclusive();
+		    SQLiteStatement sqlite_statement =
+			m_db.compileStatement
+			("REPLACE INTO settings (key_field, value) " +
+			 "VALUES (?, ?)");
 
-		    try
-		    {
-			SQLiteStatement sqlite_statement =
-			    m_db.compileStatement
-			    ("REPLACE INTO settings (key_field, value) " +
-			     "VALUES (?, ?)");
-
-			sqlite_statement.bindString(1, key);
-			sqlite_statement.bindString(2, value);
-			sqlite_statement.execute();
-			m_db.setTransactionSuccessful();
-		    }
-		    catch(Exception exception)
-		    {
-		    }
-		    finally
-		    {
-			m_db.endTransaction();
-		    }
+		    sqlite_statement.bindString(1, key);
+		    sqlite_statement.bindString(2, value);
+		    sqlite_statement.execute();
+		    m_db.setTransactionSuccessful();
 		}
-	    });
+		catch(Exception exception)
+		{
+		}
+		finally
+		{
+		    m_db.endTransaction();
+		}
+	    }
+	});
 
 	thread.start();
 
@@ -692,48 +691,54 @@ public class Database extends SQLiteOpenHelper
 	return ok;
     }
 
-    public boolean delete_messages(String email_account)
+    public boolean delete_messages(final String email_account)
     {
 	if(m_db == null)
 	    return false;
 
-	boolean ok = false;
+	Thread thread = new Thread(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_db.beginTransactionNonExclusive();
 
-	m_db.beginTransactionNonExclusive();
-
-	try
-	{
-	    ok = m_db.delete
-		("messages", "email_account = ?",
-		 new String[] {email_account}) > 0;
-	    m_db.delete
-		("messages_attachments", "email_account = ?",
-		 new String[] {email_account});
-	    m_db.delete
-		("messages_recipients", "email_account = ?",
-		 new String[] {email_account});
-	    m_db.setTransactionSuccessful();
-	}
-	catch(Exception exception)
-	{
-	    ok = false;
-	}
-	finally
-	{
-	    m_db.endTransaction();
-	}
-
-	synchronized(m_read_message_cursor_mutex)
-	{
-	    if(m_read_message_cursor_email_account.equals(email_account))
-		if(m_read_message_cursor != null)
+		try
 		{
-		    m_read_message_cursor.close();
-		    m_read_message_cursor = null;
+		    m_db.delete
+			("messages", "email_account = ?",
+			 new String[] {email_account});
+		    m_db.delete
+			("messages_attachments", "email_account = ?",
+			 new String[] {email_account});
+		    m_db.delete
+			("messages_recipients", "email_account = ?",
+			 new String[] {email_account});
+		    m_db.setTransactionSuccessful();
 		}
-	}
+		catch(Exception exception)
+		{
+		}
+		finally
+		{
+		    m_db.endTransaction();
+		}
 
-	return ok;
+		synchronized(m_read_message_cursor_mutex)
+		{
+		    if(m_read_message_cursor_email_account.
+		       equals(email_account))
+			if(m_read_message_cursor != null)
+			{
+			    m_read_message_cursor.close();
+			    m_read_message_cursor = null;
+			}
+		}
+	    }
+	});
+
+	thread.start();
+	return true;
     }
 
     public boolean message_selected(String email_account,
