@@ -1743,9 +1743,6 @@ public class Database extends SQLiteOpenHelper
 
 	    for(Message message : messages)
 	    {
-		if(interrupt.get())
-		    break;
-
 		if(message == null)
 		    continue;
 
@@ -1977,6 +1974,9 @@ public class Database extends SQLiteOpenHelper
 		catch(Exception exception)
 		{
 		}
+
+		if(interrupt.get())
+		    break;
 	    }
 
 	    m_db.delete("messages",

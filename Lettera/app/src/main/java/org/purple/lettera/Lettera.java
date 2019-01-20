@@ -369,7 +369,7 @@ public class Lettera extends AppCompatActivity
 				 selected_folder_name(),
 				 is_checked);
 			}
-		    }, 500);
+		    }, 750);
 		}
 	    };
 	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
@@ -846,7 +846,7 @@ public class Lettera extends AppCompatActivity
 		    }
 		}
 	    }
-	}, 500);
+	}, 750);
 	prepare_folders_and_messages_widgets(selected_folder_name());
 	prepare_generic_widgets();
 	prepare_icons();
