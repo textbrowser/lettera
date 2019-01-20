@@ -962,6 +962,12 @@ public class Lettera extends AppCompatActivity
 	    m_items_count.setText
 		("Items: " + m_messages_adapter.getItemCount());
 	}
+	else
+	{
+	    m_folders_drawer.set_selected_folder_name(NONE_FOLDER);
+	    m_messages_adapter.set_folder_name(NONE_FOLDER);
+	    m_items_count.setText("Items: 0");
+	}
 
 	try
 	{
@@ -973,11 +979,13 @@ public class Lettera extends AppCompatActivity
 	{
 	}
 
-	if(!folder_name.isEmpty())
-	    synchronized(m_selected_folder_name_mutex)
-	    {
+	synchronized(m_selected_folder_name_mutex)
+	{
+	    if(folder_name.isEmpty())
+		m_selected_folder_name = NONE_FOLDER;
+	    else
 		m_selected_folder_name = folder_name;
-	    }
+	}
 
 	m_scroll_bottom.setVisibility(View.GONE);
 	m_scroll_top.setVisibility(View.GONE);

@@ -629,6 +629,7 @@ public class Settings
 		 String.
 		 valueOf(m_delete_on_server_checkbox.isChecked() ? 1 : 0));
 	    string = m_inbound_address.getText().toString().trim();
+	    m_inbound_address.setText(string);
 
 	    if(string.isEmpty())
 	    {
@@ -641,6 +642,7 @@ public class Settings
 		content_values.put("in_address", string);
 
 	    string = m_inbound_email.getText().toString().trim();
+	    m_inbound_email.setText(string);
 
 	    if(string.isEmpty())
 	    {
@@ -676,6 +678,7 @@ public class Settings
 		content_values.put("in_port", string);
 
 	    string = m_outbound_address.getText().toString().trim();
+	    m_outbound_address.setText(string);
 
 	    if(string.isEmpty())
 	    {
@@ -688,6 +691,7 @@ public class Settings
 		content_values.put("out_address", string);
 
 	    string = m_outbound_email.getText().toString().trim();
+	    m_outbound_email.setText(string);
 
 	    if(string.isEmpty())
 	    {
@@ -750,7 +754,7 @@ public class Settings
 		    content_values.clear();
 		    content_values.put("key", "primary_email_account");
 		    content_values.put
-			("value", m_inbound_email.getText().toString().trim());
+			("value", m_inbound_email.getText().toString());
 		    m_database.save_setting(content_values, true);
 		    m_lettera.populate_folders_from_database();
 		}
@@ -1373,7 +1377,8 @@ public class Settings
 		    (CompoundButton button_view, boolean is_checked)
 		{
 		    m_outbound_email.setEnabled(!is_checked);
-		    m_outbound_email.setText(m_inbound_email.getText());
+		    m_outbound_email.setText
+			(m_inbound_email.getText().toString().trim());
 		    m_outbound_password.setEnabled(!is_checked);
 		    m_outbound_password.setText(m_inbound_password.getText());
 		}
@@ -1838,10 +1843,11 @@ public class Settings
 
     public void show()
     {
-	m_dialog.show();
 	m_delete_account_verify_checkbox.setChecked(false);
+	m_dialog.show();
 	m_encryption_key_spinner.setSelection(0);
 	m_generate_keys_checkbox.setChecked(false);
+	m_inbound_address.requestFocus();
 	m_outbound_as_inbound.setChecked(false);
 	populate();
 	prepare_icons();

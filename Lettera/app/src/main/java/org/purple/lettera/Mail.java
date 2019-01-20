@@ -101,19 +101,19 @@ public class Mail
 		String proxy_type,
 		String proxy_user)
     {
-	m_inbound_address = inbound_address;
-	m_inbound_email = inbound_email;
+	m_inbound_address = inbound_address.trim();
+	m_inbound_email = inbound_email.trim();
 	m_inbound_password = inbound_password;
 	m_inbound_port = inbound_port;
-	m_outbound_address = outbound_address;
-	m_outbound_email = outbound_email;
+	m_outbound_address = outbound_address.trim();
+	m_outbound_email = outbound_email.trim();
 	m_outbound_password = outbound_password;
 	m_outbound_port = outbound_port;
-	m_proxy_address = proxy_address;
+	m_proxy_address = proxy_address.trim();
 	m_proxy_password = proxy_password;
 	m_proxy_port = proxy_port;
 	m_proxy_type = proxy_type;
-	m_proxy_user = proxy_user;
+	m_proxy_user = proxy_user.trim();
 	imap();
 	smtp();
     }
