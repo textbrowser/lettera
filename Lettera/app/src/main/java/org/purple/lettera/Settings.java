@@ -65,6 +65,62 @@ public class Settings
 	private final static int PRIVACY_PAGE = 2;
     }
 
+    private class DeleteAccount implements Runnable
+    {
+	private Dialog m_dialog = null;
+	private String m_email_account = "";
+
+	private DeleteAccount(Dialog dialog, String email_account)
+	{
+	    m_dialog = dialog;
+	    m_email_account = email_account;
+	}
+
+	@Override
+	public void run()
+	{
+	    final AtomicBoolean ok = new AtomicBoolean(false);
+
+	    try
+	    {
+		ok.set(m_database.delete_email_account(m_email_account));
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    m_lettera.runOnUiThread(new Runnable()
+	    {
+		@Override
+		public void run()
+		{
+		    try
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+
+		    try
+		    {
+			if(ok.get())
+			{
+			    m_delete_account_verify_checkbox.setChecked(false);
+			    m_lettera.email_account_deleted();
+			    populate_accounts_spinner();
+			    populate_network();
+			}
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    });
+	}
+    }
+
     private class DeleteMessages implements Runnable
     {
 	private Dialog m_dialog = null;
@@ -1130,15 +1186,38 @@ public class Settings
 			if(m_lettera.isFinishing())
 			    return;
 
-			if(m_accounts_spinner.getSelectedItem() != null &&
-			   m_database.
-			   delete_email_account(m_accounts_spinner.
-						getSelectedItem().toString()))
+			if(m_accounts_spinner.getSelectedItem() != null)
 			{
-			    m_delete_account_verify_checkbox.setChecked(false);
-			    m_lettera.email_account_deleted();
-			    populate_accounts_spinner();
-			    populate_network();
+			    Dialog dialog = null;
+
+			    try
+			    {
+				dialog = new Dialog(m_lettera);
+				Windows.show_progress_dialog
+				    (m_lettera,
+				     dialog,
+				     "Deleting e-mail account. " +
+				     "Please be patient.",
+				     null);
+
+				String email_account = m_accounts_spinner.
+				    getSelectedItem().toString();
+				Thread thread = new Thread
+				    (new DeleteAccount(dialog, email_account));
+
+				thread.start();
+			    }
+			    catch(Exception exception_1)
+			    {
+				try
+				{
+				    if(dialog != null)
+					dialog.dismiss();
+				}
+				catch(Exception exception_2)
+				{
+				}
+			    }
 			}
 		    }
 		});

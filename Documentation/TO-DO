@@ -1,5 +1,6 @@
 Completed Items
 
+- Account removal should be enveloped within a progress dialog.
 - Allow cancellation of downloads.
 - Checkboxes are too near pushbuttons. Maintain a safe distance between
   important pushbuttons and their verification checkboxes.
@@ -43,7 +44,6 @@ Future Items
 
 Remaining Items
 
-- Account removal should be enveloped within a progress dialog.
 - Background services.
 - Deleted remote folders are also deleted locally.
 - Denote read messages.
