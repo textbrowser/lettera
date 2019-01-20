@@ -193,9 +193,6 @@ public abstract class Utilities
 		if(view instanceof CheckBox)
 		    color_checkbox((CheckBox) view);
 	    }
-	    else if(view instanceof Spinner)
-	    {
-	    }
 	    else if(view instanceof TextView)
 	    {
 		((TextView) view).setHintTextColor(text_color);

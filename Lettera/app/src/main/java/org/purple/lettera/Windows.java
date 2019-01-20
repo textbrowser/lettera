@@ -32,6 +32,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +61,8 @@ public abstract class Windows
 	    AlertDialog alert_dialog = new AlertDialog.Builder
 		(context).create();
 
+	    alert_dialog.getWindow().setBackgroundDrawable
+		(new ColorDrawable(Lettera.background_color()));
 	    alert_dialog.setButton
 		(AlertDialog.BUTTON_NEUTRAL,
 		 "Close",
@@ -74,8 +80,22 @@ public abstract class Windows
 			 }
 		     }
 		 });
-	    alert_dialog.setMessage(text);
-	    alert_dialog.setTitle(title);
+
+	    Spannable spannable = new SpannableStringBuilder(text);
+
+	    spannable.setSpan
+		(new ForegroundColorSpan(Lettera.text_color()),
+		 0,
+		 spannable.length(),
+		 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	    alert_dialog.setMessage(spannable);
+	    spannable = new SpannableStringBuilder(title);
+	    spannable.setSpan
+		(new ForegroundColorSpan(Lettera.text_color()),
+		 0,
+		 spannable.length(),
+		 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	    alert_dialog.setTitle(spannable);
 	    alert_dialog.show();
 	}
 	catch(Exception exception)
@@ -159,8 +179,10 @@ public abstract class Windows
 		return;
 
 	    AlertDialog alert_dialog = new AlertDialog.Builder
-		(context).create();
+		(context, Lettera.background_color()).create();
 
+	    alert_dialog.getWindow().setBackgroundDrawable
+		(new ColorDrawable(Lettera.background_color()));
 	    alert_dialog.setButton
 		(AlertDialog.BUTTON_NEGATIVE, "No",
 		 new DialogInterface.OnClickListener()
@@ -194,9 +216,23 @@ public abstract class Windows
 			 }
 		     }
 		 });
-	    alert_dialog.setMessage(prompt);
+
+	    Spannable spannable = new SpannableStringBuilder(prompt);
+
+	    spannable.setSpan
+		(new ForegroundColorSpan(Lettera.text_color()),
+		 0,
+		 spannable.length(),
+		 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	    alert_dialog.setMessage(spannable);
 	    alert_dialog.setOnCancelListener(cancel_listener);
-	    alert_dialog.setTitle("Confirmation");
+	    spannable = new SpannableStringBuilder("Confirmation");
+	    spannable.setSpan
+		(new ForegroundColorSpan(Lettera.text_color()),
+		 0,
+		 spannable.length(),
+		 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	    alert_dialog.setTitle(spannable);
 	    alert_dialog.show();
 	}
 	catch(Exception exception)
