@@ -108,9 +108,14 @@ public class Settings
 			if(ok.get())
 			{
 			    m_delete_account_verify_checkbox.setChecked(false);
-			    m_lettera.email_account_deleted();
 			    populate_accounts_spinner();
 			    populate_network();
+
+			    /*
+			    ** Order!
+			    */
+
+			    m_lettera.email_account_deleted();
 			}
 		    }
 		    catch(Exception exception)
