@@ -53,6 +53,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Lettera extends AppCompatActivity
 {
@@ -254,6 +255,14 @@ public class Lettera extends AppCompatActivity
     private final PGP m_pgp = PGP.instance();
     private final int FOLDERS_DRAWER_INTERVAL = 7500;
     private final long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
+    private final static AtomicInteger s_background_color = new AtomicInteger
+	(Color.WHITE);
+    private final static AtomicInteger s_divider_color = new AtomicInteger
+	(Color.GRAY);
+    private final static AtomicInteger s_text_color = new AtomicInteger
+	(Color.BLACK);
+    private int m_default_divider_color = 0;
+    private int m_default_text_color = 0;
     public final static String NONE_FOLDER = "(None)";
 
     private String email_account()
@@ -724,6 +733,8 @@ public class Lettera extends AppCompatActivity
 	*/
 
 	initialize_widget_members();
+	m_default_divider_color = Color.parseColor("#e0e0e0");
+	m_default_text_color = m_current_folder.getCurrentTextColor();
 	m_messages_adapter = new MessagesAdapter(getApplicationContext());
 	m_folders_drawer = new FoldersDrawer
 	    (Lettera.this, findViewById(R.id.main_layout));
@@ -756,7 +767,7 @@ public class Lettera extends AppCompatActivity
 			@Override
 			public void run()
 			{
-			    view.setBackgroundColor(Color.WHITE);
+			    view.setBackgroundColor(background_color());
 			}
 		    }, 150);
 		}
@@ -847,6 +858,7 @@ public class Lettera extends AppCompatActivity
 		}
 	    }
 	}, 750);
+	prepare_colors();
 	prepare_folders_and_messages_widgets(selected_folder_name());
 	prepare_generic_widgets();
 	prepare_icons();
@@ -880,6 +892,21 @@ public class Lettera extends AppCompatActivity
 	catch(Exception exception)
 	{
 	}
+    }
+
+    public static int background_color()
+    {
+	return s_background_color.get();
+    }
+
+    public static int divider_color()
+    {
+	return s_divider_color.get();
+    }
+
+    public static int text_color()
+    {
+	return s_text_color.get();
     }
 
     public void email_account_deleted()
@@ -927,6 +954,36 @@ public class Lettera extends AppCompatActivity
 	catch(Exception exception)
 	{
 	}
+    }
+
+    public void prepare_colors()
+    {
+	int background_color = 0;
+	int divider_color = 0;
+	int text_color = 0;
+
+	switch(m_database.setting("color_theme").toLowerCase())
+	{
+	case "black & green":
+	    background_color = Color.BLACK;
+	    divider_color = Color.parseColor("#66bb6a");
+	    text_color = Color.parseColor("#66bb6a");
+	    break;
+	default:
+	    background_color = Color.WHITE;
+	    divider_color = m_default_divider_color;
+	    text_color = m_default_text_color;
+	    break;
+	}
+
+	findViewById(R.id.bottom_divider).setBackgroundColor(divider_color);
+	findViewById(R.id.main_layout).setBackgroundColor(background_color);
+	findViewById(R.id.top_divider).setBackgroundColor(divider_color);
+	m_current_folder.setTextColor(text_color);
+	m_items_count.setTextColor(text_color);
+	s_background_color.set(background_color);
+	s_divider_color.set(divider_color);
+	s_text_color.set(text_color);
     }
 
     public void prepare_current_folder_text(String folder_name)

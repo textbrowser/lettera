@@ -182,12 +182,17 @@ public class FoldersDrawer
 
     public void show()
     {
+	((TextView) m_view.findViewById(R.id.folders_textview)).setTextColor
+	    (Lettera.text_color());
+	m_email_address.setTextColor(Lettera.text_color());
 	m_popup_window.showAsDropDown
 	    (m_parent, 0, 0, Gravity.LEFT | Gravity.TOP);
+	m_view.findViewById(R.id.top_divider).setBackgroundColor
+	    (Lettera.divider_color());
 
 	try
 	{
-	    View view;
+	    View view = null;
 
 	    if(m_popup_window.getBackground() == null)
 	    {
@@ -217,6 +222,8 @@ public class FoldersDrawer
 	catch(Exception exception)
 	{
 	}
+
+	m_view.setBackgroundColor(Lettera.background_color());
     }
 
     public void update()

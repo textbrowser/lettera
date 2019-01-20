@@ -6,9 +6,9 @@
     android:layout_marginBottom="5dp">
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -555,6 +555,7 @@
         </ScrollView>
 
         <View
+            android:id="@+id/bottom_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
@@ -562,7 +563,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
             android:orientation="horizontal"
             android:paddingStart="15dp"
             android:paddingEnd="15dp">

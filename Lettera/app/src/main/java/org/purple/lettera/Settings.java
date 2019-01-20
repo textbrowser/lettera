@@ -31,6 +31,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -474,6 +475,7 @@ public class Settings
     private Dialog m_dialog = null;
     private Lettera m_lettera = null;
     private Spinner m_accounts_spinner = null;
+    private Spinner m_color_theme_spinner = null;
     private Spinner m_email_folders_spinner = null;
     private Spinner m_encryption_key_spinner = null;
     private Spinner m_icon_theme_spinner = null;
@@ -526,6 +528,8 @@ public class Settings
 	    return "";
 	}
     };
+    private final static String s_color_themes[] = new String[]
+	{"Black & Green", "Default"};
     private final static String s_email_folders[] = new String[] {"Drawer"};
     private final static String s_icon_themes[] = new String[]
 	{"Default", "Funky", "Hand Drawn", "Material", "Nuvola", "SailFish"};
@@ -557,6 +561,20 @@ public class Settings
 	    ** Display
 	    */
 
+	    content_values.put("key", "color_theme");
+	    content_values.put
+		("value", m_color_theme_spinner.getSelectedItem().toString());
+	    error = m_database.save_setting(content_values, false);
+
+	    if(!error.isEmpty())
+	    {
+		show_display_page();
+		Windows.show_dialog
+		    (m_lettera, "Failure (" + error + ")!", "Error");
+		return;
+	    }
+
+	    content_values.clear();
 	    content_values.put("key", "email_folders");
 	    content_values.put
 		("value", m_email_folders_spinner.getSelectedItem().toString());
@@ -772,12 +790,14 @@ public class Settings
 		else
 		    populate_network();
 
+		m_lettera.prepare_colors();
 		m_lettera.prepare_folders_and_messages_widgets
 		    (m_database.
 		     setting("selected_folder_name_" +
 			     m_database.setting("primary_email_account")));
 		m_lettera.prepare_generic_widgets();
 		m_lettera.prepare_icons();
+		prepare_colors();
 	    }
 	}
 	catch(Exception exception)
@@ -831,6 +851,8 @@ public class Settings
 	    (R.id.accounts_spinner);
 	m_apply_button = (Button) m_view.findViewById(R.id.apply_button);
 	m_close_button = (Button) m_view.findViewById(R.id.close_button);
+	m_color_theme_spinner = (Spinner) m_view.findViewById
+	    (R.id.color_theme_spinner);
 	m_delete_account_button = (Button) m_view.findViewById
 	    (R.id.delete_account_button);
 	m_delete_account_verify_checkbox = (CheckBox)
@@ -937,6 +959,21 @@ public class Settings
 
     private void populate_display()
     {
+	ArrayAdapter array_adapter = new ArrayAdapter<>
+	    (m_lettera, android.R.layout.simple_spinner_item, s_color_themes);
+
+	m_color_theme_spinner.setAdapter(array_adapter);
+
+	switch(m_database.setting("color_theme").toLowerCase())
+	{
+	case "black & green":
+	    m_color_theme_spinner.setSelection(0);
+	    break;
+	default:
+	    m_color_theme_spinner.setSelection(1);
+	    break;
+	}
+
 	SettingsElement settings_element = m_database.settings_element
 	    ("email_folders");
 
@@ -955,12 +992,8 @@ public class Settings
 	m_show_vertical_separator_before_settings_checkbox.setChecked
 	    (m_database.setting("show_vertical_separator_before_settings").
 	     equals("true"));
-
-	ArrayAdapter array_adapter = new ArrayAdapter<>
-	    (m_lettera,
-	     android.R.layout.simple_spinner_item,
-	     s_icon_themes);
-
+	array_adapter = new ArrayAdapter<>
+	    (m_lettera, android.R.layout.simple_spinner_item, s_icon_themes);
 	m_icon_theme_spinner.setAdapter(array_adapter);
 	settings_element = m_database.settings_element("icon_theme");
 
@@ -1100,6 +1133,36 @@ public class Settings
 	    m_signature_key_data.setText
 		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
 	}
+    }
+
+    private void prepare_colors()
+    {
+	int background_color = 0;
+	int divider_color = 0;
+	int text_color = 0;
+
+	switch(m_database.setting("color_theme").toLowerCase())
+	{
+	case "black & green":
+	    background_color = Color.BLACK;
+	    divider_color = Color.parseColor("#66bb6a");
+	    text_color = Color.parseColor("#66bb6a");
+	    break;
+	default:
+	    background_color = Lettera.background_color();
+	    divider_color = Lettera.divider_color();
+	    text_color = Lettera.text_color();
+	    break;
+	}
+
+	Windows.color_children
+	    (m_view.findViewById(R.id.main_layout),
+	     background_color,
+	     text_color);
+	m_view.findViewById(R.id.bottom_divider).setBackgroundColor
+	    (divider_color);
+	m_view.findViewById(R.id.main_layout).setBackgroundColor
+	    (background_color);
     }
 
     private void prepare_icons()
@@ -1496,18 +1559,15 @@ public class Settings
 	m_privacy_layout.setVisibility(View.GONE);
 
 	ArrayAdapter<String> array_adapter;
-	Spinner spinner = null;
 	String array[] = null;
 
 	/*
 	** Display
 	*/
 
-	array = new String[] {"Default"};
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, array);
-	spinner = (Spinner) m_view.findViewById(R.id.color_theme_spinner);
-	spinner.setAdapter(array_adapter);
+	    (m_lettera, android.R.layout.simple_spinner_item, s_color_themes);
+	m_color_theme_spinner.setAdapter(array_adapter);
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera,
 	     android.R.layout.simple_spinner_item,
@@ -1850,6 +1910,7 @@ public class Settings
 	m_inbound_address.requestFocus();
 	m_outbound_as_inbound.setChecked(false);
 	populate();
+	prepare_colors();
 	prepare_icons();
     }
 }

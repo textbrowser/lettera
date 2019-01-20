@@ -157,7 +157,7 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/view"
+            android:id="@+id/top_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="0"
@@ -172,7 +172,6 @@
                 android:id="@+id/messages"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
                 android:scrollbars="vertical">
 
             </android.support.v7.widget.RecyclerView>
@@ -200,6 +199,7 @@
         </RelativeLayout>
 
         <View
+            android:id="@+id/bottom_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />

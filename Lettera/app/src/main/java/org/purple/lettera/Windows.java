@@ -34,12 +34,49 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class Windows
 {
+    public static void color_children(View view,
+				      int background_color,
+				      int text_color)
+    {
+	if(view == null)
+	    return;
+	else if(!(view instanceof ViewGroup))
+	{
+	    if(view instanceof Button)
+		((Button) view).setTextColor(text_color);
+	    else if(view instanceof CheckBox)
+	    {
+		((CheckBox) view).setTextColor(text_color);
+	    }
+	    else if(view instanceof Spinner)
+	    {
+	    }
+	    else if(view instanceof TextView)
+	    {
+		((TextView) view).setHintTextColor(text_color);
+		((TextView) view).setTextColor(text_color);
+	    }
+
+	    return;
+	}
+
+	for(int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
+	{
+	    View child = ((ViewGroup) view).getChildAt(i);
+
+	    color_children(child, background_color, text_color);
+	}
+    }
+
     public static void show_dialog(Context context, String text, String title)
     {
 	if(context == null ||
@@ -117,12 +154,17 @@ public abstract class Windows
 		});
 
 	    ((Button) view.findViewById(R.id.interrupt)).setAllCaps(false);
+	    ((Button) view.findViewById(R.id.interrupt)).setTextColor
+		(Lettera.text_color());
 	    ((Button) view.findViewById(R.id.interrupt)).setVisibility
 		(interrupt == null ? View.GONE : View.VISIBLE);
 	    ((TextView) view.findViewById(R.id.text)).setText(text);
+	    ((TextView) view.findViewById(R.id.text)).setTextColor
+		(Lettera.text_color());
 	    dialog.setCancelable(false);
 	    dialog.setContentView(view);
 	    dialog.show();
+	    view.setBackgroundColor(Lettera.background_color());
 	}
 	catch(Exception exception_1)
 	{

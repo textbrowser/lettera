@@ -139,13 +139,16 @@ public class MessageItem extends View
 	else
 	    m_date.setText(string);
 
+	m_date.setTextColor(Lettera.text_color());
 	m_date.setTypeface
 	    (null,
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
+	m_divider.setBackgroundColor(Lettera.divider_color());
 	m_divider.setVisibility(last_position ? View.GONE : View.VISIBLE);
 	m_email_account = message_element.m_email_account;
 	m_folder_name = folder_name;
 	m_from.setText(message_element.m_from_name);
+	m_from.setTextColor(Lettera.text_color());
 	m_from.setTypeface
 	    (null,
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
@@ -156,12 +159,14 @@ public class MessageItem extends View
 					 message_element.m_uid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
 	m_subject.setText(message_element.m_subject);
+	m_subject.setTextColor(Lettera.text_color());
 	m_subject.setTypeface
 	    (null,
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
 	m_summary.setText
 	    (message_element.m_content_downloaded ?
 	     message_element.m_message.trim().substring(0, length) : "");
+	m_summary.setTextColor(Lettera.text_color());
 	m_summary.setVisibility(length == 0 ? View.GONE : View.VISIBLE);
 	m_uid = message_element.m_uid;
 	m_view.setVisibility(View.VISIBLE);

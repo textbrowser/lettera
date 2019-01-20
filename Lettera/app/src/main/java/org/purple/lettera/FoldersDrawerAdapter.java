@@ -208,7 +208,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
                  (int) (10 * density), // End
                  (int) (5 * density)); // Bottom
 	    m_button.setText(string_buffer.toString());
-	    m_button.setTextColor(Color.BLACK);
+	    m_button.setTextColor(Lettera.text_color());
 
 	    if(folder_element.m_name.equals(m_selected_folder_name))
 		perform_click(folder_name, m_button, density);
@@ -248,7 +248,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (s_icons[button.getId()], 0, 0, 0);
 		button.setBackgroundColor(Color.TRANSPARENT);
-		button.setTextColor(Color.BLACK);
+		button.setTextColor(Lettera.text_color());
 	    }
 	}
 	catch(Exception exception)
@@ -327,7 +327,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		(new LinearLayout.
 		 LayoutParams(LinearLayout.
 			      LayoutParams.MATCH_PARENT, (int) (1 * density)));
-	    line.setBackgroundColor(Color.parseColor("#1f000000"));
+	    line.setBackgroundColor(Lettera.divider_color());
 	    return new ViewHolderSeparator(line, parent);
 	default:
 	    break;
