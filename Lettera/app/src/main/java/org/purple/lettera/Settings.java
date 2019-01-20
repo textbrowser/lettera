@@ -52,6 +52,7 @@ import com.sun.mail.smtp.SMTPTransport;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.mail.Session;
 import javax.mail.Store;
 
@@ -62,6 +63,61 @@ public class Settings
 	private final static int DISPLAY_PAGE = 0;
 	private final static int NETWORK_PAGE = 1;
 	private final static int PRIVACY_PAGE = 2;
+    }
+
+    private class DeleteMessages implements Runnable
+    {
+	private Dialog m_dialog = null;
+	private String m_email_account = "";
+
+	private DeleteMessages(Dialog dialog, String email_account)
+	{
+	    m_dialog = dialog;
+	    m_email_account = email_account;
+	}
+
+	@Override
+	public void run()
+	{
+	    final AtomicBoolean ok = new AtomicBoolean(false);
+
+	    try
+	    {
+		ok.set(m_database.delete_messages(m_email_account));
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    m_lettera.runOnUiThread(new Runnable()
+	    {
+		@Override
+		public void run()
+		{
+		    try
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+
+		    try
+		    {
+			if(ok.get())
+			{
+			    m_lettera.messages_deleted();
+			    m_remove_local_messages_verify_checkbox.
+				setChecked(false);
+			}
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    });
+	}
     }
 
     private class EmailTest implements Runnable
@@ -1262,14 +1318,37 @@ public class Settings
 			if(m_lettera.isFinishing())
 			    return;
 
-			if(m_accounts_spinner.getSelectedItem() != null &&
-			   m_database.
-			   delete_messages(m_accounts_spinner.
-					   getSelectedItem().toString()))
+			if(m_accounts_spinner.getSelectedItem() != null)
 			{
-			    m_lettera.messages_deleted();
-			    m_remove_local_messages_verify_checkbox.
-				setChecked(false);
+			    Dialog dialog = null;
+
+			    try
+			    {
+				dialog = new Dialog(m_lettera);
+				Windows.show_progress_dialog
+				    (m_lettera,
+				     dialog,
+				     "Deleting messages. Please be patient.",
+				     null);
+
+				String email_account = m_accounts_spinner.
+				    getSelectedItem().toString();
+				Thread thread = new Thread
+				    (new DeleteMessages(dialog, email_account));
+
+				thread.start();
+			    }
+			    catch(Exception exception_1)
+			    {
+				try
+				{
+				    if(dialog != null)
+					dialog.dismiss();
+				}
+				catch(Exception exception_2)
+				{
+				}
+			    }
 			}
 		    }
 		});

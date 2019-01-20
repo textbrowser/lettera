@@ -26,6 +26,7 @@ Completed Items
 - Prepare e-mail folders on account change.
 - Proxies for e-mail.
 - Real-time changes of Outbound text if Like Inbound is enabled.
+- Removal of local messages should be enveloped within a progress dialog.
 - Remove folder spinner.
 - Restore personal key pairs.
 - Retain selected folder in Folders drawer.
@@ -52,7 +53,6 @@ Remaining Items
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
-- Removal of local messages should be enveloped within a progress dialog.
 - Reset of Network widgets in Settings.
 - Simple version of folders drawer for moving messages. Ignore current folder.
 - What's a deleted message?
