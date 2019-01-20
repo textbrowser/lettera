@@ -128,6 +128,7 @@ public class MessageItem extends View
 	    return;
 	}
 
+	Utilities.color_checkbox(m_selected);
 	m_attachment.setVisibility(View.GONE);
 
 	String string = Utilities.formatted_email_date

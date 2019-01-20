@@ -27,6 +27,13 @@
 
 package org.purple.lettera;
 
+import android.content.res.ColorStateList;
+import android.view.ViewGroup;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Spinner;
+import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -144,5 +151,65 @@ public abstract class Utilities
 	}
 
 	return string_buffer.toString();
+    }
+
+    public static void color_checkbox(CheckBox checkbox)
+    {
+	if(checkbox == null)
+	    return;
+
+	int colors[] = new int[]
+	{
+	    Lettera.text_color(),
+	    Lettera.divider_color(),
+	    Lettera.text_color(),
+	    Lettera.text_color()
+	};
+	int states[][] = new int[][]
+	{
+	    new int[] { android.R.attr.state_enabled},
+	    new int[] {-android.R.attr.state_enabled},
+	    new int[] {-android.R.attr.state_checked},
+	    new int[] { android.R.attr.state_pressed}
+	};
+
+	ColorStateList color_state_list = new ColorStateList(states, colors);
+
+	checkbox.setButtonTintList(color_state_list);
+    }
+
+    public static void color_children(View view,
+				      int background_color,
+				      int text_color)
+    {
+	if(view == null)
+	    return;
+	else if(!(view instanceof ViewGroup))
+	{
+	    if(view instanceof Button)
+	    {
+		((Button) view).setTextColor(text_color);
+
+		if(view instanceof CheckBox)
+		    color_checkbox((CheckBox) view);
+	    }
+	    else if(view instanceof Spinner)
+	    {
+	    }
+	    else if(view instanceof TextView)
+	    {
+		((TextView) view).setHintTextColor(text_color);
+		((TextView) view).setTextColor(text_color);
+	    }
+
+	    return;
+	}
+
+	for(int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
+	{
+	    View child = ((ViewGroup) view).getChildAt(i);
+
+	    color_children(child, background_color, text_color);
+	}
     }
 }

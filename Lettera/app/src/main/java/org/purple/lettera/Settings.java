@@ -1155,7 +1155,7 @@ public class Settings
 	    break;
 	}
 
-	Windows.color_children
+	Utilities.color_children
 	    (m_view.findViewById(R.id.main_layout),
 	     background_color,
 	     text_color);

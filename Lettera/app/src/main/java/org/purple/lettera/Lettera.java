@@ -989,6 +989,7 @@ public class Lettera extends AppCompatActivity
 	** Order!
 	*/
 
+	Utilities.color_checkbox(m_all_checkbox);
 	m_messages_adapter.notifyDataSetChanged();
     }
 
