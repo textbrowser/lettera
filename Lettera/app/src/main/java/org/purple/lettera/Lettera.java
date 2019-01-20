@@ -984,6 +984,12 @@ public class Lettera extends AppCompatActivity
 	s_background_color.set(background_color);
 	s_divider_color.set(divider_color);
 	s_text_color.set(text_color);
+
+	/*
+	** Order!
+	*/
+
+	m_messages_adapter.notifyDataSetChanged();
     }
 
     public void prepare_current_folder_text(String folder_name)

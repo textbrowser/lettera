@@ -169,6 +169,7 @@ public class MessageItem extends View
 	m_summary.setTextColor(Lettera.text_color());
 	m_summary.setVisibility(length == 0 ? View.GONE : View.VISIBLE);
 	m_uid = message_element.m_uid;
+	m_view.setBackgroundColor(Lettera.background_color());
 	m_view.setVisibility(View.VISIBLE);
     }
 }
