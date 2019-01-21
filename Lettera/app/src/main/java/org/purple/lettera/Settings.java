@@ -530,7 +530,7 @@ public class Settings
 	}
     };
     private final static String s_color_themes[] = new String[]
-	{"Black & Green", "Default"};
+	{"Black & Blue", "Black & Green", "Default"};
     private final static String s_email_folders[] = new String[] {"Drawer"};
     private final static String s_icon_themes[] = new String[]
 	{"Default", "Funky", "Hand Drawn", "Material", "Nuvola", "SailFish"};
@@ -969,11 +969,14 @@ public class Settings
 
 	switch(m_database.setting("color_theme").toLowerCase())
 	{
-	case "black & green":
+	case "black & blue":
 	    m_color_theme_spinner.setSelection(0);
 	    break;
-	default:
+	case "black & green":
 	    m_color_theme_spinner.setSelection(1);
+	    break;
+	default:
+	    m_color_theme_spinner.setSelection(2);
 	    break;
 	}
 
@@ -1147,6 +1150,11 @@ public class Settings
 	if(color_theme != null)
 	    switch(color_theme.toLowerCase())
 	    {
+	    case "black & blue":
+		background_color = Color.BLACK;
+		divider_color = Color.parseColor("#2196f3");
+		text_color = Color.parseColor("#2196f3");
+		break;
 	    case "black & green":
 		background_color = Color.BLACK;
 		divider_color = Color.parseColor("#66bb6a");
