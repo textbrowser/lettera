@@ -88,6 +88,7 @@ public class MoveMessages
 
 	m_popup_window = new PopupWindow(m_context);
 	m_popup_window.setAttachedInDecor(true);
+	m_popup_window.setBackgroundDrawable(null);
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setOutsideTouchable(true);

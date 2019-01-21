@@ -261,8 +261,9 @@ public class Lettera extends AppCompatActivity
 	(Color.GRAY);
     private final static AtomicInteger s_text_color = new AtomicInteger
 	(Color.BLACK);
-    private int m_default_divider_color = 0;
-    private int m_default_text_color = 0;
+    private static int s_default_background_color = 0;
+    private static int s_default_divider_color = 0;
+    private static int s_default_text_color = 0;
     public final static String NONE_FOLDER = "(None)";
 
     private String email_account()
@@ -733,8 +734,9 @@ public class Lettera extends AppCompatActivity
 	*/
 
 	initialize_widget_members();
-	m_default_divider_color = Color.parseColor("#e0e0e0");
-	m_default_text_color = m_current_folder.getCurrentTextColor();
+	s_default_background_color = Color.WHITE;
+	s_default_divider_color = Color.parseColor("#e0e0e0");
+	s_default_text_color = m_current_folder.getCurrentTextColor();
 	m_messages_adapter = new MessagesAdapter(getApplicationContext());
 	m_folders_drawer = new FoldersDrawer
 	    (Lettera.this, findViewById(R.id.main_layout));
@@ -858,10 +860,10 @@ public class Lettera extends AppCompatActivity
 		}
 	    }
 	}, 750);
-	prepare_colors();
+	prepare_colors(m_database.setting("color_theme"));
 	prepare_folders_and_messages_widgets(selected_folder_name());
 	prepare_generic_widgets();
-	prepare_icons();
+	prepare_icons(m_database.settings_element("icon_theme"));
 	prepare_listeners();
 	prepare_schedulers();
     }
@@ -897,6 +899,21 @@ public class Lettera extends AppCompatActivity
     public static int background_color()
     {
 	return s_background_color.get();
+    }
+
+    public static int default_background_color()
+    {
+	return s_default_background_color;
+    }
+
+    public static int default_divider_color()
+    {
+	return s_default_divider_color;
+    }
+
+    public static int default_text_color()
+    {
+	return s_default_text_color;
     }
 
     public static int divider_color()
@@ -956,25 +973,23 @@ public class Lettera extends AppCompatActivity
 	}
     }
 
-    public void prepare_colors()
+    public void prepare_colors(String color_theme)
     {
-	int background_color = 0;
-	int divider_color = 0;
-	int text_color = 0;
+	int background_color = s_default_background_color;
+	int divider_color = s_default_divider_color;
+	int text_color = s_default_text_color;
 
-	switch(m_database.setting("color_theme").toLowerCase())
-	{
-	case "black & green":
-	    background_color = Color.BLACK;
-	    divider_color = Color.parseColor("#66bb6a");
-	    text_color = Color.parseColor("#66bb6a");
-	    break;
-	default:
-	    background_color = Color.WHITE;
-	    divider_color = m_default_divider_color;
-	    text_color = m_default_text_color;
-	    break;
-	}
+	if(color_theme != null)
+	    switch(color_theme.toLowerCase())
+	    {
+	    case "black & green":
+		background_color = Color.BLACK;
+		divider_color = Color.parseColor("#66bb6a");
+		text_color = Color.parseColor("#66bb6a");
+		break;
+	    default:
+		break;
+	    }
 
 	findViewById(R.id.bottom_divider).setBackgroundColor(divider_color);
 	findViewById(R.id.main_layout).setBackgroundColor(background_color);
@@ -989,7 +1004,8 @@ public class Lettera extends AppCompatActivity
 	** Order!
 	*/
 
-	Utilities.color_checkbox(m_all_checkbox);
+	Utilities.color_checkbox
+	    (m_all_checkbox, background_color(), divider_color(), text_color());
 	m_messages_adapter.notifyDataSetChanged();
     }
 
@@ -1069,11 +1085,8 @@ public class Lettera extends AppCompatActivity
 	     equals("true") ? View.VISIBLE : View.GONE);
     }
 
-    public void prepare_icons()
+    public void prepare_icons(SettingsElement settings_element)
     {
-	SettingsElement settings_element = m_database.settings_element
-	    ("icon_theme");
-
 	if(settings_element == null)
 	{
 	    m_compose_button.setBackgroundResource

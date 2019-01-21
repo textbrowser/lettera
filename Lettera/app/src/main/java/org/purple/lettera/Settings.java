@@ -32,6 +32,7 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -635,7 +636,7 @@ public class Settings
 
 	    m_lettera.prepare_folders_and_messages_widgets("");
 	    m_lettera.prepare_generic_widgets();
-	    m_lettera.prepare_icons();
+	    m_lettera.prepare_icons(m_database.settings_element("icon_theme"));
 
 	    /*
 	    ** Network
@@ -790,14 +791,16 @@ public class Settings
 		else
 		    populate_network();
 
-		m_lettera.prepare_colors();
+		m_lettera.prepare_colors(m_database.setting("color_theme"));
 		m_lettera.prepare_folders_and_messages_widgets
 		    (m_database.
 		     setting("selected_folder_name_" +
 			     m_database.setting("primary_email_account")));
 		m_lettera.prepare_generic_widgets();
-		m_lettera.prepare_icons();
-		prepare_colors();
+		m_lettera.prepare_icons
+		    (m_database.settings_element("icon_theme"));
+		prepare_colors
+		    (m_color_theme_spinner.getSelectedItem().toString());
 	    }
 	}
 	catch(Exception exception)
@@ -1135,30 +1138,57 @@ public class Settings
 	}
     }
 
-    private void prepare_colors()
+    private void prepare_colors(String color_theme)
     {
-	int background_color = 0;
-	int divider_color = 0;
-	int text_color = 0;
+	int background_color = Lettera.default_background_color();
+	int divider_color = Lettera.default_divider_color();
+	int text_color = Lettera.default_text_color();
 
-	switch(m_database.setting("color_theme").toLowerCase())
-	{
-	case "black & green":
-	    background_color = Color.BLACK;
-	    divider_color = Color.parseColor("#66bb6a");
-	    text_color = Color.parseColor("#66bb6a");
-	    break;
-	default:
-	    background_color = Lettera.background_color();
-	    divider_color = Lettera.divider_color();
-	    text_color = Lettera.text_color();
-	    break;
-	}
+	if(color_theme != null)
+	    switch(color_theme.toLowerCase())
+	    {
+	    case "black & green":
+		background_color = Color.BLACK;
+		divider_color = Color.parseColor("#66bb6a");
+		text_color = Color.parseColor("#66bb6a");
+		break;
+	    default:
+		break;
+	    }
 
 	Utilities.color_children
 	    (m_view.findViewById(R.id.main_layout),
 	     background_color,
+	     divider_color,
 	     text_color);
+	m_accounts_spinner.getBackground().setColorFilter
+	    (text_color, PorterDuff.Mode.SRC_ATOP);
+	m_accounts_spinner.setSelection
+	    (m_accounts_spinner.getSelectedItemPosition());
+	m_color_theme_spinner.getBackground().setColorFilter
+	    (text_color, PorterDuff.Mode.SRC_ATOP);
+	m_color_theme_spinner.setSelection
+	    (m_color_theme_spinner.getSelectedItemPosition());
+	m_email_folders_spinner.getBackground().setColorFilter
+	    (text_color, PorterDuff.Mode.SRC_ATOP);
+	m_email_folders_spinner.setSelection
+	    (m_email_folders_spinner.getSelectedItemPosition());
+	m_encryption_key_spinner.getBackground().setColorFilter
+	    (text_color, PorterDuff.Mode.SRC_ATOP);
+	m_encryption_key_spinner.setSelection
+	    (m_encryption_key_spinner.getSelectedItemPosition());
+	m_icon_theme_spinner.getBackground().setColorFilter
+	    (text_color, PorterDuff.Mode.SRC_ATOP);
+	m_icon_theme_spinner.setSelection
+	    (m_icon_theme_spinner.getSelectedItemPosition());
+	m_proxy_type_spinner.getBackground().setColorFilter
+	    (text_color, PorterDuff.Mode.SRC_ATOP);
+	m_proxy_type_spinner.setSelection
+	    (m_proxy_type_spinner.getSelectedItemPosition());
+	m_signature_key_spinner.getBackground().setColorFilter
+	    (text_color, PorterDuff.Mode.SRC_ATOP);
+	m_signature_key_spinner.setSelection
+	    (m_signature_key_spinner.getSelectedItemPosition());
 	m_view.findViewById(R.id.bottom_divider).setBackgroundColor
 	    (divider_color);
 	m_view.findViewById(R.id.main_layout).setBackgroundColor
@@ -1206,12 +1236,29 @@ public class Settings
 		    if(m_lettera.isFinishing())
 			return;
 
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+
 		    populate_network();
 		}
 
 		@Override
 		public void onNothingSelected(AdapterView<?> parent)
 		{
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 		}
 	    });
 
@@ -1237,10 +1284,55 @@ public class Settings
 		    if(m_lettera.isFinishing())
 			return;
 
+		    m_lettera.prepare_colors(m_database.setting("color_theme"));
+		    m_lettera.prepare_icons
+			(m_database.settings_element("icon_theme"));
+
 		    try
 		    {
 			if(m_dialog != null)
 			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    });
+
+	m_color_theme_spinner.setOnItemSelectedListener
+	    (new OnItemSelectedListener()
+	    {
+		@Override
+		public void onItemSelected(AdapterView<?> parent,
+					   View view,
+					   int position,
+					   long id)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+
+		    m_lettera.prepare_colors
+			(m_color_theme_spinner.getSelectedItem().toString());
+		    prepare_colors
+			(m_color_theme_spinner.getSelectedItem().toString());
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent)
+		{
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
 		    }
 		    catch(Exception exception)
 		    {
@@ -1322,6 +1414,78 @@ public class Settings
 		}
 	    });
 
+	m_email_folders_spinner.setOnItemSelectedListener
+	    (new OnItemSelectedListener()
+	    {
+		@Override
+		public void onItemSelected(AdapterView<?> parent,
+					   View view,
+					   int position,
+					   long id)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent)
+		{
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    });
+
+	m_encryption_key_spinner.setOnItemSelectedListener
+	    (new OnItemSelectedListener()
+	    {
+		@Override
+		public void onItemSelected(AdapterView<?> parent,
+					   View view,
+					   int position,
+					   long id)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent)
+		{
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    });
+
 	if(!m_generate_keys_button.hasOnClickListeners())
 	    m_generate_keys_button.setOnClickListener(new View.OnClickListener()
 	    {
@@ -1358,12 +1522,34 @@ public class Settings
 		    if(m_lettera.isFinishing())
 			return;
 
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+
+		    SettingsElement settings_element = new SettingsElement();
+
+		    settings_element.m_value = m_icon_theme_spinner.
+			getSelectedItem().toString();
+		    m_lettera.prepare_icons(settings_element);
 		    prepare_icons();
 		}
 
 		@Override
 		public void onNothingSelected(AdapterView<?> parent)
 		{
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 		}
 	    });
 
@@ -1460,6 +1646,42 @@ public class Settings
 		}
 	     });
 
+	m_proxy_type_spinner.setOnItemSelectedListener
+	    (new OnItemSelectedListener()
+	    {
+		@Override
+		public void onItemSelected(AdapterView<?> parent,
+					   View view,
+					   int position,
+					   long id)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent)
+		{
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    });
+
 	if(!m_remove_local_messages_button.hasOnClickListeners())
 	    m_remove_local_messages_button.setOnClickListener
 		(new View.OnClickListener()
@@ -1517,6 +1739,42 @@ public class Settings
 			    (is_checked &&
 			     !m_accounts_spinner.
 			     getSelectedItem().equals("(Empty)"));
+		}
+	    });
+
+	m_signature_key_spinner.setOnItemSelectedListener
+	    (new OnItemSelectedListener()
+	    {
+		@Override
+		public void onItemSelected(AdapterView<?> parent,
+					   View view,
+					   int position,
+					   long id)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent)
+		{
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 		}
 	    });
 
@@ -1910,7 +2168,7 @@ public class Settings
 	m_inbound_address.requestFocus();
 	m_outbound_as_inbound.setChecked(false);
 	populate();
-	prepare_colors();
+	prepare_colors(m_database.setting("color_theme"));
 	prepare_icons();
     }
 }

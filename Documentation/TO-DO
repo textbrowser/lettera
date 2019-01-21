@@ -37,6 +37,7 @@ Completed Items
 - Scroll-to-bottom, scroll-to-top message icons.
 - Select-all action.
 - Separate standard folders from other folders.
+- Spinners and color themes.
 
 Future Items
 
@@ -55,7 +56,6 @@ Remaining Items
 - Offline and online design.
 - Reset of Network widgets in Settings.
 - Simple version of folders drawer for moving messages. Ignore current folder.
-- Spinners and color themes.
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
   Expunge locally-deleted messages from the server if configured to do so.

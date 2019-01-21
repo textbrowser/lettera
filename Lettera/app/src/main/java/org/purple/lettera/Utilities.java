@@ -153,17 +153,17 @@ public abstract class Utilities
 	return string_buffer.toString();
     }
 
-    public static void color_checkbox(CheckBox checkbox)
+    public static void color_checkbox(CheckBox checkbox,
+				      int background_color,
+				      int divider_color,
+				      int text_color)
     {
 	if(checkbox == null)
 	    return;
 
 	int colors[] = new int[]
 	{
-	    Lettera.text_color(),
-	    Lettera.divider_color(),
-	    Lettera.text_color(),
-	    Lettera.text_color()
+	    text_color, divider_color, text_color, text_color
 	};
 	int states[][] = new int[][]
 	{
@@ -180,6 +180,7 @@ public abstract class Utilities
 
     public static void color_children(View view,
 				      int background_color,
+				      int divider_color,
 				      int text_color)
     {
 	if(view == null)
@@ -191,7 +192,10 @@ public abstract class Utilities
 		((Button) view).setTextColor(text_color);
 
 		if(view instanceof CheckBox)
-		    color_checkbox((CheckBox) view);
+		    color_checkbox((CheckBox) view,
+				   background_color,
+				   divider_color,
+				   text_color);
 	    }
 	    else if(view instanceof TextView)
 	    {
@@ -206,7 +210,7 @@ public abstract class Utilities
 	{
 	    View child = ((ViewGroup) view).getChildAt(i);
 
-	    color_children(child, background_color, text_color);
+	    color_children(child, background_color, divider_color, text_color);
 	}
     }
 }
