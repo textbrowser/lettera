@@ -73,7 +73,9 @@ public class Mail
 	    if(multipart == null)
 		return;
 
-	    for(int i = 0; i < multipart.getCount(); i++)
+	    int count = multipart.getCount();
+
+	    for(int i = 0; i < count; i++)
 		multipart_recursive(multipart.getBodyPart(i), string_buffer);
 	}
 	else if(part.isMimeType("text/plain"))

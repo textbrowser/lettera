@@ -206,9 +206,12 @@ public abstract class Utilities
 	    return;
 	}
 
-	for(int i = 0; i < ((ViewGroup) view).getChildCount(); i++)
+	ViewGroup view_group = (ViewGroup) view;
+	int count = view_group.getChildCount();
+
+	for(int i = 0; i < count; i++)
 	{
-	    View child = ((ViewGroup) view).getChildAt(i);
+	    View child = view_group.getChildAt(i);
 
 	    color_children(child, background_color, divider_color, text_color);
 	}

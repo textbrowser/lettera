@@ -194,8 +194,9 @@ public class Database extends SQLiteOpenHelper
 	    if(cursor != null && cursor.moveToFirst())
 	    {
 		EmailElement email_element = new EmailElement();
+		int count = cursor.getColumnCount();
 
-		for(int i = 0; i < cursor.getColumnCount(); i++)
+		for(int i = 0; i < count; i++)
 		    switch(i)
 		    {
 		    case 0:
@@ -437,8 +438,9 @@ public class Database extends SQLiteOpenHelper
 	    if(cursor != null && cursor.moveToFirst())
 	    {
 		SettingsElement settings_element = new SettingsElement();
+		int count = cursor.getColumnCount();
 
-		for(int i = 0; i < cursor.getColumnCount(); i++)
+		for(int i = 0; i < count; i++)
 		    switch(i)
 		    {
 		    case 0:
