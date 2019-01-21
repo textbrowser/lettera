@@ -35,6 +35,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 public class MoveMessages
 {
@@ -151,5 +152,11 @@ public class MoveMessages
 	    m_popup_window.showAtLocation
 		(view, Gravity.LEFT | Gravity.TOP, rect.left, rect.bottom);
 	}
+
+	((TextView) m_view.findViewById(R.id.move_to_textview)).setTextColor
+	    (Lettera.text_color());
+	m_view.findViewById(R.id.divider).setBackgroundColor
+	    (Lettera.divider_color());
+	m_view.setBackgroundColor(Lettera.background_color());
     }
 }

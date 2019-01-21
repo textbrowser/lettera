@@ -202,7 +202,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
                  (int) (10 * density), // End
                  (int) (5 * density)); // Bottom
 	    m_button.setText(string_buffer.toString());
-	    m_button.setTextColor(Color.BLACK);
+	    m_button.setTextColor(Lettera.text_color());
 	}
     }
 
@@ -238,7 +238,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 		button.setCompoundDrawablesWithIntrinsicBounds
 		    (s_icons[button.getId()], 0, 0, 0);
 		button.setBackgroundColor(Color.TRANSPARENT);
-		button.setTextColor(Color.BLACK);
+		button.setTextColor(Lettera.text_color());
 	    }
 	}
 	catch(Exception exception)

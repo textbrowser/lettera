@@ -1058,6 +1058,9 @@ public class Lettera extends AppCompatActivity
 
     public void prepare_generic_widgets()
     {
+	findViewById(R.id.bottom_divider).setVisibility
+	    (m_database.setting("show_status_bar").equals("true") ?
+	     View.VISIBLE : View.GONE);
 	m_status_bar.setVisibility
 	    (m_database.setting("show_status_bar").equals("true") ?
 	     View.VISIBLE : View.GONE);
