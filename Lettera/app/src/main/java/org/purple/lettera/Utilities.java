@@ -63,7 +63,7 @@ public abstract class Utilities
 	if(date == null)
 	    return "";
 
-	StringBuffer string_buffer = new StringBuffer();
+	StringBuilder string_builder = new StringBuilder();
 
 	try
 	{
@@ -78,16 +78,16 @@ public abstract class Utilities
 
 	    if(date.after(today.getTime()))
 	    {
-		string_buffer.append
+		string_builder.append
 		    (calendar.get(Calendar.HOUR)  == 0 ?
 		     12 : calendar.get(Calendar.HOUR));
-		string_buffer.append(":");
-		string_buffer.append
+		string_builder.append(":");
+		string_builder.append
 		    (calendar.get(Calendar.MINUTE) < 10 ?
 		     "0" + calendar.get(Calendar.MINUTE) :
 		     calendar.get(Calendar.MINUTE));
-		string_buffer.append(" ");
-		string_buffer.append
+		string_builder.append(" ");
+		string_builder.append
 		    (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM");
 	    }
 	    else if(calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR))
@@ -95,61 +95,61 @@ public abstract class Utilities
 		switch(calendar.get(Calendar.MONTH))
 		{
 		case Calendar.APRIL:
-		    string_buffer.append("Apr ");
+		    string_builder.append("Apr ");
 		    break;
 		case Calendar.AUGUST:
-		    string_buffer.append("Aug ");
+		    string_builder.append("Aug ");
 		    break;
 		case Calendar.DECEMBER:
-		    string_buffer.append("Dec ");
+		    string_builder.append("Dec ");
 		    break;
 		case Calendar.FEBRUARY:
-		    string_buffer.append("Feb ");
+		    string_builder.append("Feb ");
 		    break;
 		case Calendar.JANUARY:
-		    string_buffer.append("Jan ");
+		    string_builder.append("Jan ");
 		    break;
 		case Calendar.JULY:
-		    string_buffer.append("Jul ");
+		    string_builder.append("Jul ");
 		    break;
 		case Calendar.JUNE:
-		    string_buffer.append("Jun ");
+		    string_builder.append("Jun ");
 		    break;
 		case Calendar.MARCH:
-		    string_buffer.append("Mar ");
+		    string_builder.append("Mar ");
 		    break;
 		case Calendar.MAY:
-		    string_buffer.append("May ");
+		    string_builder.append("May ");
 		    break;
 		case Calendar.SEPTEMBER:
-		    string_buffer.append("Sep ");
+		    string_builder.append("Sep ");
 		    break;
 		case Calendar.OCTOBER:
-		    string_buffer.append("Oct ");
+		    string_builder.append("Oct ");
 		    break;
 		case Calendar.NOVEMBER:
-		    string_buffer.append("Nov ");
+		    string_builder.append("Nov ");
 		    break;
 		default:
 		    break;
 		}
 
-		string_buffer.append(calendar.get(Calendar.DAY_OF_MONTH));
+		string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
 	    }
 	    else
 	    {
-		string_buffer.append(calendar.get(Calendar.MONTH) + 1);
-		string_buffer.append("/");
-		string_buffer.append(calendar.get(Calendar.DAY_OF_MONTH));
-		string_buffer.append("/");
-		string_buffer.append(calendar.get(Calendar.YEAR));
+		string_builder.append(calendar.get(Calendar.MONTH) + 1);
+		string_builder.append("/");
+		string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
+		string_builder.append("/");
+		string_builder.append(calendar.get(Calendar.YEAR));
 	    }
 	}
 	catch(Exception exception)
 	{
 	}
 
-	return string_buffer.toString();
+	return string_builder.toString();
     }
 
     public static void color_checkbox(CheckBox checkbox,

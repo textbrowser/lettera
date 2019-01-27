@@ -99,7 +99,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		return;
 
 	    String name = folder_element.m_name.toLowerCase();
-	    StringBuffer string_buffer = new StringBuffer();
+	    StringBuilder string_builder = new StringBuilder();
 
 	    if(name.contains("draft"))
 		name = "Drafts";
@@ -118,12 +118,12 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    else
 		name = folder_element.m_name;
 
-	    string_buffer.append(folder_element.m_name);
-	    string_buffer.append(" (");
-	    string_buffer.append
+	    string_builder.append(folder_element.m_name);
+	    string_builder.append(" (");
+	    string_builder.append
 		(m_database.message_count_cursor(folder_element.m_email_account,
 						 folder_element.m_name));
-	    string_buffer.append(")");
+	    string_builder.append(")");
 	    m_button.setAllCaps(false);
 	    m_button.setBackgroundColor(Color.TRANSPARENT);
 	    m_button.setButtonDrawable(null);
@@ -207,7 +207,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
                  (int) (5 * density),  // Top
                  (int) (10 * density), // End
                  (int) (5 * density)); // Bottom
-	    m_button.setText(string_buffer.toString());
+	    m_button.setText(string_builder.toString());
 	    m_button.setTextColor(Lettera.text_color());
 
 	    if(folder_element.m_name.equals(m_selected_folder_name))

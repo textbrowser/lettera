@@ -98,7 +98,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 		return;
 
 	    String name = folder_element.m_name.toLowerCase();
-	    StringBuffer string_buffer = new StringBuffer();
+	    StringBuilder string_builder = new StringBuilder();
 
 	    if(name.contains("draft"))
 		name = "Drafts";
@@ -117,7 +117,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	    else
 		name = folder_element.m_name;
 
-	    string_buffer.append(folder_element.m_name);
+	    string_builder.append(folder_element.m_name);
 	    m_button.setAllCaps(false);
 	    m_button.setBackgroundColor(Color.TRANSPARENT);
 	    m_button.setButtonDrawable(null);
@@ -201,7 +201,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
                  (int) (5 * density),  // Top
                  (int) (10 * density), // End
                  (int) (5 * density)); // Bottom
-	    m_button.setText(string_buffer.toString());
+	    m_button.setText(string_builder.toString());
 	    m_button.setTextColor(Lettera.text_color());
 	}
     }
