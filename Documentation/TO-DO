@@ -55,6 +55,8 @@ Remaining Items
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - Reset of Network widgets in Settings.
+- Secure the public & private key pair. Activate the private key only
+  when a message is to be decrypted.
 - Simple version of folders drawer for moving messages. Ignore current folder.
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
