@@ -27,7 +27,6 @@
 
 package org.purple.lettera;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;

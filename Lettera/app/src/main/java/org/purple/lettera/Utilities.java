@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
