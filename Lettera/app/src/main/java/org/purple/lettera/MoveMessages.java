@@ -131,7 +131,7 @@ public class MoveMessages
     {
 	if(view == null)
 	    m_popup_window.showAtLocation
-		(m_parent, Gravity.LEFT | Gravity.TOP, 0, 0);
+		(m_parent, Gravity.START | Gravity.TOP, 0, 0);
 	else
 	{
 	    int location[] = new int[2];
@@ -143,7 +143,7 @@ public class MoveMessages
 	    catch(Exception npe)
 	    {
 		m_popup_window.showAtLocation
-		    (m_parent, Gravity.LEFT | Gravity.TOP, 0, 0);
+		    (m_parent, Gravity.START | Gravity.TOP, 0, 0);
 		return;
 	    }
 
@@ -154,7 +154,7 @@ public class MoveMessages
 		view.getWidth();
 	    rect.bottom = location[1] + view.getHeight();
 	    m_popup_window.showAtLocation
-		(view, Gravity.LEFT | Gravity.TOP, rect.left, rect.bottom);
+		(view, Gravity.START | Gravity.TOP, rect.left, rect.bottom);
 	}
 
 	((TextView) m_view.findViewById(R.id.move_to_textview)).setTextColor

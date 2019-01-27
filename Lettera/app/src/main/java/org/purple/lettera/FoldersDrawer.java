@@ -188,7 +188,7 @@ public class FoldersDrawer
 	    (Lettera.text_color());
 	m_email_address.setTextColor(Lettera.text_color());
 	m_popup_window.showAsDropDown
-	    (m_parent, 0, 0, Gravity.LEFT | Gravity.TOP);
+	    (m_parent, 0, 0, Gravity.START | Gravity.TOP);
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());
 

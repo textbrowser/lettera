@@ -178,7 +178,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		getDisplayMetrics().density;
 
 	    m_button.setEllipsize(TextUtils.TruncateAt.MIDDLE);
-	    m_button.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+	    m_button.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
 	    m_button.setOnClickListener(new View.OnClickListener()
 	    {
 		@Override

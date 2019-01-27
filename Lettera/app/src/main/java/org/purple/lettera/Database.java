@@ -1661,7 +1661,7 @@ public class Database extends SQLiteOpenHelper
 	}
 	catch(Exception exception)
 	{
-	    Log.e("Database.write_messages()",
+	    Log.e("write_messages()",
 		  exception.getMessage() + " (" + folder.getName() + ")");
 	    return;
 	}
@@ -1680,7 +1680,7 @@ public class Database extends SQLiteOpenHelper
 	}
 	catch(Exception exception1)
 	{
-	    Log.e("Database.write_messages()",
+	    Log.e("write_messages()",
 		  exception1.getMessage() + " (" + folder.getName() + ")");
 
 	    try
