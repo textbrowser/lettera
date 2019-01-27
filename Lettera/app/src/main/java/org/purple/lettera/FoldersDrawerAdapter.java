@@ -333,7 +333,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    break;
 	}
 
-	return null;
+	return new ViewHolderButton(null, null);
     }
 
     public String selected_folder_name()

@@ -124,7 +124,7 @@ public abstract class Windows
 	    View view = inflater.inflate(R.layout.progress, null);
 
 	    if(interrupt != null)
-		((Button) view.findViewById(R.id.interrupt)).
+		view.findViewById(R.id.interrupt).
 		    setOnClickListener(new View.OnClickListener()
 	        {
 		    @Override
@@ -139,14 +139,14 @@ public abstract class Windows
 	    ((Button) view.findViewById(R.id.interrupt)).setAllCaps(false);
 	    ((Button) view.findViewById(R.id.interrupt)).setTextColor
 		(Lettera.text_color());
-	    ((Button) view.findViewById(R.id.interrupt)).setVisibility
-		(interrupt == null ? View.GONE : View.VISIBLE);
 	    ((TextView) view.findViewById(R.id.text)).setText(text);
 	    ((TextView) view.findViewById(R.id.text)).setTextColor
 		(Lettera.text_color());
 	    dialog.setCancelable(false);
 	    dialog.setContentView(view);
 	    dialog.show();
+	    view.findViewById(R.id.interrupt).setVisibility
+		(interrupt == null ? View.GONE : View.VISIBLE);
 	    view.setBackgroundColor(Lettera.background_color());
 	}
 	catch(Exception exception_1)

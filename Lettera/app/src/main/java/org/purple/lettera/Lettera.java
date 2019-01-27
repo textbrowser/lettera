@@ -32,10 +32,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -334,23 +336,22 @@ public class Lettera extends AppCompatActivity
 
     private void initialize_widget_members()
     {
-	m_all_checkbox = (CheckBox) findViewById(R.id.all_checkbox);
-	m_artificial_button = (Button) findViewById(R.id.artificial_button);
-	m_compose_button = (Button) findViewById(R.id.compose_button);
-	m_contacts_button = (Button) findViewById(R.id.contacts_button);
-	m_current_folder = (TextView) findViewById(R.id.current_folder);
-	m_delete_button = (Button) findViewById(R.id.delete_button);
-	m_download_button = (Button) findViewById(R.id.download_button);
-	m_folders_drawer_button = (ImageButton) findViewById
-	    (R.id.folders_drawer_button);
-	m_items_count = (TextView) findViewById(R.id.message_count);
-	m_messaging_button = (Button) findViewById(R.id.messaging_button);
-	m_move_to_folder_button = (Button) findViewById(R.id.move_to_folder);
-	m_recycler = (RecyclerView) findViewById(R.id.messages);
-	m_scroll_bottom = (ImageButton) findViewById(R.id.scroll_bottom);
-	m_scroll_top = (ImageButton) findViewById(R.id.scroll_top);
-	m_settings_button = (Button) findViewById(R.id.settings_button);
-	m_status_bar = (LinearLayout) findViewById(R.id.status_bar);
+	m_all_checkbox = findViewById(R.id.all_checkbox);
+	m_artificial_button = findViewById(R.id.artificial_button);
+	m_compose_button = findViewById(R.id.compose_button);
+	m_contacts_button = findViewById(R.id.contacts_button);
+	m_current_folder = findViewById(R.id.current_folder);
+	m_delete_button = findViewById(R.id.delete_button);
+	m_download_button = findViewById(R.id.download_button);
+	m_folders_drawer_button = findViewById(R.id.folders_drawer_button);
+	m_items_count = findViewById(R.id.message_count);
+	m_messaging_button = findViewById(R.id.messaging_button);
+	m_move_to_folder_button = findViewById(R.id.move_to_folder);
+	m_recycler = findViewById(R.id.messages);
+	m_scroll_bottom = findViewById(R.id.scroll_bottom);
+	m_scroll_top = findViewById(R.id.scroll_top);
+	m_settings_button = findViewById(R.id.settings_button);
+	m_status_bar = findViewById(R.id.status_bar);
 	m_vertical_separator = findViewById(R.id.vertical_separator);
     }
 
@@ -476,6 +477,7 @@ public class Lettera extends AppCompatActivity
 	    m_move_to_folder_button.setOnClickListener
 		(new View.OnClickListener()
 	    {
+		@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
 		@Override
 		public void onClick(View view)
 		{

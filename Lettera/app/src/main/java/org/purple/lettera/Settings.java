@@ -849,72 +849,72 @@ public class Settings
 
     private void initialize_widget_members()
     {
-	m_accounts_spinner = (Spinner) m_view.findViewById
+	m_accounts_spinner = m_view.findViewById
 	    (R.id.accounts_spinner);
-	m_apply_button = (Button) m_view.findViewById(R.id.apply_button);
-	m_close_button = (Button) m_view.findViewById(R.id.close_button);
-	m_color_theme_spinner = (Spinner) m_view.findViewById
+	m_apply_button = m_view.findViewById(R.id.apply_button);
+	m_close_button = m_view.findViewById(R.id.close_button);
+	m_color_theme_spinner = m_view.findViewById
 	    (R.id.color_theme_spinner);
-	m_delete_account_button = (Button) m_view.findViewById
+	m_delete_account_button = m_view.findViewById
 	    (R.id.delete_account_button);
-	m_delete_account_verify_checkbox = (CheckBox)
-	    m_view.findViewById(R.id.delete_account_verify_checkbox);
-	m_delete_on_server_checkbox = (CheckBox)
-	    m_view.findViewById(R.id.delete_on_server_checkbox);
-	m_display_button = (Button) m_view.findViewById
+	m_delete_account_verify_checkbox = m_view.findViewById
+	    (R.id.delete_account_verify_checkbox);
+	m_delete_on_server_checkbox = m_view.findViewById
+	    (R.id.delete_on_server_checkbox);
+	m_display_button = m_view.findViewById
 	    (R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
-	m_email_folders_spinner = (Spinner) m_view.findViewById
+	m_email_folders_spinner = m_view.findViewById
 	    (R.id.email_folders);
-	m_encryption_key_data = (TextView) m_view.findViewById
+	m_encryption_key_data = m_view.findViewById
 	    (R.id.encryption_key_data);
-	m_encryption_key_spinner = (Spinner) m_view.findViewById
+	m_encryption_key_spinner = m_view.findViewById
 	    (R.id.encryption_key_spinner);
 	m_generate_keys_button = m_view.findViewById(R.id.generate_keys_button);
-	m_generate_keys_checkbox = (CheckBox) m_view.findViewById
+	m_generate_keys_checkbox = m_view.findViewById
 	    (R.id.generate_keys_checkbox);
-	m_icon_theme_spinner = (Spinner) m_view.findViewById
+	m_icon_theme_spinner = m_view.findViewById
 	    (R.id.icon_theme_spinner);
-	m_inbound_address = (TextView) m_view.findViewById
+	m_inbound_address = m_view.findViewById
 	    (R.id.inbound_address);
-	m_inbound_email = (TextView) m_view.findViewById(R.id.inbound_email);
-	m_inbound_password = (TextView) m_view.findViewById
+	m_inbound_email = m_view.findViewById(R.id.inbound_email);
+	m_inbound_password = m_view.findViewById
 	    (R.id.inbound_password);
-	m_inbound_port = (TextView) m_view.findViewById(R.id.inbound_port);
-	m_network_button = (Button) m_view.findViewById(R.id.network_button);
-	m_outbound_address = (TextView) m_view.findViewById
+	m_inbound_port = m_view.findViewById(R.id.inbound_port);
+	m_network_button = m_view.findViewById(R.id.network_button);
+	m_outbound_address = m_view.findViewById
 	    (R.id.outbound_address);
-	m_outbound_as_inbound = (Switch) m_view.findViewById
+	m_outbound_as_inbound = m_view.findViewById
 	    (R.id.outbound_as_inbound);
-	m_outbound_email = (TextView) m_view.findViewById(R.id.outbound_email);
-	m_outbound_password = (TextView) m_view.findViewById
+	m_outbound_email = m_view.findViewById(R.id.outbound_email);
+	m_outbound_password = m_view.findViewById
 	    (R.id.outbound_password);
-	m_outbound_port = (TextView) m_view.findViewById(R.id.outbound_port);
+	m_outbound_port = m_view.findViewById(R.id.outbound_port);
 	m_network_layout = m_view.findViewById(R.id.network_layout);
-	m_primary_account_checkbox = (CheckBox) m_view.findViewById
+	m_primary_account_checkbox = m_view.findViewById
 	    (R.id.primary_account_checkbox);
-	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
+	m_privacy_button = m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
-	m_proxy_address = (TextView) m_view.findViewById(R.id.proxy_address);
-	m_proxy_password = (TextView) m_view.findViewById(R.id.proxy_password);
-	m_proxy_port = (TextView) m_view.findViewById(R.id.proxy_port);
-	m_proxy_type_spinner = (Spinner) m_view.findViewById
+	m_proxy_address = m_view.findViewById(R.id.proxy_address);
+	m_proxy_password = m_view.findViewById(R.id.proxy_password);
+	m_proxy_port = m_view.findViewById(R.id.proxy_port);
+	m_proxy_type_spinner = m_view.findViewById
 	    (R.id.proxy_type_spinner);
-	m_proxy_user = (TextView) m_view.findViewById(R.id.proxy_user);
-	m_remove_local_messages_button = (Button) m_view.findViewById
+	m_proxy_user = m_view.findViewById(R.id.proxy_user);
+	m_remove_local_messages_button = m_view.findViewById
 	    (R.id.remove_local_messages);
-	m_remove_local_messages_verify_checkbox = (CheckBox) m_view.findViewById
+	m_remove_local_messages_verify_checkbox = m_view.findViewById
 	    (R.id.remove_local_messages_verify_checkbox);
-	m_show_status_bar = (CheckBox) m_view.findViewById
+	m_show_status_bar = m_view.findViewById
 	    (R.id.show_status_bar);
-	m_show_vertical_separator_before_settings_checkbox = (CheckBox)
+	m_show_vertical_separator_before_settings_checkbox =
 	    m_view.findViewById(R.id.show_vertical_separator_before_settings);
 	m_signature_key_data = m_view.findViewById(R.id.signature_key_data);
-	m_signature_key_spinner = (Spinner) m_view.findViewById
+	m_signature_key_spinner = m_view.findViewById
 	    (R.id.signature_key_spinner);
-	m_test_inbound_button = (Button) m_view.findViewById
+	m_test_inbound_button = m_view.findViewById
 	    (R.id.test_inbound_button);
-	m_test_outbound_button = (Button) m_view.findViewById
+	m_test_outbound_button = m_view.findViewById
 	    (R.id.test_outbound_button);
     }
 
