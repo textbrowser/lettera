@@ -414,9 +414,6 @@ public class Database extends SQLiteOpenHelper
 
 		m_read_message_cursor = null;
 	    }
-	    finally
-	    {
-	    }
 	}
 
 	return null;
