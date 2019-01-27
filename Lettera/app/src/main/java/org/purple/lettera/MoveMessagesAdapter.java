@@ -322,7 +322,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	    break;
 	}
 
-	return null;
+	return new ViewHolderButton(null, null);
     }
 
     @Override
