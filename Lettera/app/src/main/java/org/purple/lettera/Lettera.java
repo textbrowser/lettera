@@ -222,7 +222,6 @@ public class Lettera extends AppCompatActivity
 	void onLongClick(View view, int position);
     }
 
-    private AtomicBoolean m_download_interrupted = new AtomicBoolean(false);
     private Button m_artificial_button = null;
     private Button m_compose_button = null;
     private Button m_contacts_button = null;
@@ -251,16 +250,18 @@ public class Lettera extends AppCompatActivity
     private TextView m_current_folder = null;
     private TextView m_items_count = null;
     private View m_vertical_separator = null;
+    private final AtomicBoolean m_download_interrupted =
+	new AtomicBoolean(false);
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
-    private final int FOLDERS_DRAWER_INTERVAL = 7500;
-    private final long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
     private final static AtomicInteger s_background_color = new AtomicInteger
 	(Color.WHITE);
     private final static AtomicInteger s_divider_color = new AtomicInteger
 	(Color.GRAY);
     private final static AtomicInteger s_text_color = new AtomicInteger
 	(Color.BLACK);
+    private final static int FOLDERS_DRAWER_INTERVAL = 7500;
+    private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
     private static int s_default_text_color = 0;
@@ -577,8 +578,9 @@ public class Lettera extends AppCompatActivity
 	    m_folders_drawer_scheduler.scheduleAtFixedRate(new Runnable()
 	    {
 		private ArrayList<String> m_folder_names = null;
-		private AtomicBoolean m_interrupted = new AtomicBoolean(false);
 		private Mail m_mail = null;
+		private final AtomicBoolean m_interrupted =
+		    new AtomicBoolean(false);
 
 		@Override
 		public void run()
