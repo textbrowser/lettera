@@ -29,6 +29,7 @@ package org.purple.lettera;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -73,6 +74,7 @@ public class FoldersDrawer
     private View m_parent = null;
     private View m_view = null;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public FoldersDrawer(Context context, View parent)
     {
 	m_context = context;

@@ -29,6 +29,8 @@ package org.purple.lettera;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -69,10 +71,11 @@ public class MoveMessages
     private View m_parent = null;
     private View m_view = null;
 
-    public MoveMessages(Context context,
-			String email_account,
-			String folder_name,
-			View parent)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+	public MoveMessages(Context context,
+						String email_account,
+						String folder_name,
+						View parent)
     {
 	m_context = context;
 	m_parent = parent;
