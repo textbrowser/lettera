@@ -738,7 +738,6 @@ public class Settings
 	    if(string.isEmpty())
 	    {
 		m_outbound_port.requestFocus();
-		m_outbound_port.setText("");
 		show_network_page();
 		return;
 	    }
@@ -2172,7 +2171,10 @@ public class Settings
 	m_dialog.show();
 	m_encryption_key_spinner.setSelection(0);
 	m_generate_keys_checkbox.setChecked(false);
-	m_inbound_address.requestFocus();
+
+	if(m_current_page == PageEnumerator.NETWORK_PAGE)
+	    m_inbound_address.requestFocus();
+
 	m_outbound_as_inbound.setChecked(false);
 	populate();
 	prepare_colors(m_database.setting("color_theme"));
