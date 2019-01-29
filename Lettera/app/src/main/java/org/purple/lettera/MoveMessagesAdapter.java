@@ -218,6 +218,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
     }
 
     private Database m_database = null;
+    private MoveMessages m_move_messages = null;
     private String m_email_address = "";
     private String m_folder_name = "";
     private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
@@ -248,24 +249,29 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 
     private void dismiss()
     {
-	/*
-	** Display the selection and then close the dialog.
-	*/
+	if(m_move_messages != null)
+	    /*
+	    ** Display the selection and then close the dialog.
+	    */
 
-	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
-	{
-	    @Override
-	    public void run()
+	    new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
 	    {
-	    }
-	}, 250);
+		@Override
+		public void run()
+		{
+		    m_move_messages.dismiss();
+		}
+	    }, 250);
     }
 
-    public MoveMessagesAdapter(String email_address, String folder_name)
+    public MoveMessagesAdapter(MoveMessages move_messages,
+			       String email_address,
+			       String folder_name)
     {
 	m_database = Database.instance();
 	m_email_address = email_address;
 	m_folder_name = folder_name;
+	m_move_messages = move_messages;
 	s_icons[IconsEnumerator.DRAFTS] = R.drawable.drafts_folder;
 	s_icons[IconsEnumerator.IMPORTANT] = R.drawable.important_folder;
 	s_icons[IconsEnumerator.INBOX] = R.drawable.inbox_folder;
