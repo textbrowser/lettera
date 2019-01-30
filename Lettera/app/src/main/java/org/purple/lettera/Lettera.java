@@ -372,7 +372,7 @@ public class Lettera extends AppCompatActivity
 			@Override
 			public void run()
 			{
-			    m_database.select_all
+			    m_database.select_all_messages
 				(Lettera.this,
 				 m_messages_adapter,
 				 email_account(),
@@ -420,7 +420,7 @@ public class Lettera extends AppCompatActivity
 			public void onCancel(DialogInterface dialog)
 			{
 			    if(confirmed.get())
-				m_database.delete_selected
+				m_database.delete_selected_messages
 				    (Lettera.this,
 				     m_messages_adapter,
 				     email_account,
@@ -952,6 +952,12 @@ public class Lettera extends AppCompatActivity
 
     public void move_selected_messages(String to_folder_name)
     {
+	m_database.move_selected_messages
+	    (this,
+	     m_messages_adapter,
+	     email_account(),
+	     selected_folder_name(),
+	     to_folder_name);
     }
 
     @Override

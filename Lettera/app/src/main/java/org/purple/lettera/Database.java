@@ -1084,10 +1084,10 @@ public class Database extends SQLiteOpenHelper
 	    }
     }
 
-    public void delete_selected(final Lettera lettera,
-				final MessagesAdapter messages_adapter,
-				final String email_account,
-				final String folder_name)
+    public void delete_selected_messages(final Lettera lettera,
+					 final MessagesAdapter messages_adapter,
+					 final String email_account,
+					 final String folder_name)
     {
 	if(m_db == null)
 	    return;
@@ -1165,11 +1165,11 @@ public class Database extends SQLiteOpenHelper
 	thread.start();
     }
 
-    public void move_selected(final Lettera lettera,
-			      final MessagesAdapter messages_adapter,
-			      final String email_account,
-			      final String from_folder_name,
-			      final String to_folder_name)
+    public void move_selected_messages(final Lettera lettera,
+				       final MessagesAdapter messages_adapter,
+				       final String email_account,
+				       final String from_folder_name,
+				       final String to_folder_name)
     {
 	if(m_db == null)
 	    return;
@@ -1513,11 +1513,11 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void select_all(final Lettera lettera,
-			   final MessagesAdapter messages_adapter,
-			   final String email_account,
-			   final String folder_name,
-			   final boolean selected)
+    public void select_all_messages(final Lettera lettera,
+				    final MessagesAdapter messages_adapter,
+				    final String email_account,
+				    final String folder_name,
+				    final boolean selected)
     {
 	if(m_db == null)
 	    return;
