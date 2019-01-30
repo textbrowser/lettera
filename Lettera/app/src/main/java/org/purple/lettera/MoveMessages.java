@@ -118,6 +118,10 @@ public class MoveMessages
 
     public void dismiss()
     {
+	if(m_context instanceof Lettera)
+	    ((Lettera) m_context).move_selected_messages
+		(m_adapter.selected_folder_name());
+
 	try
 	{
 	    m_popup_window.dismiss();

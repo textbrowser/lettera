@@ -1165,6 +1165,93 @@ public class Database extends SQLiteOpenHelper
 	thread.start();
     }
 
+    public void move_selected(final Lettera lettera,
+			      final MessagesAdapter messages_adapter,
+			      final String email_account,
+			      final String from_folder_name,
+			      final String to_folder_name)
+    {
+	if(m_db == null)
+	    return;
+
+	Thread thread = new Thread(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_db.beginTransactionNonExclusive();
+
+		try
+		{
+		    SQLiteStatement sqlite_statement = null;
+
+		    if(from_folder_name.toLowerCase().equals("trash"))
+			sqlite_statement = m_db.compileStatement
+			    ("UPDATE messages SET deleted = " +
+			     DeletedEnumerator.NOMINAL +
+			     ", folder_name = ?, " +
+			     "selected = 0 " +
+			     "WHERE email_account = ? AND " +
+			     "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
+			     DeletedEnumerator.ARCHIVED +
+			     ") OR deleted = " +
+			     DeletedEnumerator.DELETED +
+			     ") AND selected = 1");
+		    else
+			sqlite_statement = m_db.compileStatement
+			    ("UPDATE messages SET deleted = " +
+			     DeletedEnumerator.NOMINAL +
+			     ", folder_name = ?, " +
+			     "selected = 0 " +
+			     "WHERE email_account = ? AND " +
+			     "LOWER(folder_name) = LOWER(?) AND " +
+			     "selected = 1");
+
+		    sqlite_statement.bindString(1, to_folder_name);
+		    sqlite_statement.bindString(2, email_account);
+		    sqlite_statement.bindString(3, from_folder_name);
+		    sqlite_statement.execute();
+		    m_db.setTransactionSuccessful();
+		}
+		catch(Exception exception)
+		{
+		}
+		finally
+		{
+		    m_db.endTransaction();
+		}
+
+		synchronized(m_read_message_cursor_mutex)
+		{
+		    if(m_read_message_cursor != null &&
+		       m_read_message_cursor_email_account.
+		       equals(email_account) &&
+		       m_read_message_cursor_folder_name.
+		       equals(from_folder_name))
+		    {
+			m_read_message_cursor.close();
+			m_read_message_cursor = null;
+		    }
+		}
+
+		if(messages_adapter != null)
+		    lettera.runOnUiThread(new Runnable()
+		    {
+			@Override
+			public void run()
+			{
+			    lettera.prepare_current_folder_text
+				(from_folder_name);
+			    lettera.update_folders_drawer();
+			    messages_adapter.notifyDataSetChanged();
+			}
+		    });
+	    }
+	});
+
+	thread.start();
+    }
+
     @Override
     public void onConfigure(SQLiteDatabase db)
     {

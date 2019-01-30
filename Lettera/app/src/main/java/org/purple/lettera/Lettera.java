@@ -950,6 +950,10 @@ public class Lettera extends AppCompatActivity
 	prepare_current_folder_text(selected_folder_name());
     }
 
+    public void move_selected_messages(String to_folder_name)
+    {
+    }
+
     @Override
     public void onConfigurationChanged(Configuration new_config)
     {

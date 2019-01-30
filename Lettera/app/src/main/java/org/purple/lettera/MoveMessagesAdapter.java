@@ -73,6 +73,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	    ((RadioButton) view).setCompoundDrawablesWithIntrinsicBounds
 		(s_selected_icons[view.getId()], 0, 0, 0);
 	    ((RadioButton) view).setTextColor(Color.parseColor("#5e35b1"));
+	    m_selected_folder_name = folder_name;
 	    view.setBackgroundResource(R.drawable.folder_selection);
 	    view.setPaddingRelative
 		((int) (10 * density), // Start
@@ -221,6 +222,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
     private MoveMessages m_move_messages = null;
     private String m_email_address = "";
     private String m_folder_name = "";
+    private String m_selected_folder_name = "";
     private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
     private final static Database s_database = Database.instance();
     private final static int s_icons[] = new int[IconsEnumerator.XYZ + 1];
@@ -329,6 +331,11 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	}
 
 	return new ViewHolderButton(null, null);
+    }
+
+    public String selected_folder_name()
+    {
+	return m_selected_folder_name;
     }
 
     @Override
