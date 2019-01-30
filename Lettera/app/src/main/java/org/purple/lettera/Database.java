@@ -1189,7 +1189,7 @@ public class Database extends SQLiteOpenHelper
 			sqlite_statement = m_db.compileStatement
 			    ("UPDATE messages SET deleted = " +
 			     DeletedEnumerator.NOMINAL +
-			     ", folder_name = ?, " +
+			     ", to_folder_name = ?, " +
 			     "selected = 0 " +
 			     "WHERE email_account = ? AND " +
 			     "((LOWER(folder_name) = LOWER(?) AND deleted <> " +
@@ -1201,7 +1201,7 @@ public class Database extends SQLiteOpenHelper
 			sqlite_statement = m_db.compileStatement
 			    ("UPDATE messages SET deleted = " +
 			     DeletedEnumerator.NOMINAL +
-			     ", folder_name = ?, " +
+			     ", to_folder_name = ?, " +
 			     "selected = 0 " +
 			     "WHERE email_account = ? AND " +
 			     "LOWER(folder_name) = LOWER(?) AND " +
