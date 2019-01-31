@@ -212,12 +212,12 @@ public class Settings
 			  String proxy_user)
 	{
 	    m_dialog = dialog;
-	    m_email = email;
-	    m_host = host;
+	    m_email = email.trim();
+	    m_host = host.trim();
 	    m_password = password;
 	    m_port = port;
 	    m_protocol = protocol;
-	    m_proxy_address = proxy_address;
+	    m_proxy_address = proxy_address.trim();
 	    m_proxy_password = proxy_password;
 	    m_proxy_port = proxy_port;
 	    m_proxy_type = proxy_type;

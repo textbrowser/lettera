@@ -1357,6 +1357,7 @@ public class Database extends SQLiteOpenHelper
 	    "selected INTEGER NOT NULL DEFAULT 0, " +
 	    "sent_date TEXT NOT NULL, " +
 	    "subject TEXT NOT NULL, " +
+	    "to_folder_name TEXT NOT NULL, " +
 	    "uid BIGINT NOT NULL, " +
 	    "FOREIGN KEY (email_account) REFERENCES " +
 	    "email_accounts (email_account) ON DELETE CASCADE, " +
@@ -1822,8 +1823,9 @@ public class Database extends SQLiteOpenHelper
 		 "selected, " +
 		 "sent_date, " +
 		 "subject, " +
+		 "to_folder_name, " +
 		 "uid) VALUES " +
-		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    long start_time = 0;
 
 	    for(Message message : messages)
@@ -1832,6 +1834,7 @@ public class Database extends SQLiteOpenHelper
 		    continue;
 
 		Cursor cursor = null;
+		String to_folder_name = folder.getName();
 		int deleted = DeletedEnumerator.NOMINAL;
 		int selected = 0;
 		long message_uid = 0;
@@ -1840,7 +1843,10 @@ public class Database extends SQLiteOpenHelper
 		{
 		    message_uid = folder.getUID(message);
 		    cursor = m_db.rawQuery
-			("SELECT content_downloaded, deleted, selected " +
+			("SELECT content_downloaded, " +
+			 "deleted, " +
+			 "selected, " +
+			 "to_folder_name " +
 			 "FROM messages WHERE email_account = ? AND " +
 			 "LOWER(folder_name) = LOWER(?) AND " +
 			 "uid = ?",
@@ -1873,6 +1879,7 @@ public class Database extends SQLiteOpenHelper
 
 			deleted = cursor.getInt(1);
 			selected = cursor.getInt(2);
+			to_folder_name = cursor.getString(3);
 		    }
 		}
 		catch(Exception exception)
@@ -2024,8 +2031,9 @@ public class Database extends SQLiteOpenHelper
 			(12, content_values.getAsString("sent_date"));
 		    sqlite_statement.bindString
 			(13, content_values.getAsString("subject"));
+		    sqlite_statement.bindString(14, to_folder_name);
 		    sqlite_statement.bindLong
-			(14, content_values.getAsLong("uid"));
+			(15, content_values.getAsLong("uid"));
 		    sqlite_statement.execute();
 		    sqlite_statement.clearBindings();
 
