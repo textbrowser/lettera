@@ -37,6 +37,7 @@ public class MessageElement
     public String m_received_date = "";
     public String m_sent_date = "";
     public String m_subject = "";
+    public String m_to_folder_name = "";
     public boolean m_content_downloaded = false;
     public boolean m_has_been_read = false;
     public boolean m_selected = false;
