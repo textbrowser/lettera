@@ -132,6 +132,9 @@ public class Mail
 		if(interrupt.get())
 		    break;
 
+		if((folder.getType() & Folder.HOLDS_MESSAGES) == 0)
+		    continue;
+
 		FolderElement folder_element = new FolderElement();
 
 		/*
@@ -160,7 +163,8 @@ public class Mail
 	    Folder folders[] = m_imap.getDefaultFolder().list("*");
 
 	    for(Folder folder : folders)
-		array_list.add(folder.getFullName());
+		if((folder.getType() & Folder.HOLDS_MESSAGES) != 0)
+		    array_list.add(folder.getFullName());
 
 	    Collections.sort(array_list);
 	    return array_list;
