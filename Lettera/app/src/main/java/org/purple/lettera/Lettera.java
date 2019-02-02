@@ -428,18 +428,11 @@ public class Lettera extends AppCompatActivity
 			}
 		    };
 
-		    if(folder_name.toLowerCase().equals("trash"))
-			Windows.show_prompt_dialog
-			    (Lettera.this,
-			     listener,
-			     "Archive the selected message(s) in Lettera?",
-			     confirmed);
-		    else
-			Windows.show_prompt_dialog
-			    (Lettera.this,
-			     listener,
-			     "Delete the selected message(s)?",
-			     confirmed);
+		    Windows.show_prompt_dialog
+			(Lettera.this,
+			 listener,
+			 "Delete the selected message(s)?",
+			 confirmed);
 		}
 	    });
 
@@ -1028,6 +1021,10 @@ public class Lettera extends AppCompatActivity
 
     public void prepare_current_folder_text(String folder_name)
     {
+	m_delete_button.setVisibility
+	    (folder_name.toLowerCase().equals("trash") ?
+	     View.GONE : View.VISIBLE);
+
 	if(m_database.setting("show_status_bar").equals("true"))
 	    m_current_folder.setText(folder_name);
 	else
