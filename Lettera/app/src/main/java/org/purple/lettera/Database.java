@@ -1818,11 +1818,8 @@ public class Database extends SQLiteOpenHelper
 			"deleted = " +
 			DeletedEnumerator.NOMINAL +
 			" AND email_account = ? AND " +
-			"(LOWER(folder_name) = LOWER(?) OR " +
-			"LOWER(to_folder_name) = LOWER(?))",
-			new String[] {email_account,
-				      folder.getName(),
-				      folder.getName()});
+			"LOWER(to_folder_name) = LOWER(?)",
+			new String[] {email_account, folder.getName()});
 
 	    SQLiteStatement sqlite_statement = m_db.compileStatement
 		("REPLACE INTO messages (" +
@@ -1865,7 +1862,7 @@ public class Database extends SQLiteOpenHelper
 			 "to_folder_name, " +
 			 "OID " +
 			 "FROM messages WHERE email_account = ? AND " +
-			 "LOWER(folder_name) = LOWER(?) AND " +
+			 "LOWER(to_folder_name) = LOWER(?) AND " +
 			 "uid = ?",
 			 new String[] {email_account,
 				       folder.getName(),
@@ -2090,7 +2087,7 @@ public class Database extends SQLiteOpenHelper
 	    m_db.delete("messages",
 			"current_message = 0 AND " +
 			"email_account = ? AND " +
-			"LOWER(folder_name) = LOWER(?)",
+			"LOWER(to_folder_name) = LOWER(?)",
 			new String[] {email_account, folder.getName()});
 
 	    if(enable_database_transaction)
