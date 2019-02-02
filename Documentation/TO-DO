@@ -19,6 +19,8 @@ Completed Items
 - Include algorithm information in Settings::Privacy.
 - Index failure on Folders Drawer.
 - Key generation.
+- Locally-deleted messages must remain hidden after their remote copies arrive.
+  Lettera does not archive messages.
 - Optional status bar on main activity.
 - Parse recipients.
 - Performance degradation with folders having many messages (class cursor).
@@ -51,12 +53,10 @@ Remaining Items
 - Denote read messages.
 - Display a message's origin in Trash.
 - Display percent-downloaded in dialog.
-- Locally-deleted messages must remain hidden after their remote copies arrive.
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - Reset of Network widgets in Settings.
-- Retrieve to_folder_name messages.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
 - What's a deleted message?
