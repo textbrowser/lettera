@@ -239,6 +239,7 @@ public class Lettera extends AppCompatActivity
     private ImageButton m_folders_drawer_button = null;
     private ImageButton m_scroll_bottom = null;
     private ImageButton m_scroll_top = null;
+    private Letter m_letter_dialog = null;
     private LetteraLinearLayoutManager m_layout_manager = null;
     private LinearLayout m_status_bar = null;
     private MessagesAdapter m_messages_adapter = null;
@@ -741,6 +742,8 @@ public class Lettera extends AppCompatActivity
 	m_layout_manager.setReverseLayout(true);
 	m_layout_manager.setSmoothScrollbarEnabled(true);
 	m_layout_manager.setStackFromEnd(true);
+	m_letter_dialog = new Letter
+	    (this, findViewById(R.id.main_layout));
 	m_recycler.addOnItemTouchListener
 	    (new
 	     MessagesRecyclerTouchListener(Lettera.this,
@@ -757,6 +760,7 @@ public class Lettera extends AppCompatActivity
 		public void onLongClick(final View view, int position)
 		{
 		    m_artificial_button.performClick();
+		    m_letter_dialog.show();
 		    view.setBackgroundColor(Color.parseColor("#90caf9"));
 		    new Handler(Looper.getMainLooper()).
 			postDelayed(new Runnable()
@@ -946,7 +950,7 @@ public class Lettera extends AppCompatActivity
     public void move_selected_messages(String to_folder_name)
     {
 	m_database.move_selected_messages
-	    (this,
+	    (Lettera.this,
 	     m_messages_adapter,
 	     email_account(),
 	     selected_folder_name(),

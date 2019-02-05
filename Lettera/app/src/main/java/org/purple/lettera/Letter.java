@@ -27,23 +27,22 @@
 
 package org.purple.lettera;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.PopupWindow;
+import android.view.WindowManager;
 
 public class Letter
 {
     private Context m_context = null;
     private Database m_database = null;
-    private PopupWindow m_popup_window = null;
+    private Dialog m_dialog = null;
     private View m_parent = null;
     private View m_view = null;
+    private WindowManager.LayoutParams m_layout_params = null;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public Letter(Context context, View parent)
     {
 	m_context = context;
@@ -52,18 +51,23 @@ public class Letter
 	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 
-	m_view = inflater.inflate(R.layout.folders_drawer_move, null);
+	m_layout_params = new WindowManager.LayoutParams();
+	m_layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
+	m_layout_params.height = WindowManager.LayoutParams.MATCH_PARENT;
+	m_layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
+	m_view = inflater.inflate(R.layout.letter, null);
 
 	/*
 	** The cute popup.
 	*/
 
-	m_popup_window = new PopupWindow(m_context);
-	m_popup_window.setAttachedInDecor(true);
-	m_popup_window.setContentView(m_view);
-	m_popup_window.setFocusable(true);
-	m_popup_window.setOutsideTouchable(true);
-	m_popup_window.setWidth((int) (0.40 * m_parent.getWidth()));
+	m_dialog = new Dialog(m_context);
+	m_dialog.setCancelable(false);
+	m_dialog.setContentView(m_view);
+	m_dialog.setTitle("Letter");
+
+	if(m_dialog.getWindow() != null)
+	    m_dialog.getWindow().setAttributes(m_layout_params);
 
 	/*
 	** Initialize other widgets.
@@ -80,17 +84,17 @@ public class Letter
     {
 	try
 	{
-	    m_popup_window.dismiss();
+	    m_dialog.dismiss();
 	}
 	catch(Exception exception)
 	{
 	}
     }
 
-    public void show(View view)
+    public void show()
     {
-	m_popup_window.showAtLocation(m_parent, Gravity.CENTER, 0, 0);
-	m_view.findViewById(R.id.divider).setBackgroundColor
+	m_dialog.show();
+	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());
 	m_view.setBackgroundColor(Lettera.background_color());
     }
