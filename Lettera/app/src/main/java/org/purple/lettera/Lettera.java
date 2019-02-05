@@ -743,7 +743,7 @@ public class Lettera extends AppCompatActivity
 	m_layout_manager.setSmoothScrollbarEnabled(true);
 	m_layout_manager.setStackFromEnd(true);
 	m_letter_dialog = new Letter
-	    (this, findViewById(R.id.main_layout));
+	    (Lettera.this, findViewById(R.id.main_layout));
 	m_recycler.addOnItemTouchListener
 	    (new
 	     MessagesRecyclerTouchListener(Lettera.this,

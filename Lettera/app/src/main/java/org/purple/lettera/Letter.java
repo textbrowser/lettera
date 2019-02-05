@@ -33,22 +33,24 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 
 public class Letter
 {
-    private Context m_context = null;
     private Database m_database = null;
     private Dialog m_dialog = null;
+    private ImageButton m_close_button = null;
+    private Lettera m_lettera = null;
     private View m_parent = null;
     private View m_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
 
-    public Letter(Context context, View parent)
+    public Letter(Lettera lettera, View parent)
     {
-	m_context = context;
+	m_lettera = lettera;
 	m_parent = parent;
 
-	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
+	LayoutInflater inflater = (LayoutInflater) m_lettera.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 
 	m_layout_params = new WindowManager.LayoutParams();
@@ -61,7 +63,7 @@ public class Letter
 	** The cute popup.
 	*/
 
-	m_dialog = new Dialog(m_context);
+	m_dialog = new Dialog(m_lettera);
 	m_dialog.setCancelable(false);
 	m_dialog.setContentView(m_view);
 	m_dialog.setTitle("Letter");
@@ -74,10 +76,28 @@ public class Letter
 	*/
 
 	initialize_widget_members();
+	prepare_listeners();
     }
 
     private void initialize_widget_members()
     {
+	m_close_button = m_view.findViewById(R.id.close_button);
+    }
+
+    private void prepare_listeners()
+    {
+	if(!m_close_button.hasOnClickListeners())
+	    m_close_button.setOnClickListener(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    dismiss();
+		}
+	    });
     }
 
     public void dismiss()
