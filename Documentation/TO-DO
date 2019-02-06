@@ -53,6 +53,8 @@ Remaining Items
 - Denote read messages.
 - Display a message's origin in Trash.
 - Display percent-downloaded in dialog.
+- Download incomplete content on opening of letters.
+- Letter navigation.
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.

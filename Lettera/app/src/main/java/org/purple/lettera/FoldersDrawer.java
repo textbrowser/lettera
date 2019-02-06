@@ -117,7 +117,7 @@ public class FoldersDrawer
     private void initialize_widget_members()
     {
 	m_close_button = m_view.findViewById(R.id.close_button);
-	m_email_address = m_view.findViewById(R.id.email_address);
+	m_email_address = m_view.findViewById(R.id.email_account);
 	m_recycler = m_view.findViewById(R.id.recycler);
     }
 

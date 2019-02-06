@@ -35,12 +35,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class Letter
 {
     private Dialog m_dialog = null;
     private ImageButton m_close_button = null;
     private Lettera m_lettera = null;
+    private TextView m_from_email_address = null;
+    private TextView m_subject = null;
     private View m_parent = null;
     private View m_view = null;
     private WebView m_web_view = null;
@@ -84,6 +87,8 @@ public class Letter
     private void initialize_widget_members()
     {
 	m_close_button = m_view.findViewById(R.id.close_button);
+	m_from_email_address = m_view.findViewById(R.id.from_email_address);
+	m_subject = m_view.findViewById(R.id.subject);
 	m_web_view = m_view.findViewById(R.id.content);
     }
 
@@ -123,9 +128,11 @@ public class Letter
 	    return;
 
 	m_dialog.show();
+	m_from_email_address.setText(message_element.m_from_email_account);
+	m_subject.setText(message_element.m_subject);
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());
 	m_view.setBackgroundColor(Lettera.background_color());
-	m_web_view.loadData("Hello.", "text/html", null);
+	m_web_view.loadData(message_element.m_message, "text/html", null);
     }
 }
