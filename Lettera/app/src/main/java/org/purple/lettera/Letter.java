@@ -33,6 +33,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 
 public class Letter
@@ -43,6 +44,7 @@ public class Letter
     private Lettera m_lettera = null;
     private View m_parent = null;
     private View m_view = null;
+    private WebView m_web_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
 
     public Letter(Lettera lettera, View parent)
@@ -82,6 +84,7 @@ public class Letter
     private void initialize_widget_members()
     {
 	m_close_button = m_view.findViewById(R.id.close_button);
+	m_web_view = m_view.findViewById(R.id.content);
     }
 
     private void prepare_listeners()
@@ -111,11 +114,12 @@ public class Letter
 	}
     }
 
-    public void show()
+    public void show(int position)
     {
 	m_dialog.show();
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());
 	m_view.setBackgroundColor(Lettera.background_color());
+	m_web_view.loadData("Hello.", "text/html", null);
     }
 }
