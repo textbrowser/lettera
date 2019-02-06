@@ -32,10 +32,14 @@
                 android:layout_marginEnd="5dp"
                 android:orientation="horizontal">
 
-                <Space
+                <TextView
+                    android:id="@+id/subject"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <ImageButton
                     android:id="@+id/close_button"
@@ -45,17 +49,6 @@
                     android:contentDescription="@string/close"
                     app:srcCompat="@drawable/close" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/subject"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                android:gravity="center_vertical"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/from_email_account"

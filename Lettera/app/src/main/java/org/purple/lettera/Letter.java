@@ -44,6 +44,7 @@ public class Letter
     private Lettera m_lettera = null;
     private TextView m_from_email_account = null;
     private TextView m_subject = null;
+    private TextView m_to_email_account = null;
     private View m_parent = null;
     private View m_view = null;
     private WebView m_web_view = null;
@@ -89,6 +90,7 @@ public class Letter
 	m_close_button = m_view.findViewById(R.id.close_button);
 	m_from_email_account = m_view.findViewById(R.id.from_email_account);
 	m_subject = m_view.findViewById(R.id.subject);
+	m_to_email_account = m_view.findViewById(R.id.to_email_account);
 	m_web_view = m_view.findViewById(R.id.content);
     }
 
@@ -129,7 +131,11 @@ public class Letter
 
 	m_dialog.show();
 	m_from_email_account.setText(message_element.m_from_email_account);
+	m_from_email_account.setTextColor(Lettera.text_color());
 	m_subject.setText(message_element.m_subject);
+	m_subject.setTextColor(Lettera.text_color());
+	m_to_email_account.setText(email_account);
+	m_to_email_account.setTextColor(Lettera.text_color());
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());
 	m_view.setBackgroundColor(Lettera.background_color());
