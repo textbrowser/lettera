@@ -191,7 +191,7 @@ public class Lettera extends AppCompatActivity
 		    try
 		    {
 			m_messages_adapter.notifyDataSetChanged();
-			m_folders_drawer.set_email_address(email_account());
+			m_folders_drawer.set_email_account(email_account());
 			m_folders_drawer.update();
 			m_layout_manager.scrollToPosition
 			    (m_messages_adapter.getItemCount() - 1);
@@ -597,7 +597,7 @@ public class Lettera extends AppCompatActivity
 
 			if(m_mail != null)
 			{
-			    if(!m_mail.email_address().equals(email_element.
+			    if(!m_mail.email_account().equals(email_element.
 							      m_inbound_email))
 			    {
 				m_mail.disconnect();
@@ -643,11 +643,11 @@ public class Lettera extends AppCompatActivity
 
 			    m_database.write_folders
 				(m_mail.folder_elements(m_interrupted),
-				 m_mail.email_address());
+				 m_mail.email_account());
 			    m_database.write_messages
 				(m_interrupted,
 				 m_mail.folder(selected_folder_full_name()),
-				 m_mail.email_address(),
+				 m_mail.email_account(),
 				 false);
 
 			    if(m_folder_names == null ||
@@ -682,7 +682,7 @@ public class Lettera extends AppCompatActivity
 				m_database.write_messages
 				    (m_interrupted,
 				     m_mail.folder(m_folder_names.get(0)),
-				     m_mail.email_address(),
+				     m_mail.email_account(),
 				     false);
 				m_folder_names.remove(0);
 			    }
@@ -1051,8 +1051,8 @@ public class Lettera extends AppCompatActivity
 
 	String email_account = email_account();
 
-	m_folders_drawer.set_email_address(email_account);
-	m_messages_adapter.set_email_address(email_account);
+	m_folders_drawer.set_email_account(email_account);
+	m_messages_adapter.set_email_account(email_account);
 
 	if(!folder_name.isEmpty())
 	{

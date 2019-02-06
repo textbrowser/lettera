@@ -227,7 +227,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     }
 
     private FoldersDrawer m_folders_drawer = null;
-    private String m_email_address = "";
+    private String m_email_account = "";
     private String m_selected_folder_name = "";
     private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
     private final static Database s_database = Database.instance();
@@ -342,14 +342,14 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-	return s_database.folder_count(m_email_address, "");
+	return s_database.folder_count(m_email_account, "");
     }
 
     @Override
     public int getItemViewType(int position)
     {
 	FolderElement folder_element = s_database.folder
-	    (m_email_address, "", position);
+	    (m_email_account, "", position);
 
 	if(folder_element == null)
 	    return ViewHolderTypeEnumerator.BUTTON1;
@@ -380,7 +380,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	    m_visible_buttons.add(view_holder_button.button());
 
 	    FolderElement folder_element = s_database.folder
-		(m_email_address, "", position);
+		(m_email_account, "", position);
 
 	    view_holder_button.set_data(folder_element);
 	    break;
@@ -397,9 +397,9 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		(((ViewHolderButton) view_holder).button());
     }
 
-    public void set_email_address(String email_address)
+    public void set_email_account(String email_account)
     {
-	m_email_address = email_address;
+	m_email_account = email_account;
     }
 
     public void set_selected_folder_name(String folder_name)
@@ -408,7 +408,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 
 	if(m_selected_folder_name.isEmpty())
 	    m_selected_folder_name = s_database.setting
-		("selected_folder_name_" + m_email_address);
+		("selected_folder_name_" + m_email_account);
 
 	if(m_selected_folder_name.isEmpty())
 	    m_selected_folder_name = Lettera.NONE_FOLDER;

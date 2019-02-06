@@ -219,7 +219,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
     }
 
     private MoveMessages m_move_messages = null;
-    private String m_email_address = "";
+    private String m_email_account = "";
     private String m_folder_name = "";
     private String m_selected_folder_name = "";
     private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
@@ -266,10 +266,10 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
     }
 
     public MoveMessagesAdapter(MoveMessages move_messages,
-			       String email_address,
+			       String email_account,
 			       String folder_name)
     {
-	m_email_address = email_address;
+	m_email_account = email_account;
 	m_folder_name = folder_name;
 	m_move_messages = move_messages;
 	s_icons[IconsEnumerator.DRAFTS] = R.drawable.drafts_folder;
@@ -339,14 +339,14 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-	return s_database.folder_count(m_email_address, m_folder_name);
+	return s_database.folder_count(m_email_account, m_folder_name);
     }
 
     @Override
     public int getItemViewType(int position)
     {
 	FolderElement folder_element = s_database.folder
-	    (m_email_address, m_folder_name, position);
+	    (m_email_account, m_folder_name, position);
 
 	if(folder_element == null)
 	    return ViewHolderTypeEnumerator.BUTTON1;
@@ -377,7 +377,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	    m_visible_buttons.add(view_holder_button.button());
 
 	    FolderElement folder_element = s_database.folder
-		(m_email_address, m_folder_name, position);
+		(m_email_account, m_folder_name, position);
 
 	    view_holder_button.set_data(folder_element);
 	    break;

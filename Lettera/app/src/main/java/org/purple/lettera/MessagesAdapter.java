@@ -66,7 +66,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	}
     }
 
-    private String m_email_address = "";
+    private String m_email_account = "";
     private String m_folder_name = "";
     private final static Database s_database = Database.instance();
 
@@ -90,7 +90,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-	return s_database.message_count_cursor(m_email_address, m_folder_name);
+	return s_database.message_count_cursor(m_email_account, m_folder_name);
     }
 
     @Override
@@ -106,18 +106,18 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	    return;
 
 	MessageElement message_element = s_database.message
-	    (m_email_address, m_folder_name, position);
+	    (m_email_account, m_folder_name, position);
 
 	view_holder_message.set_data
 	    (message_element, m_folder_name, position == 0);
     }
 
-    public void set_email_address(String email_address)
+    public void set_email_account(String email_account)
     {
-	m_email_address = email_address;
+	m_email_account = email_account;
 
-	if(m_email_address.isEmpty())
-	    m_email_address = "e-mail@e-mail.org";
+	if(m_email_account.isEmpty())
+	    m_email_account = "e-mail@e-mail.org";
     }
 
     public void set_folder_name(String folder_name)
@@ -126,7 +126,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 
 	if(m_folder_name.isEmpty())
 	    m_folder_name = s_database.setting
-		("selected_folder_name_" + m_email_address);
+		("selected_folder_name_" + m_email_account);
 
 	if(m_folder_name.isEmpty())
 	    m_folder_name = Lettera.NONE_FOLDER;

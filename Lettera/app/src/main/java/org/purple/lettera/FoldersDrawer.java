@@ -69,7 +69,7 @@ public class FoldersDrawer
     private ImageButton m_close_button = null;
     private PopupWindow m_popup_window = null;
     private RecyclerView m_recycler = null;
-    private TextView m_email_address = null;
+    private TextView m_email_account = null;
     private View m_parent = null;
     private View m_view = null;
     private final static Database s_database = Database.instance();
@@ -117,7 +117,7 @@ public class FoldersDrawer
     private void initialize_widget_members()
     {
 	m_close_button = m_view.findViewById(R.id.close_button);
-	m_email_address = m_view.findViewById(R.id.email_account);
+	m_email_account = m_view.findViewById(R.id.email_account);
 	m_recycler = m_view.findViewById(R.id.recycler);
     }
 
@@ -134,9 +134,9 @@ public class FoldersDrawer
 	    });
     }
 
-    public String email_address()
+    public String email_account()
     {
-	return m_email_address.getText().toString();
+	return m_email_account.getText().toString();
     }
 
     public String selected_folder_name()
@@ -151,7 +151,7 @@ public class FoldersDrawer
 		(selected_folder_name());
 
 	s_database.save_setting
-	    ("selected_folder_name_" + m_email_address.getText().toString(),
+	    ("selected_folder_name_" + m_email_account.getText().toString(),
 	     selected_folder_name(),
 	     false);
 
@@ -164,14 +164,14 @@ public class FoldersDrawer
 	}
     }
 
-    public void set_email_address(String email_address)
+    public void set_email_account(String email_account)
     {
-	m_adapter.set_email_address(email_address);
+	m_adapter.set_email_account(email_account);
 
-	if(email_address.trim().isEmpty())
-	    m_email_address.setText("e-mail@e-mail.org");
+	if(email_account.trim().isEmpty())
+	    m_email_account.setText("e-mail@e-mail.org");
 	else
-	    m_email_address.setText(email_address);
+	    m_email_account.setText(email_account);
 
 	update();
     }
@@ -185,7 +185,7 @@ public class FoldersDrawer
     {
 	((TextView) m_view.findViewById(R.id.folders_textview)).setTextColor
 	    (Lettera.text_color());
-	m_email_address.setTextColor(Lettera.text_color());
+	m_email_account.setTextColor(Lettera.text_color());
 	m_popup_window.showAsDropDown
 	    (m_parent, 0, 0, Gravity.START | Gravity.TOP);
 	m_view.findViewById(R.id.top_divider).setBackgroundColor

@@ -42,7 +42,7 @@ public class Letter
     private Dialog m_dialog = null;
     private ImageButton m_close_button = null;
     private Lettera m_lettera = null;
-    private TextView m_from_email_address = null;
+    private TextView m_from_email_account = null;
     private TextView m_subject = null;
     private View m_parent = null;
     private View m_view = null;
@@ -87,7 +87,7 @@ public class Letter
     private void initialize_widget_members()
     {
 	m_close_button = m_view.findViewById(R.id.close_button);
-	m_from_email_address = m_view.findViewById(R.id.from_email_address);
+	m_from_email_account = m_view.findViewById(R.id.from_email_account);
 	m_subject = m_view.findViewById(R.id.subject);
 	m_web_view = m_view.findViewById(R.id.content);
     }
@@ -128,7 +128,7 @@ public class Letter
 	    return;
 
 	m_dialog.show();
-	m_from_email_address.setText(message_element.m_from_email_account);
+	m_from_email_account.setText(message_element.m_from_email_account);
 	m_subject.setText(message_element.m_subject);
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());

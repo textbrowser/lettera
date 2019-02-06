@@ -281,7 +281,7 @@ public class Mail
 	return m_smtp;
     }
 
-    public String email_address()
+    public String email_account()
     {
 	return m_inbound_email;
     }
