@@ -760,7 +760,8 @@ public class Lettera extends AppCompatActivity
 		public void onLongClick(final View view, int position)
 		{
 		    m_artificial_button.performClick();
-		    m_letter_dialog.show(position);
+		    m_letter_dialog.show
+			(email_account(), selected_folder_name(), position);
 		    view.setBackgroundColor(Color.parseColor("#90caf9"));
 		    new Handler(Looper.getMainLooper()).
 			postDelayed(new Runnable()

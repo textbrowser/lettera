@@ -218,7 +218,6 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	}
     }
 
-    private Database m_database = null;
     private MoveMessages m_move_messages = null;
     private String m_email_address = "";
     private String m_folder_name = "";
@@ -270,7 +269,6 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 			       String email_address,
 			       String folder_name)
     {
-	m_database = Database.instance();
 	m_email_address = email_address;
 	m_folder_name = folder_name;
 	m_move_messages = move_messages;

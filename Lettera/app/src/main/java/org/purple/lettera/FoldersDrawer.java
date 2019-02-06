@@ -64,7 +64,6 @@ public class FoldersDrawer
     }
 
     private Context m_context = null;
-    private Database m_database = null;
     private FoldersDrawerAdapter m_adapter = null;
     private FoldersDrawerLinearLayoutManager m_layout_manager = null;
     private ImageButton m_close_button = null;
@@ -73,6 +72,7 @@ public class FoldersDrawer
     private TextView m_email_address = null;
     private View m_parent = null;
     private View m_view = null;
+    private final static Database s_database = Database.instance();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public FoldersDrawer(Context context, View parent)
@@ -106,7 +106,6 @@ public class FoldersDrawer
 
 	initialize_widget_members();
 	m_adapter = new FoldersDrawerAdapter(FoldersDrawer.this);
-	m_database = Database.instance(m_context);
 	m_layout_manager = new FoldersDrawerLinearLayoutManager(m_context);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
 	m_recycler.setAdapter(m_adapter);
@@ -151,7 +150,7 @@ public class FoldersDrawer
 	    ((Lettera) m_context).prepare_folders_and_messages_widgets
 		(selected_folder_name());
 
-	m_database.save_setting
+	s_database.save_setting
 	    ("selected_folder_name_" + m_email_address.getText().toString(),
 	     selected_folder_name(),
 	     false);

@@ -66,13 +66,12 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	}
     }
 
-    private Database m_database = null;
     private String m_email_address = "";
     private String m_folder_name = "";
+    private final static Database s_database = Database.instance();
 
     public MessagesAdapter(Context context)
     {
-	m_database = Database.instance(context);
     }
 
     @Override
@@ -91,7 +90,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
     @Override
     public int getItemCount()
     {
-	return m_database.message_count_cursor(m_email_address, m_folder_name);
+	return s_database.message_count_cursor(m_email_address, m_folder_name);
     }
 
     @Override
@@ -106,7 +105,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	if(view_holder_message == null)
 	    return;
 
-	MessageElement message_element = m_database.message
+	MessageElement message_element = s_database.message
 	    (m_email_address, m_folder_name, position);
 
 	view_holder_message.set_data
@@ -126,7 +125,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	m_folder_name = folder_name;
 
 	if(m_folder_name.isEmpty())
-	    m_folder_name = m_database.setting
+	    m_folder_name = s_database.setting
 		("selected_folder_name_" + m_email_address);
 
 	if(m_folder_name.isEmpty())

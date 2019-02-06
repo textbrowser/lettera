@@ -84,7 +84,7 @@ public class Settings
 
 	    try
 	    {
-		ok.set(m_database.delete_email_account(m_email_account));
+		ok.set(s_database.delete_email_account(m_email_account));
 	    }
 	    catch(Exception exception)
 	    {
@@ -145,7 +145,7 @@ public class Settings
 
 	    try
 	    {
-		ok.set(m_database.delete_messages(m_email_account));
+		ok.set(s_database.delete_messages(m_email_account));
 	    }
 	    catch(Exception exception)
 	    {
@@ -369,7 +369,7 @@ public class Settings
 		   m_signature_key_pair == null)
 		    m_error = true;
 		else
-		    m_database.delete("open_pgp");
+		    s_database.delete("open_pgp");
 	    }
 	    catch(Exception exception)
 	    {
@@ -396,14 +396,14 @@ public class Settings
 			     Cryptography.sha_1_fingerprint(null));
 		    else
 		    {
-			if(m_database.save_pgp_key_pair(m_encryption_key_pair,
+			if(s_database.save_pgp_key_pair(m_encryption_key_pair,
 							"encryption"))
 			{
 			    m_encryption_key_data.setText
 				(Cryptography.
 				 key_information(m_encryption_key_pair.
 						 getPublic()));
-			    m_pgp.set_encryption_key_pair
+			    s_pgp.set_encryption_key_pair
 				(m_encryption_key_pair);
 			}
 			else
@@ -421,10 +421,10 @@ public class Settings
 			     Cryptography.sha_1_fingerprint(null));
 		    else
 		    {
-			if(m_database.save_pgp_key_pair(m_signature_key_pair,
+			if(s_database.save_pgp_key_pair(m_signature_key_pair,
 							"signature"))
 			{
-			    m_pgp.set_signature_key_pair(m_signature_key_pair);
+			    s_pgp.set_signature_key_pair(m_signature_key_pair);
 			    m_signature_key_data.setText
 				(Cryptography.
 				 key_information(m_signature_key_pair.
@@ -444,9 +444,9 @@ public class Settings
 			    (m_lettera, "Key pairs generated!", "Success");
 		    else
 		    {
-			m_database.delete("open_pgp");
-			m_pgp.set_encryption_key_pair(null);
-			m_pgp.set_signature_key_pair(null);
+			s_database.delete("open_pgp");
+			s_pgp.set_encryption_key_pair(null);
+			s_pgp.set_signature_key_pair(null);
 			Windows.show_dialog
 			    (m_lettera, "Cannot generate key pairs!", "Error");
 		    }
@@ -502,8 +502,8 @@ public class Settings
     private View m_privacy_layout = null;
     private View m_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
-    private final Database m_database = Database.instance();
-    private final PGP m_pgp = PGP.instance();
+    private final static PGP s_pgp = PGP.instance();
+    private final static Database s_database = Database.instance();
     private final static InputFilter s_port_filter = new InputFilter()
     {
 	public CharSequence filter(CharSequence source,
@@ -564,7 +564,7 @@ public class Settings
 	    content_values.put("key", "color_theme");
 	    content_values.put
 		("value", m_color_theme_spinner.getSelectedItem().toString());
-	    error = m_database.save_setting(content_values, false);
+	    error = s_database.save_setting(content_values, false);
 
 	    if(!error.isEmpty())
 	    {
@@ -578,7 +578,7 @@ public class Settings
 	    content_values.put("key", "email_folders");
 	    content_values.put
 		("value", m_email_folders_spinner.getSelectedItem().toString());
-	    error = m_database.save_setting(content_values, false);
+	    error = s_database.save_setting(content_values, false);
 
 	    if(!error.isEmpty())
 	    {
@@ -592,7 +592,7 @@ public class Settings
 	    content_values.put("key", "show_status_bar");
 	    content_values.put
 		("value", m_show_status_bar.isChecked() ? "true" : "false");
-	    error = m_database.save_setting(content_values, true);
+	    error = s_database.save_setting(content_values, true);
 
 	    if(!error.isEmpty())
 	    {
@@ -609,7 +609,7 @@ public class Settings
 		("value",
 		 m_show_vertical_separator_before_settings_checkbox.
 		 isChecked() ? "true" : "false");
-	    error = m_database.save_setting(content_values, true);
+	    error = s_database.save_setting(content_values, true);
 
 	    if(!error.isEmpty())
 	    {
@@ -623,7 +623,7 @@ public class Settings
 	    content_values.put("key", "icon_theme");
 	    content_values.put
 		("value", m_icon_theme_spinner.getSelectedItem().toString());
-	    error = m_database.save_setting(content_values, true);
+	    error = s_database.save_setting(content_values, true);
 
 	    if(!error.isEmpty())
 	    {
@@ -635,7 +635,7 @@ public class Settings
 
 	    m_lettera.prepare_folders_and_messages_widgets("");
 	    m_lettera.prepare_generic_widgets();
-	    m_lettera.prepare_icons(m_database.settings_element("icon_theme"));
+	    m_lettera.prepare_icons(s_database.settings_element("icon_theme"));
 
 	    /*
 	    ** Network
@@ -756,7 +756,7 @@ public class Settings
 		 m_proxy_type_spinner.getSelectedItem().toString());
 	    content_values.put
 		("proxy_user", m_proxy_user.getText().toString().trim());
-	    error = m_database.save_email(content_values).trim();
+	    error = s_database.save_email(content_values).trim();
 
 	    if(!error.isEmpty())
 	    {
@@ -772,7 +772,7 @@ public class Settings
 		    content_values.put("key", "primary_email_account");
 		    content_values.put
 			("value", m_inbound_email.getText().toString());
-		    m_database.save_setting(content_values, true);
+		    s_database.save_setting(content_values, true);
 		    m_lettera.populate_folders_from_database();
 		}
 
@@ -789,14 +789,14 @@ public class Settings
 		else
 		    populate_network();
 
-		m_lettera.prepare_colors(m_database.setting("color_theme"));
+		m_lettera.prepare_colors(s_database.setting("color_theme"));
 		m_lettera.prepare_folders_and_messages_widgets
-		    (m_database.
+		    (s_database.
 		     setting("selected_folder_name_" +
-			     m_database.setting("primary_email_account")));
+			     s_database.setting("primary_email_account")));
 		m_lettera.prepare_generic_widgets();
 		m_lettera.prepare_icons
-		    (m_database.settings_element("icon_theme"));
+		    (s_database.settings_element("icon_theme"));
 		prepare_colors
 		    (m_color_theme_spinner.getSelectedItem().toString());
 	    }
@@ -933,7 +933,7 @@ public class Settings
 	if(m_lettera.isFinishing())
 	    return;
 
-	ArrayList<String> array_list = m_database.email_account_names();
+	ArrayList<String> array_list = s_database.email_account_names();
 
 	if(array_list == null || array_list.isEmpty())
 	{
@@ -965,7 +965,7 @@ public class Settings
 
 	m_color_theme_spinner.setAdapter(array_adapter);
 
-	switch(m_database.setting("color_theme").toLowerCase())
+	switch(s_database.setting("color_theme").toLowerCase())
 	{
 	case "black & blue":
 	    m_color_theme_spinner.setSelection(0);
@@ -978,7 +978,7 @@ public class Settings
 	    break;
 	}
 
-	SettingsElement settings_element = m_database.settings_element
+	SettingsElement settings_element = s_database.settings_element
 	    ("email_folders");
 
 	if(settings_element == null)
@@ -992,14 +992,14 @@ public class Settings
 	    }
 
 	m_show_status_bar.setChecked
-	    (m_database.setting("show_status_bar").equals("true"));
+	    (s_database.setting("show_status_bar").equals("true"));
 	m_show_vertical_separator_before_settings_checkbox.setChecked
-	    (m_database.setting("show_vertical_separator_before_settings").
+	    (s_database.setting("show_vertical_separator_before_settings").
 	     equals("true"));
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera, android.R.layout.simple_spinner_item, s_icon_themes);
 	m_icon_theme_spinner.setAdapter(array_adapter);
-	settings_element = m_database.settings_element("icon_theme");
+	settings_element = s_database.settings_element("icon_theme");
 
 	if(settings_element == null)
 	    m_icon_theme_spinner.setSelection(0);
@@ -1036,9 +1036,9 @@ public class Settings
 	    (m_lettera, android.R.layout.simple_spinner_item, s_proxy_types);
 	EmailElement email_element =
 	    m_accounts_spinner.getSelectedItem() == null ?
-	    null : m_database.email_element(m_accounts_spinner.
+	    null : s_database.email_element(m_accounts_spinner.
 					    getSelectedItem().toString());
-	SettingsElement settings_element = m_database.settings_element
+	SettingsElement settings_element = s_database.settings_element
 	    ("primary_email_account");
 
 	m_delete_account_verify_checkbox.setChecked(false);
@@ -1072,7 +1072,7 @@ public class Settings
 
 		content_values.put("key", "primary_email_account");
 		content_values.put("value", email_element.m_inbound_email);
-		m_database.save_setting(content_values, false);
+		s_database.save_setting(content_values, false);
 	    }
 
 	    m_delete_on_server_checkbox.setChecked
@@ -1117,7 +1117,7 @@ public class Settings
 	try
 	{
 	    m_encryption_key_data.setText
-		(Cryptography.key_information(m_pgp.encryption_key_pair().
+		(Cryptography.key_information(s_pgp.encryption_key_pair().
 					      getPublic()));
 	}
 	catch(Exception exception)
@@ -1129,7 +1129,7 @@ public class Settings
 	try
 	{
 	    m_signature_key_data.setText
-		(Cryptography.key_information(m_pgp.signature_key_pair().
+		(Cryptography.key_information(s_pgp.signature_key_pair().
 					      getPublic()));
 	}
 	catch(Exception exception)
@@ -1290,9 +1290,9 @@ public class Settings
 		    if(m_lettera.isFinishing())
 			return;
 
-		    m_lettera.prepare_colors(m_database.setting("color_theme"));
+		    m_lettera.prepare_colors(s_database.setting("color_theme"));
 		    m_lettera.prepare_icons
-			(m_database.settings_element("icon_theme"));
+			(s_database.settings_element("icon_theme"));
 
 		    try
 		    {
@@ -2177,7 +2177,7 @@ public class Settings
 
 	m_outbound_as_inbound.setChecked(false);
 	populate();
-	prepare_colors(m_database.setting("color_theme"));
+	prepare_colors(s_database.setting("color_theme"));
 	prepare_icons();
     }
 }

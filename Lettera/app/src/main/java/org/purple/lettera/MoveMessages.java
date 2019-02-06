@@ -63,7 +63,6 @@ public class MoveMessages
     }
 
     private Context m_context = null;
-    private Database m_database = null;
     private MoveMessagesAdapter m_adapter = null;
     private MoveMessagesLinearLayoutManager m_layout_manager = null;
     private PopupWindow m_popup_window = null;
@@ -104,7 +103,6 @@ public class MoveMessages
 	initialize_widget_members();
 	m_adapter = new MoveMessagesAdapter
 	    (MoveMessages.this, email_account, folder_name);
-	m_database = Database.instance(m_context);
 	m_layout_manager = new MoveMessagesLinearLayoutManager(m_context);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
 	m_recycler.setAdapter(m_adapter);

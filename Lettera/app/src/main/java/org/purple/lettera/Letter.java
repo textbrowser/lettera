@@ -38,7 +38,6 @@ import android.widget.ImageButton;
 
 public class Letter
 {
-    private Database m_database = null;
     private Dialog m_dialog = null;
     private ImageButton m_close_button = null;
     private Lettera m_lettera = null;
@@ -46,6 +45,7 @@ public class Letter
     private View m_view = null;
     private WebView m_web_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
+    private final static Database s_database = Database.instance();
 
     public Letter(Lettera lettera, View parent)
     {
@@ -114,8 +114,14 @@ public class Letter
 	}
     }
 
-    public void show(int position)
+    public void show(String email_account, String folder_name, int position)
     {
+	MessageElement message_element = s_database.message
+	    (email_account, folder_name, position);
+
+	if(message_element == null)
+	    return;
+
 	m_dialog.show();
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());

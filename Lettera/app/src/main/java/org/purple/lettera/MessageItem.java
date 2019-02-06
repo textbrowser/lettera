@@ -41,7 +41,6 @@ import java.util.Date;
 
 public class MessageItem extends View
 {
-    final private Database m_database = Database.instance();
     private CheckBox m_selected = null;
     private CompoundButton.OnCheckedChangeListener m_selected_listener = null;
     private Context m_context = null;
@@ -55,6 +54,7 @@ public class MessageItem extends View
     private TextView m_summary = null;
     private View m_divider = null;
     private View m_view = null;
+    private final static Database s_database = Database.instance();
     private long m_uid = 0;
 
     private void initialize_widget_members()
@@ -83,7 +83,7 @@ public class MessageItem extends View
 			    @Override
 			    public void run()
 			    {
-				m_database.set_message_selected
+				s_database.set_message_selected
 				    (m_email_account,
 				     m_folder_name,
 				     is_checked,
@@ -159,7 +159,7 @@ public class MessageItem extends View
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
 	m_selected.setOnCheckedChangeListener(null);
 	m_selected.setChecked
-	    (m_database.message_selected(message_element.m_email_account,
+	    (s_database.message_selected(message_element.m_email_account,
 					 folder_name,
 					 message_element.m_uid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
