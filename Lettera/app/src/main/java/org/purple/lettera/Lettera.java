@@ -42,6 +42,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -808,6 +809,19 @@ public class Lettera extends AppCompatActivity
 			    (SELECTION_COLOR);
 		}
 	    });
+	m_recycler.getViewTreeObserver().addOnGlobalLayoutListener
+	    (new ViewTreeObserver.OnGlobalLayoutListener()
+	    {
+		@Override
+		public void onGlobalLayout()
+		{
+		    if(m_layout_manager.
+		       findViewByPosition(m_selected_position) != null)
+			m_layout_manager.findViewByPosition
+			    (m_selected_position).setBackgroundColor
+			    (SELECTION_COLOR);
+		}
+	    });
 	m_recycler.setAdapter(m_messages_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
 	m_recycler.setHasFixedSize(true);
@@ -952,6 +966,7 @@ public class Lettera extends AppCompatActivity
 
 	m_folders_drawer.update();
 	m_messages_adapter.notifyDataSetChanged();
+	m_selected_position = -1;
 	prepare_current_folder_text(selected_folder_name());
     }
 
@@ -1044,7 +1059,6 @@ public class Lettera extends AppCompatActivity
 		(folder_name + " (" + m_messages_adapter.getItemCount() + ")");
 
 	m_items_count.setText("Items: " + m_messages_adapter.getItemCount());
-	m_selected_position = -1;
     }
 
     public void prepare_folders_and_messages_widgets(String folder_name)
@@ -1086,16 +1100,25 @@ public class Lettera extends AppCompatActivity
 	{
 	}
 
+	m_scroll_bottom.setVisibility(View.GONE);
+	m_scroll_top.setVisibility(View.GONE);
+
 	synchronized(m_selected_folder_name_mutex)
 	{
 	    if(folder_name.isEmpty())
+	    {
 		m_selected_folder_name = NONE_FOLDER;
+		m_selected_position = -1;
+	    }
 	    else
+	    {
+		if(!folder_name.equals(m_selected_folder_name))
+		    m_selected_position = -1;
+
 		m_selected_folder_name = folder_name;
+	    }
 	}
 
-	m_scroll_bottom.setVisibility(View.GONE);
-	m_scroll_top.setVisibility(View.GONE);
 	prepare_current_folder_text(selected_folder_name());
     }
 

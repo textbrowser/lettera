@@ -633,7 +633,6 @@ public class Settings
 		return;
 	    }
 
-	    m_lettera.prepare_folders_and_messages_widgets("");
 	    m_lettera.prepare_generic_widgets();
 	    m_lettera.prepare_icons(s_database.settings_element("icon_theme"));
 
