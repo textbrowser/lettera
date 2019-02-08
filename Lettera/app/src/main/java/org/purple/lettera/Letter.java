@@ -92,6 +92,8 @@ public class Letter
 	m_subject = m_view.findViewById(R.id.subject);
 	m_to_email_account = m_view.findViewById(R.id.to_email_account);
 	m_web_view = m_view.findViewById(R.id.content);
+	m_web_view.getSettings().setBlockNetworkLoads(true);
+	m_web_view.getSettings().setJavaScriptEnabled(false);
     }
 
     private void prepare_listeners()
@@ -112,6 +114,8 @@ public class Letter
 
     public void dismiss()
     {
+	m_web_view.loadData("", "text/html", null);
+
 	try
 	{
 	    m_dialog.dismiss();
@@ -134,7 +138,7 @@ public class Letter
 	m_from_email_account.setTextColor(Lettera.text_color());
 	m_subject.setText(message_element.m_subject);
 	m_subject.setTextColor(Lettera.text_color());
-	m_to_email_account.setText(email_account);
+	m_to_email_account.setText(message_element.m_email_account);
 	m_to_email_account.setTextColor(Lettera.text_color());
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());

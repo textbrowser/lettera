@@ -752,12 +752,7 @@ public class Lettera extends AppCompatActivity
 					   ClickListener()
 	    {
 		@Override
-		public void onClick(View view, int position)
-		{
-		}
-
-		@Override
-		public void onLongClick(final View view, int position)
+		public void onClick(final View view, int position)
 		{
 		    m_artificial_button.performClick();
 		    m_letter_dialog.show
@@ -772,6 +767,11 @@ public class Lettera extends AppCompatActivity
 			    view.setBackgroundColor(background_color());
 			}
 		    }, 150);
+		}
+
+		@Override
+		public void onLongClick(View view, int position)
+		{
 		}
 	    }));
 	m_recycler.addOnScrollListener
