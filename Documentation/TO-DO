@@ -32,6 +32,7 @@ Completed Items
 - Removal of local messages should be enveloped within a progress dialog.
 - Remove folder spinner.
 - Restore personal key pairs.
+- Retain current selection position if the same folder is selected?
 - Retain selected folder in Folders drawer.
 - Retain selected folder in Folders on device orientation change.
 - Retain selected messages.
@@ -59,7 +60,6 @@ Remaining Items
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - Reset of Network widgets in Settings.
-- Retain current selection position if the same folder is selected?
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
 - What's a deleted message?
