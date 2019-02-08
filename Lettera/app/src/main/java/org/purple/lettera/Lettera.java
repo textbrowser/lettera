@@ -262,7 +262,9 @@ public class Lettera extends AppCompatActivity
     private final static AtomicInteger s_text_color = new AtomicInteger
 	(Color.BLACK);
     private final static int FOLDERS_DRAWER_INTERVAL = 7500;
+    private final static int SELECTION_COLOR = Color.parseColor("#90caf9");
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
+    private int m_selected_position = -1;
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
     private static int s_default_text_color = 0;
@@ -752,26 +754,25 @@ public class Lettera extends AppCompatActivity
 					   ClickListener()
 	    {
 		@Override
-		public void onClick(final View view, int position)
+		public void onClick(View view, int position)
 		{
-		    m_artificial_button.performClick();
-		    m_letter_dialog.show
-			(email_account(), selected_folder_name(), position);
-		    view.setBackgroundColor(Color.parseColor("#90caf9"));
-		    new Handler(Looper.getMainLooper()).
-			postDelayed(new Runnable()
-		    {
-			@Override
-			public void run()
-			{
-			    view.setBackgroundColor(background_color());
-			}
-		    }, 150);
 		}
 
 		@Override
 		public void onLongClick(View view, int position)
 		{
+		    m_artificial_button.performClick();
+
+		    if(m_layout_manager.
+		       findViewByPosition(m_selected_position) != null)
+			m_layout_manager.findViewByPosition
+			    (m_selected_position).setBackgroundColor
+			    (background_color());
+
+		    m_letter_dialog.show
+			(email_account(), selected_folder_name(), position);
+		    m_selected_position = position;
+		    view.setBackgroundColor(SELECTION_COLOR);
 		}
 	    }));
 	m_recycler.addOnScrollListener
@@ -799,6 +800,12 @@ public class Lettera extends AppCompatActivity
 
 		    if(dy != 0)
 			m_scroll_hander.removeCallbacks(m_scroll_runnable);
+
+		    if(m_layout_manager.
+		       findViewByPosition(m_selected_position) != null)
+			m_layout_manager.findViewByPosition
+			    (m_selected_position).setBackgroundColor
+			    (SELECTION_COLOR);
 		}
 	    });
 	m_recycler.setAdapter(m_messages_adapter);
@@ -1037,6 +1044,7 @@ public class Lettera extends AppCompatActivity
 		(folder_name + " (" + m_messages_adapter.getItemCount() + ")");
 
 	m_items_count.setText("Items: " + m_messages_adapter.getItemCount());
+	m_selected_position = -1;
     }
 
     public void prepare_folders_and_messages_widgets(String folder_name)
