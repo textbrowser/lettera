@@ -39,6 +39,108 @@ import android.widget.TextView;
 
 public class Letter
 {
+    private class PopulateContainers implements Runnable
+    {
+	private Dialog m_dialog = null;
+	private String m_email_account = "";
+	private String m_folder_full_name = "";
+	private String m_folder_name = "";
+	private int m_position = -1;
+
+	private PopulateContainers(Dialog dialog,
+				   String email_account,
+				   String folder_name,
+				   int position)
+	{
+	    m_dialog = dialog;
+	    m_email_account = email_account;
+	    m_folder_name = folder_name;
+	    m_position = position;
+	}
+
+	@Override
+	public void run()
+	{
+	    final MessageElement message_element = s_database.message
+		(m_email_account, m_folder_name, m_position);
+
+	    if(message_element == null)
+	    {
+		try
+		{
+		    if(m_dialog != null)
+			m_dialog.dismiss();
+		}
+		catch(Exception exception)
+		{
+		}
+
+		return;
+	    }
+
+	    Mail mail = null;
+	    long uid = -1;
+
+	    try
+	    {
+		EmailElement email_element = null;
+
+		mail = new Mail
+		    (email_element.m_inbound_address,
+		     email_element.m_inbound_email,
+		     email_element.m_inbound_password,
+		     String.valueOf(email_element.m_inbound_port),
+		     email_element.m_outbound_address,
+		     email_element.m_outbound_email,
+		     email_element.m_outbound_password,
+		     String.valueOf(email_element.m_outbound_port),
+		     email_element.m_proxy_address,
+		     email_element.m_proxy_password,
+		     String.valueOf(email_element.m_proxy_port),
+		     email_element.m_proxy_type,
+		     email_element.m_proxy_user);
+		mail.connect_imap();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	    finally
+	    {
+		if(mail != null)
+		    mail.disconnect();
+	    }
+
+	    m_lettera.runOnUiThread(new Runnable()
+	    {
+		@Override
+		public void run()
+		{
+		    m_from_email_account.setText
+			(message_element.m_from_email_account);
+		    m_subject.setText(message_element.m_subject);
+		    m_to_email_account.setText(message_element.m_email_account);
+
+		    String content = message_element.m_message;
+
+		    content = content.replaceAll
+			("<img ",
+			 "<img onerror=\"this.style.display='none';\" ");
+		    m_web_view.loadDataWithBaseURL
+			(null, content, "text/html", "UTF-8", null);
+
+		    try
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    });
+	}
+    }
+
     private Dialog m_dialog = null;
     private ImageButton m_close_button = null;
     private Lettera m_lettera = null;
@@ -114,7 +216,7 @@ public class Letter
 
     public void dismiss()
     {
-	m_web_view.loadData("", "text/html", null);
+	m_web_view.loadDataWithBaseURL(null, "", "text/html", "", null);
 
 	try
 	{
@@ -127,28 +229,46 @@ public class Letter
 
     public void show(String email_account, String folder_name, int position)
     {
-	MessageElement message_element = s_database.message
-	    (email_account, folder_name, position);
-
-	if(message_element == null)
-	    return;
-
 	m_dialog.show();
-	m_from_email_account.setText(message_element.m_from_email_account);
+	m_from_email_account.setText("e-mail@e-mail.org");
 	m_from_email_account.setTextColor(Lettera.text_color());
-	m_subject.setText(message_element.m_subject);
+	m_subject.setText("Subject");
 	m_subject.setTextColor(Lettera.text_color());
-	m_to_email_account.setText(message_element.m_email_account);
+	m_to_email_account.setText("e-mail@e-mail.org");
 	m_to_email_account.setTextColor(Lettera.text_color());
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());
 	m_view.setBackgroundColor(Lettera.background_color());
 
-	String content = message_element.m_message;
+	Dialog dialog = null;
 
-	content = content.replaceAll
-	    ("<img ", "<img onerror=\"this.style.display='none';\" ");
-	m_web_view.loadDataWithBaseURL
-	    (null, content, "text/html", "charset=UTF-8", null);
+	try
+	{
+	    dialog = new Dialog(m_lettera);
+	    Windows.show_progress_dialog
+		(m_lettera,
+		 dialog,
+		 "Downloading content. Please be patient.",
+		 null);
+
+	    Thread thread = new Thread
+		(new PopulateContainers(dialog,
+					email_account,
+					folder_name,
+					position));
+
+	    thread.start();
+	}
+	catch(Exception exception_1)
+	{
+	    try
+	    {
+		if(dialog != null)
+		    dialog.dismiss();
+	    }
+	    catch(Exception exception_2)
+	    {
+	    }
+	}
     }
 }

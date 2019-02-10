@@ -151,11 +151,14 @@ public class Lettera extends AppCompatActivity
 	@Override
 	public void run()
 	{
+	    Mail mail = null;
+
 	    try
 	    {
 		EmailElement email_element = m_database.email_element
 		    (email_account());
-		Mail mail = new Mail
+
+		mail = new Mail
 		    (email_element.m_inbound_address,
 		     email_element.m_inbound_email,
 		     email_element.m_inbound_password,
@@ -169,7 +172,6 @@ public class Lettera extends AppCompatActivity
 		     String.valueOf(email_element.m_proxy_port),
 		     email_element.m_proxy_type,
 		     email_element.m_proxy_user);
-
 		mail.connect_imap();
 		m_database.write_folders
 		    (mail.folder_elements(m_download_interrupted),
@@ -182,6 +184,11 @@ public class Lettera extends AppCompatActivity
 	    }
 	    catch(Exception exception)
 	    {
+	    }
+	    finally
+	    {
+		if(mail != null)
+		    mail.disconnect();
 	    }
 
 	    Lettera.this.runOnUiThread(new Runnable()
