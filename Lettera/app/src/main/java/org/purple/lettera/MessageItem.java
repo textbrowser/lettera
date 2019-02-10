@@ -135,7 +135,7 @@ public class MessageItem extends View
 	     Lettera.text_color());
 	m_attachment.setVisibility(View.GONE);
 
-	String string = Utilities.formatted_email_date
+	String string = Utilities.formatted_email_date_for_messages
 	    (new Date(message_element.m_received_date_unix_epoch));
 	int length = Math.min(128, message_element.m_message.trim().length());
 

@@ -58,7 +58,83 @@ public abstract class Utilities
 	}
     }
 
-    public static String formatted_email_date(Date date)
+    public static String formatted_email_date_for_message(Date date)
+    {
+	if(date == null)
+	    return "";
+
+	StringBuilder string_builder = new StringBuilder();
+
+	try
+	{
+	    Calendar calendar = Calendar.getInstance();
+
+	    switch(calendar.get(Calendar.MONTH))
+	    {
+	    case Calendar.APRIL:
+		string_builder.append("Apr ");
+		break;
+	    case Calendar.AUGUST:
+		string_builder.append("Aug ");
+		break;
+	    case Calendar.DECEMBER:
+		string_builder.append("Dec ");
+		break;
+	    case Calendar.FEBRUARY:
+		string_builder.append("Feb ");
+		break;
+	    case Calendar.JANUARY:
+		string_builder.append("Jan ");
+		break;
+	    case Calendar.JULY:
+		string_builder.append("Jul ");
+		break;
+	    case Calendar.JUNE:
+		string_builder.append("Jun ");
+		break;
+	    case Calendar.MARCH:
+		string_builder.append("Mar ");
+		break;
+	    case Calendar.MAY:
+		string_builder.append("May ");
+		break;
+	    case Calendar.SEPTEMBER:
+		string_builder.append("Sep ");
+		break;
+	    case Calendar.OCTOBER:
+		string_builder.append("Oct ");
+		break;
+	    case Calendar.NOVEMBER:
+		string_builder.append("Nov ");
+		break;
+	    default:
+		break;
+	    }
+
+	    string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
+	    string_builder.append(", ");
+	    string_builder.append(calendar.get(Calendar.YEAR));
+	    string_builder.append(", ");
+	    string_builder.append
+		(calendar.get(Calendar.HOUR)  == 0 ?
+		 12 : calendar.get(Calendar.HOUR));
+	    string_builder.append(":");
+	    string_builder.append
+		(calendar.get(Calendar.MINUTE) < 10 ?
+		 "0" + calendar.get(Calendar.MINUTE) :
+		 calendar.get(Calendar.MINUTE));
+	    string_builder.append(" ");
+	    string_builder.append
+		(calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM");
+	}
+	catch(Exception exception)
+	{
+	}
+
+	return string_builder.toString();
+    }
+
+    public static String formatted_email_date_for_messages(Date date)
     {
 	if(date == null)
 	    return "";

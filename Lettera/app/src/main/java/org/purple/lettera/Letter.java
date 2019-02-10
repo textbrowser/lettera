@@ -36,6 +36,7 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import java.util.Date;
 
 public class Letter
 {
@@ -119,7 +120,16 @@ public class Letter
 		public void run()
 		{
 		    m_from.setText(message_element.m_from_name);
-		    m_from.setTextColor(Lettera.text_color());
+
+		    String string = Utilities.formatted_email_date_for_message
+			(new Date(message_element.m_received_date_unix_epoch));
+
+		    if(string.isEmpty())
+			m_received_date.setText
+			    (message_element.m_received_date);
+		    else
+			m_received_date.setText(string);
+
 		    m_subject.setText(message_element.m_subject);
 		    m_to_email_account.setText(message_element.m_email_account);
 
@@ -148,6 +158,7 @@ public class Letter
     private ImageButton m_close_button = null;
     private Lettera m_lettera = null;
     private TextView m_from = null;
+    private TextView m_received_date = null;
     private TextView m_subject = null;
     private TextView m_to_email_account = null;
     private View m_parent = null;
@@ -194,6 +205,7 @@ public class Letter
     {
 	m_close_button = m_view.findViewById(R.id.close_button);
 	m_from = m_view.findViewById(R.id.from);
+	m_received_date = m_view.findViewById(R.id.received_date);
 	m_subject = m_view.findViewById(R.id.subject);
 	m_to_email_account = m_view.findViewById(R.id.to_email_account);
 	m_web_view = m_view.findViewById(R.id.content);

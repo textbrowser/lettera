@@ -50,9 +50,10 @@ Future Items
 Remaining Items
 
 - Background services.
+- Date distances (hours, minutes).
 - Deleted remote folders are also deleted locally.
 - Denote read messages.
-- Display a message's origin in Trash.
+- Display a message's origin in the Trash folder.
 - Display attachment list.
 - Display percent-downloaded in dialog.
 - Download incomplete content on opening of letter (getMessagesByUID).
