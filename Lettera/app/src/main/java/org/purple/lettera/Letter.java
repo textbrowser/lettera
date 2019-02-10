@@ -118,8 +118,8 @@ public class Letter
 		@Override
 		public void run()
 		{
-		    m_from_email_account.setText
-			(message_element.m_from_email_account);
+		    m_from.setText(message_element.m_from_name);
+		    m_from.setTextColor(Lettera.text_color());
 		    m_subject.setText(message_element.m_subject);
 		    m_to_email_account.setText(message_element.m_email_account);
 
@@ -147,7 +147,7 @@ public class Letter
     private Dialog m_dialog = null;
     private ImageButton m_close_button = null;
     private Lettera m_lettera = null;
-    private TextView m_from_email_account = null;
+    private TextView m_from = null;
     private TextView m_subject = null;
     private TextView m_to_email_account = null;
     private View m_parent = null;
@@ -193,7 +193,7 @@ public class Letter
     private void initialize_widget_members()
     {
 	m_close_button = m_view.findViewById(R.id.close_button);
-	m_from_email_account = m_view.findViewById(R.id.from_email_account);
+	m_from = m_view.findViewById(R.id.from);
 	m_subject = m_view.findViewById(R.id.subject);
 	m_to_email_account = m_view.findViewById(R.id.to_email_account);
 	m_web_view = m_view.findViewById(R.id.content);
@@ -233,8 +233,8 @@ public class Letter
     public void show(String email_account, String folder_name, int position)
     {
 	m_dialog.show();
-	m_from_email_account.setText("e-mail@e-mail.org");
-	m_from_email_account.setTextColor(Lettera.text_color());
+	m_from.setText("e-mail@e-mail.org");
+	m_from.setTextColor(Lettera.text_color());
 	m_subject.setText("Subject");
 	m_subject.setTextColor(Lettera.text_color());
 	m_to_email_account.setText("e-mail@e-mail.org");
