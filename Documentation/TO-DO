@@ -53,8 +53,9 @@ Remaining Items
 - Deleted remote folders are also deleted locally.
 - Denote read messages.
 - Display a message's origin in Trash.
+- Display attachment list.
 - Display percent-downloaded in dialog.
-- Download incomplete content on opening of letters.
+- Download incomplete content on opening of letter (getMessagesByUID).
 - Letter navigation.
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?

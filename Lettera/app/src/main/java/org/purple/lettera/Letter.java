@@ -43,7 +43,6 @@ public class Letter
     {
 	private Dialog m_dialog = null;
 	private String m_email_account = "";
-	private String m_folder_full_name = "";
 	private String m_folder_name = "";
 	private int m_position = -1;
 
@@ -78,36 +77,40 @@ public class Letter
 		return;
 	    }
 
-	    Mail mail = null;
-	    long uid = -1;
+	    if(!message_element.m_content_downloaded)
+	    {
+		Mail mail = null;
+		long uid = -1;
 
-	    try
-	    {
-		EmailElement email_element = null;
+		try
+		{
+		    EmailElement email_element = s_database.email_element
+			(m_email_account);
 
-		mail = new Mail
-		    (email_element.m_inbound_address,
-		     email_element.m_inbound_email,
-		     email_element.m_inbound_password,
-		     String.valueOf(email_element.m_inbound_port),
-		     email_element.m_outbound_address,
-		     email_element.m_outbound_email,
-		     email_element.m_outbound_password,
-		     String.valueOf(email_element.m_outbound_port),
-		     email_element.m_proxy_address,
-		     email_element.m_proxy_password,
-		     String.valueOf(email_element.m_proxy_port),
-		     email_element.m_proxy_type,
-		     email_element.m_proxy_user);
-		mail.connect_imap();
-	    }
-	    catch(Exception exception)
-	    {
-	    }
-	    finally
-	    {
-		if(mail != null)
-		    mail.disconnect();
+		    mail = new Mail
+			(email_element.m_inbound_address,
+			 email_element.m_inbound_email,
+			 email_element.m_inbound_password,
+			 String.valueOf(email_element.m_inbound_port),
+			 email_element.m_outbound_address,
+			 email_element.m_outbound_email,
+			 email_element.m_outbound_password,
+			 String.valueOf(email_element.m_outbound_port),
+			 email_element.m_proxy_address,
+			 email_element.m_proxy_password,
+			 String.valueOf(email_element.m_proxy_port),
+			 email_element.m_proxy_type,
+			 email_element.m_proxy_user);
+		    mail.connect_imap();
+		}
+		catch(Exception exception)
+		{
+		}
+		finally
+		{
+		    if(mail != null)
+			mail.disconnect();
+		}
 	    }
 
 	    m_lettera.runOnUiThread(new Runnable()
