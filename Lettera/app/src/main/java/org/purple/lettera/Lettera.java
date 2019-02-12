@@ -261,6 +261,7 @@ public class Lettera extends AppCompatActivity
     private View m_vertical_separator = null;
     private final AtomicBoolean m_download_interrupted =
 	new AtomicBoolean(false);
+    private final AtomicBoolean m_scrolling = new AtomicBoolean(false);
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
     private final static AtomicInteger s_background_color = new AtomicInteger
@@ -697,17 +698,19 @@ public class Lettera extends AppCompatActivity
 				m_folder_names.remove(0);
 			    }
 
-			    Lettera.this.runOnUiThread(new Runnable()
-			    {
-				@Override
-				public void run()
+			    if(!m_scrolling.get())
+				Lettera.this.runOnUiThread(new Runnable()
 				{
-				    m_messages_adapter.notifyDataSetChanged();
-				    m_folders_drawer.update();
-				    prepare_current_folder_text
-					(selected_folder_name());
-				}
-			    });
+				    @Override
+				    public void run()
+				    {
+					m_messages_adapter.
+					    notifyDataSetChanged();
+					m_folders_drawer.update();
+					prepare_current_folder_text
+					    (selected_folder_name());
+				    }
+				});
 			}
 		    }
 		    catch(Exception exception)
@@ -794,7 +797,10 @@ public class Lettera extends AppCompatActivity
 			m_scroll_hander.removeCallbacks(m_scroll_runnable);
 			m_scroll_hander.postDelayed
 			    (m_scroll_runnable, HIDE_SCROLL_TO_BUTTON_DELAY);
+			m_scrolling.set(false);
 		    }
+		    else
+			m_scrolling.set(true);
 		}
 
 		public void onScrolled
