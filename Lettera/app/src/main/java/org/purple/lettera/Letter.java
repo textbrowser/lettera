@@ -138,8 +138,13 @@ public class Letter
 		    content = content.replaceAll
 			("<img ",
 			 "<img onerror=\"this.style.display='none';\" ");
+
 		    m_web_view.loadDataWithBaseURL
-			(null, content, "text/html", "UTF-8", null);
+			(null,
+			 content,
+			 !content.contains("<html>") ? "text" : "text/html",
+			 "UTF-8",
+			 null);
 
 		    try
 		    {
@@ -231,7 +236,8 @@ public class Letter
 
     public void dismiss()
     {
-	m_web_view.loadDataWithBaseURL(null, "", "text/html", "", null);
+	m_web_view.loadDataWithBaseURL(null, "", "text", "", null);
+	m_web_view.scrollTo(0, 0);
 
 	try
 	{

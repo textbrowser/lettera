@@ -61,6 +61,7 @@ Remaining Items
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
+- Optional network loading of HTML data.
 - Reset of Network widgets in Settings.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
