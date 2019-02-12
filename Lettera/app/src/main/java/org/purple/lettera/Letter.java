@@ -33,6 +33,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -142,7 +143,8 @@ public class Letter
 		    m_web_view.loadDataWithBaseURL
 			(null,
 			 content,
-			 !content.contains("<html>") ? "text" : "text/html",
+			 !content.contains("<html>") ?
+			 "text/plain" : "text/html",
 			 "UTF-8",
 			 null);
 
@@ -214,8 +216,10 @@ public class Letter
 	m_subject = m_view.findViewById(R.id.subject);
 	m_to_email_account = m_view.findViewById(R.id.to_email_account);
 	m_web_view = m_view.findViewById(R.id.content);
+	m_web_view.getSettings().setAppCacheEnabled(false);
 	m_web_view.getSettings().setBlockNetworkLoads(true);
 	m_web_view.getSettings().setJavaScriptEnabled(true);
+        m_web_view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     }
 
     private void prepare_listeners()
