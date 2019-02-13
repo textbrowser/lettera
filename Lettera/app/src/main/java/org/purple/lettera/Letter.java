@@ -29,9 +29,9 @@ package org.purple.lettera;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -177,7 +177,6 @@ public class Letter
 	    (Context.LAYOUT_INFLATER_SERVICE);
 
 	m_layout_params = new WindowManager.LayoutParams();
-	m_layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
 	m_layout_params.height = WindowManager.LayoutParams.MATCH_PARENT;
 	m_layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
 	m_view = inflater.inflate(R.layout.letter, null);
@@ -186,7 +185,9 @@ public class Letter
 	** The cute popup.
 	*/
 
-	m_dialog = new Dialog(m_lettera);
+	m_dialog = new Dialog
+	    (m_lettera, android.R.style.Theme_Material_NoActionBar_Fullscreen);
+	m_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	m_dialog.setCancelable(false);
 	m_dialog.setContentView(m_view);
 	m_dialog.setTitle("Letter");

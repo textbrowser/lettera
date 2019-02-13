@@ -36,9 +36,9 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.AdapterView;
@@ -1994,8 +1994,7 @@ public class Settings
 	    (Context.LAYOUT_INFLATER_SERVICE);
 
 	m_layout_params = new WindowManager.LayoutParams();
-	m_layout_params.gravity = Gravity.CENTER_VERTICAL | Gravity.TOP;
-	m_layout_params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+	m_layout_params.height = WindowManager.LayoutParams.MATCH_PARENT;
 	m_layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
 	m_view = inflater.inflate(R.layout.settings, null);
 
@@ -2011,7 +2010,9 @@ public class Settings
 	** The cute dialog.
 	*/
 
-	m_dialog = new Dialog(m_lettera);
+	m_dialog = new Dialog
+	    (m_lettera, android.R.style.Theme_Material_NoActionBar_Fullscreen);
+	m_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	m_dialog.setCancelable(false);
 	m_dialog.setContentView(m_view);
 	m_dialog.setTitle("Settings");
