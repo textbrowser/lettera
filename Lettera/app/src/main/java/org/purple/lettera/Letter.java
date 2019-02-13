@@ -186,7 +186,8 @@ public class Letter
 	*/
 
 	m_dialog = new Dialog
-	    (m_lettera, android.R.style.Theme_Material_NoActionBar_Fullscreen);
+	    (m_lettera,
+	     android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
 	m_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	m_dialog.setCancelable(false);
 	m_dialog.setContentView(m_view);
