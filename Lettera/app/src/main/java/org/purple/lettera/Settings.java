@@ -1994,6 +1994,7 @@ public class Settings
 	    (Context.LAYOUT_INFLATER_SERVICE);
 
 	m_layout_params = new WindowManager.LayoutParams();
+	m_layout_params.dimAmount = 0.0f;
 	m_layout_params.height = WindowManager.LayoutParams.MATCH_PARENT;
 	m_layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
 	m_view = inflater.inflate(R.layout.settings, null);
