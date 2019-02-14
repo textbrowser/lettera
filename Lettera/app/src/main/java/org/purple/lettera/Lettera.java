@@ -971,6 +971,11 @@ public class Lettera extends AppCompatActivity
 	prepare_folders_and_messages_widgets(folder_name);
     }
 
+    public void message_read()
+    {
+	m_messages_adapter.notifyDataSetChanged();
+    }
+
     public void messages_deleted()
     {
 	/*

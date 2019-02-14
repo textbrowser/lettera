@@ -7,6 +7,7 @@ Completed Items
 - Confirmation required when removing items.
 - Denote messages which have not been read.
 - Denote primary e-mail account in Settings.
+- Denote read messages.
 - Discover proper inbox. (None) folder will suffice.
 - Double-click event in Folders drawer. Dismiss on click.
 - Download folder messages incrementally.
@@ -52,7 +53,6 @@ Remaining Items
 - Background services.
 - Date distances (hours, minutes).
 - Deleted remote folders are also deleted locally.
-- Denote read messages.
 - Display a message's origin in the Trash folder.
 - Display attachment list.
 - Display percent-downloaded in dialog.

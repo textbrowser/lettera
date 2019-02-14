@@ -522,9 +522,11 @@ public class Database extends SQLiteOpenHelper
 	else if(m_db == null)
 	    return "m_db is null on save_setting()";
 
+	Thread thread = null;
 	final String key = content_values.getAsString("key");
 	final String value = content_values.getAsString("value");
-	Thread thread = new Thread(new Runnable()
+
+	thread = new Thread(new Runnable()
 	{
 	    @Override
 	    public void run()
@@ -676,7 +678,7 @@ public class Database extends SQLiteOpenHelper
 	return ok;
     }
 
-    public boolean delete_messages(final String email_account)
+    public boolean delete_messages(String email_account)
     {
 	if(m_db == null)
 	    return false;
@@ -1477,6 +1479,52 @@ public class Database extends SQLiteOpenHelper
 	});
 
 	thread.start();
+    }
+
+    public void set_message_read(String email_account,
+				 String folder_name,
+				 boolean has_been_read,
+				 long uid)
+    {
+	if(m_db == null)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    SQLiteStatement sqlite_statement = null;
+
+	    sqlite_statement = m_db.compileStatement
+		("UPDATE messages SET has_been_read = ? " +
+		 "WHERE email_account = ? " +
+		 "AND LOWER(to_folder_name) = LOWER(?) AND " +
+		 "uid = ?");
+	    sqlite_statement.bindLong(1, has_been_read ? 1 : 0);
+	    sqlite_statement.bindString(2, email_account);
+	    sqlite_statement.bindString(3, folder_name);
+	    sqlite_statement.bindLong(4, uid);
+	    sqlite_statement.execute();
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+
+	synchronized(m_read_message_cursor_mutex)
+	{
+	    if(m_read_message_cursor_email_account.equals(email_account) &&
+	       m_read_message_cursor_folder_name.equals(folder_name))
+		if(m_read_message_cursor != null)
+		{
+		    m_read_message_cursor.close();
+		    m_read_message_cursor = null;
+		}
+	}
     }
 
     public void set_message_selected(String email_account,

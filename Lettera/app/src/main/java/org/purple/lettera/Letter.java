@@ -82,7 +82,6 @@ public class Letter
 	    if(!message_element.m_content_downloaded)
 	    {
 		Mail mail = null;
-		long uid = -1;
 
 		try
 		{
@@ -141,6 +140,12 @@ public class Letter
 			 "<img onerror=\"this.style.display='none';\" ");
 		    m_web_view.loadDataWithBaseURL
 			(null, content, "text/html", "UTF-8", null);
+		    s_database.set_message_read
+			(m_email_account,
+			 m_folder_name,
+			 true,
+			 message_element.m_uid);
+		    m_lettera.message_read();
 
 		    try
 		    {
