@@ -51,6 +51,7 @@ Future Items
 Remaining Items
 
 - Background services.
+- Change read states.
 - Date distances (hours, minutes).
 - Deleted remote folders are also deleted locally.
 - Display a message's origin in the Trash folder.

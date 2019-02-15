@@ -2015,7 +2015,7 @@ public class Settings
 	    (m_lettera,
 	     android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
 	m_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	m_dialog.setCancelable(false);
+	m_dialog.setCancelable(true);
 	m_dialog.setContentView(m_view);
 	m_dialog.setTitle("Settings");
 
