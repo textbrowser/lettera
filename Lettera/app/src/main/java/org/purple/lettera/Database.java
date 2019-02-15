@@ -1753,6 +1753,7 @@ public class Database extends SQLiteOpenHelper
 		 "folder_name, " +
 		 "from_email_account, " +
 		 "from_name, " +
+		 "has_been_read, " +
 		 "message, " +
 		 "received_date, " +
 		 "received_date_unix_epoch, " +
@@ -1761,7 +1762,7 @@ public class Database extends SQLiteOpenHelper
 		 "subject, " +
 		 "to_folder_name, " +
 		 "uid) VALUES " +
-		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    long start_time = 0;
 
 	    for(Message message : messages)
@@ -1771,6 +1772,7 @@ public class Database extends SQLiteOpenHelper
 
 		Cursor cursor = null;
 		String to_folder_name = folder.getName();
+		int has_been_read = 0;
 		int selected = 0;
 		long message_uid = 0;
 
@@ -1778,10 +1780,11 @@ public class Database extends SQLiteOpenHelper
 		{
 		    message_uid = folder.getUID(message);
 		    cursor = m_db.rawQuery
-			("SELECT content_downloaded, " +
-			 "selected, " +
-			 "to_folder_name, " +
-			 "OID " +
+			("SELECT content_downloaded, " + // 0
+			 "has_been_read, " +             // 1
+			 "selected, " +                  // 2
+			 "to_folder_name, " +            // 3
+			 "OID " +                        // 4
 			 "FROM messages WHERE email_account = ? AND " +
 			 "LOWER(folder_name) = LOWER(?) AND " +
 			 "uid = ?",
@@ -1802,7 +1805,7 @@ public class Database extends SQLiteOpenHelper
 				      "OID = ?",
 				      new String[] {String.
 						    valueOf(cursor.
-							    getLong(3))}) > 0)
+							    getLong(4))}) > 0)
 			    {
 				cursor.close();
 				refresh_cursor = true;
@@ -1810,8 +1813,9 @@ public class Database extends SQLiteOpenHelper
 			    }
 			}
 
-			selected = cursor.getInt(1);
-			to_folder_name = cursor.getString(2);
+			has_been_read = cursor.getInt(1);
+			selected = cursor.getInt(2);
+			to_folder_name = cursor.getString(3);
 		    }
 		}
 		catch(Exception exception)
@@ -1878,6 +1882,8 @@ public class Database extends SQLiteOpenHelper
 			content_values.put("from_email_account", UNKNOWN_EMAIL);
 			content_values.put("from_name", "(unknown)");
 		    }
+
+		    content_values.put("has_been_read", has_been_read);
 
 		    if(message.getContentType() == null ||
 		       message.isMimeType("text/plain"))
@@ -1950,6 +1956,8 @@ public class Database extends SQLiteOpenHelper
 			(i++, content_values.getAsString("from_email_account"));
 		    sqlite_statement.bindString
 			(i++, content_values.getAsString("from_name"));
+		    sqlite_statement.bindLong
+			(i++, content_values.getAsLong("has_been_read"));
 		    sqlite_statement.bindString
 			(i++, content_values.getAsString("message"));
 		    sqlite_statement.bindString
