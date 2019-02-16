@@ -69,6 +69,8 @@ public abstract class Utilities
 	{
 	    Calendar calendar = Calendar.getInstance();
 
+	    calendar.setTime(date);
+
 	    switch(calendar.get(Calendar.MONTH))
 	    {
 	    case Calendar.APRIL:
