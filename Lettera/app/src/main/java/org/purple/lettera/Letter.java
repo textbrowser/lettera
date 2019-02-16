@@ -135,11 +135,26 @@ public class Letter
 
 		    String content = message_element.m_message;
 
-		    content = content.replaceAll
-			("<img ",
-			 "<img onerror=\"this.style.display='none';\" ");
-		    m_web_view.loadDataWithBaseURL
-			(null, content, "text/html", "UTF-8", null);
+		    if(message_element.m_content_type.equals("text/html"))
+		    {
+			content = content.replaceAll
+			    ("<img ",
+			     "<img onerror=\"this.style.display='none';\" ").
+			    trim();
+
+			int index = content.toLowerCase().indexOf("<html");
+
+			if(index >= 0)
+			    content = content.substring
+				(index, content.length());
+
+			m_web_view.loadDataWithBaseURL
+			    (null, content, "text/html", "UTF-8", null);
+		    }
+		    else
+			m_web_view.loadDataWithBaseURL
+			    (null, content, "text/plain", "UTF-8", null);
+
 		    s_database.set_message_read
 			(m_email_account,
 			 m_folder_name,
@@ -219,7 +234,7 @@ public class Letter
 	m_to_email_account = m_view.findViewById(R.id.to_email_account);
 	m_web_view = m_view.findViewById(R.id.content);
 	m_web_view.getSettings().setAppCacheEnabled(false);
-	m_web_view.getSettings().setBlockNetworkLoads(true);
+	m_web_view.getSettings().setBlockNetworkLoads(false);
 	m_web_view.getSettings().setJavaScriptEnabled(true);
         m_web_view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     }

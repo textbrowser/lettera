@@ -329,20 +329,21 @@ public class Database extends SQLiteOpenHelper
 		if(m_read_message_cursor == null)
 		{
 		    String string = "SELECT " +
-			"content_downloaded, " +         // 0
-			"email_account, " +              // 1
-			"folder_name, " +                // 2
-			"from_email_account, " +         // 3
-			"from_name, " +                  // 4
-			"has_been_read, " +              // 5
-			"message, " +                    // 6
-			"oid, " +                        // 7
-			"received_date, " +              // 8
-			"received_date_unix_epoch, " +   // 9
-			"sent_date, " +                  // 10
-			"subject, " +                    // 11
-			"to_folder_name, " +             // 12
-			"uid " +                         // 13
+			"content_downloaded, " +
+			"content_type, " +
+			"email_account, " +
+			"folder_name, " +
+			"from_email_account, " +
+			"from_name, " +
+			"has_been_read, " +
+			"message, " +
+			"oid, " +
+			"received_date, " +
+			"received_date_unix_epoch, " +
+			"sent_date, " +
+			"subject, " +
+			"to_folder_name, " +
+			"uid " +
 			"FROM messages " +
 			"INDEXED BY messages_received_date_unix_epoch " +
 			"WHERE email_account = ? AND " +
@@ -362,6 +363,8 @@ public class Database extends SQLiteOpenHelper
 
 		    message_element.m_content_downloaded =
 			m_read_message_cursor.getInt(i++) == 1;
+		    message_element.m_content_type =
+			m_read_message_cursor.getString(i++);
 		    message_element.m_email_account = m_read_message_cursor.
 			getString(i++);
 		    message_element.m_folder_name = m_read_message_cursor.
@@ -1258,6 +1261,7 @@ public class Database extends SQLiteOpenHelper
 
 	str = "CREATE TABLE IF NOT EXISTS messages (" +
 	    "content_downloaded INTEGER NOT NULL DEFAULT 0, " +
+	    "content_type TEXT NOT NULL, " +
 	    "current_message INTEGER NOT NULL DEFAULT 1, " +
 	    "email_account TEXT NOT NULL, " +
 	    "folder_name TEXT NOT NULL, " +
@@ -1748,6 +1752,7 @@ public class Database extends SQLiteOpenHelper
 	    SQLiteStatement sqlite_statement = m_db.compileStatement
 		("REPLACE INTO messages (" +
 		 "content_downloaded, " +
+		 "content_type, " +
 		 "current_message, " +
 		 "email_account, " +
 		 "folder_name, " +
@@ -1762,7 +1767,7 @@ public class Database extends SQLiteOpenHelper
 		 "subject, " +
 		 "to_folder_name, " +
 		 "uid) VALUES " +
-		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    long start_time = 0;
 
 	    for(Message message : messages)
@@ -1889,6 +1894,7 @@ public class Database extends SQLiteOpenHelper
 		       message.isMimeType("text/plain"))
 		    {
 			content_values.put("content_downloaded", 1);
+			content_values.put("content_type", "text/plain");
 
 			if(message.getContent() != null &&
 			   message.getContent().toString() != null &&
@@ -1902,6 +1908,7 @@ public class Database extends SQLiteOpenHelper
 		    else
 		    {
 			content_values.put("content_downloaded", 1);
+			content_values.put("content_type", "text/html");
 
 			String string = Mail.multipart(message).trim();
 
@@ -1946,6 +1953,8 @@ public class Database extends SQLiteOpenHelper
 
 		    sqlite_statement.bindLong
 			(i++, content_values.getAsLong("content_downloaded"));
+		    sqlite_statement.bindString
+			(i++, content_values.getAsString("content_type"));
 		    sqlite_statement.bindLong
 			(i++, content_values.getAsLong("current_message"));
 		    sqlite_statement.bindString

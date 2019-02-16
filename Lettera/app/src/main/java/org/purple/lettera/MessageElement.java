@@ -29,6 +29,7 @@ package org.purple.lettera;
 
 public class MessageElement
 {
+    public String m_content_type = "";
     public String m_email_account = "";
     public String m_folder_name = "";
     public String m_from_email_account = "";
