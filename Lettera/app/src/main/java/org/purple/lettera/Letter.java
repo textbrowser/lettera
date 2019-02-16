@@ -29,12 +29,14 @@ package org.purple.lettera;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import java.util.Date;
@@ -235,8 +237,20 @@ public class Letter
 	m_web_view = m_view.findViewById(R.id.content);
 	m_web_view.getSettings().setAppCacheEnabled(false);
 	m_web_view.getSettings().setBlockNetworkLoads(false);
+	m_web_view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 	m_web_view.getSettings().setJavaScriptEnabled(true);
-        m_web_view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+	m_web_view.setWebViewClient(new WebViewClient()
+	{
+	    public void onPageStarted(WebView view, String url, Bitmap favicon)
+	    {
+		view.scrollTo(0, 0);
+	    }
+
+	    public void onPageFinished(WebView view, String url)
+	    {
+		view.scrollTo(0, 0);
+	    }
+	});
     }
 
     private void prepare_listeners()
@@ -274,6 +288,7 @@ public class Letter
 	m_dialog.show();
 	m_from.setText("e-mail@e-mail.org");
 	m_from.setTextColor(Lettera.text_color());
+	m_received_date.setTextColor(Lettera.text_color());
 	m_subject.setText("Subject");
 	m_subject.setTextColor(Lettera.text_color());
 	m_to_email_account.setText("e-mail@e-mail.org");
