@@ -161,7 +161,6 @@ public class Letter
     }
 
     private Dialog m_dialog = null;
-    private ImageButton m_close_button = null;
     private ImageButton m_return_button = null;
     private Lettera m_lettera = null;
     private TextView m_from = null;
@@ -213,7 +212,6 @@ public class Letter
 
     private void initialize_widget_members()
     {
-	m_close_button = m_view.findViewById(R.id.close_button);
 	m_from = m_view.findViewById(R.id.from);
 	m_received_date = m_view.findViewById(R.id.received_date);
 	m_return_button = m_view.findViewById(R.id.return_button);
@@ -228,19 +226,6 @@ public class Letter
 
     private void prepare_listeners()
     {
-	if(!m_close_button.hasOnClickListeners())
-	    m_close_button.setOnClickListener(new View.OnClickListener()
-	    {
-		@Override
-		public void onClick(View view)
-		{
-		    if(m_lettera.isFinishing())
-			return;
-
-		    dismiss();
-		}
-	    });
-
 	if(!m_return_button.hasOnClickListeners())
 	    m_return_button.setOnClickListener(new View.OnClickListener()
 	    {

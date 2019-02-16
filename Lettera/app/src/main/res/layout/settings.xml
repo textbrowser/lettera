@@ -23,6 +23,16 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
 
+            <ImageButton
+                android:id="@+id/return_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="15dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/back"
+                app:srcCompat="@drawable/return_arrow" />
+
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -581,13 +591,6 @@
                 android:layout_weight="0"
                 android:text="@string/apply" />
 
-            <Button
-                android:id="@+id/close_button"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/close" />
         </LinearLayout>
 
     </LinearLayout>

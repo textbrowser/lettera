@@ -46,6 +46,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -456,7 +457,6 @@ public class Settings
     }
 
     private Button m_apply_button = null;
-    private Button m_close_button = null;
     private Button m_delete_account_button = null;
     private Button m_display_button = null;
     private Button m_generate_keys_button = null;
@@ -473,6 +473,7 @@ public class Settings
     private CheckBox m_show_status_bar = null;
     private CheckBox m_show_vertical_separator_before_settings_checkbox = null;
     private Dialog m_dialog = null;
+    private ImageButton m_return_button = null;
     private Lettera m_lettera = null;
     private Spinner m_accounts_spinner = null;
     private Spinner m_color_theme_spinner = null;
@@ -850,7 +851,6 @@ public class Settings
 	m_accounts_spinner = m_view.findViewById
 	    (R.id.accounts_spinner);
 	m_apply_button = m_view.findViewById(R.id.apply_button);
-	m_close_button = m_view.findViewById(R.id.close_button);
 	m_color_theme_spinner = m_view.findViewById
 	    (R.id.color_theme_spinner);
 	m_delete_account_button = m_view.findViewById
@@ -903,6 +903,7 @@ public class Settings
 	    (R.id.remove_local_messages);
 	m_remove_local_messages_verify_checkbox = m_view.findViewById
 	    (R.id.remove_local_messages_verify_checkbox);
+	m_return_button = m_view.findViewById(R.id.return_button);
 	m_show_status_bar = m_view.findViewById
 	    (R.id.show_status_bar);
 	m_show_vertical_separator_before_settings_checkbox =
@@ -1277,30 +1278,6 @@ public class Settings
 			return;
 
 		    apply_settings();
-		}
-	    });
-
-	if(!m_close_button.hasOnClickListeners())
-	    m_close_button.setOnClickListener(new View.OnClickListener()
-	    {
-		@Override
-		public void onClick(View view)
-		{
-		    if(m_lettera.isFinishing())
-			return;
-
-		    m_lettera.prepare_colors(s_database.setting("color_theme"));
-		    m_lettera.prepare_icons
-			(s_database.settings_element("icon_theme"));
-
-		    try
-		    {
-			if(m_dialog != null)
-			    m_dialog.dismiss();
-		    }
-		    catch(Exception exception)
-		    {
-		    }
 		}
 	    });
 
@@ -1744,6 +1721,30 @@ public class Settings
 			    (is_checked &&
 			     !m_accounts_spinner.
 			     getSelectedItem().equals("(Empty)"));
+		}
+	    });
+
+	if(!m_return_button.hasOnClickListeners())
+	    m_return_button.setOnClickListener(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    m_lettera.prepare_colors(s_database.setting("color_theme"));
+		    m_lettera.prepare_icons
+			(s_database.settings_element("icon_theme"));
+
+		    try
+		    {
+			if(m_dialog != null)
+			    m_dialog.dismiss();
+		    }
+		    catch(Exception exception)
+		    {
+		    }
 		}
 	    });
 

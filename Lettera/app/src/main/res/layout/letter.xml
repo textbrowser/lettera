@@ -55,13 +55,6 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/close_button"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/close"
-                    app:srcCompat="@drawable/close" />
             </LinearLayout>
 
             <LinearLayout
