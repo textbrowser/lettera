@@ -50,4 +50,5 @@
     <string name="interrupt">Interrupt</string>
     <string name="remove_local_messages">Remove Local Messages</string>
     <string name="move_to">Move to:</string>
+    <string name="back">Back</string>
 </resources>
