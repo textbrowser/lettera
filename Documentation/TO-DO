@@ -22,6 +22,7 @@ Completed Items
 - Key generation.
 - Locally-deleted messages must remain hidden after their remote copies arrive.
   Lettera does not archive messages.
+- Observe device Return.
 - Optional status bar on main activity.
 - Parse recipients.
 - Performance degradation with folders having many messages (class cursor).
@@ -61,7 +62,6 @@ Remaining Items
 - Letter navigation.
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
-- Observe device Return.
 - Offline and online design.
 - Optional network loading of HTML data.
 - Reset of Network widgets in Settings.
