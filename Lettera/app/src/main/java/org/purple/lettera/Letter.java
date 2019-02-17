@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -241,14 +242,22 @@ public class Letter
 	m_web_view.getSettings().setJavaScriptEnabled(true);
 	m_web_view.setWebViewClient(new WebViewClient()
 	{
-	    public void onPageStarted(WebView view, String url, Bitmap favicon)
+	    @Override
+	    public boolean shouldOverrideUrlLoading
+		(WebView web_view, WebResourceRequest web_resource_request)
 	    {
-		view.scrollTo(0, 0);
+		return true;
 	    }
 
-	    public void onPageFinished(WebView view, String url)
+	    public void onPageStarted
+		(WebView web_view, String url, Bitmap bitmap)
 	    {
-		view.scrollTo(0, 0);
+		web_view.scrollTo(0, 0);
+	    }
+
+	    public void onPageFinished(WebView web_view, String url)
+	    {
+		web_view.scrollTo(0, 0);
 	    }
 	});
     }
