@@ -131,22 +131,16 @@ public abstract class Utilities
 		string_builder.append
 		    (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM");
 	    }
-	    else if(calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR))
+	    else
 	    {
+		string_builder.append(calendar.get(Calendar.YEAR));
+		string_builder.append("-");
 		string_builder.append
 		    (calendar.get(Calendar.MONTH) <= 8 ? "0" : "");
 		string_builder.append(calendar.get(Calendar.MONTH) + 1);
 		string_builder.append("-");
 		string_builder.append
 		    (calendar.get(Calendar.DAY_OF_MONTH) <= 9 ? "0" : "");
-		string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
-	    }
-	    else
-	    {
-		string_builder.append(calendar.get(Calendar.YEAR));
-		string_builder.append("-");
-		string_builder.append(calendar.get(Calendar.MONTH) + 1);
-		string_builder.append("-");
 		string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
 	    }
 	}
