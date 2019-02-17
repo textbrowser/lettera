@@ -25,7 +25,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="0.75"
+                android:layout_weight="0.60"
                 android:ellipsize="end"
                 android:maxLines="1" />
 
@@ -33,7 +33,7 @@
                 android:id="@+id/date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.25"
+                android:layout_weight=".40"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAlignment="viewEnd" />

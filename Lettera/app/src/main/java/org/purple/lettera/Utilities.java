@@ -70,53 +70,14 @@ public abstract class Utilities
 	    Calendar calendar = Calendar.getInstance();
 
 	    calendar.setTime(date);
-
-	    switch(calendar.get(Calendar.MONTH))
-	    {
-	    case Calendar.APRIL:
-		string_builder.append("Apr ");
-		break;
-	    case Calendar.AUGUST:
-		string_builder.append("Aug ");
-		break;
-	    case Calendar.DECEMBER:
-		string_builder.append("Dec ");
-		break;
-	    case Calendar.FEBRUARY:
-		string_builder.append("Feb ");
-		break;
-	    case Calendar.JANUARY:
-		string_builder.append("Jan ");
-		break;
-	    case Calendar.JULY:
-		string_builder.append("Jul ");
-		break;
-	    case Calendar.JUNE:
-		string_builder.append("Jun ");
-		break;
-	    case Calendar.MARCH:
-		string_builder.append("Mar ");
-		break;
-	    case Calendar.MAY:
-		string_builder.append("May ");
-		break;
-	    case Calendar.SEPTEMBER:
-		string_builder.append("Sep ");
-		break;
-	    case Calendar.OCTOBER:
-		string_builder.append("Oct ");
-		break;
-	    case Calendar.NOVEMBER:
-		string_builder.append("Nov ");
-		break;
-	    default:
-		break;
-	    }
-
-	    string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
-	    string_builder.append(", ");
 	    string_builder.append(calendar.get(Calendar.YEAR));
-	    string_builder.append(", ");
+	    string_builder.append("-");
+	    string_builder.append
+		(calendar.get(Calendar.MONTH) <= 8 ? "0" : "");
+	    string_builder.append(calendar.get(Calendar.MONTH) + 1);
+	    string_builder.append("-");
+	    string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
+	    string_builder.append(" ");
 	    string_builder.append
 		(calendar.get(Calendar.HOUR)  == 0 ?
 		 12 : calendar.get(Calendar.HOUR));
@@ -216,11 +177,11 @@ public abstract class Utilities
 	    }
 	    else
 	    {
-		string_builder.append(calendar.get(Calendar.MONTH) + 1);
-		string_builder.append("/");
-		string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
-		string_builder.append("/");
 		string_builder.append(calendar.get(Calendar.YEAR));
+		string_builder.append("-");
+		string_builder.append(calendar.get(Calendar.MONTH) + 1);
+		string_builder.append("-");
+		string_builder.append(calendar.get(Calendar.DAY_OF_MONTH));
 	    }
 	}
 	catch(Exception exception)
