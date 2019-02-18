@@ -47,6 +47,7 @@ Completed Items
 
 Future Items
 
+- Display percent-downloaded in dialog.
 - Encrypted database containers.
 
 Remaining Items
@@ -57,7 +58,6 @@ Remaining Items
 - Deleted remote folders are also deleted locally.
 - Display a message's origin in the Trash folder.
 - Display attachment list.
-- Display percent-downloaded in dialog.
 - Download incomplete content on opening of letter (getMessagesByUID).
 - Letter navigation.
 - McEliece key generation, exchange, etc.
