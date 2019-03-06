@@ -29,13 +29,12 @@
                 android:paddingEnd="15dp"
                 android:paddingBottom="5dp">
 
-                <ImageButton
+                <Button
                     android:id="@+id/return_button"
+                    style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/back"
-                    app:srcCompat="@drawable/return_arrow" />
+                    android:background="@drawable/return_arrow" />
 
                 <Space
                     android:layout_width="0dp"
@@ -47,7 +46,6 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_marginEnd="10dp"
                     android:background="@drawable/move_to_folder"
                     android:gravity="center" />
 
@@ -56,6 +54,7 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_marginStart="10dp"
                     android:background="@drawable/trash_folder"
                     android:gravity="center" />
             </LinearLayout>

@@ -38,7 +38,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 import java.util.Date;
 
@@ -178,8 +178,10 @@ public class Letter
 	}
     }
 
+    private Button m_delete_button = null;
+    private Button m_move_to_folder_button = null;
+    private Button m_return_button = null;
     private Dialog m_dialog = null;
-    private ImageButton m_return_button = null;
     private Lettera m_lettera = null;
     private TextView m_from = null;
     private TextView m_received_date = null;
@@ -230,7 +232,9 @@ public class Letter
 
     private void initialize_widget_members()
     {
+	m_delete_button = m_view.findViewById(R.id.delete_button);
 	m_from = m_view.findViewById(R.id.from);
+	m_move_to_folder_button = m_view.findViewById(R.id.move_to_folder);
 	m_received_date = m_view.findViewById(R.id.received_date);
 	m_return_button = m_view.findViewById(R.id.return_button);
 	m_subject = m_view.findViewById(R.id.subject);
@@ -295,6 +299,12 @@ public class Letter
     public void show(String email_account, String folder_name, int position)
     {
 	m_dialog.show();
+
+	if(folder_name.toLowerCase().contains("trash"))
+	    m_delete_button.setVisibility(View.GONE);
+	else
+	    m_delete_button.setVisibility(View.VISIBLE);
+
 	m_from.setText("e-mail@e-mail.org");
 	m_from.setTextColor(Lettera.text_color());
 	m_received_date.setTextColor(Lettera.text_color());
