@@ -52,6 +52,8 @@ Future Items
 
 Remaining Items
 
+- After a single message is deleted, load the next message or close
+  the Letter dialog.
 - Background services.
 - Change read states.
 - Date distances (hours, minutes).
@@ -59,7 +61,7 @@ Remaining Items
 - Display a message's origin in the Trash folder.
 - Display attachment list.
 - Download incomplete content on opening of letter (getMessagesByUID).
-- Letter navigation.
+- Letter navigation (next, previous).
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
