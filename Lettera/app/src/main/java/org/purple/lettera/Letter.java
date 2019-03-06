@@ -29,6 +29,7 @@ package org.purple.lettera;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Letter
 {
@@ -183,6 +185,7 @@ public class Letter
     private Button m_return_button = null;
     private Dialog m_dialog = null;
     private Lettera m_lettera = null;
+    private MessagesAdapter m_messages_adapter = null;
     private TextView m_from = null;
     private TextView m_received_date = null;
     private TextView m_subject = null;
@@ -193,9 +196,12 @@ public class Letter
     private WindowManager.LayoutParams m_layout_params = null;
     private final static Database s_database = Database.instance();
 
-    public Letter(Lettera lettera, View parent)
+    public Letter(Lettera lettera,
+		  MessagesAdapter messages_adapter,
+		  View parent)
     {
 	m_lettera = lettera;
+	m_messages_adapter = messages_adapter;
 	m_parent = parent;
 
 	LayoutInflater inflater = (LayoutInflater) m_lettera.getSystemService
@@ -268,6 +274,33 @@ public class Letter
 
     private void prepare_listeners()
     {
+	if(m_delete_button != null && !m_delete_button.hasOnClickListeners())
+	    m_delete_button.setOnClickListener(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    final AtomicBoolean confirmed = new AtomicBoolean(false);
+
+		    DialogInterface.OnCancelListener listener =
+			new DialogInterface.OnCancelListener()
+		    {
+			public void onCancel(DialogInterface dialog)
+			{
+			    if(confirmed.get())
+			    {
+			    }
+			}
+		    };
+
+		    Windows.show_prompt_dialog
+			(m_lettera, listener, "Delete the message?", confirmed);
+		}
+	    });
+
 	if(!m_return_button.hasOnClickListeners())
 	    m_return_button.setOnClickListener(new View.OnClickListener()
 	    {
