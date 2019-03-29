@@ -125,6 +125,7 @@ public class Letter
 		public void run()
 		{
 		    m_from.setText(message_element.m_from_name);
+		    m_oid = message_element.m_oid;
 
 		    String string = Utilities.formatted_email_date_for_message
 			(new Date(message_element.m_received_date_unix_epoch));
@@ -186,6 +187,8 @@ public class Letter
     private Dialog m_dialog = null;
     private Lettera m_lettera = null;
     private MessagesAdapter m_messages_adapter = null;
+    private String m_email_account = "";
+    private String m_folder_name = "";
     private TextView m_from = null;
     private TextView m_received_date = null;
     private TextView m_subject = null;
@@ -195,6 +198,7 @@ public class Letter
     private WebView m_web_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
     private final static Database s_database = Database.instance();
+    private long m_oid = -1;
 
     public Letter(Lettera lettera,
 		  MessagesAdapter messages_adapter,
@@ -292,6 +296,13 @@ public class Letter
 			{
 			    if(confirmed.get())
 			    {
+				s_database.delete_message
+				    (m_lettera,
+				     m_messages_adapter,
+				     m_email_account,
+				     m_folder_name,
+				     m_oid);
+				dismiss();
 			    }
 			}
 		    };
@@ -338,6 +349,8 @@ public class Letter
 	else
 	    m_delete_button.setVisibility(View.VISIBLE);
 
+	m_email_account = email_account;
+	m_folder_name = folder_name;
 	m_from.setText("e-mail@e-mail.org");
 	m_from.setTextColor(Lettera.text_color());
 	m_received_date.setTextColor(Lettera.text_color());

@@ -1,6 +1,8 @@
 Completed Items
 
 - Account removal should be enveloped within a progress dialog.
+- After a single message is deleted, load the next message or close
+  the Letter dialog.
 - Allow cancellation of downloads.
 - Checkboxes are too near pushbuttons. Maintain a safe distance between
   important pushbuttons and their verification checkboxes.
@@ -52,8 +54,6 @@ Future Items
 
 Remaining Items
 
-- After a single message is deleted, load the next message or close
-  the Letter dialog.
 - Background services.
 - Change read states.
 - Date distances (hours, minutes).

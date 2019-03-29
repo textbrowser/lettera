@@ -1032,6 +1032,65 @@ public class Database extends SQLiteOpenHelper
 	    }
     }
 
+    public void delete_message(final Lettera lettera,
+			       final MessagesAdapter messages_adapter,
+			       String email_account,
+			       final String folder_name,
+			       long oid)
+    {
+	if(m_db == null)
+	    return;
+
+	m_db.beginTransactionNonExclusive();
+
+	try
+	{
+	    SQLiteStatement sqlite_statement = null;
+
+	    sqlite_statement = m_db.compileStatement
+		("UPDATE messages SET " +
+		 "selected = 0, to_folder_name = 'Trash' " +
+		 "WHERE OID = ? AND " +
+		 "email_account = ? AND " +
+		 "LOWER(to_folder_name) = LOWER(?)");
+	    sqlite_statement.bindLong(1, oid);
+	    sqlite_statement.bindString(2, email_account);
+	    sqlite_statement.bindString(3, folder_name);
+	    sqlite_statement.execute();
+	    m_db.setTransactionSuccessful();
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    m_db.endTransaction();
+	}
+
+	synchronized(m_read_message_cursor_mutex)
+	{
+	    if(m_read_message_cursor != null &&
+	       m_read_message_cursor_email_account.equals(email_account) &&
+	       m_read_message_cursor_folder_name.equals(folder_name))
+	    {
+		m_read_message_cursor.close();
+		m_read_message_cursor = null;
+	    }
+	}
+
+	if(messages_adapter != null)
+	    lettera.runOnUiThread(new Runnable()
+	    {
+		@Override
+		public void run()
+		{
+		    lettera.prepare_current_folder_text(folder_name);
+		    lettera.update_folders_drawer();
+		    messages_adapter.notifyDataSetChanged();
+		}
+	    });
+    }
+
     public void delete_selected_messages(final Lettera lettera,
 					 final MessagesAdapter messages_adapter,
 					 final String email_account,

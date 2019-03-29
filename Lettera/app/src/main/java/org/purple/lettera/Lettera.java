@@ -358,6 +358,7 @@ public class Lettera extends AppCompatActivity
 	m_folders_drawer_button = findViewById(R.id.folders_drawer_button);
 	m_items_count = findViewById(R.id.message_count);
 	m_messaging_button = findViewById(R.id.messaging_button);
+	m_messaging_button.setVisibility(View.GONE);
 	m_move_to_folder_button = findViewById(R.id.move_to_folder);
 	m_recycler = findViewById(R.id.messages);
 	m_scroll_bottom = findViewById(R.id.scroll_bottom);
