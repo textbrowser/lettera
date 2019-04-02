@@ -253,7 +253,7 @@ public class Lettera extends AppCompatActivity
     private MessagesAdapter m_messages_adapter = null;
     private RecyclerView m_recycler = null;
     private Runnable m_scroll_runnable = null;
-    private ScheduledExecutorService m_folders_drawer_scheduler = null;
+    private ScheduledExecutorService m_folders_drawer_schedule = null;
     private Settings m_settings = null;
     private String m_selected_folder_name = "";
     private TextView m_current_folder = null;
@@ -273,6 +273,7 @@ public class Lettera extends AppCompatActivity
     private final static int FOLDERS_DRAWER_INTERVAL = 7500;
     private final static int SELECTION_COLOR = Color.parseColor("#90caf9");
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
+    private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60;
     private int m_selected_position = -1;
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
@@ -575,13 +576,13 @@ public class Lettera extends AppCompatActivity
 	    });
     }
 
-    private void prepare_schedulers()
+    private void prepare_schedules()
     {
-	if(m_folders_drawer_scheduler == null)
+	if(m_folders_drawer_schedule == null)
 	{
-	    m_folders_drawer_scheduler = Executors.
+	    m_folders_drawer_schedule = Executors.
 		newSingleThreadScheduledExecutor();
-	    m_folders_drawer_scheduler.scheduleAtFixedRate(new Runnable()
+	    m_folders_drawer_schedule.scheduleAtFixedRate(new Runnable()
 	    {
 		private ArrayList<String> m_folder_names = null;
 		private Mail m_mail = null;
@@ -720,6 +721,35 @@ public class Lettera extends AppCompatActivity
 		}
 	    }, 5, FOLDERS_DRAWER_INTERVAL, TimeUnit.MILLISECONDS);
         }
+    }
+
+    private void stop_schedules()
+    {
+	if(m_folders_drawer_schedule != null)
+	{
+	    try
+	    {
+		m_folders_drawer_schedule.shutdown();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    try
+	    {
+		if(!m_folders_drawer_schedule.
+		   awaitTermination(SCHEDULE_AWAIT_TERMINATION_TIMEOUT,
+				    TimeUnit.SECONDS))
+		    m_folders_drawer_schedule.shutdownNow();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	    finally
+	    {
+		m_folders_drawer_schedule = null;
+	    }
+	}
     }
 
     @Override
@@ -900,7 +930,7 @@ public class Lettera extends AppCompatActivity
 	prepare_generic_widgets();
 	prepare_icons(m_database.settings_element("icon_theme"));
 	prepare_listeners();
-	prepare_schedulers();
+	prepare_schedules();
     }
 
     @Override
@@ -929,6 +959,15 @@ public class Lettera extends AppCompatActivity
 	catch(Exception exception)
 	{
 	}
+
+	stop_schedules();
+    }
+
+    @Override
+    protected void onResume()
+    {
+	super.onResume();
+	prepare_schedules();
     }
 
     public static int background_color()
