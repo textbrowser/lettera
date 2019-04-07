@@ -2083,7 +2083,7 @@ public class Database extends SQLiteOpenHelper
 	    m_db.delete("messages",
 			"current_message = 0 AND " +
 			"email_account = ? AND " +
-			"LOWER(to_folder_name) = LOWER(?)",
+			"LOWER(folder_name) = LOWER(?)",
 			new String[] {email_account, folder.getName()});
 
 	    if(enable_database_transaction)
