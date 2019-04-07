@@ -24,6 +24,7 @@ Completed Items
 - Key generation.
 - Locally-deleted messages must remain hidden after their remote copies arrive.
   Lettera does not archive messages.
+- Mark letters as unread.
 - Observe device Return.
 - Optional status bar on main activity.
 - Parse recipients.
@@ -55,7 +56,6 @@ Future Items
 Remaining Items
 
 - Background services.
-- Change read states.
 - Date distances (hours, minutes).
 - Deleted remote folders are also deleted locally.
 - Display a message's origin in the Trash folder.

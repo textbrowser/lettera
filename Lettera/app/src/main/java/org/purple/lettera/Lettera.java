@@ -235,6 +235,7 @@ public class Lettera extends AppCompatActivity
     private Button m_contacts_button = null;
     private Button m_delete_button = null;
     private Button m_download_button = null;
+    private Button m_mark_as_unread = null;
     private Button m_messaging_button = null;
     private Button m_move_to_folder_button = null;
     private Button m_settings_button = null;
@@ -358,6 +359,7 @@ public class Lettera extends AppCompatActivity
 	m_download_button = findViewById(R.id.download_button);
 	m_folders_drawer_button = findViewById(R.id.folders_drawer_button);
 	m_items_count = findViewById(R.id.message_count);
+	m_mark_as_unread = findViewById(R.id.mark_as_unread);
 	m_messaging_button = findViewById(R.id.messaging_button);
 	m_messaging_button.setVisibility(View.GONE);
 	m_move_to_folder_button = findViewById(R.id.move_to_folder);
@@ -479,12 +481,29 @@ public class Lettera extends AppCompatActivity
 		}
 	    });
 
+	if(m_mark_as_unread != null && !m_mark_as_unread.hasOnClickListeners())
+	    m_mark_as_unread.setOnClickListener
+		(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing())
+			return;
+
+		    m_database.set_messages_unread
+			(Lettera.this,
+			 m_messages_adapter,
+			 email_account(),
+			 selected_folder_name());
+		}
+	    });
+
 	if(m_move_to_folder_button != null && !m_move_to_folder_button.
 	                                       hasOnClickListeners())
 	    m_move_to_folder_button.setOnClickListener
 		(new View.OnClickListener()
 	    {
-		@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
 		@Override
 		public void onClick(View view)
 		{
@@ -494,8 +513,8 @@ public class Lettera extends AppCompatActivity
 		    String email_account = email_account();
 
 		    if(m_database.
-		       messages_selected(email_account,
-					 selected_folder_name()) == 0)
+		       messages_selected
+		       (email_account, selected_folder_name()) == 0)
 			return;
 
 		    MoveMessages move_messages = new MoveMessages

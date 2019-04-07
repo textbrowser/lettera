@@ -74,7 +74,6 @@ public class FoldersDrawer
     private View m_view = null;
     private final static Database s_database = Database.instance();
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public FoldersDrawer(Context context, View parent)
     {
 	m_context = context;

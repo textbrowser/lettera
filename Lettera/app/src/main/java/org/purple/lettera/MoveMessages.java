@@ -70,7 +70,6 @@ public class MoveMessages
     private View m_parent = null;
     private View m_view = null;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public MoveMessages(Context context,
 			String email_account,
 			String folder_name,
