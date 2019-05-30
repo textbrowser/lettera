@@ -255,7 +255,6 @@ public class Lettera extends AppCompatActivity
     private RecyclerView m_recycler = null;
     private Runnable m_scroll_runnable = null;
     private ScheduledExecutorService m_folders_drawer_schedule = null;
-    private Settings m_settings = null;
     private String m_selected_folder_name = "";
     private TextView m_current_folder = null;
     private TextView m_items_count = null;
@@ -587,10 +586,13 @@ public class Lettera extends AppCompatActivity
 		@Override
 		public void onClick(View view)
 		{
-		    if(Lettera.this.isFinishing() || m_settings == null)
+		    if(Lettera.this.isFinishing())
 			return;
 
-		    m_settings.show();
+		    Settings settings = new Settings
+			(Lettera.this, findViewById(R.id.main_layout));
+
+		    settings.show();
 		}
 	    });
     }
@@ -775,6 +777,7 @@ public class Lettera extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+	LetteraService.startForegroundTask(getApplicationContext());
 	m_database = Database.instance(getApplicationContext());
 
 	/*
@@ -910,7 +913,6 @@ public class Lettera extends AppCompatActivity
 		m_selected_folder_name = NONE_FOLDER;
 	}
 
-	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
 	{
 	    @Override
