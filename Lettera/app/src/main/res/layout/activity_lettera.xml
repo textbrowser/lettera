@@ -102,7 +102,23 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/default_settings" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="0"
+                    android:background="@android:color/white" />
+
+                <Button
+                    android:id="@+id/exit_lettera"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="0"
+                    android:background="@drawable/material_exit" />
 
             </LinearLayout>
 
