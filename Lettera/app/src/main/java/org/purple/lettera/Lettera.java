@@ -235,6 +235,7 @@ public class Lettera extends AppCompatActivity
     private Button m_contacts_button = null;
     private Button m_delete_button = null;
     private Button m_download_button = null;
+    private Button m_exit_lettera = null;
     private Button m_mark_as_unread = null;
     private Button m_messaging_button = null;
     private Button m_move_to_folder_button = null;
@@ -356,6 +357,7 @@ public class Lettera extends AppCompatActivity
 	m_current_folder = findViewById(R.id.current_folder);
 	m_delete_button = findViewById(R.id.delete_button);
 	m_download_button = findViewById(R.id.download_button);
+	m_exit_lettera = findViewById(R.id.exit_lettera);
 	m_folders_drawer_button = findViewById(R.id.folders_drawer_button);
 	m_items_count = findViewById(R.id.message_count);
 	m_mark_as_unread = findViewById(R.id.mark_as_unread);
@@ -462,6 +464,21 @@ public class Lettera extends AppCompatActivity
 			return;
 
 		    download();
+		}
+	    });
+
+	if(m_exit_lettera != null && !m_exit_lettera.hasOnClickListeners())
+	    m_exit_lettera.setOnClickListener(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(Lettera.this.isFinishing())
+			return;
+
+		    LetteraService.stopForegroundTask(getApplicationContext());
+		    finishAndRemoveTask();
+		    android.os.Process.killProcess(android.os.Process.myPid());
 		}
 	    });
 
