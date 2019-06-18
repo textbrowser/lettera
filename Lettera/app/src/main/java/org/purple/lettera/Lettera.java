@@ -151,6 +151,28 @@ public class Lettera extends AppCompatActivity
 	@Override
 	public void run()
 	{
+	    if(!Utilities.is_network_connected(Lettera.this))
+	    {
+		try
+		{
+		    Thread.sleep(1250);
+		}
+		catch(Exception exception)
+		{
+		}
+
+		try
+		{
+		    if(m_dialog != null)
+			m_dialog.dismiss();
+		}
+		catch(Exception exception)
+		{
+		}
+
+		return;
+	    }
+
 	    Mail mail = null;
 
 	    try
@@ -173,14 +195,18 @@ public class Lettera extends AppCompatActivity
 		     email_element.m_proxy_type,
 		     email_element.m_proxy_user);
 		mail.connect_imap();
-		m_database.write_folders
-		    (mail.folder_elements(m_download_interrupted),
-		     email_element.m_inbound_email);
-		m_database.write_messages
-		    (m_download_interrupted,
-		     mail.folder(m_folder_full_name),
-		     email_element.m_inbound_email,
-		     true);
+
+		if(mail.imap_connected())
+		{
+		    m_database.write_folders
+			(mail.folder_elements(m_download_interrupted),
+			 email_element.m_inbound_email);
+		    m_database.write_messages
+			(m_download_interrupted,
+			 mail.folder(m_folder_full_name),
+			 email_element.m_inbound_email,
+			 true);
+		}
 	    }
 	    catch(Exception exception)
 	    {

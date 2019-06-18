@@ -49,6 +49,7 @@ Completed Items
 - Simple version of folders drawer for moving messages. Ignore current folder.
 - Spinners and color themes.
 - Terminate background services on application exit.
+- Timely interruption of data if the device is disconnected.
 
 Future Items
 
@@ -71,7 +72,6 @@ Remaining Items
 - Reset of Network widgets in Settings.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
-- Timely interruption of data if the device is disconnected.
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
   Expunge locally-deleted messages from the server if configured to do so.
