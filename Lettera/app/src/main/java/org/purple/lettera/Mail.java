@@ -205,7 +205,7 @@ public class Mail
 			    m_proxy_port,
 			    m_proxy_type,
 			    m_proxy_user,
-			    "60000")).getStore("imaps");
+			    "10000")).getStore("imaps");
 	}
 	catch(Exception exception)
 	{
@@ -271,7 +271,7 @@ public class Mail
 						m_proxy_port,
 						m_proxy_type,
 						m_proxy_user,
-						"60000"))).getTransport("smtp");
+						"10000"))).getTransport("smtp");
 	}
 	catch(Exception exception)
 	{

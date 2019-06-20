@@ -141,6 +141,7 @@ public class Lettera extends AppCompatActivity
     {
 	private Dialog m_dialog = null;
 	private String m_folder_full_name = "";
+	private boolean m_connected = false;
 
 	private PopulateFolders(Dialog dialog, String folder_full_name)
 	{
@@ -151,28 +152,6 @@ public class Lettera extends AppCompatActivity
 	@Override
 	public void run()
 	{
-	    if(!Utilities.is_network_connected(Lettera.this))
-	    {
-		try
-		{
-		    Thread.sleep(1250);
-		}
-		catch(Exception exception)
-		{
-		}
-
-		try
-		{
-		    if(m_dialog != null)
-			m_dialog.dismiss();
-		}
-		catch(Exception exception)
-		{
-		}
-
-		return;
-	    }
-
 	    Mail mail = null;
 
 	    try
@@ -196,7 +175,7 @@ public class Lettera extends AppCompatActivity
 		     email_element.m_proxy_user);
 		mail.connect_imap();
 
-		if(mail.imap_connected())
+		if((m_connected = mail.imap_connected()))
 		{
 		    m_database.write_folders
 			(mail.folder_elements(m_download_interrupted),
@@ -222,20 +201,21 @@ public class Lettera extends AppCompatActivity
 		@Override
 		public void run()
 		{
-		    try
-		    {
-			m_messages_adapter.notifyDataSetChanged();
-			m_folders_drawer.set_email_account(email_account());
-			m_folders_drawer.update();
-			m_layout_manager.scrollToPosition
-			    (m_messages_adapter.getItemCount() - 1);
-			m_scroll_bottom.setVisibility(View.GONE);
-			m_scroll_top.setVisibility(View.GONE);
-			prepare_current_folder_text(selected_folder_name());
-		    }
-		    catch(Exception exception)
-		    {
-		    }
+		    if(m_connected)
+			try
+			{
+			    m_messages_adapter.notifyDataSetChanged();
+			    m_folders_drawer.set_email_account(email_account());
+			    m_folders_drawer.update();
+			    m_layout_manager.scrollToPosition
+				(m_messages_adapter.getItemCount() - 1);
+			    m_scroll_bottom.setVisibility(View.GONE);
+			    m_scroll_top.setVisibility(View.GONE);
+			    prepare_current_folder_text(selected_folder_name());
+			}
+			catch(Exception exception)
+			{
+			}
 
 		    try
 		    {

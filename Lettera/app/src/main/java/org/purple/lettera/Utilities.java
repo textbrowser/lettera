@@ -27,10 +27,7 @@
 
 package org.purple.lettera;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -152,27 +149,6 @@ public abstract class Utilities
 	}
 
 	return string_builder.toString();
-    }
-
-    public static boolean is_network_connected(Context context)
-    {
-	if(context == null)
-	    return false;
-
-	try
-	{
-	    ConnectivityManager connectivityManager = (ConnectivityManager)
-		context.getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo networkInfo = connectivityManager.
-		getActiveNetworkInfo();
-
-	    return networkInfo.isConnectedOrConnecting();
-	}
-	catch(Exception exception)
-	{
-	}
-
-	return false;
     }
 
     public static void color_checkbox(CheckBox checkbox,
