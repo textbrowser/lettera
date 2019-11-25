@@ -532,8 +532,7 @@ public class Settings
     private final static String s_color_themes[] = new String[]
 	{"Black & Blue", "Black & Green", "Default"};
     private final static String s_email_folders[] = new String[] {"Drawer"};
-    private final static String s_icon_themes[] = new String[]
-	{"Default", "Funky", "Hand Drawn", "Material", "Nuvola", "SailFish"};
+    private final static String s_icon_themes[] = new String[] {"Default"};
     private final static String s_proxy_types[] =
 	new String[] {"HTTP", "SOCKS"};
     private int m_current_page = PageEnumerator.DISPLAY_PAGE;
@@ -1008,21 +1007,6 @@ public class Settings
 	    {
 	    case "default":
 		m_icon_theme_spinner.setSelection(0);
-		break;
-	    case "funky":
-		m_icon_theme_spinner.setSelection(1);
-		break;
-	    case "hand drawn":
-		m_icon_theme_spinner.setSelection(2);
-		break;
-	    case "material":
-		m_icon_theme_spinner.setSelection(3);
-		break;
-	    case "nuvola":
-		m_icon_theme_spinner.setSelection(4);
-		break;
-	    case "sailfish":
-		m_icon_theme_spinner.setSelection(5);
 		break;
 	    default:
 		m_icon_theme_spinner.setSelection(0);
@@ -2053,116 +2037,6 @@ public class Settings
 	    return R.drawable.default_privacy_pressed;
 	case "default_settings":
 	    return R.drawable.default_settings;
-	case "funky_compose":
-	    return R.drawable.funky_compose;
-	case "funky_contacts":
-	    return R.drawable.funky_contacts;
-	case "funky_display":
-	    return R.drawable.funky_display;
-	case "funky_display_pressed":
-	    return R.drawable.funky_display_pressed;
-	case "funky_download":
-	    return R.drawable.funky_download;
-	case "funky_messaging":
-	    return R.drawable.funky_messaging;
-	case "funky_network":
-	    return R.drawable.funky_network;
-	case "funky_network_pressed":
-	    return R.drawable.funky_network_pressed;
-	case "funky_privacy":
-	    return R.drawable.funky_privacy;
-	case "funky_privacy_pressed":
-	    return R.drawable.funky_privacy_pressed;
-	case "funky_settings":
-	    return R.drawable.funky_settings;
-	case "hand drawn_compose":
-	    return R.drawable.hand_drawn_compose;
-	case "hand drawn_contacts":
-	    return R.drawable.hand_drawn_contacts;
-	case "hand drawn_display":
-	    return R.drawable.hand_drawn_display;
-	case "hand drawn_display_pressed":
-	    return R.drawable.hand_drawn_display_pressed;
-	case "hand drawn_download":
-	    return R.drawable.hand_drawn_download;
-	case "hand drawn_messaging":
-	    return R.drawable.hand_drawn_messaging;
-	case "hand drawn_network":
-	    return R.drawable.hand_drawn_network;
-	case "hand drawn_network_pressed":
-	    return R.drawable.hand_drawn_network_pressed;
-	case "hand drawn_privacy":
-	    return R.drawable.hand_drawn_privacy;
-	case "hand drawn_privacy_pressed":
-	    return R.drawable.hand_drawn_privacy_pressed;
-	case "hand drawn_settings":
-	    return R.drawable.hand_drawn_settings;
-	case "material_compose":
-	    return R.drawable.material_compose;
-	case "material_contacts":
-	    return R.drawable.material_contacts;
-	case "material_display":
-	    return R.drawable.material_display;
-	case "material_display_pressed":
-	    return R.drawable.material_display_pressed;
-	case "material_download":
-	    return R.drawable.material_download;
-	case "material_messaging":
-	    return R.drawable.material_messaging;
-	case "material_network":
-	    return R.drawable.material_network;
-	case "material_network_pressed":
-	    return R.drawable.material_network_pressed;
-	case "material_privacy":
-	    return R.drawable.material_privacy;
-	case "material_privacy_pressed":
-	    return R.drawable.material_privacy_pressed;
-	case "material_settings":
-	    return R.drawable.material_settings;
-	case "nuvola_compose":
-	    return R.drawable.nuvola_compose;
-	case "nuvola_contacts":
-	    return R.drawable.nuvola_contacts;
-	case "nuvola_display":
-	    return R.drawable.nuvola_display;
-	case "nuvola_display_pressed":
-	    return R.drawable.nuvola_display_pressed;
-	case "nuvola_download":
-	    return R.drawable.nuvola_download;
-	case "nuvola_messaging":
-	    return R.drawable.nuvola_messaging;
-	case "nuvola_network":
-	    return R.drawable.nuvola_network;
-	case "nuvola_network_pressed":
-	    return R.drawable.nuvola_network_pressed;
-	case "nuvola_privacy":
-	    return R.drawable.nuvola_privacy;
-	case "nuvola_privacy_pressed":
-	    return R.drawable.nuvola_privacy_pressed;
-	case "nuvola_settings":
-	    return R.drawable.nuvola_settings;
-	case "sailfish_compose":
-	    return R.drawable.sailfish_compose;
-	case "sailfish_contacts":
-	    return R.drawable.sailfish_contacts;
-	case "sailfish_display":
-	    return R.drawable.sailfish_display;
-	case "sailfish_display_pressed":
-	    return R.drawable.sailfish_display_pressed;
-	case "sailfish_download":
-	    return R.drawable.sailfish_download;
-	case "sailfish_messaging":
-	    return R.drawable.sailfish_messaging;
-	case "sailfish_network":
-	    return R.drawable.sailfish_network;
-	case "sailfish_network_pressed":
-	    return R.drawable.sailfish_network_pressed;
-	case "sailfish_privacy":
-	    return R.drawable.sailfish_privacy;
-	case "sailfish_privacy_pressed":
-	    return R.drawable.sailfish_privacy_pressed;
-	case "sailfish_settings":
-	    return R.drawable.sailfish_settings;
 	default:
 	    return R.drawable.lettera;
 	}

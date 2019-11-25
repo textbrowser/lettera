@@ -48,33 +48,18 @@ public class LetteraService extends Service
     private void prepareNotification()
     {
 	Intent notificationIntent = new Intent(this, Settings.class);
-	Notification.Builder builder = new Notification.Builder(this);
+	Notification notification = null;
 	PendingIntent pendingIntent = PendingIntent.getActivity
 	    (this, 0, notificationIntent, 0);
 
-	builder.setContentIntent(pendingIntent);
-	builder.setContentText("Lettera");
-	builder.setContentTitle("Lettera");
-	builder.setSmallIcon(R.drawable.lettera);
-	builder.setTicker("Lettera");
-
-	/*
-	** Stop!
-	*/
-
-	Intent stopIntent = new Intent(this, LetteraService.class);
-
-        stopIntent.setAction("stop");
-
-	PendingIntent pendingStopIntent = PendingIntent.getService
-	    (this, 0, stopIntent, 0);
-
-	builder.addAction
-	    (new Notification.Action.
-	     Builder(Icon.createWithResource(this, R.drawable.lettera),
-		     "Stop Lettera Foreground Service",
-		     pendingStopIntent).build());
-	startForeground(NOTIFICATION_ID, builder.build());
+	notification = new Notification.Builder(this).
+	    setContentIntent(pendingIntent).
+	    setContentText("Lettera Activity").
+	    setContentTitle("Lettera Activity").
+	    setSmallIcon(R.drawable.lettera).
+	    setTicker("Lettera Activity").
+	    build();
+	startForeground(NOTIFICATION_ID, notification);
     }
 
     private void start()
