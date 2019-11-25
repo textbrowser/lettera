@@ -93,7 +93,7 @@ public class MoveMessages
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setOutsideTouchable(true);
-	m_popup_window.setWidth((int) (0.40 * m_parent.getWidth()));
+	m_popup_window.setWidth((int) (0.50 * m_parent.getWidth()));
 
 	/*
 	** Initialize other widgets.
