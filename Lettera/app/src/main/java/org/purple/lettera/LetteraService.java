@@ -52,7 +52,7 @@ public class LetteraService extends Service
 	PendingIntent pendingIntent = PendingIntent.getActivity
 	    (this, 0, notificationIntent, 0);
 
-	notification = new Notification.Builder(this).
+	notification = new Notification.Builder(this, "").
 	    setContentIntent(pendingIntent).
 	    setContentText("Lettera Activity").
 	    setContentTitle("Lettera Activity").
