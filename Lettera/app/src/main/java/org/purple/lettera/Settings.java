@@ -2036,8 +2036,6 @@ public class Settings
 	    return R.drawable.default_display_pressed;
 	case "default_download":
 	    return R.drawable.default_download;
-	case "default_messaging":
-	    return R.drawable.default_messaging;
 	case "default_network":
 	    return R.drawable.default_network;
 	case "default_network_pressed":
