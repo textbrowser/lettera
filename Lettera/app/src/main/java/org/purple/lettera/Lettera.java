@@ -840,6 +840,11 @@ public class Lettera extends AppCompatActivity
 		@Override
 		public void onClick(View view, int position)
 		{
+		}
+
+		@Override
+		public void onLongClick(View view, int position)
+		{
 		    m_artificial_button.performClick();
 
 		    if(m_layout_manager.
@@ -848,16 +853,10 @@ public class Lettera extends AppCompatActivity
 			    (m_selected_position).setBackgroundColor
 			    (background_color());
 
-		    m_selected_position = position;
-		    view.setBackgroundColor(SELECTION_COLOR);
-		}
-
-		@Override
-		public void onLongClick(View view, int position)
-		{
-		    onClick(view, position);
 		    m_letter_dialog.show
 			(email_account(), selected_folder_name(), position);
+		    m_selected_position = position;
+		    view.setBackgroundColor(SELECTION_COLOR);
 		}
 	    }));
 	m_recycler.addOnScrollListener
