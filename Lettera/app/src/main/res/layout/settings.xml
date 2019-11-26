@@ -199,7 +199,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
-                            android:text="@string/delete" />
+                            android:text="@string/delete"
+                            android:textAllCaps="false" />
 
                         <CheckBox
                             android:id="@+id/delete_account_verify_checkbox"
@@ -221,7 +222,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
-                            android:text="@string/remove_local_messages" />
+                            android:text="@string/remove_local_messages"
+                            android:textAllCaps="false" />
 
                         <CheckBox
                             android:id="@+id/remove_local_messages_verify_checkbox"
@@ -311,7 +313,8 @@
                             style="@style/Widget.AppCompat.Button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/test" />
+                            android:text="@string/test"
+                            android:textAllCaps="false" />
 
                     </LinearLayout>
 
@@ -389,7 +392,8 @@
                             style="@style/Widget.AppCompat.Button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/test" />
+                            android:text="@string/test"
+                            android:textAllCaps="false" />
 
                     </LinearLayout>
 
@@ -549,7 +553,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
-                            android:text="@string/generate" />
+                            android:text="@string/generate"
+                            android:textAllCaps="false" />
 
                         <CheckBox
                             android:id="@+id/generate_keys_checkbox"
@@ -589,7 +594,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:text="@string/apply" />
+                android:text="@string/apply"
+                android:textAllCaps="false" />
 
         </LinearLayout>
 
