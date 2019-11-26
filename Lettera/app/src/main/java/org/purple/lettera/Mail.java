@@ -59,13 +59,16 @@ public class Mail
     private String m_proxy_user = "";
 
     private static void multipart_recursive
-	(Part part, StringBuffer string_buffer) throws Exception
+	(Part part,
+	 String mime_type,
+	 StringBuffer string_buffer) throws Exception
     {
 	if(part == null || string_buffer == null)
 	    return;
 
 	if(part.isMimeType("message/rfc822"))
-	    multipart_recursive((Part) part.getContent(), string_buffer);
+	    multipart_recursive
+		((Part) part.getContent(), mime_type, string_buffer);
 	else if(part.isMimeType("multipart/*"))
 	{
 	    Multipart multipart = (Multipart) part.getContent();
@@ -76,16 +79,20 @@ public class Mail
 	    int count = multipart.getCount();
 
 	    for(int i = 0; i < count; i++)
-		multipart_recursive(multipart.getBodyPart(i), string_buffer);
+		multipart_recursive
+		    (multipart.getBodyPart(i), mime_type, string_buffer);
 	}
-	else if(part.isMimeType("text/plain"))
+	else if(part.isMimeType(mime_type))
 	    string_buffer.append((String) part.getContent());
 	else
 	{
-	    Object object = part.getContent();
+	    if(mime_type.isEmpty())
+	    {
+		Object object = part.getContent();
 
-	    if(object instanceof String)
-		string_buffer.append((String) object);
+		if(object instanceof String)
+		    string_buffer.append((String) object);
+	    }
 	}
     }
 
@@ -400,7 +407,7 @@ public class Mail
 	return properties;
     }
 
-    public static String multipart(Message message)
+    public static String multipart(Message message, String mime_type)
     {
 	if(message == null)
 	    return "";
@@ -409,7 +416,7 @@ public class Mail
 	{
 	    StringBuffer string_buffer = new StringBuffer();
 
-	    multipart_recursive(message, string_buffer);
+	    multipart_recursive(message, mime_type, string_buffer);
 	    return string_buffer.toString();
 	}
 	catch(Exception exception)

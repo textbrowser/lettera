@@ -137,7 +137,17 @@ public class MessageItem extends View
 
 	String string = Utilities.formatted_email_date_for_messages
 	    (new Date(message_element.m_received_date_unix_epoch));
-	int length = Math.min(128, message_element.m_message.trim().length());
+	String summary = "";
+	int length = 0;
+
+	length = Math.min
+	    (128, message_element.m_message_plain.trim().length());
+	summary = message_element.m_message_plain.trim().
+	    substring(0, length).trim();
+
+	if(summary.isEmpty())
+	    summary = message_element.m_message_raw.trim().
+		substring(0, length).trim();
 
 	if(string.isEmpty())
 	    m_date.setText(message_element.m_received_date);
@@ -168,9 +178,7 @@ public class MessageItem extends View
 	m_subject.setTypeface
 	    (null,
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
-	m_summary.setText
-	    (message_element.m_content_downloaded ?
-	     message_element.m_message.trim().substring(0, length) : "");
+	m_summary.setText(message_element.m_content_downloaded ? summary : "");
 	m_summary.setTextColor(Lettera.text_color());
 	m_summary.setVisibility(length == 0 ? View.GONE : View.VISIBLE);
 	m_uid = message_element.m_uid;

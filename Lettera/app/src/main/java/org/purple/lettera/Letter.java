@@ -139,10 +139,10 @@ public class Letter
 		    m_subject.setText(message_element.m_subject);
 		    m_to_email_account.setText(message_element.m_email_account);
 
-		    String content = message_element.m_message;
-
 		    if(message_element.m_content_type.equals("text/html"))
 		    {
+			String content = message_element.m_message_html;
+
 			content = content.replaceAll
 			    ("<img ",
 			     "<img onerror=\"this.style.display='none';\" ").
@@ -158,8 +158,12 @@ public class Letter
 			    (null, content, "text/html", "UTF-8", null);
 		    }
 		    else
+		    {
+			String content = message_element.m_message_plain;
+
 			m_web_view.loadDataWithBaseURL
 			    (null, content, "text/plain", "UTF-8", null);
+		    }
 
 		    s_database.set_message_read
 			(m_email_account,

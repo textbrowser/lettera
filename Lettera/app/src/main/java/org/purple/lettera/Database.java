@@ -336,7 +336,9 @@ public class Database extends SQLiteOpenHelper
 			"from_email_account, " +
 			"from_name, " +
 			"has_been_read, " +
-			"message, " +
+			"message_html, " +
+			"message_plain, " +
+			"message_raw, " +
 			"oid, " +
 			"received_date, " +
 			"received_date_unix_epoch, " +
@@ -375,7 +377,11 @@ public class Database extends SQLiteOpenHelper
 			getString(i++);
 		    message_element.m_has_been_read = m_read_message_cursor.
 			getLong(i++) == 1;
-		    message_element.m_message = m_read_message_cursor.
+		    message_element.m_message_html = m_read_message_cursor.
+			getString(i++).trim();
+		    message_element.m_message_plain = m_read_message_cursor.
+			getString(i++).trim();
+		    message_element.m_message_raw = m_read_message_cursor.
 			getString(i++).trim();
 		    message_element.m_oid = m_read_message_cursor.
 			getLong(i++);
@@ -1327,7 +1333,9 @@ public class Database extends SQLiteOpenHelper
 	    "from_email_account TEXT NOT NULL, " +
 	    "from_name TEXT NOT NULL, " +
 	    "has_been_read INTEGER NOT NULL DEFAULT 0, " +
-	    "message TEXT, " +
+	    "message_html TEXT, " +
+	    "message_plain TEXT, " +
+	    "message_raw TEXT, " +
 	    "received_date TEXT NOT NULL, " +
 	    "received_date_unix_epoch BIGINT NOT NULL, " +
 	    "selected INTEGER NOT NULL DEFAULT 0, " +
@@ -1882,7 +1890,9 @@ public class Database extends SQLiteOpenHelper
 		 "from_email_account, " +
 		 "from_name, " +
 		 "has_been_read, " +
-		 "message, " +
+		 "message_html, " +
+		 "message_plain, " +
+		 "message_raw, " +
 		 "received_date, " +
 		 "received_date_unix_epoch, " +
 		 "selected, " +
@@ -1890,7 +1900,7 @@ public class Database extends SQLiteOpenHelper
 		 "subject, " +
 		 "to_folder_name, " +
 		 "uid) VALUES " +
-		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    long start_time = 0;
 
 	    for(Message message : messages)
@@ -2022,23 +2032,55 @@ public class Database extends SQLiteOpenHelper
 			if(message.getContent() != null &&
 			   message.getContent().toString() != null &&
 			   message.getContent().toString().trim().length() > 0)
+			{
 			    content_values.put
-				("message",
+				("message_html",
 				 message.getContent().toString().trim());
+			    content_values.put
+				("message_plain",
+				 message.getContent().toString().trim());
+			    content_values.put
+				("message_raw",
+				 message.getContent().toString().trim());
+			}
 			else
-			    content_values.put("message", " ");
+			{
+			    content_values.put("message_html", " ");
+			    content_values.put("message_plain", " ");
+			    content_values.put("message_raw", " ");
+			}
 		    }
 		    else
 		    {
 			content_values.put("content_downloaded", 1);
-			content_values.put("content_type", "text/html");
 
-			String string = Mail.multipart(message).trim();
+			String string = Mail.multipart
+			    (message, "text/html").trim();
 
 			if(string.isEmpty())
-			    content_values.put("message", " ");
+			    content_values.put("message_html", " ");
 			else
-			    content_values.put("message", string);
+			{
+			    content_values.put("content_type", "text/html");
+			    content_values.put("message_html", string);
+			}
+
+			string = Mail.multipart(message, "text/plain").trim();
+
+			if(string.isEmpty())
+			    content_values.put("message_plain", " ");
+			else
+			    content_values.put("message_plain", string);
+
+			string = Mail.multipart(message, "").trim();
+
+			if(string.isEmpty())
+			    content_values.put("message_raw", " ");
+			else
+			    content_values.put("message_raw", string);
+
+			if(!content_values.containsKey("content_type"))
+			    content_values.put("content_type", "text/plain");
 		    }
 
 		    if(message.getReceivedDate() != null)
@@ -2091,7 +2133,11 @@ public class Database extends SQLiteOpenHelper
 		    sqlite_statement.bindLong
 			(i++, content_values.getAsLong("has_been_read"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("message"));
+			(i++, content_values.getAsString("message_html"));
+		    sqlite_statement.bindString
+			(i++, content_values.getAsString("message_plain"));
+		    sqlite_statement.bindString
+			(i++, content_values.getAsString("message_raw"));
 		    sqlite_statement.bindString
 			(i++, content_values.getAsString("received_date"));
 		    sqlite_statement.bindLong
