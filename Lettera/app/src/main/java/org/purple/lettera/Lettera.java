@@ -1119,13 +1119,18 @@ public class Lettera extends AppCompatActivity
 	    {
 	    case "black & blue":
 		background_color = Color.BLACK;
-		divider_color = Color.parseColor("#2196f3");
+		divider_color = Color.WHITE;
 		text_color = Color.parseColor("#2196f3");
 		break;
 	    case "black & green":
 		background_color = Color.BLACK;
-		divider_color = Color.parseColor("#66bb6a");
+		divider_color = Color.WHITE;
 		text_color = Color.parseColor("#66bb6a");
+		break;
+	    case "grayish & blue":
+		background_color = Color.parseColor("#bdbdbd");
+		divider_color = Color.WHITE;
+		text_color = Color.parseColor("#0d47a1");
 		break;
 	    default:
 		break;
