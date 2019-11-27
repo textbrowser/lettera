@@ -21,7 +21,7 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:layout_weight="0"
             android:background="#0D47A1">
 
@@ -56,6 +56,7 @@
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1" />
 
                 <Button
@@ -63,6 +64,7 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/default_compose" />
 
@@ -71,6 +73,7 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/default_contacts" />
 
@@ -79,6 +82,7 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/default_download" />
 
@@ -87,6 +91,7 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/default_settings" />
 
@@ -95,6 +100,7 @@
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_gravity="center"
                     android:layout_weight="0"
                     android:background="@drawable/exit" />
 
