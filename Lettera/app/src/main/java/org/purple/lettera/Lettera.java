@@ -275,10 +275,10 @@ public class Lettera extends AppCompatActivity
 	(Color.GRAY);
     private final static AtomicInteger s_text_color = new AtomicInteger
 	(Color.BLACK);
-    private final static int FOLDERS_DRAWER_INTERVAL = 7500;
     private final static int SELECTION_COLOR = Color.parseColor("#bbdefb");
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
     private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60;
+    private int m_folders_drawer_interval = 7500;
     private int m_selected_position = -1;
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
@@ -619,6 +619,15 @@ public class Lettera extends AppCompatActivity
     {
 	if(m_folders_drawer_schedule == null)
 	{
+	    EmailElement email_element = m_database.email_element
+		(email_account());
+
+	    if(email_element != null)
+		m_folders_drawer_interval = Integer.valueOf
+		    (email_element.m_query_interval);
+	    else
+		m_folders_drawer_interval = 7500;
+
 	    m_folders_drawer_schedule = Executors.
 		newSingleThreadScheduledExecutor();
 	    m_folders_drawer_schedule.scheduleAtFixedRate(new Runnable()
@@ -758,7 +767,7 @@ public class Lettera extends AppCompatActivity
 		    {
 		    }
 		}
-	    }, 5, FOLDERS_DRAWER_INTERVAL, TimeUnit.MILLISECONDS);
+	    }, 5, m_folders_drawer_interval, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -1261,6 +1270,16 @@ public class Lettera extends AppCompatActivity
 	    m_settings_button.setBackgroundResource
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
+	}
+    }
+
+    public void reactivate_schedules(int folders_drawer_interval)
+    {
+	if(folders_drawer_interval != m_folders_drawer_interval)
+	{
+	    m_folders_drawer_interval = folders_drawer_interval;
+	    stop_schedules();
+	    prepare_schedules();
 	}
     }
 

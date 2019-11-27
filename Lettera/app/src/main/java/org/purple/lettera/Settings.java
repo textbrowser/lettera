@@ -818,6 +818,8 @@ public class Settings
 		m_lettera.prepare_generic_widgets();
 		m_lettera.prepare_icons
 		    (s_database.settings_element("icon_theme"));
+		m_lettera.reactivate_schedules
+		    (Integer.valueOf(m_query_interval.getText().toString()));
 		prepare_colors
 		    (m_color_theme_spinner.getSelectedItem().toString());
 	    }

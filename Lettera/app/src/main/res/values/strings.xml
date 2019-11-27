@@ -51,6 +51,6 @@
     <string name="remove_local_messages">Remove Local Messages</string>
     <string name="move_to">Move to:</string>
     <string name="back">Back</string>
-    <string name="query_interval">Query Interval</string>
+    <string name="query_interval">Query Interval (Milliseconds)</string>
     <string name="_7500">7500</string>
 </resources>
