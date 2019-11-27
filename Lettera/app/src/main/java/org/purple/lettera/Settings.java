@@ -495,6 +495,7 @@ public class Settings
     private TextView m_proxy_password = null;
     private TextView m_proxy_port = null;
     private TextView m_proxy_user = null;
+    private TextView m_query_interval = null;
     private TextView m_signature_key_data = null;
     private View m_display_layout = null;
     private View m_network_layout = null;
@@ -519,6 +520,30 @@ public class Settings
 		    (dest.toString() + source.toString());
 
 		if(port >= 1 && port <= 65535)
+		    return null;
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    return "";
+	}
+    };
+    private final static InputFilter s_query_interval_filter = new InputFilter()
+    {
+	public CharSequence filter(CharSequence source,
+				   int start,
+				   int end,
+				   Spanned dest,
+				   int dstart,
+				   int dend)
+	{
+	    try
+	    {
+		int query_interval = Integer.parseInt
+		    (dest.toString() + source.toString());
+
+		if(query_interval >= 1 && query_interval <= 300000)
 		    return null;
 	    }
 	    catch(Exception exception)
@@ -740,6 +765,18 @@ public class Settings
 		 m_proxy_type_spinner.getSelectedItem().toString());
 	    content_values.put
 		("proxy_user", m_proxy_user.getText().toString().trim());
+
+	    string = m_query_interval.getText().toString().trim();
+
+	    if(string.isEmpty())
+	    {
+		m_query_interval.requestFocus();
+		show_network_page();
+		return;
+	    }
+	    else
+		content_values.put("query_interval", string);
+
 	    error = s_database.save_email(content_values).trim();
 
 	    if(!error.isEmpty())
@@ -883,6 +920,7 @@ public class Settings
 	m_proxy_type_spinner = m_view.findViewById
 	    (R.id.proxy_type_spinner);
 	m_proxy_user = m_view.findViewById(R.id.proxy_user);
+	m_query_interval = m_view.findViewById(R.id.query_interval);
 	m_remove_local_messages_button = m_view.findViewById
 	    (R.id.remove_local_messages);
 	m_remove_local_messages_verify_checkbox = m_view.findViewById
@@ -1030,6 +1068,7 @@ public class Settings
 	    m_proxy_port.setText("");
 	    m_proxy_type_spinner.setSelection(0);
 	    m_proxy_user.setText("");
+	    m_query_interval.setText("7500");
 	}
 	else
 	{
@@ -1076,6 +1115,7 @@ public class Settings
 	    }
 
 	    m_proxy_user.setText(email_element.m_proxy_user);
+	    m_query_interval.setText(email_element.m_query_interval);
 	}
     }
 
@@ -1827,6 +1867,8 @@ public class Settings
 	m_inbound_port.setFilters(new InputFilter[] {s_port_filter});
 	m_outbound_port.setFilters(new InputFilter[] {s_port_filter});
 	m_proxy_port.setFilters(new InputFilter[] {s_port_filter});
+	m_query_interval.setFilters
+	    (new InputFilter[] {s_query_interval_filter});
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera, android.R.layout.simple_spinner_item, s_proxy_types);
 	m_proxy_type_spinner.setAdapter(array_adapter);
