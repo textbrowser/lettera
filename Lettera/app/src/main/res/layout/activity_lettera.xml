@@ -110,7 +110,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:orientation="horizontal">
@@ -136,7 +136,8 @@
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginEnd="10dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/unread"
                 android:gravity="center" />
 
@@ -145,7 +146,8 @@
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginEnd="10dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/move_to_folder"
                 android:gravity="center" />
 
@@ -154,7 +156,8 @@
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginEnd="10dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/trash_folder"
                 android:gravity="center" />
 
@@ -162,6 +165,7 @@
                 android:id="@+id/all_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center" />
 
         </LinearLayout>
@@ -217,7 +221,7 @@
         <LinearLayout
             android:id="@+id/status_bar"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="48dp"
             android:orientation="horizontal"
             android:paddingStart="15dp"
             android:paddingEnd="15dp">
