@@ -264,7 +264,6 @@ public class Lettera extends AppCompatActivity
     private String m_selected_folder_name = "";
     private TextView m_current_folder = null;
     private TextView m_items_count = null;
-    private View m_vertical_separator = null;
     private final AtomicBoolean m_download_interrupted =
 	new AtomicBoolean(false);
     private final AtomicBoolean m_scrolling = new AtomicBoolean(false);
@@ -372,7 +371,6 @@ public class Lettera extends AppCompatActivity
 	m_scroll_top = findViewById(R.id.scroll_top);
 	m_settings_button = findViewById(R.id.settings_button);
 	m_status_bar = findViewById(R.id.status_bar);
-	m_vertical_separator = findViewById(R.id.vertical_separator);
     }
 
     private void prepare_listeners()
@@ -1234,9 +1232,6 @@ public class Lettera extends AppCompatActivity
 	m_status_bar.setVisibility
 	    (m_database.setting("show_status_bar").equals("true") ?
 	     View.VISIBLE : View.GONE);
-	m_vertical_separator.setVisibility
-	    (m_database.setting("show_vertical_separator_before_settings").
-	     equals("true") ? View.VISIBLE : View.GONE);
     }
 
     public void prepare_icons(SettingsElement settings_element)

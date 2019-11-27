@@ -146,13 +146,6 @@
                     </android.support.v7.widget.GridLayout>
 
                     <CheckBox
-                        android:id="@+id/show_vertical_separator_before_settings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="@string/show_a_vertical_separator_before_the_settings_icon" />
-
-                    <CheckBox
                         android:id="@+id/show_status_bar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

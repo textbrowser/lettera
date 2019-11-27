@@ -471,7 +471,6 @@ public class Settings
     private CheckBox m_primary_account_checkbox = null;
     private CheckBox m_remove_local_messages_verify_checkbox = null;
     private CheckBox m_show_status_bar = null;
-    private CheckBox m_show_vertical_separator_before_settings_checkbox = null;
     private Dialog m_dialog = null;
     private ImageButton m_return_button = null;
     private Lettera m_lettera = null;
@@ -595,23 +594,6 @@ public class Settings
 	    content_values.put("key", "show_status_bar");
 	    content_values.put
 		("value", m_show_status_bar.isChecked() ? "true" : "false");
-	    error = s_database.save_setting(content_values, true);
-
-	    if(!error.isEmpty())
-	    {
-		show_display_page();
-		Windows.show_dialog
-		    (m_lettera, "Failure (" + error + ")!", "Error");
-		return;
-	    }
-
-	    content_values.clear();
-	    content_values.put
-		("key", "show_vertical_separator_before_settings");
-	    content_values.put
-		("value",
-		 m_show_vertical_separator_before_settings_checkbox.
-		 isChecked() ? "true" : "false");
 	    error = s_database.save_setting(content_values, true);
 
 	    if(!error.isEmpty())
@@ -908,8 +890,6 @@ public class Settings
 	m_return_button = m_view.findViewById(R.id.return_button);
 	m_show_status_bar = m_view.findViewById
 	    (R.id.show_status_bar);
-	m_show_vertical_separator_before_settings_checkbox =
-	    m_view.findViewById(R.id.show_vertical_separator_before_settings);
 	m_signature_key_data = m_view.findViewById(R.id.signature_key_data);
 	m_signature_key_spinner = m_view.findViewById
 	    (R.id.signature_key_spinner);
@@ -998,9 +978,6 @@ public class Settings
 
 	m_show_status_bar.setChecked
 	    (s_database.setting("show_status_bar").equals("true"));
-	m_show_vertical_separator_before_settings_checkbox.setChecked
-	    (s_database.setting("show_vertical_separator_before_settings").
-	     equals("true"));
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera, android.R.layout.simple_spinner_item, s_icon_themes);
 	m_icon_theme_spinner.setAdapter(array_adapter);
