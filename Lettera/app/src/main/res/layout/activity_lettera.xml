@@ -65,7 +65,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@drawable/default_compose" />
 
                 <Button
@@ -74,7 +74,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@drawable/default_contacts" />
 
                 <Button
@@ -83,7 +83,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@drawable/default_download" />
 
                 <Button
@@ -92,7 +92,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@drawable/default_settings" />
 
                 <Button
@@ -217,7 +217,7 @@
         <LinearLayout
             android:id="@+id/status_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:orientation="horizontal"
             android:paddingStart="15dp"
             android:paddingEnd="15dp">
@@ -225,7 +225,8 @@
             <TextView
                 android:id="@+id/message_count"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/items"
                 android:textSize="16sp" />
         </LinearLayout>
