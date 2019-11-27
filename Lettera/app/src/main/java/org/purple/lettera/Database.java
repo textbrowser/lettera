@@ -179,7 +179,8 @@ public class Database extends SQLiteOpenHelper
 		 "proxy_port, " +              // 11
 		 "proxy_type, " +              // 12
 		 "proxy_user, " +              // 13
-		 "OID " +                      // 14
+		 "query_interval, " +          // 14
+		 "OID " +                      // 15
 		 "FROM email_accounts WHERE email_account = ?",
 		 new String[] {email_account});
 
@@ -235,6 +236,9 @@ public class Database extends SQLiteOpenHelper
 			email_element.m_proxy_user = cursor.getString(i);
 			break;
 		    case 14:
+			email_element.m_query_interval = cursor.getString(i);
+			break;
+		    case 15:
 			email_element.m_oid = cursor.getLong(i);
 			break;
 		    default:
@@ -1296,7 +1300,13 @@ public class Database extends SQLiteOpenHelper
 	    "proxy_password TEXT, " +
 	    "proxy_port INTEGER, " +
 	    "proxy_type TEXT, " +
-	    "proxy_user TEXT)";
+	    "proxy_user TEXT, " +
+	    "query_interval INTEGER DEFAULT 7500 NOT NULL, " +
+	    "reserved_a TEXT NOT NULL DEFAULT 'a', " +
+	    "reserved_b TEXT NOT NULL DEFAULT 'b', " +
+	    "reserved_c TEXT NOT NULL DEFAULT 'c', " +
+	    "reserved_d TEXT NOT NULL DEFAULT 'd', " +
+	    "reserved_e TEXT NOT NULL DEFAULT 'e')";
 
 	try
 	{
