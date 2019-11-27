@@ -55,6 +55,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Lettera extends AppCompatActivity
 {
@@ -267,6 +268,8 @@ public class Lettera extends AppCompatActivity
     private final AtomicBoolean m_download_interrupted =
 	new AtomicBoolean(false);
     private final AtomicBoolean m_scrolling = new AtomicBoolean(false);
+    private final AtomicInteger m_folders_drawer_interval =
+	new AtomicInteger(7500);
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
     private final static AtomicInteger s_background_color = new AtomicInteger
@@ -278,7 +281,6 @@ public class Lettera extends AppCompatActivity
     private final static int SELECTION_COLOR = Color.parseColor("#bbdefb");
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
     private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60;
-    private int m_folders_drawer_interval = 7500;
     private int m_selected_position = -1;
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
@@ -623,10 +625,10 @@ public class Lettera extends AppCompatActivity
 		(email_account());
 
 	    if(email_element != null)
-		m_folders_drawer_interval = Integer.valueOf
-		    (email_element.m_query_interval);
+		m_folders_drawer_interval.set
+		    (Integer.valueOf(email_element.m_query_interval));
 	    else
-		m_folders_drawer_interval = 7500;
+		m_folders_drawer_interval.set(7500);
 
 	    m_folders_drawer_schedule = Executors.
 		newSingleThreadScheduledExecutor();
@@ -636,12 +638,18 @@ public class Lettera extends AppCompatActivity
 		private Mail m_mail = null;
 		private final AtomicBoolean m_interrupted =
 		    new AtomicBoolean(false);
+		private final AtomicLong m_last_tick = new AtomicLong
+		    (System.currentTimeMillis());
 
 		@Override
 		public void run()
 		{
 		    try
 		    {
+			if(System.currentTimeMillis() - m_last_tick.get() <
+			   m_folders_drawer_interval.get())
+			    return;
+
 			EmailElement email_element = m_database.email_element
 			    (email_account());
 
@@ -653,6 +661,7 @@ public class Lettera extends AppCompatActivity
 				m_mail = null;
 			    }
 
+			    m_last_tick.set(System.currentTimeMillis());
 			    return;
 			}
 
@@ -762,12 +771,14 @@ public class Lettera extends AppCompatActivity
 				    }
 				});
 			}
+
+			m_last_tick.set(System.currentTimeMillis());
 		    }
 		    catch(Exception exception)
 		    {
 		    }
 		}
-	    }, 5, m_folders_drawer_interval, TimeUnit.MILLISECONDS);
+	    }, 5, 250, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -1275,12 +1286,8 @@ public class Lettera extends AppCompatActivity
 
     public void reactivate_schedules(int folders_drawer_interval)
     {
-	if(folders_drawer_interval != m_folders_drawer_interval)
-	{
-	    m_folders_drawer_interval = folders_drawer_interval;
-	    stop_schedules();
-	    prepare_schedules();
-	}
+	if(folders_drawer_interval != m_folders_drawer_interval.get())
+	    m_folders_drawer_interval.set(folders_drawer_interval);
     }
 
     public void update_folders_drawer()
