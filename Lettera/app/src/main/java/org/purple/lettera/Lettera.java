@@ -837,7 +837,7 @@ public class Lettera extends AppCompatActivity
 	s_default_background_color = Color.WHITE;
 	s_default_divider_color = Color.parseColor("#e0e0e0");
 	s_default_text_color = m_current_folder.getCurrentTextColor();
-	m_messages_adapter = new MessagesAdapter(getApplicationContext());
+	m_messages_adapter = new MessagesAdapter(getApplicationContext(), this);
 	m_folders_drawer = new FoldersDrawer
 	    (Lettera.this, findViewById(R.id.main_layout));
 	m_layout_manager = new LetteraLinearLayoutManager
@@ -1282,6 +1282,11 @@ public class Lettera extends AppCompatActivity
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
 	}
+    }
+
+    public void show_email_dialog(int position)
+    {
+	m_letter_dialog.show(email_account(), selected_folder_name(), position);
     }
 
     public void reactivate_schedules(int folders_drawer_interval)

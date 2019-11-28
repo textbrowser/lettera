@@ -33,6 +33,7 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -41,11 +42,13 @@ import java.util.Date;
 
 public class MessageItem extends View
 {
+    private Button m_open = null;
     private CheckBox m_selected = null;
     private CompoundButton.OnCheckedChangeListener m_selected_listener = null;
     private Context m_context = null;
     private ImageView m_attachment = null;
     private LayoutInflater m_inflater = null;
+    private Lettera m_lettera = null;
     private String m_email_account = "";
     private String m_folder_name = "";
     private TextView m_date = null;
@@ -55,6 +58,7 @@ public class MessageItem extends View
     private View m_divider = null;
     private View m_view = null;
     private final static Database s_database = Database.instance();
+    private int m_position = -1;
     private long m_uid = 0;
 
     private void initialize_widget_members()
@@ -63,6 +67,7 @@ public class MessageItem extends View
 	m_date = m_view.findViewById(R.id.date);
 	m_divider = m_view.findViewById(R.id.divider);
 	m_from = m_view.findViewById(R.id.from);
+	m_open = m_view.findViewById(R.id.open);
 	m_selected = m_view.findViewById(R.id.selected);
 	m_subject = m_view.findViewById(R.id.subject);
 	m_summary = m_view.findViewById(R.id.summary);
@@ -70,6 +75,19 @@ public class MessageItem extends View
 
     private void prepare_listeners()
     {
+	if(m_open != null && !m_open.hasOnClickListeners())
+	    m_open.setOnClickListener(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    m_lettera.show_email_dialog(m_position);
+		}
+	    });
+
 	if(m_selected_listener == null)
 	    m_selected_listener = new CompoundButton.OnCheckedChangeListener()
 	    {
@@ -102,12 +120,13 @@ public class MessageItem extends View
 	super.onDraw(canvas);
     }
 
-    public MessageItem(Context context, ViewGroup view_group)
+    public MessageItem(Context context, Lettera lettera, ViewGroup view_group)
     {
 	super(context);
 	m_context = context;
 	m_inflater = (LayoutInflater) m_context.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
+	m_lettera = lettera;
 	m_view = m_inflater.inflate(R.layout.letter_line, view_group, false);
 	initialize_widget_members();
 	prepare_listeners();
@@ -120,7 +139,8 @@ public class MessageItem extends View
 
     public void set_data(MessageElement message_element,
 			 String folder_name,
-			 boolean last_position)
+			 boolean last_position,
+			 int position)
     {
 	if(message_element == null)
 	{
@@ -167,6 +187,7 @@ public class MessageItem extends View
 	m_from.setTypeface
 	    (null,
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
+	m_position = position;
 	m_selected.setOnCheckedChangeListener(null);
 	m_selected.setChecked
 	    (s_database.message_selected(message_element.m_email_account,

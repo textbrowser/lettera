@@ -35,6 +35,11 @@ import android.view.ViewGroup;
 
 public class MessagesAdapter extends RecyclerView.Adapter
 {
+    private Lettera m_lettera = null;
+    private String m_email_account = "";
+    private String m_folder_name = "";
+    private final static Database s_database = Database.instance();
+
     public class ViewHolderMessage extends RecyclerView.ViewHolder
     {
 	private MessageItem m_message_item = null;
@@ -47,11 +52,12 @@ public class MessagesAdapter extends RecyclerView.Adapter
 
 	public void set_data(MessageElement message_element,
 			     String folder_name,
-			     boolean last_position)
+			     boolean last_position,
+			     int position)
 	{
 	    if(m_message_item != null)
 		m_message_item.set_data
-		    (message_element, folder_name, last_position);
+		    (message_element, folder_name, last_position, position);
 	}
     }
 
@@ -66,12 +72,9 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	}
     }
 
-    private String m_email_account = "";
-    private String m_folder_name = "";
-    private final static Database s_database = Database.instance();
-
-    public MessagesAdapter(Context context)
+    public MessagesAdapter(Context context, Lettera lettera)
     {
+	m_lettera = lettera;
     }
 
     @Override
@@ -79,7 +82,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	(ViewGroup parent, int view_type)
     {
 	return new ViewHolderMessage
-	    (new MessageItem(parent.getContext(), parent));
+	    (new MessageItem(parent.getContext(), m_lettera, parent));
     }
 
     public String folder_name()
@@ -109,7 +112,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	    (m_email_account, m_folder_name, position);
 
 	view_holder_message.set_data
-	    (message_element, m_folder_name, position == 0);
+	    (message_element, m_folder_name, position == 0, position);
     }
 
     public void set_email_account(String email_account)

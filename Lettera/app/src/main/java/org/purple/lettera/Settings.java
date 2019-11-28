@@ -1932,7 +1932,7 @@ public class Settings
 	{
 	    dialog = new Dialog(m_lettera);
 	    Windows.show_progress_dialog
-		(m_lettera, dialog, "Testing IMAPS.\nPlease be patient.", null);
+		(m_lettera, dialog, "Testing IMAPS. Please be patient.", null);
 
 	    Thread thread = new Thread
 		(new EmailTest(dialog,
@@ -1971,7 +1971,7 @@ public class Settings
 	{
 	    dialog = new Dialog(m_lettera);
 	    Windows.show_progress_dialog
-		(m_lettera, dialog, "Testing SMTPS.\nPlease be patient.", null);
+		(m_lettera, dialog, "Testing SMTPS. Please be patient.", null);
 
 	    Thread thread = new Thread
 		(new EmailTest(dialog,

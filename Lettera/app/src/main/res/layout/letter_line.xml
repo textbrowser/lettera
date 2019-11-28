@@ -25,6 +25,7 @@
                 android:id="@+id/from"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="0.60"
                 android:ellipsize="end"
@@ -34,24 +35,57 @@
                 android:id="@+id/date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight=".40"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAlignment="viewEnd" />
 
+            <ImageView
+                android:id="@+id/attachment"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/todo"
+                app:srcCompat="@drawable/attachment" />
+
             <CheckBox
                 android:id="@+id/selected"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/subject"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/subject"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.95"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.05" />
+
+            <Button
+                android:id="@+id/open"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/email_open" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/summary"
@@ -60,13 +94,6 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@android:color/darker_gray" />
-
-        <ImageView
-            android:id="@+id/attachment"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="@string/todo"
-            app:srcCompat="@drawable/attachment" />
 
     </LinearLayout>
 
