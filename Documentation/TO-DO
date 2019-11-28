@@ -65,6 +65,7 @@ Remaining Items
 - Download incomplete content on opening of letter (getMessagesByUID).
 - Letter navigation (next, previous).
 - McEliece key generation, exchange, etc.
+- Move-to implementation in letter panel.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - Optional network loading of HTML data.
