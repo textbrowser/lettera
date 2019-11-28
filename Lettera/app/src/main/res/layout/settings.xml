@@ -219,21 +219,17 @@
 
                         <TextView
                             android:id="@+id/textView2"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.50"
+                            android:layout_gravity="center"
                             android:text="@string/query_interval" />
 
-                        <EditText
+                        <Spinner
                             android:id="@+id/query_interval"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.50"
-                            android:ems="10"
-                            android:hint="@string/query_interval"
-                            android:inputType="number"
-                            android:nextFocusDown="@id/inbound_address"
-                            android:text="@string/_7500" />
+                            android:layout_gravity="center" />
+
                     </LinearLayout>
 
                     <LinearLayout

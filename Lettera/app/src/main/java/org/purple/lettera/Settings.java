@@ -480,6 +480,7 @@ public class Settings
     private Spinner m_encryption_key_spinner = null;
     private Spinner m_icon_theme_spinner = null;
     private Spinner m_proxy_type_spinner = null;
+    private Spinner m_query_interval_spinner = null;
     private Spinner m_signature_key_spinner = null;
     private Switch m_outbound_as_inbound = null;
     private TextView m_encryption_key_data = null;
@@ -495,7 +496,6 @@ public class Settings
     private TextView m_proxy_password = null;
     private TextView m_proxy_port = null;
     private TextView m_proxy_user = null;
-    private TextView m_query_interval = null;
     private TextView m_signature_key_data = null;
     private View m_display_layout = null;
     private View m_network_layout = null;
@@ -520,30 +520,6 @@ public class Settings
 		    (dest.toString() + source.toString());
 
 		if(port >= 1 && port <= 65535)
-		    return null;
-	    }
-	    catch(Exception exception)
-	    {
-	    }
-
-	    return "";
-	}
-    };
-    private final static InputFilter s_query_interval_filter = new InputFilter()
-    {
-	public CharSequence filter(CharSequence source,
-				   int start,
-				   int end,
-				   Spanned dest,
-				   int dstart,
-				   int dend)
-	{
-	    try
-	    {
-		int query_interval = Integer.parseInt
-		    (dest.toString() + source.toString());
-
-		if(query_interval >= 1 && query_interval <= 300000)
 		    return null;
 	    }
 	    catch(Exception exception)
@@ -765,18 +741,9 @@ public class Settings
 		 m_proxy_type_spinner.getSelectedItem().toString());
 	    content_values.put
 		("proxy_user", m_proxy_user.getText().toString().trim());
-
-	    string = m_query_interval.getText().toString().trim();
-
-	    if(string.isEmpty())
-	    {
-		m_query_interval.requestFocus();
-		show_network_page();
-		return;
-	    }
-	    else
-		content_values.put("query_interval", string);
-
+	    content_values.put
+		("query_interval",
+		 m_query_interval_spinner.getSelectedItem().toString());
 	    error = s_database.save_email(content_values).trim();
 
 	    if(!error.isEmpty())
@@ -819,7 +786,8 @@ public class Settings
 		m_lettera.prepare_icons
 		    (s_database.settings_element("icon_theme"));
 		m_lettera.reactivate_schedules
-		    (Integer.valueOf(m_query_interval.getText().toString()));
+		    (Integer.valueOf(m_query_interval_spinner.
+				     getSelectedItem().toString()));
 		prepare_colors
 		    (m_color_theme_spinner.getSelectedItem().toString());
 	    }
@@ -871,45 +839,34 @@ public class Settings
 
     private void initialize_widget_members()
     {
-	m_accounts_spinner = m_view.findViewById
-	    (R.id.accounts_spinner);
+	m_accounts_spinner = m_view.findViewById(R.id.accounts_spinner);
 	m_apply_button = m_view.findViewById(R.id.apply_button);
-	m_color_theme_spinner = m_view.findViewById
-	    (R.id.color_theme_spinner);
+	m_color_theme_spinner = m_view.findViewById(R.id.color_theme_spinner);
 	m_delete_account_button = m_view.findViewById
 	    (R.id.delete_account_button);
 	m_delete_account_verify_checkbox = m_view.findViewById
 	    (R.id.delete_account_verify_checkbox);
 	m_delete_on_server_checkbox = m_view.findViewById
 	    (R.id.delete_on_server_checkbox);
-	m_display_button = m_view.findViewById
-	    (R.id.display_button);
+	m_display_button = m_view.findViewById(R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
-	m_email_folders_spinner = m_view.findViewById
-	    (R.id.email_folders);
-	m_encryption_key_data = m_view.findViewById
-	    (R.id.encryption_key_data);
+	m_email_folders_spinner = m_view.findViewById(R.id.email_folders);
+	m_encryption_key_data = m_view.findViewById(R.id.encryption_key_data);
 	m_encryption_key_spinner = m_view.findViewById
 	    (R.id.encryption_key_spinner);
 	m_generate_keys_button = m_view.findViewById(R.id.generate_keys_button);
 	m_generate_keys_checkbox = m_view.findViewById
 	    (R.id.generate_keys_checkbox);
-	m_icon_theme_spinner = m_view.findViewById
-	    (R.id.icon_theme_spinner);
-	m_inbound_address = m_view.findViewById
-	    (R.id.inbound_address);
+	m_icon_theme_spinner = m_view.findViewById(R.id.icon_theme_spinner);
+	m_inbound_address = m_view.findViewById(R.id.inbound_address);
 	m_inbound_email = m_view.findViewById(R.id.inbound_email);
-	m_inbound_password = m_view.findViewById
-	    (R.id.inbound_password);
+	m_inbound_password = m_view.findViewById(R.id.inbound_password);
 	m_inbound_port = m_view.findViewById(R.id.inbound_port);
 	m_network_button = m_view.findViewById(R.id.network_button);
-	m_outbound_address = m_view.findViewById
-	    (R.id.outbound_address);
-	m_outbound_as_inbound = m_view.findViewById
-	    (R.id.outbound_as_inbound);
+	m_outbound_address = m_view.findViewById(R.id.outbound_address);
+	m_outbound_as_inbound = m_view.findViewById(R.id.outbound_as_inbound);
 	m_outbound_email = m_view.findViewById(R.id.outbound_email);
-	m_outbound_password = m_view.findViewById
-	    (R.id.outbound_password);
+	m_outbound_password = m_view.findViewById(R.id.outbound_password);
 	m_outbound_port = m_view.findViewById(R.id.outbound_port);
 	m_network_layout = m_view.findViewById(R.id.network_layout);
 	m_primary_account_checkbox = m_view.findViewById
@@ -919,22 +876,19 @@ public class Settings
 	m_proxy_address = m_view.findViewById(R.id.proxy_address);
 	m_proxy_password = m_view.findViewById(R.id.proxy_password);
 	m_proxy_port = m_view.findViewById(R.id.proxy_port);
-	m_proxy_type_spinner = m_view.findViewById
-	    (R.id.proxy_type_spinner);
+	m_proxy_type_spinner = m_view.findViewById(R.id.proxy_type_spinner);
 	m_proxy_user = m_view.findViewById(R.id.proxy_user);
-	m_query_interval = m_view.findViewById(R.id.query_interval);
+	m_query_interval_spinner = m_view.findViewById(R.id.query_interval);
 	m_remove_local_messages_button = m_view.findViewById
 	    (R.id.remove_local_messages);
 	m_remove_local_messages_verify_checkbox = m_view.findViewById
 	    (R.id.remove_local_messages_verify_checkbox);
 	m_return_button = m_view.findViewById(R.id.return_button);
-	m_show_status_bar = m_view.findViewById
-	    (R.id.show_status_bar);
+	m_show_status_bar = m_view.findViewById(R.id.show_status_bar);
 	m_signature_key_data = m_view.findViewById(R.id.signature_key_data);
 	m_signature_key_spinner = m_view.findViewById
 	    (R.id.signature_key_spinner);
-	m_test_inbound_button = m_view.findViewById
-	    (R.id.test_inbound_button);
+	m_test_inbound_button = m_view.findViewById(R.id.test_inbound_button);
 	m_test_outbound_button = m_view.findViewById
 	    (R.id.test_outbound_button);
     }
@@ -982,11 +936,6 @@ public class Settings
 
     private void populate_display()
     {
-	ArrayAdapter array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, s_color_themes);
-
-	m_color_theme_spinner.setAdapter(array_adapter);
-
 	switch(s_database.setting("color_theme").toLowerCase())
 	{
 	case "black & blue":
@@ -1018,9 +967,6 @@ public class Settings
 
 	m_show_status_bar.setChecked
 	    (s_database.setting("show_status_bar").equals("true"));
-	array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, s_icon_themes);
-	m_icon_theme_spinner.setAdapter(array_adapter);
 	settings_element = s_database.settings_element("icon_theme");
 
 	if(settings_element == null)
@@ -1039,8 +985,6 @@ public class Settings
 
     private void populate_network()
     {
-	ArrayAdapter<String> array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, s_proxy_types);
 	EmailElement email_element =
 	    m_accounts_spinner.getSelectedItem() == null ?
 	    null : s_database.email_element(m_accounts_spinner.
@@ -1050,7 +994,6 @@ public class Settings
 
 	m_delete_account_verify_checkbox.setChecked(false);
 	m_outbound_as_inbound.setChecked(false);
-	m_proxy_type_spinner.setAdapter(array_adapter);
 	m_remove_local_messages_verify_checkbox.setChecked(false);
 
 	if(email_element == null)
@@ -1070,7 +1013,7 @@ public class Settings
 	    m_proxy_port.setText("");
 	    m_proxy_type_spinner.setSelection(0);
 	    m_proxy_user.setText("");
-	    m_query_interval.setText("7500");
+	    m_query_interval_spinner.setSelection(0);
 	}
 	else
 	{
@@ -1114,10 +1057,32 @@ public class Settings
 		break;
 	    default:
 		m_proxy_type_spinner.setSelection(0);
+		break;
 	    }
 
 	    m_proxy_user.setText(email_element.m_proxy_user);
-	    m_query_interval.setText(email_element.m_query_interval);
+
+	    switch(email_element.m_query_interval)
+	    {
+	    case "7500":
+		m_query_interval_spinner.setSelection(0);
+		break;
+	    case "10000":
+		m_query_interval_spinner.setSelection(1);
+		break;
+	    case "15000":
+		m_query_interval_spinner.setSelection(2);
+		break;
+	    case "30000":
+		m_query_interval_spinner.setSelection(3);
+		break;
+	    case "60000":
+		m_query_interval_spinner.setSelection(4);
+		break;
+	    default:
+		m_query_interval_spinner.setSelection(0);
+		break;
+	    }
 	}
     }
 
@@ -1205,6 +1170,10 @@ public class Settings
 	    (text_color, PorterDuff.Mode.SRC_ATOP);
 	m_proxy_type_spinner.setSelection
 	    (m_proxy_type_spinner.getSelectedItemPosition());
+	m_query_interval_spinner.getBackground().setColorFilter
+	    (text_color, PorterDuff.Mode.SRC_ATOP);
+	m_query_interval_spinner.setSelection
+	    (m_query_interval_spinner.getSelectedItemPosition());
 	m_signature_key_spinner.getBackground().setColorFilter
 	    (text_color, PorterDuff.Mode.SRC_ATOP);
 	m_signature_key_spinner.setSelection
@@ -1869,11 +1838,13 @@ public class Settings
 	m_inbound_port.setFilters(new InputFilter[] {s_port_filter});
 	m_outbound_port.setFilters(new InputFilter[] {s_port_filter});
 	m_proxy_port.setFilters(new InputFilter[] {s_port_filter});
-	m_query_interval.setFilters
-	    (new InputFilter[] {s_query_interval_filter});
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera, android.R.layout.simple_spinner_item, s_proxy_types);
 	m_proxy_type_spinner.setAdapter(array_adapter);
+	array = new String[] {"7500", "10000", "15000", "30000", "60000"};
+	array_adapter = new ArrayAdapter<>
+	    (m_lettera, android.R.layout.simple_spinner_item, array);
+	m_query_interval_spinner.setAdapter(array_adapter);
 	m_remove_local_messages_button.setEnabled(false);
 
 	/*
