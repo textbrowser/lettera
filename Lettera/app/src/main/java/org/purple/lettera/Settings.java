@@ -1647,6 +1647,42 @@ public class Settings
 		}
 	    });
 
+	m_query_interval_spinner.setOnItemSelectedListener
+	    (new OnItemSelectedListener()
+	    {
+		@Override
+		public void onItemSelected(AdapterView<?> parent,
+					   View view,
+					   int position,
+					   long id)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent)
+		{
+		    try
+		    {
+			((TextView) parent.getChildAt(0)).
+			    setTextColor(Lettera.text_color());
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    });
+
 	if(!m_remove_local_messages_button.hasOnClickListeners())
 	    m_remove_local_messages_button.setOnClickListener
 		(new View.OnClickListener()
