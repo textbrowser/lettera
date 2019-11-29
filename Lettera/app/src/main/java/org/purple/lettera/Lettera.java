@@ -746,6 +746,10 @@ public class Lettera extends AppCompatActivity
 						 " (Downloading " +
 						 folder_name +
 						 ".)");
+					    m_messages_adapter.
+						notifyDataSetChanged();
+					    m_folders_drawer.update();
+					    prepare_current_folder_widgets();
 					}
 				    });
 
