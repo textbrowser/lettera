@@ -56,7 +56,6 @@ public class Database extends SQLiteOpenHelper
     private final static String DATABASE_NAME = "lettera.db";
     private final static String UNKNOWN_EMAIL = "unknown@unknown.org";
     private final static int DATABASE_VERSION = 1;
-    private final static int MESSAGE_DOWNLOAD_TIME = 10000; // 10 Seconds
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -1826,7 +1825,8 @@ public class Database extends SQLiteOpenHelper
     public void write_messages(AtomicBoolean interrupt,
 			       IMAPFolder folder,
 			       String email_account,
-			       boolean enable_database_transaction)
+			       boolean enable_database_transaction,
+			       long message_download_time)
     {
 	if(folder == null || m_db == null)
 	    return;
@@ -2002,7 +2002,7 @@ public class Database extends SQLiteOpenHelper
 		    start_time = System.currentTimeMillis();
 
 		if(System.currentTimeMillis() - start_time >
-		   MESSAGE_DOWNLOAD_TIME)
+		   java.lang.Math.min(25000, message_download_time))
 		    break;
 
 		try
