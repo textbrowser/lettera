@@ -153,7 +153,7 @@
                 android:gravity="center" />
 
             <CheckBox
-                android:id="@+id/all_checkbox"
+                android:id="@+id/select_all_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

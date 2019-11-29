@@ -48,6 +48,7 @@ Completed Items
 - Separate standard folders from other folders.
 - Simple version of folders drawer for moving messages. Ignore current folder.
 - Spinners and color themes.
+- Tap-to-select letter and checkbox avoidance.
 - Terminate background services on application exit.
 - Timely interruption of data if the device is disconnected.
 
@@ -73,7 +74,6 @@ Remaining Items
 - Reset of Network widgets in Settings.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
-- Tap-to-select letter and checkbox avoidance.
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
   Expunge locally-deleted messages from the server if configured to do so.

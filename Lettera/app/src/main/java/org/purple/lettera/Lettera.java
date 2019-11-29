@@ -213,6 +213,7 @@ public class Lettera extends AppCompatActivity
 			    m_scroll_bottom.setVisibility(View.GONE);
 			    m_scroll_top.setVisibility(View.GONE);
 			    prepare_current_folder_text(selected_folder_name());
+			    prepare_current_folder_widgets();
 			}
 			catch(Exception exception)
 			{
@@ -245,9 +246,9 @@ public class Lettera extends AppCompatActivity
     private Button m_mark_as_unread = null;
     private Button m_move_to_folder_button = null;
     private Button m_settings_button = null;
-    private CheckBox m_all_checkbox = null;
+    private CheckBox m_select_all_checkbox = null;
     private CompoundButton.OnCheckedChangeListener
-	m_all_checkbox_listener = null;
+	m_select_all_checkbox_listener = null;
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private Handler m_scroll_hander = null;
@@ -355,7 +356,6 @@ public class Lettera extends AppCompatActivity
 
     private void initialize_widget_members()
     {
-	m_all_checkbox = findViewById(R.id.all_checkbox);
 	m_artificial_button = findViewById(R.id.artificial_button);
 	m_compose_button = findViewById(R.id.compose_button);
 	m_current_folder = findViewById(R.id.current_folder);
@@ -369,40 +369,13 @@ public class Lettera extends AppCompatActivity
 	m_recycler = findViewById(R.id.messages);
 	m_scroll_bottom = findViewById(R.id.scroll_bottom);
 	m_scroll_top = findViewById(R.id.scroll_top);
+	m_select_all_checkbox = findViewById(R.id.select_all_checkbox);
 	m_settings_button = findViewById(R.id.settings_button);
 	m_status_bar = findViewById(R.id.status_bar);
     }
 
     private void prepare_listeners()
     {
-	if(m_all_checkbox_listener == null)
-	{
-	    m_all_checkbox_listener =
-		new CompoundButton.OnCheckedChangeListener()
-	    {
-		@Override
-		public void onCheckedChanged
-		    (CompoundButton button_view, final boolean is_checked)
-		{
-		    new Handler
-			(Looper.getMainLooper()).postDelayed(new Runnable()
-		    {
-			@Override
-			public void run()
-			{
-			    m_database.select_all_messages
-				(Lettera.this,
-				 m_messages_adapter,
-				 email_account(),
-				 selected_folder_name(),
-				 is_checked);
-			}
-		    }, 750);
-		}
-	    };
-	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
-	}
-
 	if(m_artificial_button != null && !m_artificial_button.
 	                                   hasOnClickListeners())
 	    m_artificial_button.setOnClickListener(new View.OnClickListener()
@@ -597,6 +570,35 @@ public class Lettera extends AppCompatActivity
 		}
 	    });
 
+	if(m_select_all_checkbox_listener == null)
+	{
+	    m_select_all_checkbox_listener =
+		new CompoundButton.OnCheckedChangeListener()
+	    {
+		@Override
+		public void onCheckedChanged
+		    (CompoundButton button_view, final boolean is_checked)
+		{
+		    new Handler
+			(Looper.getMainLooper()).postDelayed(new Runnable()
+		    {
+			@Override
+			public void run()
+			{
+			    m_database.select_all_messages
+				(Lettera.this,
+				 m_messages_adapter,
+				 email_account(),
+				 selected_folder_name(),
+				 is_checked);
+			}
+		    }, 750);
+		}
+	    };
+	    m_select_all_checkbox.setOnCheckedChangeListener
+		(m_select_all_checkbox_listener);
+	}
+
 	if(m_settings_button != null && !m_settings_button.
 	                                 hasOnClickListeners())
 	    m_settings_button.setOnClickListener(new View.OnClickListener()
@@ -766,6 +768,7 @@ public class Lettera extends AppCompatActivity
 					m_folders_drawer.update();
 					prepare_current_folder_text
 					    (selected_folder_name());
+					prepare_current_folder_widgets();
 				    }
 				});
 			}
@@ -1083,6 +1086,7 @@ public class Lettera extends AppCompatActivity
 	m_messages_adapter.notifyDataSetChanged();
 	m_selected_position = -1;
 	prepare_current_folder_text(selected_folder_name());
+	prepare_current_folder_widgets();
     }
 
     public void move_selected_messages(String to_folder_name)
@@ -1162,7 +1166,10 @@ public class Lettera extends AppCompatActivity
 	*/
 
 	Utilities.color_checkbox
-	    (m_all_checkbox, background_color(), divider_color(), text_color());
+	    (m_select_all_checkbox,
+	     background_color(),
+	     divider_color(),
+	     text_color());
 	m_messages_adapter.notifyDataSetChanged();
     }
 
@@ -1181,14 +1188,47 @@ public class Lettera extends AppCompatActivity
 	m_items_count.setText("Items: " + m_messages_adapter.getItemCount());
     }
 
+    public void prepare_current_folder_widgets()
+    {
+	int count = m_messages_adapter.getItemCount();
+
+	if(count == 0)
+	{
+	    m_delete_button.setVisibility(View.GONE);
+	    m_mark_as_unread.setVisibility(View.GONE);
+	    m_move_to_folder_button.setVisibility(View.GONE);
+	    m_select_all_checkbox.setChecked(false);
+	    m_select_all_checkbox.setEnabled(false);
+	}
+	else
+	{
+	    count = m_database.messages_selected
+		(email_account(), selected_folder_name());
+
+	    if(count == 0)
+		m_delete_button.setVisibility(View.GONE);
+	    else
+		m_delete_button.setVisibility
+		    (m_current_folder.getText().toString().toLowerCase().
+		     equals("trash") ? View.GONE : View.VISIBLE);
+
+	    m_mark_as_unread.setVisibility
+		(count == 0 ? View.GONE : View.VISIBLE);
+	    m_move_to_folder_button.setVisibility
+		(count == 0 ? View.GONE : View.VISIBLE);
+	    m_select_all_checkbox.setEnabled(true);
+	}
+    }
+
     public void prepare_folders_and_messages_widgets(String folder_name)
     {
 	if(!folder_name.equals(m_messages_adapter.folder_name()) &&
 	   !folder_name.isEmpty())
 	{
-	    m_all_checkbox.setOnCheckedChangeListener(null);
-	    m_all_checkbox.setChecked(false);
-	    m_all_checkbox.setOnCheckedChangeListener(m_all_checkbox_listener);
+	    m_select_all_checkbox.setOnCheckedChangeListener(null);
+	    m_select_all_checkbox.setChecked(false);
+	    m_select_all_checkbox.setOnCheckedChangeListener
+		(m_select_all_checkbox_listener);
 	}
 
 	String email_account = email_account();
@@ -1240,6 +1280,7 @@ public class Lettera extends AppCompatActivity
 	}
 
 	prepare_current_folder_text(selected_folder_name());
+	prepare_current_folder_widgets();
     }
 
     public void prepare_generic_widgets()
