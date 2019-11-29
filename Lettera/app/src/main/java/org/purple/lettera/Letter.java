@@ -124,7 +124,15 @@ public class Letter
 		@Override
 		public void run()
 		{
-		    m_from.setText(message_element.m_from_name);
+		    if(message_element.m_from_email_account.
+		       equals(message_element.m_from_name))
+			m_from.setText(message_element.m_from_email_account);
+		    else
+			m_from.setText(message_element.m_from_name +
+				       " (" +
+				       message_element.m_from_email_account +
+				       ")");
+
 		    m_oid = message_element.m_oid;
 
 		    String string = Utilities.formatted_email_date_for_message
