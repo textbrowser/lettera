@@ -1095,6 +1095,7 @@ public class Database extends SQLiteOpenHelper
 		public void run()
 		{
 		    lettera.prepare_current_folder_text(folder_name);
+		    lettera.prepare_current_folder_widgets();
 		    lettera.update_folders_drawer();
 		    messages_adapter.notifyDataSetChanged();
 		}
@@ -1158,6 +1159,7 @@ public class Database extends SQLiteOpenHelper
 			public void run()
 			{
 			    lettera.prepare_current_folder_text(folder_name);
+			    lettera.prepare_current_folder_widgets();
 			    lettera.update_folders_drawer();
 			    messages_adapter.notifyDataSetChanged();
 			}
@@ -1229,6 +1231,7 @@ public class Database extends SQLiteOpenHelper
 			{
 			    lettera.prepare_current_folder_text
 				(from_folder_name);
+			    lettera.prepare_current_folder_widgets();
 			    lettera.update_folders_drawer();
 			    messages_adapter.notifyDataSetChanged();
 			}
@@ -1553,6 +1556,7 @@ public class Database extends SQLiteOpenHelper
 			public void run()
 			{
 			    lettera.prepare_current_folder_text(folder_name);
+			    lettera.prepare_current_folder_widgets();
 			    messages_adapter.notifyDataSetChanged();
 			}
 		    });
