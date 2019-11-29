@@ -1608,39 +1608,58 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void set_message_selected(String email_account,
-				     String folder_name,
-				     boolean selected,
-				     long uid)
+    public void set_message_selected(final Lettera lettera,
+				     final String email_account,
+				     final String folder_name,
+				     final boolean selected,
+				     final long uid)
     {
 	if(m_db == null)
 	    return;
 
-	m_db.beginTransactionNonExclusive();
+	Thread thread = new Thread(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_db.beginTransactionNonExclusive();
 
-	try
-	{
-	    SQLiteStatement sqlite_statement = null;
+		try
+		{
+		    SQLiteStatement sqlite_statement = null;
 
-	    sqlite_statement = m_db.compileStatement
-		("UPDATE messages SET selected = ? " +
-		 "WHERE email_account = ? AND " +
-		 "LOWER(to_folder_name) = LOWER(?) AND " +
-		 "uid = ?");
-	    sqlite_statement.bindLong(1, selected ? 1 : 0);
-	    sqlite_statement.bindString(2, email_account);
-	    sqlite_statement.bindString(3, folder_name);
-	    sqlite_statement.bindLong(4, uid);
-	    sqlite_statement.execute();
-	    m_db.setTransactionSuccessful();
-	}
-	catch(Exception exception)
-	{
-	}
-	finally
-	{
-	    m_db.endTransaction();
-	}
+		    sqlite_statement = m_db.compileStatement
+			("UPDATE messages SET selected = ? " +
+			 "WHERE email_account = ? AND " +
+			 "LOWER(to_folder_name) = LOWER(?) AND " +
+			 "uid = ?");
+		    sqlite_statement.bindLong(1, selected ? 1 : 0);
+		    sqlite_statement.bindString(2, email_account);
+		    sqlite_statement.bindString(3, folder_name);
+		    sqlite_statement.bindLong(4, uid);
+		    sqlite_statement.execute();
+		    m_db.setTransactionSuccessful();
+		}
+		catch(Exception exception)
+		{
+		}
+		finally
+		{
+		    m_db.endTransaction();
+		}
+
+		lettera.runOnUiThread(new Runnable()
+		{
+		    @Override
+		    public void run()
+		    {
+			lettera.prepare_current_folder_widgets();
+		    }
+		});
+	    }
+	});
+
+	thread.start();
     }
 
     public void set_messages_unread(final Lettera lettera,
