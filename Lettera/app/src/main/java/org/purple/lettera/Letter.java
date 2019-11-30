@@ -162,15 +162,13 @@ public class Letter
 			    content = content.substring
 				(index, content.length());
 
-			m_web_view.loadDataWithBaseURL
-			    (null, content, "text/html", "UTF-8", null);
+			m_web_view.loadData(content, "text/html", "UTF-8");
 		    }
 		    else
 		    {
 			String content = message_element.m_message_plain;
 
-			m_web_view.loadDataWithBaseURL
-			    (null, content, "text/plain", "UTF-8", null);
+			m_web_view.loadData(content, "text/plain", "UTF-8");
 		    }
 
 		    s_database.set_message_read
