@@ -582,7 +582,7 @@ public class Lettera extends AppCompatActivity
 		    (CompoundButton button_view, final boolean is_checked)
 		{
 		    new Handler
-			(Looper.getMainLooper()).postDelayed(new Runnable()
+			(Looper.getMainLooper()).post(new Runnable()
 		    {
 			@Override
 			public void run()
@@ -594,7 +594,7 @@ public class Lettera extends AppCompatActivity
 				 selected_folder_name(),
 				 is_checked);
 			}
-		    }, 750);
+		    });
 		}
 	    };
 	    m_select_all_checkbox.setOnCheckedChangeListener
