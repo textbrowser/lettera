@@ -26,6 +26,7 @@ Completed Items
 - Locally-deleted messages must remain hidden after their remote copies arrive.
   Lettera does not archive messages.
 - Mark letters as unread.
+- Move-to implementation in letter panel.
 - Observe device Return.
 - Optional status bar on main activity.
 - Parse recipients.
@@ -66,11 +67,11 @@ Remaining Items
 - Download incomplete content on opening of letter (getMessagesByUID).
 - Letter navigation (next, previous).
 - McEliece key generation, exchange, etc.
-- Move-to implementation in letter panel.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - Optional network loading of HTML data.
 - Optional text instead of icons in Settings header.
+- Proceed to next letter on delete / move.
 - Reset of Network widgets in Settings.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
