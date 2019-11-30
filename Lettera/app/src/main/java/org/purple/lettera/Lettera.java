@@ -1224,6 +1224,11 @@ public class Lettera extends AppCompatActivity
 	    m_move_to_folder_button.setVisibility
 		(count == 0 ? View.GONE : View.VISIBLE);
 	    m_select_all_checkbox.setEnabled(true);
+	    m_select_all_checkbox.setOnCheckedChangeListener(null);
+	    m_select_all_checkbox.setChecked
+		(count == m_messages_adapter.getItemCount() ? true : false);
+	    m_select_all_checkbox.setOnCheckedChangeListener
+		(m_select_all_checkbox_listener);
 	}
     }
 
