@@ -512,7 +512,8 @@ public class Lettera extends AppCompatActivity
 			(Lettera.this,
 			 email_account,
 			 selected_folder_name(),
-			 findViewById(R.id.main_layout));
+			 findViewById(R.id.main_layout),
+			 -1);
 
 		    move_messages.show(m_move_to_folder_button);
 		}
@@ -1094,6 +1095,25 @@ public class Lettera extends AppCompatActivity
 	m_selected_position = -1;
 	prepare_current_folder_text(selected_folder_name());
 	prepare_current_folder_widgets();
+    }
+
+    public void move_message(String to_folder_name, long message_oid)
+    {
+	m_database.move_message
+	    (Lettera.this,
+	     m_messages_adapter,
+	     email_account(),
+	     selected_folder_name(),
+	     to_folder_name,
+	     message_oid);
+
+	try
+	{
+	    m_letter_dialog.dismiss();
+	}
+	catch(Exception exception)
+	{
+	}
     }
 
     public void move_selected_messages(String to_folder_name)

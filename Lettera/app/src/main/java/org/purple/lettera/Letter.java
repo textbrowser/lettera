@@ -337,7 +337,8 @@ public class Letter
 			(m_lettera,
 			 m_email_account,
 			 m_folder_name,
-			 m_view);
+			 m_view,
+			 m_oid);
 
 		    move_messages.show(m_move_to_folder_button);
 		}

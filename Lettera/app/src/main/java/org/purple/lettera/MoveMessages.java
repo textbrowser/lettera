@@ -62,23 +62,26 @@ public class MoveMessages
 	}
     }
 
-    private Context m_context = null;
+    private Lettera m_lettera = null;
     private MoveMessagesAdapter m_adapter = null;
     private MoveMessagesLinearLayoutManager m_layout_manager = null;
     private PopupWindow m_popup_window = null;
     private RecyclerView m_recycler = null;
     private View m_parent = null;
     private View m_view = null;
+    private long m_message_oid = -1;
 
-    public MoveMessages(Context context,
+    public MoveMessages(Lettera lettera,
 			String email_account,
 			String folder_name,
-			View parent)
+			View parent,
+			long message_oid)
     {
-	m_context = context;
+	m_lettera = lettera;
+	m_message_oid = message_oid;
 	m_parent = parent;
 
-	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
+	LayoutInflater inflater = (LayoutInflater) m_lettera.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 
 	m_view = inflater.inflate(R.layout.folders_drawer_move, null);
@@ -87,7 +90,7 @@ public class MoveMessages
 	** The cute popup.
 	*/
 
-	m_popup_window = new PopupWindow(m_context);
+	m_popup_window = new PopupWindow(m_lettera);
 	m_popup_window.setAttachedInDecor(true);
 	m_popup_window.setBackgroundDrawable(null);
 	m_popup_window.setContentView(m_view);
@@ -102,7 +105,7 @@ public class MoveMessages
 	initialize_widget_members();
 	m_adapter = new MoveMessagesAdapter
 	    (MoveMessages.this, email_account, folder_name);
-	m_layout_manager = new MoveMessagesLinearLayoutManager(m_context);
+	m_layout_manager = new MoveMessagesLinearLayoutManager(m_lettera);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
@@ -116,9 +119,11 @@ public class MoveMessages
 
     public void dismiss()
     {
-	if(m_context instanceof Lettera)
-	    ((Lettera) m_context).move_selected_messages
-		(m_adapter.selected_folder_name());
+	if(m_message_oid != -1)
+	    m_lettera.move_message
+		(m_adapter.selected_folder_name(), m_message_oid);
+	else
+	    m_lettera.move_selected_messages(m_adapter.selected_folder_name());
 
 	try
 	{

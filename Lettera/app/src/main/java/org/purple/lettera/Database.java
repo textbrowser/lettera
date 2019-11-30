@@ -1045,7 +1045,7 @@ public class Database extends SQLiteOpenHelper
 			       final MessagesAdapter messages_adapter,
 			       String email_account,
 			       final String folder_name,
-			       long oid)
+			       long message_oid)
     {
 	if(m_db == null)
 	    return;
@@ -1062,7 +1062,7 @@ public class Database extends SQLiteOpenHelper
 		 "WHERE OID = ? AND " +
 		 "email_account = ? AND " +
 		 "LOWER(to_folder_name) = LOWER(?)");
-	    sqlite_statement.bindLong(1, oid);
+	    sqlite_statement.bindLong(1, message_oid);
 	    sqlite_statement.bindString(2, email_account);
 	    sqlite_statement.bindString(3, folder_name);
 	    sqlite_statement.execute();
@@ -1158,6 +1158,80 @@ public class Database extends SQLiteOpenHelper
 			public void run()
 			{
 			    lettera.prepare_current_folder_text(folder_name);
+			    lettera.prepare_current_folder_widgets();
+			    lettera.update_folders_drawer();
+			    messages_adapter.notifyDataSetChanged();
+			}
+		    });
+	    }
+	});
+
+	thread.start();
+    }
+
+    public void move_message(final Lettera lettera,
+			     final MessagesAdapter messages_adapter,
+			     final String email_account,
+			     final String from_folder_name,
+			     final String to_folder_name,
+			     final long message_oid)
+    {
+	if(m_db == null)
+	    return;
+
+	Thread thread = new Thread(new Runnable()
+	{
+	    @Override
+	    public void run()
+	    {
+		m_db.beginTransactionNonExclusive();
+
+		try
+		{
+		    SQLiteStatement sqlite_statement = null;
+
+		    sqlite_statement = m_db.compileStatement
+			("UPDATE messages SET " +
+			 "selected = 0, to_folder_name = ? " +
+			 "WHERE OID = ? AND " +
+			 "email_account = ? AND " +
+			 "LOWER(to_folder_name) = LOWER(?)");
+		    sqlite_statement.bindString(1, to_folder_name);
+		    sqlite_statement.bindLong(2, message_oid);
+		    sqlite_statement.bindString(3, email_account);
+		    sqlite_statement.bindString(4, from_folder_name);
+		    sqlite_statement.execute();
+		    m_db.setTransactionSuccessful();
+		}
+		catch(Exception exception)
+		{
+		}
+		finally
+		{
+		    m_db.endTransaction();
+		}
+
+		synchronized(m_read_message_cursor_mutex)
+		{
+		    if(m_read_message_cursor != null &&
+		       m_read_message_cursor_email_account.
+		       equals(email_account) &&
+		       m_read_message_cursor_folder_name.
+		       equals(from_folder_name))
+		    {
+			m_read_message_cursor.close();
+			m_read_message_cursor = null;
+		    }
+		}
+
+		if(messages_adapter != null)
+		    lettera.runOnUiThread(new Runnable()
+		    {
+			@Override
+			public void run()
+			{
+			    lettera.prepare_current_folder_text
+				(from_folder_name);
 			    lettera.prepare_current_folder_widgets();
 			    lettera.update_folders_drawer();
 			    messages_adapter.notifyDataSetChanged();
