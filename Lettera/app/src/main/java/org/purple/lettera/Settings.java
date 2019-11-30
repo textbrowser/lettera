@@ -1013,7 +1013,7 @@ public class Settings
 	    m_proxy_port.setText("");
 	    m_proxy_type_spinner.setSelection(0);
 	    m_proxy_user.setText("");
-	    m_query_interval_spinner.setSelection(0);
+	    m_query_interval_spinner.setSelection(1);
 	}
 	else
 	{
@@ -1064,23 +1064,26 @@ public class Settings
 
 	    switch(email_element.m_query_interval)
 	    {
-	    case "7500":
+	    case "5000":
 		m_query_interval_spinner.setSelection(0);
 		break;
-	    case "10000":
+	    case "7500":
 		m_query_interval_spinner.setSelection(1);
 		break;
-	    case "15000":
+	    case "10000":
 		m_query_interval_spinner.setSelection(2);
 		break;
-	    case "30000":
+	    case "15000":
 		m_query_interval_spinner.setSelection(3);
 		break;
-	    case "60000":
+	    case "30000":
 		m_query_interval_spinner.setSelection(4);
 		break;
+	    case "60000":
+		m_query_interval_spinner.setSelection(5);
+		break;
 	    default:
-		m_query_interval_spinner.setSelection(0);
+		m_query_interval_spinner.setSelection(1);
 		break;
 	    }
 	}
@@ -1877,7 +1880,8 @@ public class Settings
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera, android.R.layout.simple_spinner_item, s_proxy_types);
 	m_proxy_type_spinner.setAdapter(array_adapter);
-	array = new String[] {"7500", "10000", "15000", "30000", "60000"};
+	array = new String[]
+	    {"5000", "7500", "10000", "15000", "30000", "60000"};
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera, android.R.layout.simple_spinner_item, array);
 	m_query_interval_spinner.setAdapter(array_adapter);
