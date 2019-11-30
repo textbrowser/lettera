@@ -322,6 +322,27 @@ public class Letter
 		}
 	    });
 
+	if(m_move_to_folder_button != null && !m_move_to_folder_button.
+	                                       hasOnClickListeners())
+	    m_move_to_folder_button.setOnClickListener
+		(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    MoveMessages move_messages = new MoveMessages
+			(m_lettera,
+			 m_email_account,
+			 m_folder_name,
+			 m_view);
+
+		    move_messages.show(m_move_to_folder_button);
+		}
+	    });
+
 	if(!m_return_button.hasOnClickListeners())
 	    m_return_button.setOnClickListener(new View.OnClickListener()
 	    {
