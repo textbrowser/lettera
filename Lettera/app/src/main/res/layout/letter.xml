@@ -54,9 +54,16 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/trash_folder_white"
                 android:gravity="center" />
+
+            <Button
+                android:id="@+id/menu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:background="@drawable/menu" />
         </LinearLayout>
 
         <LinearLayout
