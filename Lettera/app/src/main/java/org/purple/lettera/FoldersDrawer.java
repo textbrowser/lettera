@@ -78,10 +78,17 @@ public class FoldersDrawer
 	m_context = context;
 	m_parent = parent;
 
-	LayoutInflater inflater = (LayoutInflater) m_context.getSystemService
-	    (Context.LAYOUT_INFLATER_SERVICE);
+	try
+	{
+	    LayoutInflater inflater = (LayoutInflater) m_context.
+		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-	m_view = inflater.inflate(R.layout.folders_drawer, null);
+	    m_view = inflater.inflate(R.layout.folders_drawer, null);
+	}
+	catch(Exception exception)
+	{
+	    m_view = null;
+	}
 
 	/*
 	** The cute popup.
@@ -90,7 +97,10 @@ public class FoldersDrawer
 	m_popup_window = new PopupWindow(m_context);
 	m_popup_window.setAttachedInDecor(true);
 	m_popup_window.setBackgroundDrawable(null);
-	m_popup_window.setContentView(m_view);
+
+	if(m_view != null)
+	    m_popup_window.setContentView(m_view);
+
 	m_popup_window.setFocusable(true);
 	m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
 	m_popup_window.setOutsideTouchable(true);
@@ -114,6 +124,9 @@ public class FoldersDrawer
 
     private void initialize_widget_members()
     {
+	if(m_view == null)
+	    return;
+
 	m_close_button = m_view.findViewById(R.id.close_button);
 	m_email_account = m_view.findViewById(R.id.email_account);
 	m_recycler = m_view.findViewById(R.id.recycler);
@@ -181,13 +194,17 @@ public class FoldersDrawer
 
     public void show()
     {
-	((TextView) m_view.findViewById(R.id.folders_textview)).setTextColor
-	    (Lettera.text_color());
+	if(m_view != null)
+	    ((TextView) m_view.findViewById(R.id.folders_textview)).setTextColor
+		(Lettera.text_color());
+
 	m_email_account.setTextColor(Lettera.text_color());
 	m_popup_window.showAsDropDown
 	    (m_parent, 0, 0, Gravity.START | Gravity.TOP);
-	m_view.findViewById(R.id.top_divider).setBackgroundColor
-	    (Lettera.divider_color());
+
+	if(m_view != null)
+	    m_view.findViewById(R.id.top_divider).setBackgroundColor
+		(Lettera.divider_color());
 
 	try
 	{
@@ -222,7 +239,8 @@ public class FoldersDrawer
 	{
 	}
 
-	m_view.setBackgroundColor(Lettera.background_color());
+	if(m_view != null)
+	    m_view.setBackgroundColor(Lettera.background_color());
     }
 
     public void update()

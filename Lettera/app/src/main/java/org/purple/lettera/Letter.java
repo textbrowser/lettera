@@ -218,14 +218,17 @@ public class Letter
 	m_messages_adapter = messages_adapter;
 	m_parent = parent;
 
-	LayoutInflater inflater = (LayoutInflater) m_lettera.getSystemService
-	    (Context.LAYOUT_INFLATER_SERVICE);
+	try
+	{
+	    LayoutInflater inflater = (LayoutInflater) m_lettera.
+		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-	m_layout_params = new WindowManager.LayoutParams();
-	m_layout_params.dimAmount = 0.0f;
-	m_layout_params.height = WindowManager.LayoutParams.MATCH_PARENT;
-	m_layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
-	m_view = inflater.inflate(R.layout.letter, null);
+	    m_view = inflater.inflate(R.layout.letter, null);
+	}
+	catch(Exception exception)
+	{
+	    m_view = null;
+	}
 
 	/*
 	** The cute popup.
@@ -236,11 +239,20 @@ public class Letter
 	     android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
 	m_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	m_dialog.setCancelable(true);
-	m_dialog.setContentView(m_view);
+
+	if(m_view != null)
+	    m_dialog.setContentView(m_view);
+
 	m_dialog.setTitle("Letter");
 
 	if(m_dialog.getWindow() != null)
+	{
+	    m_layout_params = new WindowManager.LayoutParams();
+	    m_layout_params.dimAmount = 0.0f;
+	    m_layout_params.height = WindowManager.LayoutParams.MATCH_PARENT;
+	    m_layout_params.width = WindowManager.LayoutParams.MATCH_PARENT;
 	    m_dialog.getWindow().setAttributes(m_layout_params);
+	}
 
 	/*
 	** Initialize other widgets.
@@ -252,14 +264,18 @@ public class Letter
 
     private void initialize_widget_members()
     {
-	m_delete_button = m_view.findViewById(R.id.delete_button);
-	m_from = m_view.findViewById(R.id.from);
-	m_move_to_folder_button = m_view.findViewById(R.id.move_to_folder);
-	m_received_date = m_view.findViewById(R.id.received_date);
-	m_return_button = m_view.findViewById(R.id.return_button);
-	m_subject = m_view.findViewById(R.id.subject);
-	m_to_email_account = m_view.findViewById(R.id.to_email_account);
-	m_web_view = m_view.findViewById(R.id.content);
+	if(m_view != null)
+	{
+	    m_delete_button = m_view.findViewById(R.id.delete_button);
+	    m_from = m_view.findViewById(R.id.from);
+	    m_move_to_folder_button = m_view.findViewById(R.id.move_to_folder);
+	    m_received_date = m_view.findViewById(R.id.received_date);
+	    m_return_button = m_view.findViewById(R.id.return_button);
+	    m_subject = m_view.findViewById(R.id.subject);
+	    m_to_email_account = m_view.findViewById(R.id.to_email_account);
+	    m_web_view = m_view.findViewById(R.id.content);
+	}
+
 	m_web_view.getSettings().setAppCacheEnabled(false);
 	m_web_view.getSettings().setBlockNetworkLoads(false);
 	m_web_view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -390,9 +406,13 @@ public class Letter
 	m_subject.setTextColor(Lettera.text_color());
 	m_to_email_account.setText("e-mail@e-mail.org");
 	m_to_email_account.setTextColor(Lettera.text_color());
-	m_view.findViewById(R.id.top_divider).setBackgroundColor
-	    (Lettera.divider_color());
-	m_view.setBackgroundColor(Lettera.background_color());
+
+	if(m_view != null)
+	{
+	    m_view.findViewById(R.id.top_divider).setBackgroundColor
+		(Lettera.divider_color());
+	    m_view.setBackgroundColor(Lettera.background_color());
+	}
 
 	Dialog dialog = null;
 

@@ -94,7 +94,9 @@ public class MoveMessages
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setOutsideTouchable(true);
-	m_popup_window.setWidth((int) (0.50 * m_parent.getWidth()));
+
+	if(m_parent != null)
+	    m_popup_window.setWidth((int) (0.50 * m_parent.getWidth()));
 
 	/*
 	** Initialize other widgets.
@@ -134,7 +136,7 @@ public class MoveMessages
 
     public void show(View view)
     {
-	if(view == null)
+	if(m_parent != null && view == null)
 	    m_popup_window.showAtLocation
 		(m_parent, Gravity.START | Gravity.TOP, 0, 0);
 	else
@@ -147,8 +149,10 @@ public class MoveMessages
 	    }
 	    catch(Exception exception)
 	    {
-		m_popup_window.showAtLocation
-		    (m_parent, Gravity.START | Gravity.TOP, 0, 0);
+		if(m_parent != null)
+		    m_popup_window.showAtLocation
+			(m_parent, Gravity.START | Gravity.TOP, 0, 0);
+
 		return;
 	    }
 
