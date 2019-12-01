@@ -32,12 +32,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -1246,7 +1244,7 @@ public class Lettera extends AppCompatActivity
 	    m_select_all_checkbox.setEnabled(true);
 	    m_select_all_checkbox.setOnCheckedChangeListener(null);
 	    m_select_all_checkbox.setChecked
-		(count == m_messages_adapter.getItemCount() ? true : false);
+		(count == m_messages_adapter.getItemCount());
 	    m_select_all_checkbox.setOnCheckedChangeListener
 		(m_select_all_checkbox_listener);
 	}

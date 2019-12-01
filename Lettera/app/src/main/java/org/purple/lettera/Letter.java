@@ -263,7 +263,7 @@ public class Letter
 	m_web_view.getSettings().setAppCacheEnabled(false);
 	m_web_view.getSettings().setBlockNetworkLoads(false);
 	m_web_view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-	m_web_view.getSettings().setJavaScriptEnabled(true);
+	m_web_view.getSettings().setJavaScriptEnabled(false);
 	m_web_view.setWebViewClient(new WebViewClient()
 	{
 	    @Override
