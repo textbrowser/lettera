@@ -79,17 +79,10 @@ public class MoveMessages
 	m_message_oid = message_oid;
 	m_parent = parent;
 
-	try
-	{
-	    LayoutInflater inflater = (LayoutInflater) m_lettera.
-		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	LayoutInflater inflater = (LayoutInflater) m_lettera.
+	    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-	    m_view = inflater.inflate(R.layout.folders_drawer_move, null);
-	}
-	catch(Exception exception)
-	{
-	    m_view = null;
-	}
+	m_view = inflater.inflate(R.layout.folders_drawer_move, null);
 
 	/*
 	** The cute popup.
@@ -98,15 +91,10 @@ public class MoveMessages
 	m_popup_window = new PopupWindow(m_lettera);
 	m_popup_window.setAttachedInDecor(true);
 	m_popup_window.setBackgroundDrawable(null);
-
-	if(m_view != null)
-	    m_popup_window.setContentView(m_view);
-
+	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setOutsideTouchable(true);
-
-	if(m_parent != null)
-	    m_popup_window.setWidth((int) (0.50 * m_parent.getWidth()));
+	m_popup_window.setWidth((int) (0.50 * m_parent.getWidth()));
 
 	/*
 	** Initialize other widgets.
@@ -117,19 +105,14 @@ public class MoveMessages
 	    (MoveMessages.this, email_account, folder_name);
 	m_layout_manager = new MoveMessagesLinearLayoutManager(m_lettera);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
-
-	if(m_recycler != null)
-	{
-	    m_recycler.setAdapter(m_adapter);
-	    m_recycler.setLayoutManager(m_layout_manager);
-	    m_recycler.setHasFixedSize(true);
-	}
+	m_recycler.setAdapter(m_adapter);
+	m_recycler.setLayoutManager(m_layout_manager);
+	m_recycler.setHasFixedSize(true);
     }
 
     private void initialize_widget_members()
     {
-	if(m_view != null)
-	    m_recycler = m_view.findViewById(R.id.recycler);
+	m_recycler = m_view.findViewById(R.id.recycler);
     }
 
     public void dismiss()
@@ -151,7 +134,7 @@ public class MoveMessages
 
     public void show(View view)
     {
-	if(m_parent != null && view == null)
+	if(view == null)
 	    m_popup_window.showAtLocation
 		(m_parent, Gravity.START | Gravity.TOP, 0, 0);
 	else
@@ -164,9 +147,8 @@ public class MoveMessages
 	    }
 	    catch(Exception exception)
 	    {
-		if(m_parent != null)
-		    m_popup_window.showAtLocation
-			(m_parent, Gravity.START | Gravity.TOP, 0, 0);
+		m_popup_window.showAtLocation
+		    (m_parent, Gravity.START | Gravity.TOP, 0, 0);
 
 		return;
 	    }
@@ -181,13 +163,10 @@ public class MoveMessages
 		(view, Gravity.START | Gravity.TOP, rect.left, rect.bottom);
 	}
 
-	if(m_view != null)
-	{
-	    ((TextView) m_view.findViewById(R.id.move_to_textview)).setTextColor
-		(Lettera.text_color());
-	    m_view.findViewById(R.id.divider).setBackgroundColor
-		(Lettera.divider_color());
-	    m_view.setBackgroundColor(Lettera.background_color());
-	}
+	((TextView) m_view.findViewById(R.id.move_to_textview)).setTextColor
+	    (Lettera.text_color());
+	m_view.findViewById(R.id.divider).setBackgroundColor
+	    (Lettera.divider_color());
+	m_view.setBackgroundColor(Lettera.background_color());
     }
 }

@@ -63,9 +63,6 @@ public class MessageItem extends View
 
     private void initialize_widget_members()
     {
-	if(m_view == null)
-	    return;
-
 	m_attachment = m_view.findViewById(R.id.attachment);
 	m_date = m_view.findViewById(R.id.date);
 	m_divider = m_view.findViewById(R.id.divider);
@@ -78,7 +75,7 @@ public class MessageItem extends View
 
     private void prepare_listeners()
     {
-	if(m_open != null && !m_open.hasOnClickListeners())
+	if(!m_open.hasOnClickListeners())
 	    m_open.setOnClickListener(new View.OnClickListener()
 	    {
 		@Override
@@ -121,17 +118,7 @@ public class MessageItem extends View
 	m_inflater = (LayoutInflater) m_context.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 	m_lettera = lettera;
-
-	try
-	{
-	    m_view = m_inflater.inflate
-		(R.layout.letter_line, view_group, false);
-	}
-	catch(Exception exception)
-	{
-	    m_view = null;
-	}
-
+	m_view = m_inflater.inflate(R.layout.letter_line, view_group, false);
 	initialize_widget_members();
 	prepare_listeners();
     }
@@ -146,11 +133,9 @@ public class MessageItem extends View
 			 boolean last_position,
 			 int position)
     {
-	if(m_view == null || message_element == null)
+	if(message_element == null)
 	{
-	    if(m_view != null)
-		m_view.setVisibility(View.GONE);
-
+	    m_view.setVisibility(View.GONE);
 	    return;
 	}
 

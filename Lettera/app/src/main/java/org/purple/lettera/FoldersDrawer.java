@@ -78,17 +78,10 @@ public class FoldersDrawer
 	m_context = context;
 	m_parent = parent;
 
-	try
-	{
-	    LayoutInflater inflater = (LayoutInflater) m_context.
-		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	LayoutInflater inflater = (LayoutInflater) m_context.
+	    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-	    m_view = inflater.inflate(R.layout.folders_drawer, null);
-	}
-	catch(Exception exception)
-	{
-	    m_view = null;
-	}
+	m_view = inflater.inflate(R.layout.folders_drawer, null);
 
 	/*
 	** The cute popup.
@@ -97,10 +90,7 @@ public class FoldersDrawer
 	m_popup_window = new PopupWindow(m_context);
 	m_popup_window.setAttachedInDecor(true);
 	m_popup_window.setBackgroundDrawable(null);
-
-	if(m_view != null)
-	    m_popup_window.setContentView(m_view);
-
+	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
 	m_popup_window.setOutsideTouchable(true);
@@ -116,22 +106,14 @@ public class FoldersDrawer
 	m_adapter = new FoldersDrawerAdapter(FoldersDrawer.this);
 	m_layout_manager = new FoldersDrawerLinearLayoutManager(m_context);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
-
-	if(m_recycler != null)
-	{
-	    m_recycler.setAdapter(m_adapter);
-	    m_recycler.setLayoutManager(m_layout_manager);
-	    m_recycler.setHasFixedSize(true);
-	}
-
+	m_recycler.setAdapter(m_adapter);
+	m_recycler.setLayoutManager(m_layout_manager);
+	m_recycler.setHasFixedSize(true);
 	prepare_listeners();
     }
 
     private void initialize_widget_members()
     {
-	if(m_view == null)
-	    return;
-
 	m_close_button = m_view.findViewById(R.id.close_button);
 	m_email_account = m_view.findViewById(R.id.email_account);
 	m_recycler = m_view.findViewById(R.id.recycler);
@@ -139,7 +121,7 @@ public class FoldersDrawer
 
     private void prepare_listeners()
     {
-	if(m_close_button != null && !m_close_button.hasOnClickListeners())
+	if(!m_close_button.hasOnClickListeners())
 	    m_close_button.setOnClickListener(new View.OnClickListener()
 	    {
 		@Override
@@ -152,10 +134,7 @@ public class FoldersDrawer
 
     public String email_account()
     {
-	if(m_email_account != null)
-	    return m_email_account.getText().toString();
-	else
-	    return "";
+	return m_email_account.getText().toString();
     }
 
     public String selected_folder_name()
@@ -169,11 +148,10 @@ public class FoldersDrawer
 	    ((Lettera) m_context).prepare_folders_and_messages_widgets
 		(selected_folder_name());
 
-	if(m_email_account != null)
-	    s_database.save_setting
-		("selected_folder_name_" + m_email_account.getText().toString(),
-		 selected_folder_name(),
-		 false);
+	s_database.save_setting
+	    ("selected_folder_name_" + m_email_account.getText().toString(),
+	     selected_folder_name(),
+	     false);
 
 	try
 	{
@@ -188,13 +166,10 @@ public class FoldersDrawer
     {
 	m_adapter.set_email_account(email_account);
 
-	if(m_email_account != null)
-	{
-	    if(email_account.trim().isEmpty())
-		m_email_account.setText("e-mail@e-mail.org");
-	    else
-		m_email_account.setText(email_account);
-	}
+	if(email_account.trim().isEmpty())
+	    m_email_account.setText("e-mail@e-mail.org");
+	else
+	    m_email_account.setText(email_account);
 
 	update();
     }
@@ -206,19 +181,13 @@ public class FoldersDrawer
 
     public void show()
     {
-	if(m_view != null)
-	    ((TextView) m_view.findViewById(R.id.folders_textview)).setTextColor
-		(Lettera.text_color());
-
-	if(m_email_account != null)
-	    m_email_account.setTextColor(Lettera.text_color());
-
+	((TextView) m_view.findViewById(R.id.folders_textview)).setTextColor
+	    (Lettera.text_color());
+	m_email_account.setTextColor(Lettera.text_color());
 	m_popup_window.showAsDropDown
 	    (m_parent, 0, 0, Gravity.START | Gravity.TOP);
-
-	if(m_view != null)
-	    m_view.findViewById(R.id.top_divider).setBackgroundColor
-		(Lettera.divider_color());
+	m_view.findViewById(R.id.top_divider).setBackgroundColor
+	    (Lettera.divider_color());
 
 	try
 	{
@@ -253,8 +222,7 @@ public class FoldersDrawer
 	{
 	}
 
-	if(m_view != null)
-	    m_view.setBackgroundColor(Lettera.background_color());
+	m_view.setBackgroundColor(Lettera.background_color());
     }
 
     public void update()

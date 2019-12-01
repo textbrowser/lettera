@@ -218,17 +218,10 @@ public class Letter
 	m_messages_adapter = messages_adapter;
 	m_parent = parent;
 
-	try
-	{
-	    LayoutInflater inflater = (LayoutInflater) m_lettera.
-		getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	LayoutInflater inflater = (LayoutInflater) m_lettera.
+	    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-	    m_view = inflater.inflate(R.layout.letter, null);
-	}
-	catch(Exception exception)
-	{
-	    m_view = null;
-	}
+	m_view = inflater.inflate(R.layout.letter, null);
 
 	/*
 	** The cute popup.
@@ -239,10 +232,7 @@ public class Letter
 	     android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
 	m_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	m_dialog.setCancelable(true);
-
-	if(m_view != null)
-	    m_dialog.setContentView(m_view);
-
+	m_dialog.setContentView(m_view);
 	m_dialog.setTitle("Letter");
 
 	if(m_dialog.getWindow() != null)
@@ -264,9 +254,6 @@ public class Letter
 
     private void initialize_widget_members()
     {
-	if(m_view == null)
-	    return;
-
 	m_delete_button = m_view.findViewById(R.id.delete_button);
 	m_from = m_view.findViewById(R.id.from);
 	m_move_to_folder_button = m_view.findViewById(R.id.move_to_folder);
@@ -303,7 +290,7 @@ public class Letter
 
     private void prepare_listeners()
     {
-	if(m_delete_button != null && !m_delete_button.hasOnClickListeners())
+	if(!m_delete_button.hasOnClickListeners())
 	    m_delete_button.setOnClickListener(new View.OnClickListener()
 	    {
 		@Override
@@ -337,8 +324,7 @@ public class Letter
 		}
 	    });
 
-	if(m_move_to_folder_button != null && !m_move_to_folder_button.
-	                                       hasOnClickListeners())
+	if(!m_move_to_folder_button.hasOnClickListeners())
 	    m_move_to_folder_button.setOnClickListener
 		(new View.OnClickListener()
 	    {
@@ -405,13 +391,9 @@ public class Letter
 	m_subject.setTextColor(Lettera.text_color());
 	m_to_email_account.setText("e-mail@e-mail.org");
 	m_to_email_account.setTextColor(Lettera.text_color());
-
-	if(m_view != null)
-	{
-	    m_view.findViewById(R.id.top_divider).setBackgroundColor
-		(Lettera.divider_color());
-	    m_view.setBackgroundColor(Lettera.background_color());
-	}
+	m_view.findViewById(R.id.top_divider).setBackgroundColor
+	    (Lettera.divider_color());
+	m_view.setBackgroundColor(Lettera.background_color());
 
 	Dialog dialog = null;
 
