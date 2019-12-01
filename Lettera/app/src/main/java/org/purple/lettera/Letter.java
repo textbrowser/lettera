@@ -11,7 +11,7 @@
 **    notice, this list of conditions and the following disclaimer in the
 **    documentation and/or other materials provided with the distribution.
 ** 3. The name of the author may not be used to endorse or promote products
-**    derived from Smoke without specific prior written permission.
+**    derived from Lettera without specific prior written permission.
 **
 ** LETTERA IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
 ** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -264,18 +264,17 @@ public class Letter
 
     private void initialize_widget_members()
     {
-	if(m_view != null)
-	{
-	    m_delete_button = m_view.findViewById(R.id.delete_button);
-	    m_from = m_view.findViewById(R.id.from);
-	    m_move_to_folder_button = m_view.findViewById(R.id.move_to_folder);
-	    m_received_date = m_view.findViewById(R.id.received_date);
-	    m_return_button = m_view.findViewById(R.id.return_button);
-	    m_subject = m_view.findViewById(R.id.subject);
-	    m_to_email_account = m_view.findViewById(R.id.to_email_account);
-	    m_web_view = m_view.findViewById(R.id.content);
-	}
+	if(m_view == null)
+	    return;
 
+	m_delete_button = m_view.findViewById(R.id.delete_button);
+	m_from = m_view.findViewById(R.id.from);
+	m_move_to_folder_button = m_view.findViewById(R.id.move_to_folder);
+	m_received_date = m_view.findViewById(R.id.received_date);
+	m_return_button = m_view.findViewById(R.id.return_button);
+	m_subject = m_view.findViewById(R.id.subject);
+	m_to_email_account = m_view.findViewById(R.id.to_email_account);
+	m_web_view = m_view.findViewById(R.id.content);
 	m_web_view.getSettings().setAppCacheEnabled(false);
 	m_web_view.getSettings().setBlockNetworkLoads(false);
 	m_web_view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);

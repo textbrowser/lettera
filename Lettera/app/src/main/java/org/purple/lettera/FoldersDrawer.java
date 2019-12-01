@@ -11,7 +11,7 @@
 **    notice, this list of conditions and the following disclaimer in the
 **    documentation and/or other materials provided with the distribution.
 ** 3. The name of the author may not be used to endorse or promote products
-**    derived from Smoke without specific prior written permission.
+**    derived from Lettera without specific prior written permission.
 **
 ** LETTERA IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
 ** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -116,9 +116,14 @@ public class FoldersDrawer
 	m_adapter = new FoldersDrawerAdapter(FoldersDrawer.this);
 	m_layout_manager = new FoldersDrawerLinearLayoutManager(m_context);
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
-	m_recycler.setAdapter(m_adapter);
-	m_recycler.setLayoutManager(m_layout_manager);
-	m_recycler.setHasFixedSize(true);
+
+	if(m_recycler != null)
+	{
+	    m_recycler.setAdapter(m_adapter);
+	    m_recycler.setLayoutManager(m_layout_manager);
+	    m_recycler.setHasFixedSize(true);
+	}
+
 	prepare_listeners();
     }
 
@@ -147,7 +152,10 @@ public class FoldersDrawer
 
     public String email_account()
     {
-	return m_email_account.getText().toString();
+	if(m_email_account != null)
+	    return m_email_account.getText().toString();
+	else
+	    return "";
     }
 
     public String selected_folder_name()
@@ -161,10 +169,11 @@ public class FoldersDrawer
 	    ((Lettera) m_context).prepare_folders_and_messages_widgets
 		(selected_folder_name());
 
-	s_database.save_setting
-	    ("selected_folder_name_" + m_email_account.getText().toString(),
-	     selected_folder_name(),
-	     false);
+	if(m_email_account != null)
+	    s_database.save_setting
+		("selected_folder_name_" + m_email_account.getText().toString(),
+		 selected_folder_name(),
+		 false);
 
 	try
 	{
@@ -179,10 +188,13 @@ public class FoldersDrawer
     {
 	m_adapter.set_email_account(email_account);
 
-	if(email_account.trim().isEmpty())
-	    m_email_account.setText("e-mail@e-mail.org");
-	else
-	    m_email_account.setText(email_account);
+	if(m_email_account != null)
+	{
+	    if(email_account.trim().isEmpty())
+		m_email_account.setText("e-mail@e-mail.org");
+	    else
+		m_email_account.setText(email_account);
+	}
 
 	update();
     }
@@ -198,7 +210,9 @@ public class FoldersDrawer
 	    ((TextView) m_view.findViewById(R.id.folders_textview)).setTextColor
 		(Lettera.text_color());
 
-	m_email_account.setTextColor(Lettera.text_color());
+	if(m_email_account != null)
+	    m_email_account.setTextColor(Lettera.text_color());
+
 	m_popup_window.showAsDropDown
 	    (m_parent, 0, 0, Gravity.START | Gravity.TOP);
 

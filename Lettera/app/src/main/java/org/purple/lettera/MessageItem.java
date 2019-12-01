@@ -11,9 +11,9 @@
 **    notice, this list of conditions and the following disclaimer in the
 **    documentation and/or other materials provided with the distribution.
 ** 3. The name of the author may not be used to endorse or promote products
-**    derived from Smoke without specific prior written permission.
+**    derived from Lettera without specific prior written permission.
 **
-** SMOKE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+** LETTERA IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
 ** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
 ** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
 ** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -22,7 +22,7 @@
 ** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 ** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 ** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-** SMOKE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+** LETTERA, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 package org.purple.lettera;
@@ -63,6 +63,9 @@ public class MessageItem extends View
 
     private void initialize_widget_members()
     {
+	if(m_view == null)
+	    return;
+
 	m_attachment = m_view.findViewById(R.id.attachment);
 	m_date = m_view.findViewById(R.id.date);
 	m_divider = m_view.findViewById(R.id.divider);
@@ -118,7 +121,17 @@ public class MessageItem extends View
 	m_inflater = (LayoutInflater) m_context.getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 	m_lettera = lettera;
-	m_view = m_inflater.inflate(R.layout.letter_line, view_group, false);
+
+	try
+	{
+	    m_view = m_inflater.inflate
+		(R.layout.letter_line, view_group, false);
+	}
+	catch(Exception exception)
+	{
+	    m_view = null;
+	}
+
 	initialize_widget_members();
 	prepare_listeners();
     }
@@ -133,9 +146,11 @@ public class MessageItem extends View
 			 boolean last_position,
 			 int position)
     {
-	if(message_element == null)
+	if(m_view == null || message_element == null)
 	{
-	    m_view.setVisibility(View.GONE);
+	    if(m_view != null)
+		m_view.setVisibility(View.GONE);
+
 	    return;
 	}
 
