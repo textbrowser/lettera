@@ -32,6 +32,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -40,6 +42,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -192,6 +195,7 @@ public class Letter
     }
 
     private Button m_delete_button = null;
+    private Button m_menu_button = null;
     private Button m_move_to_folder_button = null;
     private Button m_return_button = null;
     private Dialog m_dialog = null;
@@ -256,6 +260,7 @@ public class Letter
     {
 	m_delete_button = m_view.findViewById(R.id.delete_button);
 	m_from = m_view.findViewById(R.id.from);
+	m_menu_button = m_view.findViewById(R.id.menu);
 	m_move_to_folder_button = m_view.findViewById(R.id.move_to_folder);
 	m_received_date = m_view.findViewById(R.id.received_date);
 	m_return_button = m_view.findViewById(R.id.return_button);
@@ -321,6 +326,27 @@ public class Letter
 
 		    Windows.show_prompt_dialog
 			(m_lettera, listener, "Delete the message?", confirmed);
+		}
+	    });
+
+	if(!m_menu_button.hasOnClickListeners())
+	    m_menu_button.setOnClickListener
+		(new View.OnClickListener()
+	    {
+		@Override
+		public void onClick(View view)
+		{
+		    if(m_lettera.isFinishing())
+			return;
+
+		    Menu menu = null;
+		    PopupMenu popup_menu  = new PopupMenu
+			(m_lettera, m_menu_button);
+
+		    menu = popup_menu.getMenu();
+		    menu.add(0, 1, Menu.NONE, "Forward");
+		    menu.add(0, 2, Menu.NONE, "Reply");
+		    popup_menu.show();
 		}
 	    });
 
