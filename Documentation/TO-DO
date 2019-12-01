@@ -74,6 +74,7 @@ Remaining Items
 - Proceed to next letter on delete / move.
 - Replace letter right-hand buttons with menu.
 - Reset of Network widgets in Settings.
+- Retrieve messages via AndTerm and ReceivedDateTerm.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
 - What's a deleted message?
