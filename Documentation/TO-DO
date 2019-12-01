@@ -72,6 +72,7 @@ Remaining Items
 - Optional network loading of HTML data.
 - Optional text instead of icons in Settings header.
 - Proceed to next letter on delete / move.
+- Replace letter right-hand buttons with menu.
 - Reset of Network widgets in Settings.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
