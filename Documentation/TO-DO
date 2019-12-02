@@ -64,6 +64,7 @@ Remaining Items
 - Deleted remote folders are also deleted locally.
 - Display a message's origin in the Trash folder.
 - Display attachment list.
+- Display recipients in letters.
 - Download incomplete content on opening of letter (getMessagesByUID).
 - Letter navigation (next, previous).
 - McEliece key generation, exchange, etc.
