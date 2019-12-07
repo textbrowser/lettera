@@ -33,6 +33,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -178,7 +179,7 @@ public class Letter
 			(m_email_account,
 			 m_folder_name,
 			 true,
-			 message_element.m_uid);
+			 m_oid);
 		    m_lettera.message_read();
 
 		    try
@@ -340,12 +341,49 @@ public class Letter
 			return;
 
 		    Menu menu = null;
+		    MenuItem menu_item = null;
 		    PopupMenu popup_menu  = new PopupMenu
 			(m_lettera, m_menu_button);
 
 		    menu = popup_menu.getMenu();
-		    menu.add(0, 1, Menu.NONE, "Forward");
-		    menu.add(0, 2, Menu.NONE, "Reply");
+		    menu_item = menu.add(0, 1, Menu.NONE, "Forward");
+		    menu_item = menu.add(0, 2, Menu.NONE, "Mark As New");
+
+		    menu_item.setOnMenuItemClickListener
+			(new OnMenuItemClickListener()
+			{
+			    @Override
+			    public boolean onMenuItemClick(MenuItem item)
+			    {
+				s_database.set_message_read
+				    (m_email_account,
+				     m_folder_name,
+				     false,
+				     m_oid);
+				m_lettera.message_read();
+				return true;
+			    }
+			});
+
+		    menu_item = menu.add(0, 3, Menu.NONE, "Mark As Read");
+
+		    menu_item.setOnMenuItemClickListener
+			(new OnMenuItemClickListener()
+			{
+			    @Override
+			    public boolean onMenuItemClick(MenuItem item)
+			    {
+				s_database.set_message_read
+				    (m_email_account,
+				     m_folder_name,
+				     true,
+				     m_oid);
+				m_lettera.message_read();
+				return true;
+			    }
+			});
+
+		    menu_item = menu.add(0, 4, Menu.NONE, "Reply");
 		    popup_menu.show();
 		}
 	    });

@@ -59,7 +59,7 @@ public class MessageItem extends View
     private View m_view = null;
     private final static Database s_database = Database.instance();
     private int m_position = -1;
-    private long m_uid = 0;
+    private long m_oid = 0;
 
     private void initialize_widget_members()
     {
@@ -97,10 +97,8 @@ public class MessageItem extends View
 		{
 		    s_database.set_message_selected
 			(m_lettera,
-			 m_email_account,
-			 m_folder_name,
 			 is_checked,
-			 m_uid);
+			 m_oid);
 		}
 	    };
     }
@@ -178,12 +176,11 @@ public class MessageItem extends View
 	m_from.setTypeface
 	    (null,
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
+	m_oid = message_element.m_oid;
 	m_position = position;
 	m_selected.setOnCheckedChangeListener(null);
 	m_selected.setChecked
-	    (s_database.message_selected(message_element.m_email_account,
-					 folder_name,
-					 message_element.m_uid));
+	    (s_database.message_selected(message_element.m_oid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
 	m_subject.setText(message_element.m_subject);
 	m_subject.setTextColor(Lettera.text_color());
@@ -193,7 +190,6 @@ public class MessageItem extends View
 	m_summary.setText(message_element.m_content_downloaded ? summary : "");
 	m_summary.setTextColor(Lettera.text_color());
 	m_summary.setVisibility(length == 0 ? View.GONE : View.VISIBLE);
-	m_uid = message_element.m_uid;
 	m_view.setBackgroundColor(Lettera.background_color());
 	m_view.setVisibility(View.VISIBLE);
     }

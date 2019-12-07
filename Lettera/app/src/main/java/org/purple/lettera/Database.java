@@ -732,9 +732,7 @@ public class Database extends SQLiteOpenHelper
 	return true;
     }
 
-    public boolean message_selected(String email_account,
-				    String folder_name,
-				    long uid)
+    public boolean message_selected(long message_oid)
     {
 	if(m_db == null)
 	    return false;
@@ -745,12 +743,8 @@ public class Database extends SQLiteOpenHelper
 	{
 	    cursor = m_db.rawQuery
 		("SELECT selected FROM messages " +
-		 "WHERE email_account = ? AND " +
-		 "LOWER(to_folder_name) = LOWER(?) AND " +
-		 "uid = ?",
-		 new String[] {email_account,
-			       folder_name,
-			       String.valueOf(uid)});
+		 "WHERE OID = ?",
+		 new String[] {String.valueOf(message_oid)});
 
 	    if(cursor != null && cursor.moveToFirst())
 		return cursor.getInt(0) == 1;
@@ -1642,7 +1636,7 @@ public class Database extends SQLiteOpenHelper
     public void set_message_read(String email_account,
 				 String folder_name,
 				 boolean has_been_read,
-				 long uid)
+				 long message_oid)
     {
 	if(m_db == null)
 	    return;
@@ -1655,13 +1649,9 @@ public class Database extends SQLiteOpenHelper
 
 	    sqlite_statement = m_db.compileStatement
 		("UPDATE messages SET has_been_read = ? " +
-		 "WHERE email_account = ? AND " +
-		 "LOWER(to_folder_name) = LOWER(?) AND " +
-		 "uid = ?");
+		 "WHERE OID = ?");
 	    sqlite_statement.bindLong(1, has_been_read ? 1 : 0);
-	    sqlite_statement.bindString(2, email_account);
-	    sqlite_statement.bindString(3, folder_name);
-	    sqlite_statement.bindLong(4, uid);
+	    sqlite_statement.bindLong(2, message_oid);
 	    sqlite_statement.execute();
 	    m_db.setTransactionSuccessful();
 	}
@@ -1686,10 +1676,8 @@ public class Database extends SQLiteOpenHelper
     }
 
     public void set_message_selected(final Lettera lettera,
-				     final String email_account,
-				     final String folder_name,
 				     final boolean selected,
-				     final long uid)
+				     final long message_oid)
     {
 	if(m_db == null)
 	    return;
@@ -1707,13 +1695,9 @@ public class Database extends SQLiteOpenHelper
 
 		    sqlite_statement = m_db.compileStatement
 			("UPDATE messages SET selected = ? " +
-			 "WHERE email_account = ? AND " +
-			 "LOWER(to_folder_name) = LOWER(?) AND " +
-			 "uid = ?");
+			 "WHERE OID = ?");
 		    sqlite_statement.bindLong(1, selected ? 1 : 0);
-		    sqlite_statement.bindString(2, email_account);
-		    sqlite_statement.bindString(3, folder_name);
-		    sqlite_statement.bindLong(4, uid);
+		    sqlite_statement.bindLong(2, message_oid);
 		    sqlite_statement.execute();
 		    m_db.setTransactionSuccessful();
 		}
