@@ -36,6 +36,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Base64;
 import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.YoungerTerm;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -1883,6 +1884,7 @@ public class Database extends SQLiteOpenHelper
     public void write_messages(AtomicBoolean interrupt,
 			       IMAPFolder folder,
 			       String email_account,
+			       YoungerTerm younger_term,
 			       boolean enable_database_transaction,
 			       long message_download_time)
     {
@@ -1913,7 +1915,10 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    messages = folder.getMessages();
+	    if(younger_term == null)
+		messages = folder.getMessages();
+	    else
+		messages = folder.search(younger_term);
 
 	    FetchProfile fetch_profile = new FetchProfile();
 
@@ -1964,12 +1969,15 @@ public class Database extends SQLiteOpenHelper
 	    ** delete their local representations.
 	    */
 
-	    content_values.put("current_message", 0);
-	    m_db.update("messages",
-			content_values,
-			"email_account = ? AND " +
-			"LOWER(folder_name) = LOWER(?)",
-			new String[] {email_account, folder.getName()});
+	    if(younger_term == null)
+	    {
+		content_values.put("current_message", 0);
+		m_db.update("messages",
+			    content_values,
+			    "email_account = ? AND " +
+			    "LOWER(folder_name) = LOWER(?)",
+			    new String[] {email_account, folder.getName()});
+	    }
 
 	    SQLiteStatement sqlite_statement = m_db.compileStatement
 		("REPLACE INTO messages (" +
@@ -2281,11 +2289,12 @@ public class Database extends SQLiteOpenHelper
 		    break;
 	    }
 
-	    m_db.delete("messages",
-			"current_message = 0 AND " +
-			"email_account = ? AND " +
-			"LOWER(folder_name) = LOWER(?)",
-			new String[] {email_account, folder.getName()});
+	    if(younger_term == null)
+		m_db.delete("messages",
+			    "current_message = 0 AND " +
+			    "email_account = ? AND " +
+			    "LOWER(folder_name) = LOWER(?)",
+			    new String[] {email_account, folder.getName()});
 
 	    if(enable_database_transaction)
 		m_db.setTransactionSuccessful();

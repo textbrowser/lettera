@@ -47,6 +47,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.sun.mail.imap.YoungerTerm;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -140,12 +141,16 @@ public class Lettera extends AppCompatActivity
     {
 	private Dialog m_dialog = null;
 	private String m_folder_full_name = "";
+	private YoungerTerm m_younger_term = null;
 	private boolean m_connected = false;
 
-	private PopulateFolders(Dialog dialog, String folder_full_name)
+	private PopulateFolders(Dialog dialog,
+				String folder_full_name,
+				YoungerTerm younger_term)
 	{
 	    m_dialog = dialog;
 	    m_folder_full_name = folder_full_name;
+	    m_younger_term = younger_term;
 	}
 
 	@Override
@@ -183,6 +188,7 @@ public class Lettera extends AppCompatActivity
 			(m_download_interrupted,
 			 mail.folder(m_folder_full_name),
 			 email_element.m_inbound_email,
+			 m_younger_term,
 			 true,
 			 m_folders_drawer_interval.get());
 		}
@@ -280,6 +286,7 @@ public class Lettera extends AppCompatActivity
     private final static int SELECTION_COLOR = Color.parseColor("#bbdefb");
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
     private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60;
+    private int m_download_last_seconds = 24 * 60 * 60; // 24 Hours
     private int m_selected_position = -1;
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
@@ -322,21 +329,32 @@ public class Lettera extends AppCompatActivity
     private void download()
     {
 	m_download_interrupted.set(false);
+	m_download_last_seconds *= 2;
+
+	if(m_download_last_seconds > 176947200) // 5 Years
+	    m_download_last_seconds = 172800; // 2 Days
 
 	Dialog dialog = null;
+	YoungerTerm younger_term = null;
 
 	try
 	{
 	    dialog = new Dialog(Lettera.this);
+	    younger_term = new YoungerTerm(m_download_last_seconds);
 	    Windows.show_progress_dialog
 		(Lettera.this,
 		 dialog,
-		 "Downloading e-mail folders and messages.\n" +
+		 "Downloading e-mail folders and messages\n" +
+		 "received within the last " +
+		 m_download_last_seconds / 86400 +
+		 " day(s).\n" +
 		 "Please be patient.",
 		 m_download_interrupted);
 
 	    Thread thread = new Thread
-		(new PopulateFolders(dialog, selected_folder_full_name()));
+		(new PopulateFolders(dialog,
+				     selected_folder_full_name(),
+				     younger_term));
 
 	    thread.start();
 	}
@@ -718,6 +736,7 @@ public class Lettera extends AppCompatActivity
 				(m_interrupted,
 				 m_mail.folder(selected_folder_full_name()),
 				 m_mail.email_account(),
+				 null,
 				 false,
 				 m_folders_drawer_interval.get());
 
@@ -758,6 +777,7 @@ public class Lettera extends AppCompatActivity
 				    (m_interrupted,
 				     m_mail.folder(m_folder_names.get(0)),
 				     m_mail.email_account(),
+				     null,
 				     false,
 				     m_folders_drawer_interval.get());
 				m_folder_names.remove(0);
