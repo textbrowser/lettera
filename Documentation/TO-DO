@@ -44,8 +44,8 @@ Completed Items
 - Retain selected folder in Folders drawer.
 - Retain selected folder in Folders on device orientation change.
 - Retain selected messages.
-- Retrieve messages via AndTerm and ReceivedDateTerm. Previous week followed
-  by all; manual downloads only.
+- Retrieve messages via AndTerm and ReceivedDateTerm. Previous 2 days,
+  4 days, 8 days, ..., 2048 days, 2 days, etc. Manual downloads only.
 - Save personal key pairs.
 - Scroll-to-bottom, scroll-to-top message icons.
 - Select-all action.

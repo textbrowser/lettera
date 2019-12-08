@@ -347,7 +347,7 @@ public class Lettera extends AppCompatActivity
 		 "Downloading e-mail folders and messages\n" +
 		 "received within the last " +
 		 m_download_last_seconds / 86400 +
-		 " day(s).\n" +
+		 " days.\n" +
 		 "Please be patient.",
 		 m_download_interrupted);
 
