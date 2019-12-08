@@ -295,7 +295,7 @@ public class Lettera extends AppCompatActivity
 
     private String email_account()
     {
-	return m_database.setting("primary_email_account");
+	return m_database.primary_email_account();
     }
 
     private String selected_folder_full_name()

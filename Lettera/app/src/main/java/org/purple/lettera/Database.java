@@ -127,18 +127,27 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    cursor = m_db.rawQuery
-		("SELECT email_account FROM email_accounts ORDER BY 1", null);
+	    String primary_email_account = primary_email_account();
 
-	    if(cursor != null && cursor.moveToFirst())
+	    cursor = m_db.rawQuery
+		("SELECT email_account FROM email_accounts WHERE " +
+		 "email_account <> ? ORDER BY 1",
+		 new String[] {primary_email_account});
+
+	    if((cursor != null && cursor.moveToFirst()) ||
+	       !primary_email_account.isEmpty())
 	    {
 		ArrayList<String> array_list = new ArrayList<> ();
 
-		while(!cursor.isAfterLast())
-		{
-		    array_list.add(cursor.getString(0));
-		    cursor.moveToNext();
-		}
+		if(!primary_email_account.isEmpty())
+		    array_list.add(primary_email_account);
+
+		if(cursor != null)
+		    while(!cursor.isAfterLast())
+		    {
+			array_list.add(cursor.getString(0));
+			cursor.moveToNext();
+		    }
 
 		return array_list;
 	    }
@@ -488,6 +497,11 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	return "";
+    }
+
+    public String primary_email_account()
+    {
+	return setting("primary_email_account");
     }
 
     public String save_email(ContentValues content_values)

@@ -781,7 +781,7 @@ public class Settings
 		m_lettera.prepare_folders_and_messages_widgets
 		    (s_database.
 		     setting("selected_folder_name_" +
-			     s_database.setting("primary_email_account")));
+			     s_database.primary_email_account()));
 		m_lettera.prepare_generic_widgets();
 		m_lettera.prepare_icons
 		    (s_database.settings_element("icon_theme"));
@@ -989,8 +989,7 @@ public class Settings
 	    m_accounts_spinner.getSelectedItem() == null ?
 	    null : s_database.email_element(m_accounts_spinner.
 					    getSelectedItem().toString());
-	SettingsElement settings_element = s_database.settings_element
-	    ("primary_email_account");
+	String primary_email_account = s_database.primary_email_account();
 
 	m_delete_account_verify_checkbox.setChecked(false);
 	m_outbound_as_inbound.setChecked(false);
@@ -1038,14 +1037,8 @@ public class Settings
 	    m_outbound_password.setText(email_element.m_outbound_password);
 	    m_outbound_port.setText
 		(String.valueOf(email_element.m_outbound_port));
-
-	    if(settings_element != null)
-		m_primary_account_checkbox.setChecked
-		    (email_element.m_inbound_email.
-		     equals(settings_element.m_value));
-	    else
-		m_primary_account_checkbox.setChecked(false);
-
+	    m_primary_account_checkbox.setChecked
+		(email_element.m_inbound_email.equals(primary_email_account));
 	    m_proxy_address.setText(email_element.m_proxy_address);
 	    m_proxy_password.setText(email_element.m_proxy_password);
 	    m_proxy_port.setText(String.valueOf(email_element.m_proxy_port));
