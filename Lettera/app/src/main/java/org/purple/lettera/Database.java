@@ -134,15 +134,14 @@ public class Database extends SQLiteOpenHelper
 		 "email_account <> ? ORDER BY 1",
 		 new String[] {primary_email_account});
 
-	    if((cursor != null && cursor.moveToFirst()) ||
-	       !primary_email_account.isEmpty())
+	    if(cursor != null || !primary_email_account.isEmpty())
 	    {
 		ArrayList<String> array_list = new ArrayList<> ();
 
 		if(!primary_email_account.isEmpty())
 		    array_list.add(primary_email_account);
 
-		if(cursor != null)
+		if(cursor.moveToFirst())
 		    while(!cursor.isAfterLast())
 		    {
 			array_list.add(cursor.getString(0));
