@@ -756,6 +756,11 @@ public class Settings
 	    {
 		if(m_primary_account_checkbox.isChecked())
 		{
+		    if(!m_inbound_email.getText().toString().
+		       equals(s_database.primary_email_account()))
+			m_lettera.primary_email_account_changed
+			    (m_inbound_email.getText().toString());
+
 		    content_values.clear();
 		    content_values.put("key", "primary_email_account");
 		    content_values.put

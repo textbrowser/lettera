@@ -1275,6 +1275,7 @@ public class Lettera extends AppCompatActivity
 	if(!folder_name.equals(m_messages_adapter.folder_name()) &&
 	   !folder_name.isEmpty())
 	{
+	    m_download_last_seconds = 24 * 60 * 60; // 24 Hours
 	    m_select_all_checkbox.setOnCheckedChangeListener(null);
 	    m_select_all_checkbox.setChecked(false);
 	    m_select_all_checkbox.setOnCheckedChangeListener
@@ -1366,6 +1367,15 @@ public class Lettera extends AppCompatActivity
 		(Settings.
 		 icon_from_name(settings_element.m_value + "_settings"));
 	}
+    }
+
+    public void primary_email_account_changed(String email_account)
+    {
+	/*
+	** The primary e-mail account is now email_account.
+	*/
+
+	m_download_last_seconds = 24 * 60 * 60; // 24 Hours
     }
 
     public void show_email_dialog(int position)
