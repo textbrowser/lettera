@@ -88,8 +88,13 @@ public class FoldersDrawer
 	*/
 
 	m_popup_window = new PopupWindow(m_context);
-	m_popup_window.setAttachedInDecor(true);
-	m_popup_window.setBackgroundDrawable(null);
+
+	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+	{
+	    m_popup_window.setAttachedInDecor(true);
+	    m_popup_window.setBackgroundDrawable(null);
+	}
+
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
@@ -114,9 +119,9 @@ public class FoldersDrawer
 
     private void initialize_widget_members()
     {
-	m_close_button = m_view.findViewById(R.id.close_button);
-	m_email_account = m_view.findViewById(R.id.email_account);
-	m_recycler = m_view.findViewById(R.id.recycler);
+	m_close_button = (ImageButton) m_view.findViewById(R.id.close_button);
+	m_email_account = (TextView) m_view.findViewById(R.id.email_account);
+	m_recycler = (RecyclerView) m_view.findViewById(R.id.recycler);
     }
 
     private void prepare_listeners()
@@ -184,8 +189,14 @@ public class FoldersDrawer
 	((TextView) m_view.findViewById(R.id.folders_textview)).setTextColor
 	    (Lettera.text_color());
 	m_email_account.setTextColor(Lettera.text_color());
-	m_popup_window.showAsDropDown
-	    (m_parent, 0, 0, Gravity.START | Gravity.TOP);
+
+	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+	    m_popup_window.showAsDropDown
+		(m_parent, 0, 0, Gravity.START | Gravity.TOP);
+	else
+	    m_popup_window.showAsDropDown
+		(new View(m_context), 0, 0, Gravity.START | Gravity.TOP);
+
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());
 
@@ -195,14 +206,14 @@ public class FoldersDrawer
 
 	    if(m_popup_window.getBackground() == null)
 	    {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		    view = (View) m_popup_window.getContentView().getParent();
 		else
 		    view = m_popup_window.getContentView();
 	    }
 	    else
 	    {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		    view = (View) m_popup_window.getContentView().getParent().
 			getParent();
 		else

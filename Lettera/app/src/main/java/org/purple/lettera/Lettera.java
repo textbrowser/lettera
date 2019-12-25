@@ -373,22 +373,24 @@ public class Lettera extends AppCompatActivity
 
     private void initialize_widget_members()
     {
-	m_artificial_button = findViewById(R.id.artificial_button);
-	m_compose_button = findViewById(R.id.compose_button);
-	m_current_folder = findViewById(R.id.current_folder);
-	m_delete_button = findViewById(R.id.delete_button);
-	m_download_button = findViewById(R.id.download_button);
-	m_exit_lettera = findViewById(R.id.exit_lettera);
-	m_folders_drawer_button = findViewById(R.id.folders_drawer_button);
-	m_items_count = findViewById(R.id.message_count);
-	m_mark_as_unread = findViewById(R.id.mark_as_unread);
-	m_move_to_folder_button = findViewById(R.id.move_to_folder);
-	m_recycler = findViewById(R.id.messages);
-	m_scroll_bottom = findViewById(R.id.scroll_bottom);
-	m_scroll_top = findViewById(R.id.scroll_top);
-	m_select_all_checkbox = findViewById(R.id.select_all_checkbox);
-	m_settings_button = findViewById(R.id.settings_button);
-	m_status_bar = findViewById(R.id.status_bar);
+	m_artificial_button = (Button) findViewById(R.id.artificial_button);
+	m_compose_button = (Button) findViewById(R.id.compose_button);
+	m_current_folder = (TextView) findViewById(R.id.current_folder);
+	m_delete_button = (Button) findViewById(R.id.delete_button);
+	m_download_button = (Button) findViewById(R.id.download_button);
+	m_exit_lettera = (Button) findViewById(R.id.exit_lettera);
+	m_folders_drawer_button = (ImageButton) findViewById
+	    (R.id.folders_drawer_button);
+	m_items_count = (TextView) findViewById(R.id.message_count);
+	m_mark_as_unread = (Button) findViewById(R.id.mark_as_unread);
+	m_move_to_folder_button = (Button) findViewById(R.id.move_to_folder);
+	m_recycler = (RecyclerView) findViewById(R.id.messages);
+	m_scroll_bottom = (ImageButton) findViewById(R.id.scroll_bottom);
+	m_scroll_top = (ImageButton) findViewById(R.id.scroll_top);
+	m_select_all_checkbox = (CheckBox) findViewById
+	    (R.id.select_all_checkbox);
+	m_settings_button = (Button) findViewById(R.id.settings_button);
+	m_status_bar = (LinearLayout) findViewById(R.id.status_bar);
     }
 
     private void prepare_listeners()

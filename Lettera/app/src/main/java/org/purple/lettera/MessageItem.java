@@ -63,14 +63,14 @@ public class MessageItem extends View
 
     private void initialize_widget_members()
     {
-	m_attachment = m_view.findViewById(R.id.attachment);
-	m_date = m_view.findViewById(R.id.date);
+	m_attachment = (ImageView) m_view.findViewById(R.id.attachment);
+	m_date = (TextView) m_view.findViewById(R.id.date);
 	m_divider = m_view.findViewById(R.id.divider);
-	m_from = m_view.findViewById(R.id.from);
-	m_open = m_view.findViewById(R.id.open);
-	m_selected = m_view.findViewById(R.id.selected);
-	m_subject = m_view.findViewById(R.id.subject);
-	m_summary = m_view.findViewById(R.id.summary);
+	m_from = (TextView) m_view.findViewById(R.id.from);
+	m_open = (Button) m_view.findViewById(R.id.open);
+	m_selected = (CheckBox) m_view.findViewById(R.id.selected);
+	m_subject = (TextView) m_view.findViewById(R.id.subject);
+	m_summary = (TextView) m_view.findViewById(R.id.summary);
     }
 
     private void prepare_listeners()

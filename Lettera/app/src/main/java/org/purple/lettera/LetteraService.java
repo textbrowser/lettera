@@ -32,6 +32,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 
 public class LetteraService extends Service
@@ -51,13 +52,23 @@ public class LetteraService extends Service
 	PendingIntent pendingIntent = PendingIntent.getActivity
 	    (this, 0, notificationIntent, 0);
 
-	notification = new Notification.Builder(this, "").
-	    setContentIntent(pendingIntent).
-	    setContentText("Lettera Activity").
-	    setContentTitle("Lettera Activity").
-	    setSmallIcon(R.drawable.lettera).
-	    setTicker("Lettera Activity").
-	    build();
+	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+	    notification = new Notification.Builder(this, "").
+		setContentIntent(pendingIntent).
+		setContentText("Lettera Activity").
+		setContentTitle("Lettera Activity").
+		setSmallIcon(R.drawable.lettera).
+		setTicker("Lettera Activity").
+		build();
+	else
+	    notification = new Notification.Builder(this).
+		setContentIntent(pendingIntent).
+		setContentText("Lettera Activity").
+		setContentTitle("Lettera Activity").
+		setSmallIcon(R.drawable.lettera).
+		setTicker("Lettera Activity").
+		build();
+	    
 	startForeground(NOTIFICATION_ID, notification);
     }
 

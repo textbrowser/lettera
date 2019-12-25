@@ -29,11 +29,13 @@ package org.purple.lettera;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -89,8 +91,14 @@ public class MoveMessages
 	*/
 
 	m_popup_window = new PopupWindow(m_lettera);
-	m_popup_window.setAttachedInDecor(true);
-	m_popup_window.setBackgroundDrawable(null);
+
+	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+	    m_popup_window.setAttachedInDecor(true);
+	else
+	{
+	    m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
+	}
+
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setOutsideTouchable(true);
@@ -112,7 +120,7 @@ public class MoveMessages
 
     private void initialize_widget_members()
     {
-	m_recycler = m_view.findViewById(R.id.recycler);
+	m_recycler = (RecyclerView) m_view.findViewById(R.id.recycler);
     }
 
     public void dismiss()
@@ -135,9 +143,15 @@ public class MoveMessages
     public void show(View view)
     {
 	if(view == null)
-	    m_popup_window.showAtLocation
-		(m_parent, Gravity.START | Gravity.TOP, 0, 0);
-	else
+	{
+	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		m_popup_window.showAtLocation
+		    (m_parent, Gravity.START | Gravity.TOP, 0, 0);
+	    else
+		m_popup_window.showAsDropDown
+		    (new View(m_lettera), 0, 0, Gravity.START | Gravity.TOP);
+	}
+	else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 	{
 	    int location[] = new int[2];
 
@@ -162,6 +176,9 @@ public class MoveMessages
 	    m_popup_window.showAtLocation
 		(view, Gravity.START | Gravity.TOP, rect.left, rect.bottom);
 	}
+	else
+	    m_popup_window.showAsDropDown
+		(new View(m_lettera), 0, 0, Gravity.START | Gravity.TOP);
 
 	((TextView) m_view.findViewById(R.id.move_to_textview)).setTextColor
 	    (Lettera.text_color());
