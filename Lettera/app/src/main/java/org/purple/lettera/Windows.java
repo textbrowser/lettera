@@ -33,6 +33,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -61,8 +62,10 @@ public abstract class Windows
 	    AlertDialog alert_dialog = new AlertDialog.Builder
 		(context).create();
 
-	    alert_dialog.getWindow().setBackgroundDrawable
-		(new ColorDrawable(Lettera.background_color()));
+	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		alert_dialog.getWindow().setBackgroundDrawable
+		    (new ColorDrawable(Lettera.background_color()));
+
 	    alert_dialog.setButton
 		(AlertDialog.BUTTON_NEUTRAL,
 		 "Close",
@@ -181,8 +184,10 @@ public abstract class Windows
 	    AlertDialog alert_dialog = new AlertDialog.Builder
 		(context, Lettera.background_color()).create();
 
-	    alert_dialog.getWindow().setBackgroundDrawable
-		(new ColorDrawable(Lettera.background_color()));
+	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		alert_dialog.getWindow().setBackgroundDrawable
+		    (new ColorDrawable(Lettera.background_color()));
+
 	    alert_dialog.setButton
 		(AlertDialog.BUTTON_NEGATIVE, "No",
 		 new DialogInterface.OnClickListener()
