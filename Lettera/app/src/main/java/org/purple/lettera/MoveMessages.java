@@ -142,14 +142,11 @@ public class MoveMessages
 
     public void show(View view)
     {
-	if(view == null)
+	if(view == null) // Should never, ever be true!
 	{
 	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		m_popup_window.showAtLocation
 		    (m_parent, Gravity.START | Gravity.TOP, 0, 0);
-	    else
-		m_popup_window.showAsDropDown
-		    (new View(m_lettera), 0, 0, Gravity.START | Gravity.TOP);
 	}
 	else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 	{
@@ -178,7 +175,7 @@ public class MoveMessages
 	}
 	else
 	    m_popup_window.showAsDropDown
-		(new View(m_lettera), 0, 0, Gravity.START | Gravity.TOP);
+		(view, 0, 0, Gravity.START | Gravity.TOP);
 
 	((TextView) m_view.findViewById(R.id.move_to_textview)).setTextColor
 	    (Lettera.text_color());
