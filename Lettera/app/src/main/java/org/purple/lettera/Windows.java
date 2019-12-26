@@ -107,7 +107,7 @@ public abstract class Windows
     }
 
     public static void show_progress_dialog(Context context,
-					    Dialog dialog,
+					    final Dialog dialog,
 					    String text,
 					    final AtomicBoolean interrupt)
     {
@@ -133,9 +133,15 @@ public abstract class Windows
 		    @Override
 		    public void onClick(View view)
 		    {
-			((Button) view).setText("Interrupting...");
+			try
+			{
+			    dialog.dismiss();
+			}
+			catch(Exception exception)
+			{
+			}
+
 			interrupt.set(true);
-			view.findViewById(R.id.interrupt).setEnabled(false);
 		    }
 		});
 
