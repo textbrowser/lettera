@@ -75,6 +75,7 @@ Remaining Items
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - Optional network loading of HTML data.
+- POP3.
 - Proceed to next letter on delete / move.
 - Reset of Network widgets in Settings.
 - Secure the public & private key pair. Activate the private key only
