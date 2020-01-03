@@ -465,7 +465,9 @@ public class Letter
 
 	try
 	{
-	    dialog = new Dialog(m_lettera);
+	    dialog = new Dialog
+		(m_lettera,
+		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    Windows.show_progress_dialog
 		(m_lettera,
 		 dialog,

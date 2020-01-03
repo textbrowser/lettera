@@ -813,7 +813,9 @@ public class Settings
 
 	try
 	{
-	    dialog = new Dialog(m_lettera);
+	    dialog = new Dialog
+		(m_lettera,
+		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    Windows.show_progress_dialog
 		(m_lettera,
 		 dialog,
@@ -1338,7 +1340,10 @@ public class Settings
 
 			    try
 			    {
-				dialog = new Dialog(m_lettera);
+				dialog = new Dialog
+				    (m_lettera,
+				     android.R.style.
+				     Theme_DeviceDefault_Dialog_NoActionBar);
 				Windows.show_progress_dialog
 				    (m_lettera,
 				     dialog,
@@ -1716,7 +1721,10 @@ public class Settings
 
 			    try
 			    {
-				dialog = new Dialog(m_lettera);
+				dialog = new Dialog
+				    (m_lettera,
+				     android.R.style.
+				     Theme_DeviceDefault_Dialog_NoActionBar);
 				Windows.show_progress_dialog
 				    (m_lettera,
 				     dialog,
@@ -1955,7 +1963,9 @@ public class Settings
 
 	try
 	{
-	    dialog = new Dialog(m_lettera);
+	    dialog = new Dialog
+		(m_lettera,
+		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    Windows.show_progress_dialog
 		(m_lettera, dialog, "Testing IMAPS. Please be patient.", null);
 
@@ -1994,7 +2004,9 @@ public class Settings
 
 	try
 	{
-	    dialog = new Dialog(m_lettera);
+	    dialog = new Dialog
+		(m_lettera,
+		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    Windows.show_progress_dialog
 		(m_lettera, dialog, "Testing SMTPS. Please be patient.", null);
 

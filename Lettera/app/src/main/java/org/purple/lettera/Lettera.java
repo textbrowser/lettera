@@ -339,7 +339,9 @@ public class Lettera extends AppCompatActivity
 
 	try
 	{
-	    dialog = new Dialog(Lettera.this);
+	    dialog = new Dialog
+		(Lettera.this,
+		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    younger_term = new YoungerTerm(m_download_last_seconds);
 	    Windows.show_progress_dialog
 		(Lettera.this,
@@ -989,7 +991,10 @@ public class Lettera extends AppCompatActivity
 
 		try
 		{
-		    dialog = new Dialog(Lettera.this);
+		    dialog = new Dialog
+			(Lettera.this,
+			 android.R.style.
+			 Theme_DeviceDefault_Dialog_NoActionBar);
 		    Windows.show_progress_dialog
 			(Lettera.this,
 			 dialog,
