@@ -394,7 +394,7 @@ public class Settings
 		    if(m_encryption_key_pair == null)
 			m_encryption_key_data.setText
 			    ("SHA-1: " +
-			     Cryptography.sha_1_fingerprint(null));
+			     Cryptography.sha_256_fingerprint(null));
 		    else
 		    {
 			if(s_database.save_pgp_key_pair(m_encryption_key_pair,
@@ -411,7 +411,7 @@ public class Settings
 			{
 			    m_encryption_key_data.setText
 				("SHA-1: " +
-				 Cryptography.sha_1_fingerprint(null));
+				 Cryptography.sha_256_fingerprint(null));
 			    m_error = true;
 			}
 		    }
@@ -419,7 +419,7 @@ public class Settings
 		    if(m_signature_key_pair == null)
 			m_signature_key_data.setText
 			    ("SHA-1: " +
-			     Cryptography.sha_1_fingerprint(null));
+			     Cryptography.sha_256_fingerprint(null));
 		    else
 		    {
 			if(s_database.save_pgp_key_pair(m_signature_key_pair,
@@ -436,7 +436,7 @@ public class Settings
 			    m_error = true;
 			    m_signature_key_data.setText
 				("SHA-1: " +
-				 Cryptography.sha_1_fingerprint(null));
+				 Cryptography.sha_256_fingerprint(null));
 			}
 		    }
 
@@ -1114,7 +1114,7 @@ public class Settings
 	catch(Exception exception)
 	{
 	    m_encryption_key_data.setText
-		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
+		("SHA-1: " + Cryptography.sha_256_fingerprint(null));
 	}
 
 	try
@@ -1126,7 +1126,7 @@ public class Settings
 	catch(Exception exception)
 	{
 	    m_signature_key_data.setText
-		("SHA-1: " + Cryptography.sha_1_fingerprint(null));
+		("SHA-1: " + Cryptography.sha_256_fingerprint(null));
 	}
     }
 

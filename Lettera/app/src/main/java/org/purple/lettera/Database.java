@@ -789,10 +789,11 @@ public class Database extends SQLiteOpenHelper
 
 	    strings[0] = Base64.encodeToString
 		(key_pair.getPrivate().getEncoded(), Base64.NO_WRAP);
-	    strings[1] = Cryptography.sha_1_fingerprint(key_pair.getPrivate());
+	    strings[1] = Cryptography.sha_256_fingerprint
+		(key_pair.getPrivate());
 	    strings[2] = Base64.encodeToString
 		(key_pair.getPublic().getEncoded(), Base64.NO_WRAP);
-	    strings[3] = Cryptography.sha_1_fingerprint(key_pair.getPublic());
+	    strings[3] = Cryptography.sha_256_fingerprint(key_pair.getPublic());
 	    m_db.execSQL
 		("REPLACE INTO open_pgp (" +
 		 "function, " +

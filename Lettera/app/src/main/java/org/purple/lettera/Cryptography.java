@@ -35,8 +35,8 @@ import org.bouncycastle.pqc.jcajce.provider.mceliece.BCMcElieceCCA2PublicKey;
 
 public class Cryptography
 {
-    private final static String s_empty_sha_1 =
-	"0000000000000000000000000000000000000000";
+    private final static String s_empty_sha_256 =
+	"0000000000000000000000000000000000000000000000000000000000000000";
     private static Cryptography s_instance = null;
 
     private Cryptography()
@@ -83,8 +83,8 @@ public class Cryptography
 	    string_builder.append("Format: ");
 	    string_builder.append(public_key.getFormat());
 	    string_builder.append("\n");
-	    string_builder.append("SHA-1: ");
-	    string_builder.append(sha_1_fingerprint(public_key));
+	    string_builder.append("SHA-256: ");
+	    string_builder.append(sha_256_fingerprint(public_key));
 
 	    if(algorithm.equals("McEliece-CCA2") ||
 	       algorithm.equals("RSA"))
@@ -133,24 +133,29 @@ public class Cryptography
 	return "";
     }
 
-    public static String sha_1_fingerprint(Key key)
+    public static byte[] sha_1(byte[] ... data)
+    {
+	return hash("SHA-1", data);
+    }
+
+    public static byte[] sha_256(byte[] ... data)
+    {
+	return hash("SHA-256", data);
+    }
+
+    public static String sha_256_fingerprint(Key key)
     {
 	if(key == null)
-	    return s_empty_sha_1;
+	    return s_empty_sha_256;
 	else
 	{
-	    byte bytes[] = sha_1(key.getEncoded());
+	    byte bytes[] = sha_256(key.getEncoded());
 
 	    if(bytes != null)
 		return Utilities.bytes_to_hex(bytes);
 	}
 
-	return s_empty_sha_1;
-    }
-
-    public static byte[] sha_1(byte[] ... data)
-    {
-	return hash("SHA-1", data);
+	return s_empty_sha_256;
     }
 
     public static byte[] sha_512(byte[] ... data)
