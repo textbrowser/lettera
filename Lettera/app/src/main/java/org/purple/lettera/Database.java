@@ -36,7 +36,6 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Base64;
 import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
-import com.sun.mail.imap.YoungerTerm;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -1898,7 +1897,7 @@ public class Database extends SQLiteOpenHelper
     public void write_messages(AtomicBoolean interrupt,
 			       IMAPFolder folder,
 			       String email_account,
-			       YoungerTerm younger_term,
+			       boolean enable_database_delete,
 			       boolean enable_database_transaction,
 			       long message_download_time)
     {
@@ -1929,10 +1928,10 @@ public class Database extends SQLiteOpenHelper
 
 	try
 	{
-	    if(younger_term == null)
-		messages = folder.getMessages();
-	    else
-		messages = folder.search(younger_term);
+	    int end = folder.getMessageCount();
+	    int start = 1;
+
+	    messages = folder.getMessages(start, end);
 
 	    FetchProfile fetch_profile = new FetchProfile();
 
@@ -1983,7 +1982,7 @@ public class Database extends SQLiteOpenHelper
 	    ** delete their local representations.
 	    */
 
-	    if(younger_term == null)
+	    if(enable_database_delete)
 	    {
 		content_values.put("current_message", 0);
 		m_db.update("messages",
@@ -2014,10 +2013,13 @@ public class Database extends SQLiteOpenHelper
 		 "to_folder_name, " +
 		 "uid) VALUES " +
 		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	    int length = messages.length;
 	    long start_time = 0;
 
-	    for(Message message : messages)
+	    for(int i = length - 1; i >= 0; i--)
 	    {
+		Message message = messages[i];
+
 		if(message == null)
 		    continue;
 
@@ -2227,44 +2229,44 @@ public class Database extends SQLiteOpenHelper
 
 		    content_values.put("uid", message_uid);
 
-		    int i = 1;
+		    int j = 1;
 
 		    sqlite_statement.bindLong
-			(i++, content_values.getAsLong("content_downloaded"));
+			(j++, content_values.getAsLong("content_downloaded"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("content_type"));
+			(j++, content_values.getAsString("content_type"));
 		    sqlite_statement.bindLong
-			(i++, content_values.getAsLong("current_message"));
+			(j++, content_values.getAsLong("current_message"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("email_account"));
+			(j++, content_values.getAsString("email_account"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("folder_name"));
+			(j++, content_values.getAsString("folder_name"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("from_email_account"));
+			(j++, content_values.getAsString("from_email_account"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("from_name"));
+			(j++, content_values.getAsString("from_name"));
 		    sqlite_statement.bindLong
-			(i++, content_values.getAsLong("has_been_read"));
+			(j++, content_values.getAsLong("has_been_read"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("message_html"));
+			(j++, content_values.getAsString("message_html"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("message_plain"));
+			(j++, content_values.getAsString("message_plain"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("message_raw"));
+			(j++, content_values.getAsString("message_raw"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("received_date"));
+			(j++, content_values.getAsString("received_date"));
 		    sqlite_statement.bindLong
-			(i++,
+			(j++,
 			 content_values.getAsLong("received_date_unix_epoch"));
 		    sqlite_statement.bindLong
-			(i++, content_values.getAsLong("selected"));
+			(j++, content_values.getAsLong("selected"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("sent_date"));
+			(j++, content_values.getAsString("sent_date"));
 		    sqlite_statement.bindString
-			(i++, content_values.getAsString("subject"));
-		    sqlite_statement.bindString(i++, to_folder_name);
+			(j++, content_values.getAsString("subject"));
+		    sqlite_statement.bindString(j++, to_folder_name);
 		    sqlite_statement.bindLong
-			(i++, content_values.getAsLong("uid"));
+			(j++, content_values.getAsLong("uid"));
 		    sqlite_statement.execute();
 		    sqlite_statement.clearBindings();
 
@@ -2303,7 +2305,7 @@ public class Database extends SQLiteOpenHelper
 		    break;
 	    }
 
-	    if(younger_term == null)
+	    if(enable_database_delete)
 		m_db.delete("messages",
 			    "current_message = 0 AND " +
 			    "email_account = ? AND " +
