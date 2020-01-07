@@ -322,7 +322,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 		(new LinearLayout.
 		 LayoutParams(LinearLayout.
 			      LayoutParams.MATCH_PARENT, (int) (1 * density)));
-	    line.setBackgroundColor(Color.parseColor("#1f000000"));
+	    line.setBackgroundColor(Lettera.divider_color());
 	    return new ViewHolderSeparator(line, parent);
 	default:
 	    break;
