@@ -188,7 +188,7 @@ public abstract class Windows
 		return;
 
 	    AlertDialog alert_dialog = new AlertDialog.Builder
-		(context, Lettera.background_color()).create();
+		(context).create();
 
 	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		alert_dialog.getWindow().setBackgroundDrawable

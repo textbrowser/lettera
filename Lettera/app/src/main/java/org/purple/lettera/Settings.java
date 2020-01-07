@@ -530,10 +530,7 @@ public class Settings
 	}
     };
     private final static String s_color_themes[] = new String[]
-	{"Black & Blue",
-	 "Black & Green",
-	 "Grayish & Blue",
-	 "Default"};
+	{"Black & Blue", "Black & Green", "Grayish & Blue", "Default"};
     private final static String s_email_folders[] = new String[] {"Drawer"};
     private final static String s_icon_themes[] = new String[] {"Default"};
     private final static String s_proxy_types[] =
