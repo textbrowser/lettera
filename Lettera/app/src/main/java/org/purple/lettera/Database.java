@@ -1956,6 +1956,7 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	boolean current_folder = false;
+	boolean delete_messages = false;
 	boolean refresh_cursor = true;
 	int count = 0;
 
@@ -1982,9 +1983,12 @@ public class Database extends SQLiteOpenHelper
 	    ** delete their local representations.
 	    */
 
-	    if(enable_database_delete)
+	    if(enable_database_delete &&
+	       folder.getMessageCount() <
+	       message_count(email_account, folder.getName()))
 	    {
 		content_values.put("current_message", 0);
+		delete_messages = true;
 		m_db.update("messages",
 			    content_values,
 			    "email_account = ? AND " +
@@ -2051,6 +2055,7 @@ public class Database extends SQLiteOpenHelper
 			{
 			    content_values.clear();
 			    content_values.put("current_message", 1);
+			    start_time = System.currentTimeMillis();
 
 			    if(m_db.
 			       update("messages",
@@ -2305,7 +2310,7 @@ public class Database extends SQLiteOpenHelper
 		    break;
 	    }
 
-	    if(enable_database_delete)
+	    if(delete_messages)
 		m_db.delete("messages",
 			    "current_message = 0 AND " +
 			    "email_account = ? AND " +
