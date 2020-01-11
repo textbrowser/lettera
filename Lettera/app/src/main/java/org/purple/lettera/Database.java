@@ -1439,9 +1439,7 @@ public class Database extends SQLiteOpenHelper
 	    "uid BIGINT NOT NULL, " +
 	    "FOREIGN KEY (email_account) REFERENCES " +
 	    "email_accounts (email_account) ON DELETE CASCADE, " +
-	    "PRIMARY KEY (email_account, " +
-	    "folder_name, " +
-	    "uid))";
+	    "PRIMARY KEY (email_account, folder_name, uid))";
 
 	try
 	{

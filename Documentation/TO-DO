@@ -70,6 +70,9 @@ Remaining Items
 - Display attachment list.
 - Display recipients in letters.
 - Download incomplete content on opening of letter (getMessagesByUID).
+- Folders may contain duplicate letters:
+  Move a letter from one folder to another folder, locally.
+  Move the same letter to the same folder, remotely.
 - Letter navigation (next, previous).
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
