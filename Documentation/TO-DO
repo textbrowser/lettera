@@ -50,6 +50,7 @@ Completed Items
 - Retain selected messages.
 - Retrieve messages via AndTerm and ReceivedDateTerm. Previous 2 days,
   4 days, 8 days, ..., 2048 days, 2 days, etc. Manual downloads only.
+  Abandoned.
 - Save personal key pairs.
 - Scroll-to-bottom, scroll-to-top message icons.
 - Select-all action.
@@ -60,25 +61,22 @@ Completed Items
 - Terminate background services on application exit.
 - Timely interruption of data if the device is disconnected.
 
-Future Items
-
-- Display percent-downloaded in dialog.
-- Encrypted database containers.
-- Optional text instead of icons in Settings header.
-
 Remaining Items
 
 - Date distances (hours, minutes).
 - Deleted remote folders are also deleted locally.
 - Display a message's original folder.
 - Display attachment list.
+- Display percent-downloaded in dialog.
 - Display recipients in letters.
 - Download incomplete content on opening of letter (getMessagesByUID).
+- Encrypted database containers.
 - Letter navigation (next, previous).
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
 - Optional network loading of HTML data.
+- Optional text instead of icons in Settings header.
 - POP3.
 - Proceed to next letter on delete / move.
 - Reset of Network widgets in Settings.
