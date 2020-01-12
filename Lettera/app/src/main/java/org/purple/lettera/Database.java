@@ -2066,6 +2066,32 @@ public class Database extends SQLiteOpenHelper
 			selected = cursor.getInt(2);
 			to_folder_name = cursor.getString(3);
 		    }
+		    else
+		    {
+			if(cursor != null)
+			    cursor.close();
+
+			cursor = m_db.rawQuery
+			    ("SELECT OID " +
+			     "FROM messages WHERE email_account = ? AND " +
+			     "LOWER(to_folder_name) = LOWER(?) AND " +
+			     "uid = ?",
+			     new String[] {email_account,
+					   folder.getName(),
+					   String.valueOf(message_uid)});
+
+			if(cursor != null && cursor.moveToFirst())
+			    /*
+			    ** The message was moved from some folder
+			    ** into this folder. Remove the local copy.
+			    */
+
+			    m_db.delete("messages",
+					"OID = ?",
+					new String[] {String.
+						      valueOf(cursor.
+							      getLong(0))});
+		    }
 		}
 		catch(Exception exception)
 		{

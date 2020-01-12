@@ -19,6 +19,10 @@ Completed Items
 - Fast SQLite sort.
 - Folders drawer folders order. Sort by name.
 - Folders drawer.
+- Folders may contain duplicate letters:
+  Move a letter from one folder to another folder, locally.
+  Move the same letter to the same folder, remotely.
+  Delete the local duplicate.
 - Ignore incoming messages if the messages exist in other folders (a move).
 - Include algorithm information in Settings::Privacy.
 - Index failure on Folders Drawer.
@@ -70,9 +74,6 @@ Remaining Items
 - Display attachment list.
 - Display recipients in letters.
 - Download incomplete content on opening of letter (getMessagesByUID).
-- Folders may contain duplicate letters:
-  Move a letter from one folder to another folder, locally.
-  Move the same letter to the same folder, remotely.
 - Letter navigation (next, previous).
 - McEliece key generation, exchange, etc.
 - New-message notifications. Optional scroll-to-top?
