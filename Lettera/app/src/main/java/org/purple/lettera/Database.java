@@ -1896,8 +1896,7 @@ public class Database extends SQLiteOpenHelper
 			       IMAPFolder folder,
 			       String email_account,
 			       boolean enable_database_delete,
-			       boolean enable_database_transaction,
-			       long message_download_time)
+			       boolean enable_database_transaction)
     {
 	if(folder == null || m_db == null)
 	    return;
@@ -1954,7 +1953,6 @@ public class Database extends SQLiteOpenHelper
 	}
 
 	boolean current_folder = false;
-	boolean delete_messages = false;
 	boolean refresh_cursor = true;
 	int count = 0;
 
@@ -1981,12 +1979,9 @@ public class Database extends SQLiteOpenHelper
 	    ** delete their local representations.
 	    */
 
-	    if(enable_database_delete &&
-	       folder.getMessageCount() <
-	       message_count(email_account, folder.getName()))
+	    if(enable_database_delete)
 	    {
 		content_values.put("current_message", 0);
-		delete_messages = true;
 		m_db.update("messages",
 			    content_values,
 			    "email_account = ? AND " +
@@ -2016,7 +2011,6 @@ public class Database extends SQLiteOpenHelper
 		 "uid) VALUES " +
 		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    int length = messages.length;
-	    long start_time = 0;
 
 	    for(int i = length - 1; i >= 0; i--)
 	    {
@@ -2053,7 +2047,6 @@ public class Database extends SQLiteOpenHelper
 			{
 			    content_values.clear();
 			    content_values.put("current_message", 1);
-			    start_time = System.currentTimeMillis();
 
 			    if(m_db.
 			       update("messages",
@@ -2082,13 +2075,6 @@ public class Database extends SQLiteOpenHelper
 		    if(cursor != null)
 			cursor.close();
 		}
-
-		if(start_time == 0)
-		    start_time = System.currentTimeMillis();
-
-		if(System.currentTimeMillis() - start_time >
-		   java.lang.Math.min(25000, message_download_time))
-		    break;
 
 		try
 		{
@@ -2308,7 +2294,7 @@ public class Database extends SQLiteOpenHelper
 		    break;
 	    }
 
-	    if(delete_messages)
+	    if(enable_database_delete)
 		m_db.delete("messages",
 			    "current_message = 0 AND " +
 			    "email_account = ? AND " +
