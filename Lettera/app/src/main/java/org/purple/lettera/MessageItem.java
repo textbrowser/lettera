@@ -95,10 +95,7 @@ public class MessageItem extends View
 		public void onCheckedChanged
 		    (CompoundButton button_view, final boolean is_checked)
 		{
-		    s_database.set_message_selected
-			(m_lettera,
-			 is_checked,
-			 m_oid);
+		    s_database.set_message_selected(is_checked, m_oid);
 		}
 	    };
     }

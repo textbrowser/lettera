@@ -27,7 +27,9 @@
 
 package org.purple.lettera;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -212,6 +214,21 @@ public abstract class Utilities
 	    View child = view_group.getChildAt(i);
 
 	    color_children(child, background_color, divider_color, text_color);
+	}
+    }
+
+    public static void send_broadcast(String action)
+    {
+	try
+	{
+	    Intent intent = new Intent(action);
+	    LocalBroadcastManager local_broadcast_manager =
+		LocalBroadcastManager.getInstance(Lettera.instance());
+
+	    local_broadcast_manager.sendBroadcast(intent);
+	}
+	catch(Exception exception)
+	{
 	}
     }
 }

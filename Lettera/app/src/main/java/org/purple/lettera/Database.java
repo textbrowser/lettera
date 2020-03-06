@@ -1687,8 +1687,7 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void set_message_selected(final Lettera lettera,
-				     final boolean selected,
+    public void set_message_selected(final boolean selected,
 				     final long message_oid)
     {
 	if(m_db == null)
@@ -1706,8 +1705,7 @@ public class Database extends SQLiteOpenHelper
 		    SQLiteStatement sqlite_statement = null;
 
 		    sqlite_statement = m_db.compileStatement
-			("UPDATE messages SET selected = ? " +
-			 "WHERE OID = ?");
+			("UPDATE messages SET selected = ? WHERE OID = ?");
 		    sqlite_statement.bindLong(1, selected ? 1 : 0);
 		    sqlite_statement.bindLong(2, message_oid);
 		    sqlite_statement.execute();
@@ -1721,14 +1719,8 @@ public class Database extends SQLiteOpenHelper
 		    m_db.endTransaction();
 		}
 
-		lettera.runOnUiThread(new Runnable()
-		{
-		    @Override
-		    public void run()
-		    {
-			lettera.prepare_current_folder_widgets();
-		    }
-		});
+		Utilities.send_broadcast
+		    ("org.purple.lettera.set_message_selected");
 	    }
 	});
 
@@ -1736,7 +1728,6 @@ public class Database extends SQLiteOpenHelper
     }
 
     public void set_messages_unread(final Lettera lettera,
-				    final MessagesAdapter messages_adapter,
 				    final String email_account,
 				    final String folder_name)
     {
@@ -1784,15 +1775,8 @@ public class Database extends SQLiteOpenHelper
 		    }
 		}
 
-		if(messages_adapter != null)
-		    lettera.runOnUiThread(new Runnable()
-		    {
-			@Override
-			public void run()
-			{
-			    messages_adapter.notifyDataSetChanged();
-			}
-		    });
+		Utilities.send_broadcast
+		    ("org.purple.lettera.set_messages_unread");
 	    }
 	});
 

@@ -28,14 +28,18 @@
 package org.purple.lettera;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,6 +61,32 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Lettera extends AppCompatActivity
 {
+    private class LetteraBroadcastReceiver extends BroadcastReceiver
+    {
+	public LetteraBroadcastReceiver()
+	{
+	}
+
+	@Override
+	public void onReceive(Context context, Intent intent)
+	{
+	    if(intent == null || intent.getAction() == null)
+		return;
+
+	    switch(intent.getAction())
+	    {
+	    case "org.purple.lettera.set_message_selected":
+		prepare_current_folder_widgets();
+		break;
+	    case "org.purple.lettera.set_messages_unread":
+		m_messages_adapter.notifyDataSetChanged();
+		break;
+	    default:
+		break;
+	    }
+	}
+    }
+
     private class LetteraLinearLayoutManager extends LinearLayoutManager
     {
 	LetteraLinearLayoutManager(Context context)
@@ -256,6 +286,7 @@ public class Lettera extends AppCompatActivity
     private ImageButton m_scroll_bottom = null;
     private ImageButton m_scroll_top = null;
     private Letter m_letter_dialog = null;
+    private LetteraBroadcastReceiver m_receiver = null;
     private LetteraLinearLayoutManager m_layout_manager = null;
     private LinearLayout m_status_bar = null;
     private MessagesAdapter m_messages_adapter = null;
@@ -265,6 +296,7 @@ public class Lettera extends AppCompatActivity
     private String m_selected_folder_name = "";
     private TextView m_current_folder = null;
     private TextView m_items_count = null;
+    private boolean m_receiver_registered = false;
     private final AtomicBoolean m_download_interrupted =
 	new AtomicBoolean(false);
     private final AtomicBoolean m_scrolling = new AtomicBoolean(false);
@@ -282,6 +314,7 @@ public class Lettera extends AppCompatActivity
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
     private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60;
     private int m_selected_position = -1;
+    private static Lettera s_instance = null;
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
     private static int s_default_text_color = 0;
@@ -486,10 +519,7 @@ public class Lettera extends AppCompatActivity
 			return;
 
 		    m_database.set_messages_unread
-			(Lettera.this,
-			 m_messages_adapter,
-			 email_account(),
-			 selected_folder_name());
+			(Lettera.this, email_account(), selected_folder_name());
 		}
 	    });
 
@@ -827,6 +857,8 @@ public class Lettera extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+	m_receiver = new LetteraBroadcastReceiver();
+	s_instance = this;
 	LetteraService.startForegroundTask(getApplicationContext());
 	m_database = Database.instance(getApplicationContext());
 
@@ -1026,6 +1058,13 @@ public class Lettera extends AppCompatActivity
     {
 	super.onPause();
 
+	if(m_receiver_registered)
+	{
+	    LocalBroadcastManager.getInstance(this).
+		unregisterReceiver(m_receiver);
+	    m_receiver_registered = false;
+	}
+
 	try
 	{
 	    m_folders_drawer.dismiss();
@@ -1041,6 +1080,18 @@ public class Lettera extends AppCompatActivity
     protected void onResume()
     {
 	super.onResume();
+
+	if(!m_receiver_registered)
+	{
+	    IntentFilter intent_filter = new IntentFilter();
+
+	    intent_filter.addAction("org.purple.lettera.set_message_selected");
+	    intent_filter.addAction("org.purple.lettera.set_messages_unread");
+	    LocalBroadcastManager.getInstance(this).
+		registerReceiver(m_receiver, intent_filter);
+	    m_receiver_registered = true;
+	}
+
 	prepare_schedules();
     }
 
@@ -1072,6 +1123,11 @@ public class Lettera extends AppCompatActivity
     public static int text_color()
     {
 	return s_text_color.get();
+    }
+
+    public static synchronized Lettera instance()
+    {
+	return s_instance;
     }
 
     public void email_account_deleted()
