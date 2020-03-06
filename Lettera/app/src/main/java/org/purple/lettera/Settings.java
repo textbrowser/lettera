@@ -393,7 +393,7 @@ public class Settings
 
 		    if(m_encryption_key_pair == null)
 			m_encryption_key_data.setText
-			    ("SHA-1: " +
+			    ("SHA-256: " +
 			     Cryptography.sha_256_fingerprint(null));
 		    else
 		    {
@@ -410,7 +410,7 @@ public class Settings
 			else
 			{
 			    m_encryption_key_data.setText
-				("SHA-1: " +
+				("SHA-256: " +
 				 Cryptography.sha_256_fingerprint(null));
 			    m_error = true;
 			}
@@ -418,7 +418,7 @@ public class Settings
 
 		    if(m_signature_key_pair == null)
 			m_signature_key_data.setText
-			    ("SHA-1: " +
+			    ("SHA-256: " +
 			     Cryptography.sha_256_fingerprint(null));
 		    else
 		    {
@@ -435,7 +435,7 @@ public class Settings
 			{
 			    m_error = true;
 			    m_signature_key_data.setText
-				("SHA-1: " +
+				("SHA-256: " +
 				 Cryptography.sha_256_fingerprint(null));
 			}
 		    }
@@ -1113,7 +1113,7 @@ public class Settings
 	catch(Exception exception)
 	{
 	    m_encryption_key_data.setText
-		("SHA-1: " + Cryptography.sha_256_fingerprint(null));
+		("SHA-256: " + Cryptography.sha_256_fingerprint(null));
 	}
 
 	try
@@ -1125,7 +1125,7 @@ public class Settings
 	catch(Exception exception)
 	{
 	    m_signature_key_data.setText
-		("SHA-1: " + Cryptography.sha_256_fingerprint(null));
+		("SHA-256: " + Cryptography.sha_256_fingerprint(null));
 	}
     }
 
