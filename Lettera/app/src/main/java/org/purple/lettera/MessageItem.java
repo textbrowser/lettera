@@ -59,7 +59,7 @@ public class MessageItem extends View
     private View m_view = null;
     private final static Database s_database = Database.instance();
     private int m_position = -1;
-    private long m_oid = 0;
+    private long m_oid = 0L;
 
     private void initialize_widget_members()
     {

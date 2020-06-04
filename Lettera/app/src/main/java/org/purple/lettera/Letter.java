@@ -213,7 +213,7 @@ public class Letter
     private WebView m_web_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
     private final static Database s_database = Database.instance();
-    private long m_oid = -1;
+    private long m_oid = -1L;
 
     public Letter(Lettera lettera,
 		  MessagesAdapter messages_adapter,

@@ -69,7 +69,7 @@ public class MoveMessages
     private RecyclerView m_recycler = null;
     private View m_parent = null;
     private View m_view = null;
-    private long m_message_oid = -1;
+    private long m_message_oid = -1L;
 
     public MoveMessages(Lettera lettera,
 			String email_account,

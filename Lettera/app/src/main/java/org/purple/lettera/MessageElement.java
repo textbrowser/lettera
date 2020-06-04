@@ -44,7 +44,7 @@ public class MessageElement
     public boolean m_content_downloaded = false;
     public boolean m_has_been_read = false;
     public boolean m_selected = false;
-    public long m_oid = -1;
-    public long m_received_date_unix_epoch = 0;
-    public long m_uid = -1;
+    public long m_oid = -1L;
+    public long m_received_date_unix_epoch = 0L;
+    public long m_uid = -1L;
 }

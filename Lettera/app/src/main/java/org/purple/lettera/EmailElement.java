@@ -44,5 +44,5 @@ public class EmailElement
     public int m_inbound_port = 1;
     public int m_outbound_port = 1;
     public int m_proxy_port = 0;
-    public long m_oid = -1;
+    public long m_oid = -1L;
 }

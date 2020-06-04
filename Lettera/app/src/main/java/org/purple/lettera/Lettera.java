@@ -311,8 +311,8 @@ public class Lettera extends AppCompatActivity
     private final static AtomicInteger s_text_color = new AtomicInteger
 	(Color.BLACK);
     private final static int SELECTION_COLOR = Color.parseColor("#bbdefb");
-    private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500;
-    private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60;
+    private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500L;
+    private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60L;
     private int m_selected_position = -1;
     private static Lettera s_instance = null;
     private static int s_default_background_color = 0;

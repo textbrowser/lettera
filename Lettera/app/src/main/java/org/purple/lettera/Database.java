@@ -387,7 +387,7 @@ public class Database extends SQLiteOpenHelper
 		    message_element.m_from_name = m_read_message_cursor.
 			getString(i++);
 		    message_element.m_has_been_read = m_read_message_cursor.
-			getLong(i++) == 1;
+			getLong(i++) == 1L;
 		    message_element.m_message_html = m_read_message_cursor.
 			getString(i++).trim();
 		    message_element.m_message_plain = m_read_message_cursor.
@@ -2007,7 +2007,7 @@ public class Database extends SQLiteOpenHelper
 		String to_folder_name = folder.getName();
 		int has_been_read = 0;
 		int selected = 0;
-		long message_uid = 0;
+		long message_uid = 0L;
 
 		try
 		{
