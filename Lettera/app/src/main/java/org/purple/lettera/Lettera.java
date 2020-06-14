@@ -681,7 +681,8 @@ public class Lettera extends AppCompatActivity
 		{
 		    try
 		    {
-			if(System.currentTimeMillis() - m_last_tick.get() <
+			if(Math.abs(System.currentTimeMillis() -
+				    m_last_tick.get()) <
 			   m_folders_drawer_interval.get())
 			    return;
 
