@@ -71,7 +71,7 @@ Remaining Items
 - Display attachment list.
 - Display percent-downloaded in dialog.
 - Display recipients in letters.
-- Download incomplete content on opening of letter (getMessagesByUID).
+- Download incomplete content on opening of letter (getMessagesByUID()).
 - Encrypted database containers.
 - Letter navigation (next, previous).
 - McEliece key generation, exchange, etc.
