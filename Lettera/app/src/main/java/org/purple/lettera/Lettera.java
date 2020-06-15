@@ -290,10 +290,13 @@ public class Lettera extends AppCompatActivity
     private LetteraLinearLayoutManager m_layout_manager = null;
     private LinearLayout m_status_bar = null;
     private MessagesAdapter m_messages_adapter = null;
+    private Object m_status_message_mutex = new Object();
     private RecyclerView m_recycler = null;
     private Runnable m_scroll_runnable = null;
     private ScheduledExecutorService m_folders_drawer_schedule = null;
+    private ScheduledExecutorService m_status_message_schedule = null;
     private String m_selected_folder_name = "";
+    private String m_status_message = "";
     private TextView m_current_folder = null;
     private TextView m_items_count = null;
     private boolean m_receiver_registered = false;
@@ -313,6 +316,7 @@ public class Lettera extends AppCompatActivity
     private final static int SELECTION_COLOR = Color.parseColor("#bbdefb");
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500L;
     private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60L;
+    private final static long STATUS_MESSAGE_INTERVAL = 2500L;
     private int m_selected_position = -1;
     private static Lettera s_instance = null;
     private static int s_default_background_color = 0;
@@ -681,9 +685,14 @@ public class Lettera extends AppCompatActivity
 		{
 		    try
 		    {
+			synchronized(m_status_message_mutex)
+			{
+			    m_status_message = "";
+			}
+
 			if(Math.abs(System.currentTimeMillis() -
 				    m_last_tick.get()) <
-			   m_folders_drawer_interval.get())
+			   (long) m_folders_drawer_interval.get())
 			    return;
 
 			EmailElement email_element = m_database.email_element
@@ -738,12 +747,15 @@ public class Lettera extends AppCompatActivity
 				@Override
 				public void run()
 				{
-				    m_items_count.setText
-					("Items: " +
-					 m_messages_adapter.getItemCount() +
-					 " (Downloading " +
-					 selected_folder_name() +
-					 ".)");
+				    synchronized(m_status_message_mutex)
+				    {
+					m_status_message = "Items: " +
+					    m_messages_adapter.getItemCount() +
+					    " (Downloading " +
+					    selected_folder_name() +
+					    ".)";
+					m_items_count.setText(m_status_message);
+				    }
 				}
 			    });
 
@@ -776,13 +788,18 @@ public class Lettera extends AppCompatActivity
 					@Override
 					public void run()
 					{
-					    m_items_count.setText
-						("Items: " +
-						 m_messages_adapter.
-						 getItemCount() +
-						 " (Downloading " +
-						 folder_name +
-						 ".)");
+					    synchronized(m_status_message_mutex)
+					    {
+						m_status_message = "Items: " +
+						    m_messages_adapter.
+						    getItemCount() +
+						    " (Downloading " +
+						    folder_name +
+						    ".)";
+						m_items_count.setText
+						    (m_status_message);
+					    }
+
 					    m_messages_adapter.
 						notifyDataSetChanged();
 					    m_folders_drawer.update();
@@ -821,8 +838,39 @@ public class Lettera extends AppCompatActivity
 		    {
 		    }
 		}
-	    }, 5, 250, TimeUnit.MILLISECONDS);
+	    }, 5L, 250L, TimeUnit.MILLISECONDS);
         }
+
+	if(m_status_message_schedule == null)
+	{
+	    m_status_message_schedule = Executors.
+		newSingleThreadScheduledExecutor();
+	    m_status_message_schedule.scheduleAtFixedRate(new Runnable()
+	    {
+		@Override
+		public void run()
+		{
+		    try
+		    {
+			Lettera.this.runOnUiThread(new Runnable()
+			{
+			    @Override
+			    public void run()
+			    {
+				synchronized(m_status_message_schedule)
+				{
+				    if(!m_status_message.isEmpty())
+					m_items_count.setText(m_status_message);
+				}
+			    }
+			});
+		    }
+		    catch(Exception exception)
+		    {
+		    }
+		}
+	    }, 5L, STATUS_MESSAGE_INTERVAL, TimeUnit.MILLISECONDS);
+	}
     }
 
     private void stop_schedules()
@@ -850,6 +898,32 @@ public class Lettera extends AppCompatActivity
 	    finally
 	    {
 		m_folders_drawer_schedule = null;
+	    }
+	}
+
+	if(m_status_message_schedule != null)
+	{
+	    try
+	    {
+		m_status_message_schedule.shutdown();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+
+	    try
+	    {
+		if(!m_status_message_schedule.
+		   awaitTermination(SCHEDULE_AWAIT_TERMINATION_TIMEOUT,
+				    TimeUnit.SECONDS))
+		    m_status_message_schedule.shutdownNow();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
+	    finally
+	    {
+		m_status_message_schedule = null;
 	    }
 	}
     }

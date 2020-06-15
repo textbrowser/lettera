@@ -55,6 +55,8 @@ Completed Items
 - Scroll-to-bottom, scroll-to-top message icons.
 - Select-all action.
 - Separate standard folders from other folders.
+- Set status information ("downloading" text) after the main activity gains
+  focus.
 - Simple version of folders drawer for moving messages. Ignore current folder.
 - Spinners and color themes.
 - Tap-to-select letter and checkbox avoidance.
@@ -82,8 +84,6 @@ Remaining Items
 - Reset of Network widgets in Settings.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
-- Set status information ("downloading" text) after the main activity gains
-  focus.
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
   Expunge locally-deleted messages from the server if configured to do so.
