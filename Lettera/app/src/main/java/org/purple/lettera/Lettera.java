@@ -491,9 +491,26 @@ public class Lettera extends AppCompatActivity
 		    if(Lettera.this.isFinishing())
 			return;
 
-		    LetteraService.stopForegroundTask(getApplicationContext());
-		    finishAndRemoveTask();
-		    android.os.Process.killProcess(android.os.Process.myPid());
+		    final AtomicBoolean confirmed = new AtomicBoolean(false);
+
+		    DialogInterface.OnCancelListener listener =
+			new DialogInterface.OnCancelListener()
+		    {
+			public void onCancel(DialogInterface dialog)
+			{
+			    if(confirmed.get())
+			    {
+				LetteraService.stopForegroundTask
+				    (getApplicationContext());
+				finishAndRemoveTask();
+				android.os.Process.killProcess
+				    (android.os.Process.myPid());
+			    }
+			}
+		    };
+
+		    Windows.show_prompt_dialog
+			(Lettera.this, listener, "Exit Lettera?", confirmed);
 		}
 	    });
 
