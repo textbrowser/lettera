@@ -766,12 +766,9 @@ public class Lettera extends AppCompatActivity
 				{
 				    synchronized(m_status_message_mutex)
 				    {
-					m_status_message = "Items: " +
-					    m_messages_adapter.getItemCount() +
-					    " (Downloading " +
+					m_status_message = " (Downloading " +
 					    selected_folder_name() +
 					    ".)";
-					m_items_count.setText(m_status_message);
 				    }
 				}
 			    });
@@ -807,14 +804,10 @@ public class Lettera extends AppCompatActivity
 					{
 					    synchronized(m_status_message_mutex)
 					    {
-						m_status_message = "Items: " +
-						    m_messages_adapter.
-						    getItemCount() +
+						m_status_message =
 						    " (Downloading " +
 						    folder_name +
 						    ".)";
-						m_items_count.setText
-						    (m_status_message);
 					    }
 
 					    m_messages_adapter.
@@ -877,7 +870,10 @@ public class Lettera extends AppCompatActivity
 				synchronized(m_status_message_schedule)
 				{
 				    if(!m_status_message.isEmpty())
-					m_items_count.setText(m_status_message);
+					m_items_count.setText
+					    ("Items: " +
+					     m_messages_adapter.getItemCount() +
+					     m_status_message);
 				}
 			    }
 			});

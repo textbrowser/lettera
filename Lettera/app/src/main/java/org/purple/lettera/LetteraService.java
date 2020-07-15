@@ -68,7 +68,7 @@ public class LetteraService extends Service
 		setSmallIcon(R.drawable.lettera).
 		setTicker("Lettera Activity").
 		build();
-	    
+
 	startForeground(NOTIFICATION_ID, notification);
     }
 
