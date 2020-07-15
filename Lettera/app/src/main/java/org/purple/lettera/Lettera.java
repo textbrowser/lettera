@@ -867,7 +867,7 @@ public class Lettera extends AppCompatActivity
 			    @Override
 			    public void run()
 			    {
-				synchronized(m_status_message_schedule)
+				synchronized(m_status_message_mutex)
 				{
 				    if(!m_status_message.isEmpty())
 					m_items_count.setText
@@ -1160,8 +1160,6 @@ public class Lettera extends AppCompatActivity
 	catch(Exception exception)
 	{
 	}
-
-	stop_schedules();
     }
 
     @Override
@@ -1179,8 +1177,6 @@ public class Lettera extends AppCompatActivity
 		registerReceiver(m_receiver, intent_filter);
 	    m_receiver_registered = true;
 	}
-
-	prepare_schedules();
     }
 
     public static int background_color()

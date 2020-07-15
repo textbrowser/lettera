@@ -56,6 +56,7 @@ public class Database extends SQLiteOpenHelper
     private final static String DATABASE_NAME = "lettera.db";
     private final static String UNKNOWN_EMAIL = "unknown@unknown.org";
     private final static int DATABASE_VERSION = 1;
+    private final static int MAXIMUM_ITERATIONS_PER_DOWNLOAD = 100;
     private static Database s_instance = null;
 
     private Database(Context context)
@@ -1996,7 +1997,7 @@ public class Database extends SQLiteOpenHelper
 		 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    int length = messages.length;
 
-	    for(int i = length - 1; i >= 0; i--)
+	    for(int i = length - 1, k = 0; i >= 0; i--)
 	    {
 		Message message = messages[i];
 
@@ -2300,8 +2301,10 @@ public class Database extends SQLiteOpenHelper
 		{
 		}
 
-		if(interrupt.get())
+		if(interrupt.get() || k >= MAXIMUM_ITERATIONS_PER_DOWNLOAD)
 		    break;
+		else
+		    k += 1;
 	    }
 
 	    if(enable_database_delete)
