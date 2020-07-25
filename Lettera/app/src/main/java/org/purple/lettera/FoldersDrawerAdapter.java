@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 public class FoldersDrawerAdapter extends RecyclerView.Adapter
@@ -226,9 +227,9 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 	}
     }
 
-    private FoldersDrawer m_folders_drawer = null;
     private String m_email_account = "";
     private String m_selected_folder_name = "";
+    private WeakReference<FoldersDrawer> m_folders_drawer = null;
     private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
     private final static Database s_database = Database.instance();
     private final static int s_icons[] = new int[IconsEnumerator.XYZ + 1];
@@ -257,7 +258,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 
     private void dismiss()
     {
-	if(m_folders_drawer != null)
+	if(m_folders_drawer.get() != null)
 	    /*
 	    ** Display the selection and then close the Folders drawer.
 	    */
@@ -267,14 +268,15 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		@Override
 		public void run()
 		{
-		    m_folders_drawer.dismiss();
+		    if(m_folders_drawer.get() != null)
+			m_folders_drawer.get().dismiss();
 		}
 	    }, 250);
     }
 
     public FoldersDrawerAdapter(FoldersDrawer folders_drawer)
     {
-	m_folders_drawer = folders_drawer;
+	m_folders_drawer = new WeakReference<> (folders_drawer);
 	s_icons[IconsEnumerator.DRAFTS] = R.drawable.drafts_folder;
 	s_icons[IconsEnumerator.IMPORTANT] = R.drawable.important_folder;
 	s_icons[IconsEnumerator.INBOX] = R.drawable.inbox_folder;

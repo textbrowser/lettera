@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 public class MoveMessagesAdapter extends RecyclerView.Adapter
@@ -218,10 +219,10 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 	}
     }
 
-    private MoveMessages m_move_messages = null;
     private String m_email_account = "";
     private String m_folder_name = "";
     private String m_selected_folder_name = "";
+    private WeakReference<MoveMessages> m_move_messages = null;
     private final HashSet<RadioButton> m_visible_buttons = new HashSet<> ();
     private final static Database s_database = Database.instance();
     private final static int s_icons[] = new int[IconsEnumerator.XYZ + 1];
@@ -250,7 +251,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 
     private void dismiss()
     {
-	if(m_move_messages != null)
+	if(m_move_messages.get() != null)
 	    /*
 	    ** Display the selection and then close the dialog.
 	    */
@@ -260,7 +261,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 		@Override
 		public void run()
 		{
-		    m_move_messages.dismiss();
+		    m_move_messages.get().dismiss();
 		}
 	    }, 250);
     }
@@ -271,7 +272,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
     {
 	m_email_account = email_account;
 	m_folder_name = folder_name;
-	m_move_messages = move_messages;
+	m_move_messages = new WeakReference<> (move_messages);
 	s_icons[IconsEnumerator.DRAFTS] = R.drawable.drafts_folder;
 	s_icons[IconsEnumerator.IMPORTANT] = R.drawable.important_folder;
 	s_icons[IconsEnumerator.INBOX] = R.drawable.inbox_folder;
