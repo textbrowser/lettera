@@ -1148,7 +1148,7 @@ public class Lettera extends AppCompatActivity
 
 	if(m_receiver_registered)
 	{
-	    LocalBroadcastManager.getInstance(this).
+	    LocalBroadcastManager.getInstance(getApplicationContext()).
 		unregisterReceiver(m_receiver);
 	    m_receiver_registered = false;
 	}
@@ -1173,7 +1173,7 @@ public class Lettera extends AppCompatActivity
 
 	    intent_filter.addAction("org.purple.lettera.set_message_selected");
 	    intent_filter.addAction("org.purple.lettera.set_messages_unread");
-	    LocalBroadcastManager.getInstance(this).
+	    LocalBroadcastManager.getInstance(getApplicationContext()).
 		registerReceiver(m_receiver, intent_filter);
 	    m_receiver_registered = true;
 	}
