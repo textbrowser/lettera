@@ -1323,7 +1323,7 @@ public class Lettera extends AppCompatActivity
 		break;
 	    case "night":
 		background_color = Color.BLACK;
-		divider_color = Color.parseColor("#1fffffff");
+		divider_color = Color.parseColor("#33ffffff");
 		text_color = Color.WHITE;
 	    default:
 		break;

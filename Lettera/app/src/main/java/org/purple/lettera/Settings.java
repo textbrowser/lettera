@@ -1158,7 +1158,7 @@ public class Settings
 		break;
 	    case "night":
 		background_color = Color.BLACK;
-		divider_color = Color.WHITE;
+		divider_color = Color.parseColor("#33ffffff");
 		text_color = Color.WHITE;
 		break;
 	    default:
