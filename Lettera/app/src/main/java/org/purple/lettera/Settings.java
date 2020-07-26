@@ -530,7 +530,7 @@ public class Settings
 	}
     };
     private final static String s_color_themes[] = new String[]
-	{"Black & Blue", "Black & Green", "Grayish & Blue", "Default"};
+	{"Black & Blue", "Black & Green", "Grayish & Blue", "Default", "Night"};
     private final static String s_email_folders[] = new String[] {"Drawer"};
     private final static String s_icon_themes[] = new String[] {"Default"};
     private final static String s_proxy_types[] =
@@ -967,6 +967,9 @@ public class Settings
 	case "grayish & blue":
 	    m_color_theme_spinner.setSelection(2);
 	    break;
+	case "night":
+	    m_color_theme_spinner.setSelection(4);
+	    break;
 	default:
 	    m_color_theme_spinner.setSelection(3);
 	    break;
@@ -1152,6 +1155,11 @@ public class Settings
 		background_color = Color.parseColor("#bdbdbd");
 		divider_color = Color.WHITE;
 		text_color = Color.parseColor("#0d47a1");
+		break;
+	    case "night":
+		background_color = Color.BLACK;
+		divider_color = Color.WHITE;
+		text_color = Color.WHITE;
 		break;
 	    default:
 		break;

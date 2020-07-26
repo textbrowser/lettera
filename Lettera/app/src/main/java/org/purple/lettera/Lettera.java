@@ -1321,6 +1321,10 @@ public class Lettera extends AppCompatActivity
 		divider_color = Color.WHITE;
 		text_color = Color.parseColor("#0d47a1");
 		break;
+	    case "night":
+		background_color = Color.BLACK;
+		divider_color = Color.parseColor("#1fffffff");
+		text_color = Color.WHITE;
 	    default:
 		break;
 	    }
