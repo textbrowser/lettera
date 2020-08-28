@@ -82,6 +82,7 @@ Remaining Items
 - POP3.
 - Proceed to next letter on delete / move.
 - Reset of Network widgets in Settings.
+- Retain select-all setting and apply it to arriving messages.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
 - What's a deleted message?
