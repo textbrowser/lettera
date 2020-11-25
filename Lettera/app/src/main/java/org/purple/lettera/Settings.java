@@ -1918,7 +1918,7 @@ public class Settings
 	** Privacy
 	*/
 
-	array = new String[] {"McEliece", "RSA"};
+	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera, android.R.layout.simple_spinner_item, array);
 	m_encryption_key_spinner.setAdapter(array_adapter);
