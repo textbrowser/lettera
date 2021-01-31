@@ -322,7 +322,7 @@ public class Lettera extends AppCompatActivity
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
     private static int s_default_text_color = 0;
-    public final static String NONE_FOLDER = "(Please Select)";
+    public final static String NONE_FOLDER = "(Please Select Folder)";
 
     private String email_account()
     {

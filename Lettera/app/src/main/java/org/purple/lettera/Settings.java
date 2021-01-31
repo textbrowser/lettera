@@ -189,6 +189,7 @@ public class Settings
 	private SMTPTransport m_smtp_transport = null;
 	private Store m_store = null;
 	private String m_email = "";
+	private String m_error = "";
 	private String m_host = "";
 	private String m_password = "";
 	private String m_port = "";
@@ -198,7 +199,6 @@ public class Settings
 	private String m_proxy_port = "";
 	private String m_proxy_type = "";
 	private String m_proxy_user = "";
-	private boolean m_error = true;
 
 	private EmailTest(Dialog dialog,
 			  String email,
@@ -250,7 +250,7 @@ public class Settings
 		    m_store = session.getStore(m_protocol);
 		    m_store.connect
 			(m_host, Integer.valueOf(m_port), m_email, m_password);
-		    m_error = false;
+		    m_error = "";
 		    break;
 		case "smtp":
 		case "smtps":
@@ -259,16 +259,16 @@ public class Settings
 		    m_smtp_transport.setRequireStartTLS(true);
 		    m_smtp_transport.connect
 			(m_host, Integer.valueOf(m_port), m_email, m_password);
-		    m_error = false;
+		    m_error = "";
 		    break;
 		default:
-		    m_error = true;
+		    m_error = "unknown protocol";
 		    break;
 		}
 	    }
 	    catch(Exception exception)
 	    {
-		m_error = true;
+		m_error = exception.getMessage();
 	    }
 	    finally
 	    {
@@ -318,10 +318,14 @@ public class Settings
 			    break;
 			}
 
-			if(m_error)
+			if(!m_error.isEmpty())
 			    Windows.show_dialog
 				(m_lettera,
-				 m_protocol.toUpperCase() + " test failed!",
+				 m_protocol.toUpperCase() +
+				 " test failed!" +
+				 "\n\n(" +
+				 m_error +
+				 ")",
 				 "Error");
 			else
 			    Windows.show_dialog
