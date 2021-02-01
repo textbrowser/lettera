@@ -1140,6 +1140,8 @@ public class Lettera extends AppCompatActivity
 	catch(Exception exception)
 	{
 	}
+
+	stop_schedules();
     }
 
     @Override
@@ -1161,6 +1163,8 @@ public class Lettera extends AppCompatActivity
 	catch(Exception exception)
 	{
 	}
+
+	stop_schedules();
     }
 
     @Override
