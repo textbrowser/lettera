@@ -277,7 +277,6 @@
                                 android:layout_weight="0.70"
                                 android:ems="10"
                                 android:hint="@string/address"
-                                android:importantForAutofill="no"
                                 android:inputType="textPersonName"
                                 android:nextFocusDown="@id/inbound_port"
                                 tools:targetApi="o" />
@@ -289,7 +288,6 @@
                                 android:layout_weight="0.30"
                                 android:ems="10"
                                 android:hint="@string/port"
-                                android:importantForAutofill="no"
                                 android:inputType="number"
                                 android:text="@string/_993"
                                 tools:targetApi="o" />
@@ -303,7 +301,6 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:hint="@string/e_mail"
-                            android:importantForAutofill="no"
                             android:inputType="textEmailAddress"
                             tools:targetApi="o" />
 
@@ -313,7 +310,6 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="@string/password"
-                            android:importantForAutofill="no"
                             android:inputType="textPassword"
                             tools:targetApi="o" />
 
@@ -368,7 +364,6 @@
                                 android:layout_weight="0.70"
                                 android:ems="10"
                                 android:hint="@string/address"
-                                android:importantForAutofill="no"
                                 android:inputType="textPersonName"
                                 android:nextFocusDown="@id/outbound_port"
                                 tools:targetApi="o" />
@@ -380,7 +375,6 @@
                                 android:layout_weight="0.30"
                                 android:ems="10"
                                 android:hint="@string/port"
-                                android:importantForAutofill="no"
                                 android:inputType="number"
                                 android:text="@string/_587"
                                 tools:targetApi="o" />
@@ -394,7 +388,6 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:hint="@string/e_mail"
-                            android:importantForAutofill="no"
                             android:inputType="textEmailAddress"
                             tools:targetApi="o" />
 
@@ -404,7 +397,6 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="@string/password"
-                            android:importantForAutofill="no"
                             android:inputType="textPassword"
                             tools:targetApi="o" />
 
@@ -453,7 +445,6 @@
                                 android:layout_height="wrap_content"
                                 android:ems="10"
                                 android:hint="@string/address"
-                                android:importantForAutofill="no"
                                 android:inputType="textPersonName"
                                 android:nextFocusDown="@id/proxy_port"
                                 app:layout_columnWeight="0.70"
@@ -465,7 +456,6 @@
                                 android:layout_height="wrap_content"
                                 android:ems="10"
                                 android:hint="@string/port"
-                                android:importantForAutofill="no"
                                 android:inputType="number"
                                 android:nextFocusDown="@id/proxy_user"
                                 app:layout_columnWeight="0.30"
@@ -477,7 +467,6 @@
                                 android:layout_height="wrap_content"
                                 android:ems="10"
                                 android:hint="@string/user"
-                                android:importantForAutofill="no"
                                 android:inputType="textPersonName"
                                 android:nextFocusDown="@id/proxy_password"
                                 app:layout_columnWeight="0.70"
@@ -489,7 +478,6 @@
                                 android:layout_height="wrap_content"
                                 android:ems="10"
                                 android:hint="@string/password"
-                                android:importantForAutofill="no"
                                 android:inputType="textPassword"
                                 app:layout_columnWeight="0.30"
                                 tools:targetApi="o" />

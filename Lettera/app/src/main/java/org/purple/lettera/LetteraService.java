@@ -52,23 +52,13 @@ public class LetteraService extends Service
 	PendingIntent pendingIntent = PendingIntent.getActivity
 	    (this, 0, notificationIntent, 0);
 
-	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-	    notification = new Notification.Builder(this, "").
-		setContentIntent(pendingIntent).
-		setContentText("Lettera Activity").
-		setContentTitle("Lettera Activity").
-		setSmallIcon(R.drawable.lettera).
-		setTicker("Lettera Activity").
-		build();
-	else
-	    notification = new Notification.Builder(this).
-		setContentIntent(pendingIntent).
-		setContentText("Lettera Activity").
-		setContentTitle("Lettera Activity").
-		setSmallIcon(R.drawable.lettera).
-		setTicker("Lettera Activity").
-		build();
-
+	notification = new Notification.Builder(this).
+	    setContentIntent(pendingIntent).
+	    setContentText("Lettera Activity").
+	    setContentTitle("Lettera Activity").
+	    setSmallIcon(R.drawable.lettera).
+	    setTicker("Lettera Activity").
+	    build();
 	startForeground(NOTIFICATION_ID, notification);
     }
 

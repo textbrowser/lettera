@@ -91,14 +91,7 @@ public class MoveMessages
 	*/
 
 	m_popup_window = new PopupWindow(m_lettera);
-
-	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-	    m_popup_window.setAttachedInDecor(true);
-	else
-	{
-	    m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
-	}
-
+	m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setOutsideTouchable(true);
@@ -144,34 +137,6 @@ public class MoveMessages
     {
 	if(view == null) // Should never, ever be true!
 	{
-	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		m_popup_window.showAtLocation
-		    (m_parent, Gravity.START | Gravity.TOP, 0, 0);
-	}
-	else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-	{
-	    int location[] = new int[2];
-
-	    try
-	    {
-		view.getLocationOnScreen(location);
-	    }
-	    catch(Exception exception)
-	    {
-		m_popup_window.showAtLocation
-		    (m_parent, Gravity.START | Gravity.TOP, 0, 0);
-
-		return;
-	    }
-
-	    Rect rect = new Rect();
-
-	    rect.left = location[0] -
-		m_popup_window.getWidth() +
-		view.getWidth();
-	    rect.bottom = location[1] + view.getHeight();
-	    m_popup_window.showAtLocation
-		(view, Gravity.START | Gravity.TOP, rect.left, rect.bottom);
 	}
 	else
 	    m_popup_window.showAsDropDown

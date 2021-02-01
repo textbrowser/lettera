@@ -62,10 +62,6 @@ public abstract class Windows
 	    AlertDialog alert_dialog = new AlertDialog.Builder
 		(context).create();
 
-	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		alert_dialog.getWindow().setBackgroundDrawable
-		    (new ColorDrawable(Lettera.background_color()));
-
 	    alert_dialog.setButton
 		(AlertDialog.BUTTON_NEUTRAL,
 		 "Close",
@@ -189,10 +185,6 @@ public abstract class Windows
 
 	    AlertDialog alert_dialog = new AlertDialog.Builder
 		(context).create();
-
-	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		alert_dialog.getWindow().setBackgroundDrawable
-		    (new ColorDrawable(Lettera.background_color()));
 
 	    alert_dialog.setButton
 		(AlertDialog.BUTTON_NEGATIVE, "No",

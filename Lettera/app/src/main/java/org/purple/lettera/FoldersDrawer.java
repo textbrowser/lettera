@@ -38,6 +38,7 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import java.lang.ref.WeakReference;
 
 public class FoldersDrawer
 {
@@ -62,7 +63,6 @@ public class FoldersDrawer
 	}
     }
 
-    private Context m_context = null;
     private FoldersDrawerAdapter m_adapter = null;
     private FoldersDrawerLinearLayoutManager m_layout_manager = null;
     private ImageButton m_close_button = null;
@@ -71,14 +71,15 @@ public class FoldersDrawer
     private TextView m_email_account = null;
     private View m_parent = null;
     private View m_view = null;
+    private WeakReference<Context> m_context = null;
     private final static Database s_database = Database.instance();
 
     public FoldersDrawer(Context context, View parent)
     {
-	m_context = context;
+	m_context = new WeakReference<> (context);
 	m_parent = parent;
 
-	LayoutInflater inflater = (LayoutInflater) m_context.
+	LayoutInflater inflater = (LayoutInflater) m_context.get().
 	    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 	m_view = inflater.inflate(R.layout.folders_drawer, null);
@@ -87,21 +88,15 @@ public class FoldersDrawer
 	** The cute popup.
 	*/
 
-	m_popup_window = new PopupWindow(m_context);
-
-	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-	{
-	    m_popup_window.setAttachedInDecor(true);
-	    m_popup_window.setBackgroundDrawable(null);
-	}
-
+	m_popup_window = new PopupWindow(m_context.get());
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
 	m_popup_window.setOutsideTouchable(true);
 	m_popup_window.setWidth
 	    ((int) (0.80 *
-		    m_context.getResources().getDisplayMetrics().widthPixels));
+		    m_context.get().getResources().getDisplayMetrics().
+		    widthPixels));
 
 	/*
 	** Initialize other widgets.
@@ -109,7 +104,8 @@ public class FoldersDrawer
 
 	initialize_widget_members();
 	m_adapter = new FoldersDrawerAdapter(FoldersDrawer.this);
-	m_layout_manager = new FoldersDrawerLinearLayoutManager(m_context);
+	m_layout_manager = new FoldersDrawerLinearLayoutManager
+	    (m_context.get());
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
@@ -149,8 +145,8 @@ public class FoldersDrawer
 
     public void dismiss()
     {
-	if(m_context instanceof Lettera)
-	    ((Lettera) m_context).prepare_folders_and_messages_widgets
+	if(m_context.get() != null && m_context.get() instanceof Lettera)
+	    ((Lettera) m_context.get()).prepare_folders_and_messages_widgets
 		(selected_folder_name());
 
 	s_database.save_setting
@@ -190,12 +186,9 @@ public class FoldersDrawer
 	    (Lettera.text_color());
 	m_email_account.setTextColor(Lettera.text_color());
 
-	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+	if(m_context.get() != null)
 	    m_popup_window.showAsDropDown
-		(m_parent, 0, 0, Gravity.START | Gravity.TOP);
-	else
-	    m_popup_window.showAsDropDown
-		(new View(m_context), 0, 0, Gravity.START | Gravity.TOP);
+		(new View(m_context.get()), 0, 0, Gravity.START | Gravity.TOP);
 
 	m_view.findViewById(R.id.top_divider).setBackgroundColor
 	    (Lettera.divider_color());
@@ -205,22 +198,11 @@ public class FoldersDrawer
 	    View view = null;
 
 	    if(m_popup_window.getBackground() == null)
-	    {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		    view = (View) m_popup_window.getContentView().getParent();
-		else
-		    view = m_popup_window.getContentView();
-	    }
+		view = m_popup_window.getContentView();
 	    else
-	    {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		    view = (View) m_popup_window.getContentView().getParent().
-			getParent();
-		else
-		    view = (View) m_popup_window.getContentView().getParent();
-	    }
+		view = (View) m_popup_window.getContentView().getParent();
 
-	    WindowManager window_manager = (WindowManager) m_context.
+	    WindowManager window_manager = (WindowManager) m_context.get().
 		getSystemService(Context.WINDOW_SERVICE);
 	    WindowManager.LayoutParams layout_params =
 		(WindowManager.LayoutParams) view.getLayoutParams();
