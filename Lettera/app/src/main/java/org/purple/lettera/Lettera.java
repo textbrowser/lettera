@@ -295,6 +295,7 @@ public class Lettera extends AppCompatActivity
     private Runnable m_scroll_runnable = null;
     private ScheduledExecutorService m_folders_drawer_schedule = null;
     private ScheduledExecutorService m_status_message_schedule = null;
+    private Settings m_settings = null;
     private String m_selected_folder_name = "";
     private String m_status_message = "";
     private TextView m_current_folder = null;
@@ -522,7 +523,7 @@ public class Lettera extends AppCompatActivity
 		@Override
 		public void onClick(View view)
 		{
-		    if(Lettera.this.isFinishing() || m_folders_drawer == null)
+		    if(Lettera.this.isFinishing())
 			return;
 
 		    m_folders_drawer.show();
@@ -552,7 +553,7 @@ public class Lettera extends AppCompatActivity
 		@Override
 		public void onClick(View view)
 		{
-		    if(Lettera.this.isFinishing() || m_folders_drawer == null)
+		    if(Lettera.this.isFinishing())
 			return;
 
 		    String email_account = email_account();
@@ -665,10 +666,7 @@ public class Lettera extends AppCompatActivity
 		    if(Lettera.this.isFinishing())
 			return;
 
-		    Settings settings = new Settings
-			(Lettera.this, findViewById(R.id.main_layout));
-
-		    settings.show();
+		    m_settings.show();
 		}
 	    });
     }
@@ -1083,6 +1081,8 @@ public class Lettera extends AppCompatActivity
 		m_selected_folder_name = NONE_FOLDER;
 	}
 
+	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
+
 	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
 	{
 	    @Override
@@ -1119,6 +1119,7 @@ public class Lettera extends AppCompatActivity
 		}
 	    }
 	}, 750);
+
 	prepare_colors(m_database.setting("color_theme"));
 	prepare_folders_and_messages_widgets(selected_folder_name());
 	prepare_generic_widgets();

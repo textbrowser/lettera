@@ -38,6 +38,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.lang.ref.WeakReference;
 import java.util.Date;
 
 public class MessageItem extends View
@@ -45,7 +46,6 @@ public class MessageItem extends View
     private Button m_open = null;
     private CheckBox m_selected = null;
     private CompoundButton.OnCheckedChangeListener m_selected_listener = null;
-    private Context m_context = null;
     private ImageView m_attachment = null;
     private LayoutInflater m_inflater = null;
     private Lettera m_lettera = null;
@@ -57,6 +57,7 @@ public class MessageItem extends View
     private TextView m_summary = null;
     private View m_divider = null;
     private View m_view = null;
+    private WeakReference<Context> m_context = null;
     private final static Database s_database = Database.instance();
     private int m_position = -1;
     private long m_oid = 0L;
@@ -109,8 +110,8 @@ public class MessageItem extends View
     public MessageItem(Context context, Lettera lettera, ViewGroup view_group)
     {
 	super(context);
-	m_context = context;
-	m_inflater = (LayoutInflater) m_context.getSystemService
+	m_context = new WeakReference<> (context);
+	m_inflater = (LayoutInflater) m_context.get().getSystemService
 	    (Context.LAYOUT_INFLATER_SERVICE);
 	m_lettera = lettera;
 	m_view = m_inflater.inflate(R.layout.letter_line, view_group, false);
