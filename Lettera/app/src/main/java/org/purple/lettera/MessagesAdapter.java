@@ -75,7 +75,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 
     public MessagesAdapter(Context context, Lettera lettera)
     {
-	m_lettera = lettera;
+	m_lettera = new WeakReference<> (lettera);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class MessagesAdapter extends RecyclerView.Adapter
 	(ViewGroup parent, int view_type)
     {
 	return new ViewHolderMessage
-	    (new MessageItem(parent.getContext(), m_lettera, parent));
+	    (new MessageItem(parent.getContext(), m_lettera.get(), parent));
     }
 
     public String folder_name()
