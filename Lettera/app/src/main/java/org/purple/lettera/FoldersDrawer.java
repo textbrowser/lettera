@@ -69,15 +69,15 @@ public class FoldersDrawer
     private PopupWindow m_popup_window = null;
     private RecyclerView m_recycler = null;
     private TextView m_email_account = null;
-    private View m_parent = null;
     private View m_view = null;
     private WeakReference<Context> m_context = null;
+    private WeakReference<View> m_parent = null;
     private final static Database s_database = Database.instance();
 
     public FoldersDrawer(Context context, View parent)
     {
 	m_context = new WeakReference<> (context);
-	m_parent = parent;
+	m_parent = new WeakReference<> (parent);
 
 	LayoutInflater inflater = (LayoutInflater) m_context.get().
 	    getSystemService(Context.LAYOUT_INFLATER_SERVICE);

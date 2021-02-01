@@ -45,6 +45,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -123,7 +124,10 @@ public class Letter
 		}
 	    }
 
-	    m_lettera.runOnUiThread(new Runnable()
+	    if(m_lettera.get() == null)
+		return;
+
+	    m_lettera.get().runOnUiThread(new Runnable()
 	    {
 		@Override
 		public void run()
@@ -180,7 +184,9 @@ public class Letter
 			 m_folder_name,
 			 true,
 			 m_oid);
-		    m_lettera.message_read();
+
+		    if(m_lettera.get() != null)
+			m_lettera.get().message_read();
 
 		    try
 		    {
@@ -200,16 +206,16 @@ public class Letter
     private Button m_move_to_folder_button = null;
     private Button m_return_button = null;
     private Dialog m_dialog = null;
-    private Lettera m_lettera = null;
-    private MessagesAdapter m_messages_adapter = null;
     private String m_email_account = "";
     private String m_folder_name = "";
     private TextView m_from = null;
     private TextView m_received_date = null;
     private TextView m_subject = null;
     private TextView m_to_email_account = null;
-    private View m_parent = null;
     private View m_view = null;
+    private WeakReference<Lettera> m_lettera = null;
+    private WeakReference<MessagesAdapter> m_messages_adapter = null;
+    private WeakReference<View> m_parent = null;
     private WebView m_web_view = null;
     private WindowManager.LayoutParams m_layout_params = null;
     private final static Database s_database = Database.instance();
@@ -219,11 +225,11 @@ public class Letter
 		  MessagesAdapter messages_adapter,
 		  View parent)
     {
-	m_lettera = lettera;
-	m_messages_adapter = messages_adapter;
-	m_parent = parent;
+	m_lettera = new WeakReference<> (lettera);
+	m_messages_adapter = new WeakReference<> (messages_adapter);
+	m_parent = new WeakReference<> (parent);
 
-	LayoutInflater inflater = (LayoutInflater) m_lettera.
+	LayoutInflater inflater = (LayoutInflater) m_lettera.get().
 	    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 	m_view = inflater.inflate(R.layout.letter, null);
@@ -233,7 +239,7 @@ public class Letter
 	*/
 
 	m_dialog = new Dialog
-	    (m_lettera,
+	    (m_lettera.get(),
 	     android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
 	m_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	m_dialog.setCancelable(true);
@@ -304,7 +310,8 @@ public class Letter
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    final AtomicBoolean confirmed = new AtomicBoolean(false);
@@ -317,8 +324,8 @@ public class Letter
 			    if(confirmed.get())
 			    {
 				s_database.delete_message
-				    (m_lettera,
-				     m_messages_adapter,
+				    (m_lettera.get(),
+				     m_messages_adapter.get(),
 				     m_email_account,
 				     m_folder_name,
 				     m_oid);
@@ -328,7 +335,10 @@ public class Letter
 		    };
 
 		    Windows.show_prompt_dialog
-			(m_lettera, listener, "Delete the message?", confirmed);
+			(m_lettera.get(),
+			 listener,
+			 "Delete the message?",
+			 confirmed);
 		}
 	    });
 
@@ -339,13 +349,14 @@ public class Letter
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    Menu menu = null;
 		    MenuItem menu_item = null;
 		    PopupMenu popup_menu  = new PopupMenu
-			(m_lettera, m_menu_button);
+			(m_lettera.get(), m_menu_button);
 
 		    menu = popup_menu.getMenu();
 		    menu_item = menu.add(0, 1, Menu.NONE, "Forward");
@@ -362,7 +373,10 @@ public class Letter
 				     m_folder_name,
 				     false,
 				     m_oid);
-				m_lettera.message_read();
+
+				if(m_lettera.get() != null)
+				    m_lettera.get().message_read();
+
 				return true;
 			    }
 			});
@@ -380,7 +394,10 @@ public class Letter
 				     m_folder_name,
 				     true,
 				     m_oid);
-				m_lettera.message_read();
+
+				if(m_lettera.get() != null)
+				    m_lettera.get().message_read();
+
 				return true;
 			    }
 			});
@@ -397,11 +414,12 @@ public class Letter
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    MoveMessages move_messages = new MoveMessages
-			(m_lettera,
+			(m_lettera.get(),
 			 m_email_account,
 			 m_folder_name,
 			 m_view,
@@ -417,7 +435,8 @@ public class Letter
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    dismiss();
@@ -466,10 +485,10 @@ public class Letter
 	try
 	{
 	    dialog = new Dialog
-		(m_lettera,
+		(m_lettera.get(),
 		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    Windows.show_progress_dialog
-		(m_lettera,
+		(m_lettera.get(),
 		 dialog,
 		 "Downloading content. Please be patient.",
 		 null);
