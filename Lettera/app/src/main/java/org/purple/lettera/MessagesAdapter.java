@@ -32,12 +32,13 @@ import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import java.lang.ref.WeakReference;
 
 public class MessagesAdapter extends RecyclerView.Adapter
 {
-    private Lettera m_lettera = null;
     private String m_email_account = "";
     private String m_folder_name = "";
+    private WeakReference<Lettera> m_lettera = null;
     private final static Database s_database = Database.instance();
 
     public class ViewHolderMessage extends RecyclerView.ViewHolder

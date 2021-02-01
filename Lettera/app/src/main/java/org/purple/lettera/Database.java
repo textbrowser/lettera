@@ -36,6 +36,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Base64;
 import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
+import java.lang.ref.WeakReference;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -52,6 +53,7 @@ public class Database extends SQLiteOpenHelper
     private SQLiteDatabase m_db = null;
     private String m_read_message_cursor_email_account = "";
     private String m_read_message_cursor_folder_name = "";
+    private WeakReference<Lettera> m_lettera = null;
     private final Object m_read_message_cursor_mutex = new Object();
     private final static String DATABASE_NAME = "lettera.db";
     private final static String UNKNOWN_EMAIL = "unknown@unknown.org";
@@ -59,7 +61,7 @@ public class Database extends SQLiteOpenHelper
     private final static int MAXIMUM_ITERATIONS_PER_DOWNLOAD = 100;
     private static Database s_instance = null;
 
-    private Database(Context context)
+    private Database(Context context, Lettera lettera)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
@@ -71,6 +73,8 @@ public class Database extends SQLiteOpenHelper
 	{
 	    m_db = null;
 	}
+
+	m_lettera = new WeakReference<> (lettera);
     }
 
     private void write_recipient(InternetAddress internet_address,
@@ -963,10 +967,11 @@ public class Database extends SQLiteOpenHelper
 	return s_instance; // Should never be null.
     }
 
-    public static synchronized Database instance(Context context)
+    public static synchronized Database instance
+	(Context context, Lettera lettera)
     {
 	if(s_instance == null)
-	    s_instance = new Database(context.getApplicationContext());
+	    s_instance = new Database(context, lettera);
 
 	return s_instance;
     }
@@ -2007,7 +2012,8 @@ public class Database extends SQLiteOpenHelper
 		Cursor cursor = null;
 		String to_folder_name = folder.getName();
 		int has_been_read = 0;
-		int selected = 0;
+		int selected = m_lettera.get() != null ?
+		    (m_lettera.get().m_all_selected.get() ? 1 : 0) : 0;
 		long message_uid = 0L;
 
 		try

@@ -323,6 +323,7 @@ public class Lettera extends AppCompatActivity
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
     private static int s_default_text_color = 0;
+    public final AtomicBoolean m_all_selected = new AtomicBoolean(false);
     public final static String NONE_FOLDER = "(Please Select Folder)";
 
     private String email_account()
@@ -634,8 +635,10 @@ public class Lettera extends AppCompatActivity
 	    {
 		@Override
 		public void onCheckedChanged
-		    (CompoundButton button_view, final boolean is_checked)
+		    (CompoundButton button_view, boolean is_checked)
 		{
+		    m_all_selected.set(is_checked);
+
 		    new Handler
 			(Looper.getMainLooper()).post(new Runnable()
 		    {
@@ -647,7 +650,7 @@ public class Lettera extends AppCompatActivity
 				 m_messages_adapter,
 				 email_account(),
 				 selected_folder_name(),
-				 is_checked);
+				 m_all_selected.get());
 			}
 		    });
 		}
@@ -946,7 +949,7 @@ public class Lettera extends AppCompatActivity
 	m_receiver = new LetteraBroadcastReceiver();
 	s_instance = this;
 	LetteraService.startForegroundTask(getApplicationContext());
-	m_database = Database.instance(getApplicationContext());
+	m_database = Database.instance(getApplicationContext(), this);
 
 	/*
 	** JavaMail may open sockets on the main thread. StrictMode
@@ -1376,6 +1379,7 @@ public class Lettera extends AppCompatActivity
 
 	if(count == 0)
 	{
+	    m_all_selected.set(false);
 	    m_delete_button.setVisibility(View.GONE);
 	    m_mark_as_unread.setVisibility(View.GONE);
 	    m_move_to_folder_button.setVisibility(View.GONE);
@@ -1400,8 +1404,7 @@ public class Lettera extends AppCompatActivity
 		(count == 0 ? View.GONE : View.VISIBLE);
 	    m_select_all_checkbox.setEnabled(true);
 	    m_select_all_checkbox.setOnCheckedChangeListener(null);
-	    m_select_all_checkbox.setChecked
-		(count == m_messages_adapter.getItemCount());
+	    m_select_all_checkbox.setChecked(m_all_selected.get());
 	    m_select_all_checkbox.setOnCheckedChangeListener
 		(m_select_all_checkbox_listener);
 	}
@@ -1412,6 +1415,7 @@ public class Lettera extends AppCompatActivity
 	if(!folder_name.equals(m_messages_adapter.folder_name()) &&
 	   !folder_name.isEmpty())
 	{
+	    m_all_selected.set(false);
 	    m_select_all_checkbox.setOnCheckedChangeListener(null);
 	    m_select_all_checkbox.setChecked(false);
 	    m_select_all_checkbox.setOnCheckedChangeListener
