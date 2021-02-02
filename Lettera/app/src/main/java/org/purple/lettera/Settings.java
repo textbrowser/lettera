@@ -51,6 +51,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.sun.mail.smtp.SMTPTransport;
+import java.lang.ref.WeakReference;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -91,7 +92,10 @@ public class Settings
 	    {
 	    }
 
-	    m_lettera.runOnUiThread(new Runnable()
+	    if(m_lettera.get() == null)
+		return;
+
+	    m_lettera.get().runOnUiThread(new Runnable()
 	    {
 		@Override
 		public void run()
@@ -117,7 +121,8 @@ public class Settings
 			    ** Order!
 			    */
 
-			    m_lettera.email_account_deleted();
+			    if(m_lettera.get() != null)
+				m_lettera.get().email_account_deleted();
 			}
 		    }
 		    catch(Exception exception)
@@ -152,7 +157,10 @@ public class Settings
 	    {
 	    }
 
-	    m_lettera.runOnUiThread(new Runnable()
+	    if(m_lettera.get() == null)
+		return;
+
+	    m_lettera.get().runOnUiThread(new Runnable()
 	    {
 		@Override
 		public void run()
@@ -170,7 +178,9 @@ public class Settings
 		    {
 			if(ok.get())
 			{
-			    m_lettera.messages_deleted();
+			    if(m_lettera.get() != null)
+				m_lettera.get().messages_deleted();
+
 			    m_remove_local_messages_verify_checkbox.
 				setChecked(false);
 			}
@@ -291,7 +301,10 @@ public class Settings
 		}
 	    }
 
-	    m_lettera.runOnUiThread(new Runnable()
+	    if(m_lettera.get() == null)
+		return;
+
+	    m_lettera.get().runOnUiThread(new Runnable()
 	    {
 		@Override
 		public void run()
@@ -320,7 +333,7 @@ public class Settings
 
 			if(!m_error.isEmpty())
 			    Windows.show_dialog
-				(m_lettera,
+				(m_lettera.get(),
 				 m_protocol.toUpperCase() +
 				 " test failed!" +
 				 "\n\n(" +
@@ -329,7 +342,7 @@ public class Settings
 				 "Error");
 			else
 			    Windows.show_dialog
-				(m_lettera,
+				(m_lettera.get(),
 				 m_protocol.toUpperCase() +
 				 " test succeeded!",
 				 "Success");
@@ -381,7 +394,10 @@ public class Settings
 		m_error = true;
 	    }
 
-	    m_lettera.runOnUiThread(new Runnable()
+	    if(m_lettera.get() == null)
+		return;
+
+	    m_lettera.get().runOnUiThread(new Runnable()
 	    {
 		@Override
 		public void run()
@@ -446,14 +462,18 @@ public class Settings
 
 		    if(!m_error)
 			Windows.show_dialog
-			    (m_lettera, "Key pairs generated!", "Success");
+			    (m_lettera.get(),
+			     "Key pairs generated!",
+			     "Success");
 		    else
 		    {
 			s_database.delete("open_pgp");
 			s_pgp.set_encryption_key_pair(null);
 			s_pgp.set_signature_key_pair(null);
 			Windows.show_dialog
-			    (m_lettera, "Cannot generate key pairs!", "Error");
+			    (m_lettera.get(),
+			     "Cannot generate key pairs!",
+			     "Error");
 		    }
 		}
 	    });
@@ -469,15 +489,14 @@ public class Settings
     private Button m_remove_local_messages_button = null;
     private Button m_test_inbound_button = null;
     private Button m_test_outbound_button = null;
-    private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_delete_account_verify_checkbox = null;
+    private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_generate_keys_checkbox = null;
     private CheckBox m_primary_account_checkbox = null;
     private CheckBox m_remove_local_messages_verify_checkbox = null;
     private CheckBox m_show_status_bar = null;
     private Dialog m_dialog = null;
     private ImageButton m_return_button = null;
-    private Lettera m_lettera = null;
     private Spinner m_accounts_spinner = null;
     private Spinner m_color_theme_spinner = null;
     private Spinner m_email_folders_spinner = null;
@@ -503,9 +522,10 @@ public class Settings
     private TextView m_signature_key_data = null;
     private View m_display_layout = null;
     private View m_network_layout = null;
-    private View m_parent = null;
     private View m_privacy_layout = null;
     private View m_view = null;
+    private WeakReference<Lettera> m_lettera = null;
+    private WeakReference<View> m_parent = null;
     private WindowManager.LayoutParams m_layout_params = null;
     private final static PGP s_pgp = PGP.instance();
     private final static Database s_database = Database.instance();
@@ -574,7 +594,7 @@ public class Settings
 	    {
 		show_display_page();
 		Windows.show_dialog
-		    (m_lettera, "Failure (" + error + ")!", "Error");
+		    (m_lettera.get(), "Failure (" + error + ")!", "Error");
 		return;
 	    }
 
@@ -588,7 +608,7 @@ public class Settings
 	    {
 		show_display_page();
 		Windows.show_dialog
-		    (m_lettera, "Failure (" + error + ")!", "Error");
+		    (m_lettera.get(), "Failure (" + error + ")!", "Error");
 		return;
 	    }
 
@@ -602,7 +622,7 @@ public class Settings
 	    {
 		show_display_page();
 		Windows.show_dialog
-		    (m_lettera, "Failure (" + error + ")!", "Error");
+		    (m_lettera.get(), "Failure (" + error + ")!", "Error");
 		return;
 	    }
 
@@ -616,12 +636,16 @@ public class Settings
 	    {
 		show_display_page();
 		Windows.show_dialog
-		    (m_lettera, "Failure (" + error + ")!", "Error");
+		    (m_lettera.get(), "Failure (" + error + ")!", "Error");
 		return;
 	    }
 
-	    m_lettera.prepare_generic_widgets();
-	    m_lettera.prepare_icons(s_database.settings_element("icon_theme"));
+	    if(m_lettera.get() != null)
+	    {
+		m_lettera.get().prepare_generic_widgets();
+		m_lettera.get().prepare_icons
+		    (s_database.settings_element("icon_theme"));
+	    }
 
 	    /*
 	    ** Network
@@ -751,15 +775,16 @@ public class Settings
 	    {
 		show_network_page();
 		Windows.show_dialog
-		    (m_lettera, "Failure (" + error + ")!", "Error");
+		    (m_lettera.get(), "Failure (" + error + ")!", "Error");
 	    }
 	    else
 	    {
 		if(m_primary_account_checkbox.isChecked())
 		{
 		    if(!m_inbound_email.getText().toString().
-		       equals(s_database.primary_email_account()))
-			m_lettera.primary_email_account_changed
+		       equals(s_database.primary_email_account()) &&
+		       m_lettera.get() != null)
+			m_lettera.get().primary_email_account_changed
 			    (m_inbound_email.getText().toString());
 
 		    content_values.clear();
@@ -767,7 +792,9 @@ public class Settings
 		    content_values.put
 			("value", m_inbound_email.getText().toString());
 		    s_database.save_setting(content_values, true);
-		    m_lettera.populate_folders_from_database();
+
+		    if(m_lettera.get() != null)
+			m_lettera.get().populate_folders_from_database();
 		}
 
 		String selected_item = m_accounts_spinner.
@@ -783,17 +810,22 @@ public class Settings
 		else
 		    populate_network();
 
-		m_lettera.prepare_colors(s_database.setting("color_theme"));
-		m_lettera.prepare_folders_and_messages_widgets
-		    (s_database.
-		     setting("selected_folder_name_" +
-			     s_database.primary_email_account()));
-		m_lettera.prepare_generic_widgets();
-		m_lettera.prepare_icons
-		    (s_database.settings_element("icon_theme"));
-		m_lettera.reactivate_schedules
-		    (Integer.valueOf(m_query_interval_spinner.
-				     getSelectedItem().toString()));
+		if(m_lettera.get() != null)
+		{
+		    m_lettera.get().prepare_colors
+			(s_database.setting("color_theme"));
+		    m_lettera.get().prepare_folders_and_messages_widgets
+			(s_database.
+			 setting("selected_folder_name_" +
+				 s_database.primary_email_account()));
+		    m_lettera.get().prepare_generic_widgets();
+		    m_lettera.get().prepare_icons
+			(s_database.settings_element("icon_theme"));
+		    m_lettera.get().reactivate_schedules
+			(Integer.valueOf(m_query_interval_spinner.
+					 getSelectedItem().toString()));
+		}
+
 		prepare_colors
 		    (m_color_theme_spinner.getSelectedItem().toString());
 	    }
@@ -802,7 +834,7 @@ public class Settings
 	{
 	    show_network_page();
 	    Windows.show_dialog
-		(m_lettera,
+		(m_lettera.get(),
 		 "Failure (" + exception.getMessage() + ")!",
 		 "Error");
 	}
@@ -815,10 +847,10 @@ public class Settings
 	try
 	{
 	    dialog = new Dialog
-		(m_lettera,
+		(m_lettera.get(),
 		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    Windows.show_progress_dialog
-		(m_lettera,
+		(m_lettera.get(),
 		 dialog,
 		 "Generating key pairs.\nPlease be patient.",
 		 null);
@@ -927,10 +959,10 @@ public class Settings
 
     private void populate_accounts_spinner()
     {
-	if(m_lettera == null)
+	if(m_lettera == null || m_lettera.get() == null)
 	    return;
 
-	if(m_lettera.isFinishing())
+	if(m_lettera.get().isFinishing())
 	    return;
 
 	ArrayList<String> array_list = s_database.email_account_names();
@@ -953,7 +985,7 @@ public class Settings
 	}
 
 	ArrayAdapter<String> array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, array_list);
+	    (m_lettera.get(), android.R.layout.simple_spinner_item, array_list);
 
 	m_accounts_spinner.setAdapter(array_adapter);
     }
@@ -1238,7 +1270,7 @@ public class Settings
 
     private void prepare_listeners()
     {
-	if(m_lettera == null)
+	if(m_lettera == null || m_lettera.get() == null)
 	    return;
 
 	m_accounts_spinner.setOnItemSelectedListener
@@ -1250,7 +1282,8 @@ public class Settings
 					   int position,
 					   long id)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    try
@@ -1285,7 +1318,8 @@ public class Settings
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    apply_settings();
@@ -1301,7 +1335,8 @@ public class Settings
 					   int position,
 					   long id)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    try
@@ -1313,8 +1348,11 @@ public class Settings
 		    {
 		    }
 
-		    m_lettera.prepare_colors
-			(m_color_theme_spinner.getSelectedItem().toString());
+		    if(m_lettera.get() != null)
+			m_lettera.get().prepare_colors
+			    (m_color_theme_spinner.getSelectedItem().
+			     toString());
+
 		    prepare_colors
 			(m_color_theme_spinner.getSelectedItem().toString());
 		}
@@ -1340,7 +1378,8 @@ public class Settings
 		    @Override
 		    public void onClick(View view)
 		    {
-			if(m_lettera.isFinishing())
+			if(m_lettera.get() != null &&
+			   m_lettera.get().isFinishing())
 			    return;
 
 			if(m_accounts_spinner.getSelectedItem() != null)
@@ -1350,11 +1389,11 @@ public class Settings
 			    try
 			    {
 				dialog = new Dialog
-				    (m_lettera,
+				    (m_lettera.get(),
 				     android.R.style.
 				     Theme_DeviceDefault_Dialog_NoActionBar);
 				Windows.show_progress_dialog
-				    (m_lettera,
+				    (m_lettera.get(),
 				     dialog,
 				     "Deleting e-mail account. " +
 				     "Please be patient.",
@@ -1403,7 +1442,8 @@ public class Settings
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    show_display_page();
@@ -1419,7 +1459,8 @@ public class Settings
 					   int position,
 					   long id)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    try
@@ -1455,7 +1496,8 @@ public class Settings
 					   int position,
 					   long id)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    try
@@ -1488,7 +1530,8 @@ public class Settings
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    generate_key_pairs();
@@ -1515,7 +1558,8 @@ public class Settings
 					   int position,
 					   long id)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    try
@@ -1531,7 +1575,10 @@ public class Settings
 
 		    settings_element.m_value = m_icon_theme_spinner.
 			getSelectedItem().toString();
-		    m_lettera.prepare_icons(settings_element);
+
+		    if(m_lettera.get() != null)
+			m_lettera.get().prepare_icons(settings_element);
+
 		    prepare_icons();
 		}
 
@@ -1607,7 +1654,8 @@ public class Settings
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    show_network_page();
@@ -1635,7 +1683,8 @@ public class Settings
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    show_privacy_page();
@@ -1651,7 +1700,8 @@ public class Settings
 					   int position,
 					   long id)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    try
@@ -1687,7 +1737,8 @@ public class Settings
 					   int position,
 					   long id)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    try
@@ -1721,7 +1772,8 @@ public class Settings
 		    @Override
 		    public void onClick(View view)
 		    {
-			if(m_lettera.isFinishing())
+			if(m_lettera.get() != null &&
+			   m_lettera.get().isFinishing())
 			    return;
 
 			if(m_accounts_spinner.getSelectedItem() != null)
@@ -1731,11 +1783,11 @@ public class Settings
 			    try
 			    {
 				dialog = new Dialog
-				    (m_lettera,
+				    (m_lettera.get(),
 				     android.R.style.
 				     Theme_DeviceDefault_Dialog_NoActionBar);
 				Windows.show_progress_dialog
-				    (m_lettera,
+				    (m_lettera.get(),
 				     dialog,
 				     "Deleting messages. Please be patient.",
 				     null);
@@ -1783,12 +1835,17 @@ public class Settings
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
-		    m_lettera.prepare_colors(s_database.setting("color_theme"));
-		    m_lettera.prepare_icons
-			(s_database.settings_element("icon_theme"));
+		    if(m_lettera.get() != null)
+		    {
+			m_lettera.get().prepare_colors
+			    (s_database.setting("color_theme"));
+			m_lettera.get().prepare_icons
+			    (s_database.settings_element("icon_theme"));
+		    }
 
 		    try
 		    {
@@ -1810,7 +1867,8 @@ public class Settings
 					   int position,
 					   long id)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    try
@@ -1843,7 +1901,8 @@ public class Settings
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    test_inbound_server();
@@ -1856,7 +1915,8 @@ public class Settings
 		@Override
 		public void onClick(View view)
 		{
-		    if(m_lettera.isFinishing())
+		    if(m_lettera.get() != null &&
+		       m_lettera.get().isFinishing())
 			return;
 
 		    test_outbound_server();
@@ -1883,15 +1943,17 @@ public class Settings
 	*/
 
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, s_color_themes);
+	    (m_lettera.get(),
+	     android.R.layout.simple_spinner_item,
+	     s_color_themes);
 	m_color_theme_spinner.setAdapter(array_adapter);
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera,
+	    (m_lettera.get(),
 	     android.R.layout.simple_spinner_item,
 	     s_email_folders);
 	m_email_folders_spinner.setAdapter(array_adapter);
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera,
+	    (m_lettera.get(),
 	     android.R.layout.simple_spinner_item,
 	     s_icon_themes);
 	m_icon_theme_spinner.setAdapter(array_adapter);
@@ -1902,19 +1964,21 @@ public class Settings
 
 	array = new String[] {"(Empty)"};
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, array);
+	    (m_lettera.get(), android.R.layout.simple_spinner_item, array);
 	m_accounts_spinner.setAdapter(array_adapter);
 	m_delete_account_button.setEnabled(false);
 	m_inbound_port.setFilters(new InputFilter[] {s_port_filter});
 	m_outbound_port.setFilters(new InputFilter[] {s_port_filter});
 	m_proxy_port.setFilters(new InputFilter[] {s_port_filter});
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, s_proxy_types);
+	    (m_lettera.get(),
+	     android.R.layout.simple_spinner_item,
+	     s_proxy_types);
 	m_proxy_type_spinner.setAdapter(array_adapter);
 	array = new String[]
 	    {"5000", "7500", "10000", "15000", "30000", "60000"};
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, array);
+	    (m_lettera.get(), android.R.layout.simple_spinner_item, array);
 	m_query_interval_spinner.setAdapter(array_adapter);
 	m_remove_local_messages_button.setEnabled(false);
 
@@ -1924,12 +1988,12 @@ public class Settings
 
 	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, array);
+	    (m_lettera.get(), android.R.layout.simple_spinner_item, array);
 	m_encryption_key_spinner.setAdapter(array_adapter);
 	m_generate_keys_button.setEnabled(false);
 	array = new String[] {"RSA"};
 	array_adapter = new ArrayAdapter<>
-	    (m_lettera, android.R.layout.simple_spinner_item, array);
+	    (m_lettera.get(), android.R.layout.simple_spinner_item, array);
 	m_signature_key_spinner.setAdapter(array_adapter);
     }
 
@@ -1973,10 +2037,13 @@ public class Settings
 	try
 	{
 	    dialog = new Dialog
-		(m_lettera,
+		(m_lettera.get(),
 		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    Windows.show_progress_dialog
-		(m_lettera, dialog, "Testing IMAPS. Please be patient.", null);
+		(m_lettera.get(),
+		 dialog,
+		 "Testing IMAPS. Please be patient.",
+		 null);
 
 	    Thread thread = new Thread
 		(new EmailTest(dialog,
@@ -2014,10 +2081,13 @@ public class Settings
 	try
 	{
 	    dialog = new Dialog
-		(m_lettera,
+		(m_lettera.get(),
 		 android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
 	    Windows.show_progress_dialog
-		(m_lettera, dialog, "Testing SMTPS. Please be patient.", null);
+		(m_lettera.get(),
+		 dialog,
+		 "Testing SMTPS. Please be patient.",
+		 null);
 
 	    Thread thread = new Thread
 		(new EmailTest(dialog,
@@ -2050,11 +2120,11 @@ public class Settings
 
     public Settings(Lettera lettera, View parent)
     {
-	m_lettera = lettera;
-	m_parent = parent;
+	m_lettera = new WeakReference<> (lettera);
+	m_parent = new WeakReference<> (parent);
 
-	LayoutInflater inflater = (LayoutInflater) m_lettera.getSystemService
-	    (Context.LAYOUT_INFLATER_SERVICE);
+	LayoutInflater inflater = (LayoutInflater) m_lettera.get().
+	    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 	m_layout_params = new WindowManager.LayoutParams();
 	m_layout_params.dimAmount = 0.0f;
@@ -2075,7 +2145,7 @@ public class Settings
 	*/
 
 	m_dialog = new Dialog
-	    (m_lettera,
+	    (m_lettera.get(),
 	     android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
 	m_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	m_dialog.setCancelable(true);

@@ -6,8 +6,8 @@ android {
         applicationId "org.purple.lettera"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 20210808
+        versionName "2021.08.08"
     }
     buildTypes {
         android.applicationVariants.all { variant ->

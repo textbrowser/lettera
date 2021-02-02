@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import java.lang.ref.WeakReference;
 
 public class MoveMessages
 {
@@ -62,13 +63,13 @@ public class MoveMessages
 	}
     }
 
-    private Lettera m_lettera = null;
     private MoveMessagesAdapter m_adapter = null;
     private MoveMessagesLinearLayoutManager m_layout_manager = null;
     private PopupWindow m_popup_window = null;
     private RecyclerView m_recycler = null;
-    private View m_parent = null;
     private View m_view = null;
+    private WeakReference<Lettera> m_lettera = null;
+    private WeakReference<View> m_parent = null;
     private long m_message_oid = -1L;
 
     public MoveMessages(Lettera lettera,
@@ -77,11 +78,11 @@ public class MoveMessages
 			View parent,
 			long message_oid)
     {
-	m_lettera = lettera;
+	m_lettera = new WeakReference<> (lettera);
 	m_message_oid = message_oid;
-	m_parent = parent;
+	m_parent = new WeakReference<> (parent);
 
-	LayoutInflater inflater = (LayoutInflater) m_lettera.
+	LayoutInflater inflater = (LayoutInflater) m_lettera.get().
 	    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 	m_view = inflater.inflate(R.layout.folders_drawer_move, null);
@@ -90,12 +91,12 @@ public class MoveMessages
 	** The cute popup.
 	*/
 
-	m_popup_window = new PopupWindow(m_lettera);
+	m_popup_window = new PopupWindow(m_lettera.get());
 	m_popup_window.setHeight(WindowManager.LayoutParams.MATCH_PARENT);
 	m_popup_window.setContentView(m_view);
 	m_popup_window.setFocusable(true);
 	m_popup_window.setOutsideTouchable(true);
-	m_popup_window.setWidth((int) (0.50 * m_parent.getWidth()));
+	m_popup_window.setWidth((int) (0.50 * m_parent.get().getWidth()));
 
 	/*
 	** Initialize other widgets.
@@ -104,7 +105,7 @@ public class MoveMessages
 	initialize_widget_members();
 	m_adapter = new MoveMessagesAdapter
 	    (MoveMessages.this, email_account, folder_name);
-	m_layout_manager = new MoveMessagesLinearLayoutManager(m_lettera);
+	m_layout_manager = new MoveMessagesLinearLayoutManager(m_lettera.get());
 	m_layout_manager.setOrientation(LinearLayoutManager.VERTICAL);
 	m_recycler.setAdapter(m_adapter);
 	m_recycler.setLayoutManager(m_layout_manager);
@@ -118,11 +119,15 @@ public class MoveMessages
 
     public void dismiss()
     {
-	if(m_message_oid != -1)
-	    m_lettera.move_message
-		(m_adapter.selected_folder_name(), m_message_oid);
-	else
-	    m_lettera.move_selected_messages(m_adapter.selected_folder_name());
+	if(m_lettera.get() != null)
+	{
+	    if(m_message_oid != -1)
+		m_lettera.get().move_message
+		    (m_adapter.selected_folder_name(), m_message_oid);
+	    else
+		m_lettera.get().move_selected_messages
+		    (m_adapter.selected_folder_name());
+	}
 
 	try
 	{
