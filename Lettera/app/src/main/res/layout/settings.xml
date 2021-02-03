@@ -238,16 +238,16 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/remove_local_messages"
+                            android:id="@+id/remove_local_content"
                             style="@style/Widget.AppCompat.Button.Colored"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
-                            android:text="@string/remove_local_messages"
+                            android:text="@string/remove_local_folders_messages"
                             android:textAllCaps="false" />
 
                         <CheckBox
-                            android:id="@+id/remove_local_messages_verify_checkbox"
+                            android:id="@+id/remove_local_content_verify_checkbox"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"

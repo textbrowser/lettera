@@ -151,7 +151,8 @@ public class Settings
 
 	    try
 	    {
-		ok.set(s_database.delete_messages(m_email_account));
+		ok.set(s_database.delete_folders(m_email_account) &&
+		       s_database.delete_messages(m_email_account));
 	    }
 	    catch(Exception exception)
 	    {
@@ -181,7 +182,7 @@ public class Settings
 			    if(m_lettera.get() != null)
 				m_lettera.get().messages_deleted();
 
-			    m_remove_local_messages_verify_checkbox.
+			    m_remove_local_content_verify_checkbox.
 				setChecked(false);
 			}
 		    }
@@ -486,14 +487,14 @@ public class Settings
     private Button m_generate_keys_button = null;
     private Button m_network_button = null;
     private Button m_privacy_button = null;
-    private Button m_remove_local_messages_button = null;
+    private Button m_remove_local_content_button = null;
     private Button m_test_inbound_button = null;
     private Button m_test_outbound_button = null;
     private CheckBox m_delete_account_verify_checkbox = null;
     private CheckBox m_delete_on_server_checkbox = null;
     private CheckBox m_generate_keys_checkbox = null;
     private CheckBox m_primary_account_checkbox = null;
-    private CheckBox m_remove_local_messages_verify_checkbox = null;
+    private CheckBox m_remove_local_content_verify_checkbox = null;
     private CheckBox m_show_status_bar = null;
     private Dialog m_dialog = null;
     private ImageButton m_return_button = null;
@@ -932,10 +933,10 @@ public class Settings
 	m_proxy_user = (TextView) m_view.findViewById(R.id.proxy_user);
 	m_query_interval_spinner = (Spinner) m_view.findViewById
 	    (R.id.query_interval);
-	m_remove_local_messages_button = (Button) m_view.findViewById
-	    (R.id.remove_local_messages);
-	m_remove_local_messages_verify_checkbox = (CheckBox) m_view.findViewById
-	    (R.id.remove_local_messages_verify_checkbox);
+	m_remove_local_content_button = (Button) m_view.findViewById
+	    (R.id.remove_local_content);
+	m_remove_local_content_verify_checkbox = (CheckBox) m_view.findViewById
+	    (R.id.remove_local_content_verify_checkbox);
 	m_return_button = (ImageButton) m_view.findViewById(R.id.return_button);
 	m_show_status_bar = (CheckBox) m_view.findViewById
 	    (R.id.show_status_bar);
@@ -973,15 +974,15 @@ public class Settings
 	    array_list.add("(Empty)");
 	    m_delete_account_button.setEnabled(false);
 	    m_delete_account_verify_checkbox.setEnabled(false);
-	    m_remove_local_messages_button.setEnabled(false);
-	    m_remove_local_messages_verify_checkbox.setEnabled(false);
+	    m_remove_local_content_button.setEnabled(false);
+	    m_remove_local_content_verify_checkbox.setEnabled(false);
 	}
 	else
 	{
 	    m_delete_account_button.setEnabled(false);
 	    m_delete_account_verify_checkbox.setEnabled(true);
-	    m_remove_local_messages_button.setEnabled(false);
-	    m_remove_local_messages_verify_checkbox.setEnabled(true);
+	    m_remove_local_content_button.setEnabled(false);
+	    m_remove_local_content_verify_checkbox.setEnabled(true);
 	}
 
 	ArrayAdapter<String> array_adapter = new ArrayAdapter<>
@@ -1052,7 +1053,7 @@ public class Settings
 
 	m_delete_account_verify_checkbox.setChecked(false);
 	m_outbound_as_inbound.setChecked(false);
-	m_remove_local_messages_verify_checkbox.setChecked(false);
+	m_remove_local_content_verify_checkbox.setChecked(false);
 
 	if(email_element == null)
 	{
@@ -1765,8 +1766,8 @@ public class Settings
 		}
 	    });
 
-	if(!m_remove_local_messages_button.hasOnClickListeners())
-	    m_remove_local_messages_button.setOnClickListener
+	if(!m_remove_local_content_button.hasOnClickListeners())
+	    m_remove_local_content_button.setOnClickListener
 		(new View.OnClickListener()
 		{
 		    @Override
@@ -1814,7 +1815,7 @@ public class Settings
 		    }
 		});
 
-	m_remove_local_messages_verify_checkbox.setOnCheckedChangeListener
+	m_remove_local_content_verify_checkbox.setOnCheckedChangeListener
 	    (new CompoundButton.OnCheckedChangeListener()
 	    {
 		@Override
@@ -1822,7 +1823,7 @@ public class Settings
 		    (CompoundButton button_view, boolean is_checked)
 		{
 		    if(m_accounts_spinner.getSelectedItem() != null)
-			m_remove_local_messages_button.setEnabled
+			m_remove_local_content_button.setEnabled
 			    (is_checked &&
 			     !m_accounts_spinner.
 			     getSelectedItem().equals("(Empty)"));
@@ -1980,7 +1981,7 @@ public class Settings
 	array_adapter = new ArrayAdapter<>
 	    (m_lettera.get(), android.R.layout.simple_spinner_item, array);
 	m_query_interval_spinner.setAdapter(array_adapter);
-	m_remove_local_messages_button.setEnabled(false);
+	m_remove_local_content_button.setEnabled(false);
 
 	/*
 	** Privacy
