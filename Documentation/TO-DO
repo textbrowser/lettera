@@ -45,6 +45,7 @@ Completed Items
 - Replace letter right-hand buttons with menu. Not replaced, enhanced.
 - Restore personal key pairs.
 - Retain current selection position if the same folder is selected?
+- Retain select-all setting and apply it to new messages.
 - Retain selected folder in Folders drawer.
 - Retain selected folder in Folders on device orientation change.
 - Retain selected messages.
@@ -73,6 +74,7 @@ Remaining Items
 - Display recipients in letters.
 - Download incomplete content on opening of letter (getMessagesByUID()).
 - Encrypted database containers.
+- Initial installation does not launch retrieval task.
 - Letter navigation (next, previous).
 - New-message notifications. Optional scroll-to-top?
 - Offline and online design.
@@ -80,7 +82,6 @@ Remaining Items
 - Optional text instead of icons in Settings header.
 - Proceed to next letter on delete / move.
 - Reset of Network widgets in Settings.
-- Retain select-all setting and apply it to arriving messages.
 - Secure the public & private key pair. Activate the private key only
   when a message is to be decrypted.
 - What's a deleted message?

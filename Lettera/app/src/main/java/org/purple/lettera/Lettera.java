@@ -505,8 +505,6 @@ public class Lettera extends AppCompatActivity
 				LetteraService.stopForegroundTask
 				    (getApplicationContext());
 				finishAndRemoveTask();
-				android.os.Process.killProcess
-				    (android.os.Process.myPid());
 			    }
 			}
 		    };
@@ -1134,17 +1132,7 @@ public class Lettera extends AppCompatActivity
     @Override
     protected void onDestroy()
     {
-	super.onDestroy();
-
-	try
-	{
-	    m_folders_drawer.dismiss();
-	}
-	catch(Exception exception)
-	{
-	}
-
-	stop_schedules();
+	android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     @Override
