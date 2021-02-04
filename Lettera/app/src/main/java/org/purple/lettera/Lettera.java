@@ -396,6 +396,15 @@ public class Lettera extends AppCompatActivity
 	}
     }
 
+    private void initialize_letter_dialog()
+    {
+	if(m_letter_dialog != null)
+	    return;
+
+	m_letter_dialog = new Letter
+	    (Lettera.this, m_messages_adapter, findViewById(R.id.main_layout));
+    }
+
     private void initialize_widget_members()
     {
 	m_artificial_button = (Button) findViewById(R.id.artificial_button);
@@ -668,6 +677,10 @@ public class Lettera extends AppCompatActivity
 		{
 		    if(Lettera.this.isFinishing())
 			return;
+
+		    if(m_settings == null)
+			m_settings = new Settings
+			    (Lettera.this, findViewById(R.id.main_layout));
 
 		    m_settings.show();
 		}
@@ -979,8 +992,6 @@ public class Lettera extends AppCompatActivity
 	m_layout_manager.setReverseLayout(true);
 	m_layout_manager.setSmoothScrollbarEnabled(true);
 	m_layout_manager.setStackFromEnd(true);
-	m_letter_dialog = new Letter
-	    (Lettera.this, m_messages_adapter, findViewById(R.id.main_layout));
 	m_recycler.addOnItemTouchListener
 	    (new
 	     MessagesRecyclerTouchListener(Lettera.this,
@@ -1004,6 +1015,7 @@ public class Lettera extends AppCompatActivity
 			    (m_selected_position).setBackgroundColor
 			    (background_color());
 
+		    initialize_letter_dialog();
 		    m_letter_dialog.show
 			(email_account(), selected_folder_name(), position);
 		    m_selected_position = position;
@@ -1083,8 +1095,6 @@ public class Lettera extends AppCompatActivity
 	    if(m_selected_folder_name.isEmpty())
 		m_selected_folder_name = NONE_FOLDER;
 	}
-
-	m_settings = new Settings(Lettera.this, findViewById(R.id.main_layout));
 
 	new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
 	{
@@ -1256,7 +1266,8 @@ public class Lettera extends AppCompatActivity
 
 	try
 	{
-	    m_letter_dialog.dismiss();
+	    if(m_letter_dialog != null)
+		m_letter_dialog.dismiss();
 	}
 	catch(Exception exception)
 	{
@@ -1511,6 +1522,7 @@ public class Lettera extends AppCompatActivity
 
     public void show_email_dialog(int position)
     {
+	initialize_letter_dialog();
 	m_letter_dialog.show(email_account(), selected_folder_name(), position);
     }
 
