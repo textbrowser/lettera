@@ -300,6 +300,7 @@ public class Lettera extends AppCompatActivity
     private String m_status_message = "";
     private TextView m_current_folder = null;
     private TextView m_items_count = null;
+    private boolean m_exit = false;
     private boolean m_receiver_registered = false;
     private final AtomicBoolean m_download_interrupted =
 	new AtomicBoolean(false);
@@ -504,6 +505,7 @@ public class Lettera extends AppCompatActivity
 			    {
 				LetteraService.stopForegroundTask
 				    (getApplicationContext());
+				m_exit = true;
 				finishAndRemoveTask();
 			    }
 			}
@@ -1132,7 +1134,10 @@ public class Lettera extends AppCompatActivity
     @Override
     protected void onDestroy()
     {
-	android.os.Process.killProcess(android.os.Process.myPid());
+	if(m_exit)
+	    android.os.Process.killProcess(android.os.Process.myPid());
+	else
+	    super.onDestroy();
     }
 
     @Override
