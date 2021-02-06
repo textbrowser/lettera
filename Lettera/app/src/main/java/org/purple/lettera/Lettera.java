@@ -307,6 +307,7 @@ public class Lettera extends AppCompatActivity
     private final AtomicBoolean m_scrolling = new AtomicBoolean(false);
     private final AtomicInteger m_folders_drawer_interval =
 	new AtomicInteger(7500);
+    private final AtomicInteger m_selected_position = new AtomicInteger(-1);
     private final Object m_selected_folder_name_mutex = new Object();
     private final PGP m_pgp = PGP.instance();
     private final static AtomicInteger s_background_color = new AtomicInteger
@@ -319,7 +320,6 @@ public class Lettera extends AppCompatActivity
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500L;
     private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60L;
     private final static long STATUS_MESSAGE_INTERVAL = 2500L;
-    private int m_selected_position = -1;
     private static Lettera s_instance = null;
     private static int s_default_background_color = 0;
     private static int s_default_divider_color = 0;
@@ -1010,15 +1010,15 @@ public class Lettera extends AppCompatActivity
 		    m_artificial_button.performClick();
 
 		    if(m_layout_manager.
-		       findViewByPosition(m_selected_position) != null)
+		       findViewByPosition(m_selected_position.get()) != null)
 			m_layout_manager.findViewByPosition
-			    (m_selected_position).setBackgroundColor
+			    (m_selected_position.get()).setBackgroundColor
 			    (background_color());
 
 		    initialize_letter_dialog();
 		    m_letter_dialog.show
 			(email_account(), selected_folder_name(), position);
-		    m_selected_position = position;
+		    m_selected_position.set(position);
 		    view.setBackgroundColor(SELECTION_COLOR);
 		}
 	    }));
@@ -1052,9 +1052,9 @@ public class Lettera extends AppCompatActivity
 			m_scroll_hander.removeCallbacks(m_scroll_runnable);
 
 		    if(m_layout_manager.
-		       findViewByPosition(m_selected_position) != null)
+		       findViewByPosition(m_selected_position.get()) != null)
 			m_layout_manager.findViewByPosition
-			    (m_selected_position).setBackgroundColor
+			    (m_selected_position.get()).setBackgroundColor
 			    (SELECTION_COLOR);
 		}
 	    });
@@ -1065,9 +1065,9 @@ public class Lettera extends AppCompatActivity
 		public void onGlobalLayout()
 		{
 		    if(m_layout_manager.
-		       findViewByPosition(m_selected_position) != null)
+		       findViewByPosition(m_selected_position.get()) != null)
 			m_layout_manager.findViewByPosition
-			    (m_selected_position).setBackgroundColor
+			    (m_selected_position.get()).setBackgroundColor
 			    (SELECTION_COLOR);
 		}
 	    });
@@ -1236,22 +1236,28 @@ public class Lettera extends AppCompatActivity
 	prepare_folders_and_messages_widgets(folder_name);
     }
 
-    public void message_read()
-    {
-	m_messages_adapter.notifyDataSetChanged();
-    }
-
-    public void messages_deleted()
+    public void local_content_deleted()
     {
 	/*
-	** All of the messages have been deleted.
+	** All of the folders and messages have been deleted.
 	*/
 
 	m_folders_drawer.update();
 	m_messages_adapter.notifyDataSetChanged();
-	m_selected_position = -1;
+
+	synchronized(m_selected_folder_name_mutex)
+	{
+	    m_selected_folder_name = NONE_FOLDER;
+	}
+
+	m_selected_position.set(-1);
 	prepare_current_folder_text(selected_folder_name());
 	prepare_current_folder_widgets();
+    }
+
+    public void message_read()
+    {
+	m_messages_adapter.notifyDataSetChanged();
     }
 
     public void move_message(String to_folder_name, long message_oid)
@@ -1463,12 +1469,12 @@ public class Lettera extends AppCompatActivity
 	    if(folder_name.isEmpty())
 	    {
 		m_selected_folder_name = NONE_FOLDER;
-		m_selected_position = -1;
+		m_selected_position.set(-1);
 	    }
 	    else
 	    {
 		if(!folder_name.equals(m_selected_folder_name))
-		    m_selected_position = -1;
+		    m_selected_position.set(-1);
 
 		m_selected_folder_name = folder_name;
 	    }

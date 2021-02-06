@@ -180,7 +180,7 @@ public class Settings
 			if(ok.get())
 			{
 			    if(m_lettera.get() != null)
-				m_lettera.get().messages_deleted();
+				m_lettera.get().local_content_deleted();
 
 			    m_remove_local_content_verify_checkbox.
 				setChecked(false);
