@@ -1,4 +1,3 @@
-<html>
 Summary of Lettera
 
 <ul>
@@ -10,4 +9,3 @@ Summary of Lettera
 <li>OpenPGP.</li>
 <li>Simple interface.</li>
 </ul>
-</html>
