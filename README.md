@@ -1,5 +1,5 @@
 <html>
-Summary of Lettera
+Summary of Lettera<br>
 <ul>
 <li>Folders drawer. Native.</li>
 <li>IMAP.</li>
