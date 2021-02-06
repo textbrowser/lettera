@@ -179,6 +179,11 @@ public class Settings
 		    {
 			if(ok.get())
 			{
+			    s_database.save_setting
+				("selected_folder_name_" + m_email_account,
+				 "",
+				 true);
+
 			    if(m_lettera.get() != null)
 				m_lettera.get().local_content_deleted();
 

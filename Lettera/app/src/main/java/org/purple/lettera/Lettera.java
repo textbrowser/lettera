@@ -1242,17 +1242,10 @@ public class Lettera extends AppCompatActivity
 	** All of the folders and messages have been deleted.
 	*/
 
-	m_folders_drawer.update();
-	m_messages_adapter.notifyDataSetChanged();
+	String folder_name = m_database.setting
+	    ("selected_folder_name_" + email_account());
 
-	synchronized(m_selected_folder_name_mutex)
-	{
-	    m_selected_folder_name = NONE_FOLDER;
-	}
-
-	m_selected_position.set(-1);
-	prepare_current_folder_text(selected_folder_name());
-	prepare_current_folder_widgets();
+	prepare_folders_and_messages_widgets(folder_name);
     }
 
     public void message_read()
