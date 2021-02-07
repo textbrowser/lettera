@@ -45,7 +45,7 @@ public class LetteraService extends Service
 	return null;
     }
 
-    private void prepareNotification()
+    private void prepare_notification()
     {
 	Intent notificationIntent = new Intent(this, Settings.class);
 	Notification notification = null;
@@ -64,7 +64,7 @@ public class LetteraService extends Service
 
     private void start()
     {
-	prepareNotification();
+	prepare_notification();
     }
 
     private void stop()
@@ -92,7 +92,7 @@ public class LetteraService extends Service
 	return START_STICKY;
     }
 
-    public static void startForegroundTask(Context context)
+    public static void start_foreground_task(Context context)
     {
 	if(context == null)
 	    return;
@@ -103,7 +103,7 @@ public class LetteraService extends Service
 	context.startService(intent);
     }
 
-    public static void stopForegroundTask(Context context)
+    public static void stop_foreground_task(Context context)
     {
 	if(context == null)
 	    return;

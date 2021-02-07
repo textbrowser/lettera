@@ -512,7 +512,7 @@ public class Lettera extends AppCompatActivity
 			{
 			    if(confirmed.get())
 			    {
-				LetteraService.stopForegroundTask
+				LetteraService.stop_foreground_task
 				    (getApplicationContext());
 				m_exit = true;
 				finishAndRemoveTask();
@@ -961,7 +961,6 @@ public class Lettera extends AppCompatActivity
         super.onCreate(savedInstanceState);
 	m_receiver = new LetteraBroadcastReceiver();
 	s_instance = this;
-	LetteraService.startForegroundTask(getApplicationContext());
 	m_database = Database.instance(getApplicationContext(), this);
 
 	/*
@@ -1139,6 +1138,7 @@ public class Lettera extends AppCompatActivity
 	prepare_icons(m_database.settings_element("icon_theme"));
 	prepare_listeners();
 	prepare_schedules();
+	LetteraService.start_foreground_task(getApplicationContext());
     }
 
     @Override
