@@ -959,9 +959,9 @@ public class Lettera extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-	m_receiver = new LetteraBroadcastReceiver();
 	s_instance = this;
 	m_database = Database.instance(getApplicationContext(), this);
+	m_receiver = new LetteraBroadcastReceiver();
 
 	/*
 	** JavaMail may open sockets on the main thread. StrictMode
