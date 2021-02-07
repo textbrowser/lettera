@@ -685,27 +685,25 @@ public class Database extends SQLiteOpenHelper
 	if(m_db == null)
 	    return false;
 
-	boolean ok = false;
-
 	m_db.beginTransactionNonExclusive();
 
 	try
 	{
-	    ok = m_db.delete
+	    m_db.delete
 		("folders", "email_account = ?",
-		 new String[] {email_account}) > 0;
+		 new String[] {email_account});
 	    m_db.setTransactionSuccessful();
+	    return true;
 	}
 	catch(Exception exception)
 	{
-	    ok = false;
 	}
 	finally
 	{
 	    m_db.endTransaction();
 	}
 
-	return ok;
+	return false;
     }
 
     public boolean delete_messages(String email_account)
