@@ -271,7 +271,7 @@ public class FoldersDrawerAdapter extends RecyclerView.Adapter
 		    if(m_folders_drawer.get() != null)
 			m_folders_drawer.get().dismiss();
 		}
-	    }, 250);
+	    }, 250L);
     }
 
     public FoldersDrawerAdapter(FoldersDrawer folders_drawer)

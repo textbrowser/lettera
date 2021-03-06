@@ -264,7 +264,7 @@ public class MoveMessagesAdapter extends RecyclerView.Adapter
 		    if(m_move_messages.get() != null)
 			m_move_messages.get().dismiss();
 		}
-	    }, 250);
+	    }, 250L);
     }
 
     public MoveMessagesAdapter(MoveMessages move_messages,

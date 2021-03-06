@@ -318,7 +318,8 @@ public class Lettera extends AppCompatActivity
 	(Color.BLACK);
     private final static int SELECTION_COLOR = Color.parseColor("#bbdefb");
     private final static long HIDE_SCROLL_TO_BUTTON_DELAY = 2500L;
-    private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 60L;
+    private final static long SCHEDULE_AWAIT_TERMINATION_TIMEOUT = 10L;
+    private final static long SELECT_ALL_DELAY = 250L;
     private final static long STATUS_MESSAGE_INTERVAL = 2500L;
     private static Lettera s_instance = null;
     private static int s_default_background_color = 0;
@@ -648,7 +649,7 @@ public class Lettera extends AppCompatActivity
 		    m_all_selected.set(is_checked);
 
 		    new Handler
-			(Looper.getMainLooper()).post(new Runnable()
+			(Looper.getMainLooper()).postDelayed(new Runnable()
 		    {
 			@Override
 			public void run()
@@ -660,7 +661,7 @@ public class Lettera extends AppCompatActivity
 				 selected_folder_name(),
 				 m_all_selected.get());
 			}
-		    });
+		    }, SELECT_ALL_DELAY);
 		}
 	    };
 	    m_select_all_switch.setOnCheckedChangeListener
@@ -1129,7 +1130,7 @@ public class Lettera extends AppCompatActivity
 		    }
 		}
 	    }
-	}, 750);
+	}, 750L);
 
 	prepare_colors(m_database.setting("color_theme"));
 	prepare_folders_and_messages_widgets(selected_folder_name());
