@@ -46,10 +46,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -276,9 +276,8 @@ public class Lettera extends AppCompatActivity
     private Button m_mark_as_unread = null;
     private Button m_move_to_folder_button = null;
     private Button m_settings_button = null;
-    private CheckBox m_select_all_checkbox = null;
     private CompoundButton.OnCheckedChangeListener
-	m_select_all_checkbox_listener = null;
+	m_select_all_switch_listener = null;
     private Database m_database = null;
     private FoldersDrawer m_folders_drawer = null;
     private Handler m_scroll_hander = null;
@@ -298,6 +297,7 @@ public class Lettera extends AppCompatActivity
     private Settings m_settings = null;
     private String m_selected_folder_name = "";
     private String m_status_message = "";
+    private Switch m_select_all_switch = null;
     private TextView m_current_folder = null;
     private TextView m_items_count = null;
     private boolean m_exit = false;
@@ -421,8 +421,7 @@ public class Lettera extends AppCompatActivity
 	m_recycler = (RecyclerView) findViewById(R.id.messages);
 	m_scroll_bottom = (ImageButton) findViewById(R.id.scroll_bottom);
 	m_scroll_top = (ImageButton) findViewById(R.id.scroll_top);
-	m_select_all_checkbox = (CheckBox) findViewById
-	    (R.id.select_all_checkbox);
+	m_select_all_switch = (Switch) findViewById(R.id.select_all_switch);
 	m_settings_button = (Button) findViewById(R.id.settings_button);
 	m_status_bar = (LinearLayout) findViewById(R.id.status_bar);
     }
@@ -637,9 +636,9 @@ public class Lettera extends AppCompatActivity
 		}
 	    });
 
-	if(m_select_all_checkbox_listener == null)
+	if(m_select_all_switch_listener == null)
 	{
-	    m_select_all_checkbox_listener =
+	    m_select_all_switch_listener =
 		new CompoundButton.OnCheckedChangeListener()
 	    {
 		@Override
@@ -664,8 +663,8 @@ public class Lettera extends AppCompatActivity
 		    });
 		}
 	    };
-	    m_select_all_checkbox.setOnCheckedChangeListener
-		(m_select_all_checkbox_listener);
+	    m_select_all_switch.setOnCheckedChangeListener
+		(m_select_all_switch_listener);
 	}
 
 	if(m_settings_button != null && !m_settings_button.
@@ -1353,8 +1352,8 @@ public class Lettera extends AppCompatActivity
 	** Order!
 	*/
 
-	Utilities.color_checkbox
-	    (m_select_all_checkbox,
+	Utilities.color_switch
+	    (m_select_all_switch,
 	     background_color(),
 	     divider_color(),
 	     text_color());
@@ -1386,8 +1385,8 @@ public class Lettera extends AppCompatActivity
 	    m_delete_button.setVisibility(View.GONE);
 	    m_mark_as_unread.setVisibility(View.GONE);
 	    m_move_to_folder_button.setVisibility(View.GONE);
-	    m_select_all_checkbox.setChecked(false);
-	    m_select_all_checkbox.setEnabled(false);
+	    m_select_all_switch.setChecked(false);
+	    m_select_all_switch.setEnabled(false);
 	}
 	else
 	{
@@ -1405,11 +1404,11 @@ public class Lettera extends AppCompatActivity
 		(count == 0 ? View.GONE : View.VISIBLE);
 	    m_move_to_folder_button.setVisibility
 		(count == 0 ? View.GONE : View.VISIBLE);
-	    m_select_all_checkbox.setEnabled(true);
-	    m_select_all_checkbox.setOnCheckedChangeListener(null);
-	    m_select_all_checkbox.setChecked(m_all_selected.get());
-	    m_select_all_checkbox.setOnCheckedChangeListener
-		(m_select_all_checkbox_listener);
+	    m_select_all_switch.setEnabled(true);
+	    m_select_all_switch.setOnCheckedChangeListener(null);
+	    m_select_all_switch.setChecked(m_all_selected.get());
+	    m_select_all_switch.setOnCheckedChangeListener
+		(m_select_all_switch_listener);
 	}
     }
 
@@ -1419,10 +1418,10 @@ public class Lettera extends AppCompatActivity
 	   !folder_name.isEmpty())
 	{
 	    m_all_selected.set(false);
-	    m_select_all_checkbox.setOnCheckedChangeListener(null);
-	    m_select_all_checkbox.setChecked(false);
-	    m_select_all_checkbox.setOnCheckedChangeListener
-		(m_select_all_checkbox_listener);
+	    m_select_all_switch.setOnCheckedChangeListener(null);
+	    m_select_all_switch.setChecked(false);
+	    m_select_all_switch.setOnCheckedChangeListener
+		(m_select_all_switch_listener);
 	}
 
 	String email_account = email_account();

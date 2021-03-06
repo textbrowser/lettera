@@ -153,11 +153,12 @@
 
                     </android.support.v7.widget.GridLayout>
 
-                    <CheckBox
+                    <Switch
                         android:id="@+id/show_status_bar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:checked="true"
+                        android:layoutDirection="rtl"
                         android:text="@string/show_status_bar_on_main_activity" />
 
                 </LinearLayout>
@@ -203,12 +204,13 @@
                             android:text="@string/delete"
                             android:textAllCaps="false" />
 
-                        <CheckBox
-                            android:id="@+id/delete_account_verify_checkbox"
+                        <Switch
+                            android:id="@+id/delete_account_verify_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
-                            android:layout_weight="0" />
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="0"
+                            android:layoutDirection="rtl" />
 
                     </LinearLayout>
 
@@ -246,12 +248,13 @@
                             android:text="@string/remove_local_folders_messages"
                             android:textAllCaps="false" />
 
-                        <CheckBox
-                            android:id="@+id/remove_local_content_verify_checkbox"
+                        <Switch
+                            android:id="@+id/remove_local_content_verify_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
-                            android:layout_weight="0" />
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="0"
+                            android:layoutDirection="rtl" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -313,16 +316,18 @@
                             android:inputType="textPassword"
                             tools:targetApi="o" />
 
-                        <CheckBox
-                            android:id="@+id/delete_on_server_checkbox"
+                        <Switch
+                            android:id="@+id/delete_on_server_switch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
                             android:text="@string/delete_on_server" />
 
-                        <CheckBox
-                            android:id="@+id/primary_account_checkbox"
+                        <Switch
+                            android:id="@+id/primary_account_switch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
                             android:text="@string/primary_account" />
 
                         <Button
@@ -350,6 +355,7 @@
                             android:id="@+id/outbound_as_inbound"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
                             android:text="@string/like_inbound" />
 
                         <LinearLayout
@@ -565,12 +571,13 @@
                             android:text="@string/generate"
                             android:textAllCaps="false" />
 
-                        <CheckBox
-                            android:id="@+id/generate_keys_checkbox"
+                        <Switch
+                            android:id="@+id/generate_keys_switch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
-                            android:layout_weight="0" />
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="0"
+                            android:layoutDirection="rtl" />
 
                     </LinearLayout>
 

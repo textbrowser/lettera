@@ -44,7 +44,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -113,7 +112,7 @@ public class Settings
 		    {
 			if(ok.get())
 			{
-			    m_delete_account_verify_checkbox.setChecked(false);
+			    m_delete_account_verify_switch.setChecked(false);
 			    populate_accounts_spinner();
 			    populate_network();
 
@@ -187,7 +186,7 @@ public class Settings
 			    if(m_lettera.get() != null)
 				m_lettera.get().local_content_deleted();
 
-			    m_remove_local_content_verify_checkbox.
+			    m_remove_local_content_verify_switch.
 				setChecked(false);
 			}
 		    }
@@ -495,12 +494,6 @@ public class Settings
     private Button m_remove_local_content_button = null;
     private Button m_test_inbound_button = null;
     private Button m_test_outbound_button = null;
-    private CheckBox m_delete_account_verify_checkbox = null;
-    private CheckBox m_delete_on_server_checkbox = null;
-    private CheckBox m_generate_keys_checkbox = null;
-    private CheckBox m_primary_account_checkbox = null;
-    private CheckBox m_remove_local_content_verify_checkbox = null;
-    private CheckBox m_show_status_bar = null;
     private Dialog m_dialog = null;
     private ImageButton m_return_button = null;
     private Spinner m_accounts_spinner = null;
@@ -511,7 +504,13 @@ public class Settings
     private Spinner m_proxy_type_spinner = null;
     private Spinner m_query_interval_spinner = null;
     private Spinner m_signature_key_spinner = null;
+    private Switch m_delete_account_verify_switch = null;
+    private Switch m_delete_on_server_switch = null;
+    private Switch m_generate_keys_switch = null;
     private Switch m_outbound_as_inbound = null;
+    private Switch m_primary_account_switch = null;
+    private Switch m_remove_local_content_verify_switch = null;
+    private Switch m_show_status_bar = null;
     private TextView m_encryption_key_data = null;
     private TextView m_inbound_address = null;
     private TextView m_inbound_email = null;
@@ -533,7 +532,6 @@ public class Settings
     private WeakReference<Lettera> m_lettera = null;
     private WeakReference<View> m_parent = null;
     private WindowManager.LayoutParams m_layout_params = null;
-    private final static PGP s_pgp = PGP.instance();
     private final static Database s_database = Database.instance();
     private final static InputFilter s_port_filter = new InputFilter()
     {
@@ -559,6 +557,7 @@ public class Settings
 	    return "";
 	}
     };
+    private final static PGP s_pgp = PGP.instance();
     private final static String s_color_themes[] = new String[]
 	{"Black & Blue", "Black & Green", "Grayish & Blue", "Default", "Night"};
     private final static String s_email_folders[] = new String[] {"Drawer"};
@@ -661,7 +660,7 @@ public class Settings
 	    content_values.put
 		("delete_on_server",
 		 String.
-		 valueOf(m_delete_on_server_checkbox.isChecked() ? 1 : 0));
+		 valueOf(m_delete_on_server_switch.isChecked() ? 1 : 0));
 	    string = m_inbound_address.getText().toString().trim();
 	    m_inbound_address.setText(string);
 
@@ -785,7 +784,7 @@ public class Settings
 	    }
 	    else
 	    {
-		if(m_primary_account_checkbox.isChecked())
+		if(m_primary_account_switch.isChecked())
 		{
 		    if(!m_inbound_email.getText().toString().
 		       equals(s_database.primary_email_account()) &&
@@ -892,10 +891,10 @@ public class Settings
 	    (R.id.color_theme_spinner);
 	m_delete_account_button = (Button) m_view.findViewById
 	    (R.id.delete_account_button);
-	m_delete_account_verify_checkbox = (CheckBox) m_view.findViewById
-	    (R.id.delete_account_verify_checkbox);
-	m_delete_on_server_checkbox = (CheckBox) m_view.findViewById
-	    (R.id.delete_on_server_checkbox);
+	m_delete_account_verify_switch = (Switch) m_view.findViewById
+	    (R.id.delete_account_verify_switch);
+	m_delete_on_server_switch = (Switch) m_view.findViewById
+	    (R.id.delete_on_server_switch);
 	m_display_button = (Button) m_view.findViewById(R.id.display_button);
 	m_display_layout = m_view.findViewById(R.id.display_layout);
 	m_email_folders_spinner = (Spinner) m_view.findViewById
@@ -906,8 +905,8 @@ public class Settings
 	    (R.id.encryption_key_spinner);
 	m_generate_keys_button = (Button) m_view.findViewById
 	    (R.id.generate_keys_button);
-	m_generate_keys_checkbox = (CheckBox) m_view.findViewById
-	    (R.id.generate_keys_checkbox);
+	m_generate_keys_switch = (Switch) m_view.findViewById
+	    (R.id.generate_keys_switch);
 	m_icon_theme_spinner = (Spinner) m_view.findViewById
 	    (R.id.icon_theme_spinner);
 	m_inbound_address = (TextView) m_view.findViewById
@@ -926,8 +925,8 @@ public class Settings
 	    (R.id.outbound_password);
 	m_outbound_port = (TextView) m_view.findViewById(R.id.outbound_port);
 	m_network_layout = m_view.findViewById(R.id.network_layout);
-	m_primary_account_checkbox = (CheckBox) m_view.findViewById
-	    (R.id.primary_account_checkbox);
+	m_primary_account_switch = (Switch) m_view.findViewById
+	    (R.id.primary_account_switch);
 	m_privacy_button = (Button) m_view.findViewById(R.id.privacy_button);
 	m_privacy_layout = m_view.findViewById(R.id.privacy_layout);
 	m_proxy_address = (TextView) m_view.findViewById(R.id.proxy_address);
@@ -940,10 +939,10 @@ public class Settings
 	    (R.id.query_interval);
 	m_remove_local_content_button = (Button) m_view.findViewById
 	    (R.id.remove_local_content);
-	m_remove_local_content_verify_checkbox = (CheckBox) m_view.findViewById
-	    (R.id.remove_local_content_verify_checkbox);
+	m_remove_local_content_verify_switch = (Switch) m_view.findViewById
+	    (R.id.remove_local_content_verify_switch);
 	m_return_button = (ImageButton) m_view.findViewById(R.id.return_button);
-	m_show_status_bar = (CheckBox) m_view.findViewById
+	m_show_status_bar = (Switch) m_view.findViewById
 	    (R.id.show_status_bar);
 	m_signature_key_data = (TextView) m_view.findViewById
 	    (R.id.signature_key_data);
@@ -978,16 +977,16 @@ public class Settings
 	    array_list = new ArrayList<> ();
 	    array_list.add("(Empty)");
 	    m_delete_account_button.setEnabled(false);
-	    m_delete_account_verify_checkbox.setEnabled(false);
+	    m_delete_account_verify_switch.setEnabled(false);
 	    m_remove_local_content_button.setEnabled(false);
-	    m_remove_local_content_verify_checkbox.setEnabled(false);
+	    m_remove_local_content_verify_switch.setEnabled(false);
 	}
 	else
 	{
 	    m_delete_account_button.setEnabled(false);
-	    m_delete_account_verify_checkbox.setEnabled(true);
+	    m_delete_account_verify_switch.setEnabled(true);
 	    m_remove_local_content_button.setEnabled(false);
-	    m_remove_local_content_verify_checkbox.setEnabled(true);
+	    m_remove_local_content_verify_switch.setEnabled(true);
 	}
 
 	ArrayAdapter<String> array_adapter = new ArrayAdapter<>
@@ -1056,13 +1055,13 @@ public class Settings
 					    getSelectedItem().toString());
 	String primary_email_account = s_database.primary_email_account();
 
-	m_delete_account_verify_checkbox.setChecked(false);
+	m_delete_account_verify_switch.setChecked(false);
 	m_outbound_as_inbound.setChecked(false);
-	m_remove_local_content_verify_checkbox.setChecked(false);
+	m_remove_local_content_verify_switch.setChecked(false);
 
 	if(email_element == null)
 	{
-	    m_delete_on_server_checkbox.setChecked(false);
+	    m_delete_on_server_switch.setChecked(false);
 	    m_inbound_address.setText("");
 	    m_inbound_email.setText("");
 	    m_inbound_password.setText("");
@@ -1071,7 +1070,7 @@ public class Settings
 	    m_outbound_email.setText("");
 	    m_outbound_password.setText("");
 	    m_outbound_port.setText("587");
-	    m_primary_account_checkbox.setChecked(false);
+	    m_primary_account_switch.setChecked(false);
 	    m_proxy_address.setText("");
 	    m_proxy_password.setText("");
 	    m_proxy_port.setText("");
@@ -1090,7 +1089,7 @@ public class Settings
 		s_database.save_setting(content_values, false);
 	    }
 
-	    m_delete_on_server_checkbox.setChecked
+	    m_delete_on_server_switch.setChecked
 		(email_element.m_delete_on_server);
 	    m_inbound_address.setText(email_element.m_inbound_address);
 	    m_inbound_email.setText(email_element.m_inbound_email);
@@ -1102,7 +1101,7 @@ public class Settings
 	    m_outbound_password.setText(email_element.m_outbound_password);
 	    m_outbound_port.setText
 		(String.valueOf(email_element.m_outbound_port));
-	    m_primary_account_checkbox.setChecked
+	    m_primary_account_switch.setChecked
 		(email_element.m_inbound_email.equals(primary_email_account));
 	    m_proxy_address.setText(email_element.m_proxy_address);
 	    m_proxy_password.setText(email_element.m_proxy_password);
@@ -1427,7 +1426,7 @@ public class Settings
 		    }
 		});
 
-	m_delete_account_verify_checkbox.setOnCheckedChangeListener
+	m_delete_account_verify_switch.setOnCheckedChangeListener
 	    (new CompoundButton.OnCheckedChangeListener()
 	    {
 		@Override
@@ -1544,7 +1543,7 @@ public class Settings
 		}
 	    });
 
-	m_generate_keys_checkbox.setOnCheckedChangeListener
+	m_generate_keys_switch.setOnCheckedChangeListener
 	    (new CompoundButton.OnCheckedChangeListener()
 	    {
 		@Override
@@ -1820,7 +1819,7 @@ public class Settings
 		    }
 		});
 
-	m_remove_local_content_verify_checkbox.setOnCheckedChangeListener
+	m_remove_local_content_verify_switch.setOnCheckedChangeListener
 	    (new CompoundButton.OnCheckedChangeListener()
 	    {
 		@Override
@@ -2196,10 +2195,10 @@ public class Settings
 
     public void show()
     {
-	m_delete_account_verify_checkbox.setChecked(false);
+	m_delete_account_verify_switch.setChecked(false);
 	m_dialog.show();
 	m_encryption_key_spinner.setSelection(0);
-	m_generate_keys_checkbox.setChecked(false);
+	m_generate_keys_switch.setChecked(false);
 
 	if(m_current_page == PageEnumerator.NETWORK_PAGE)
 	    m_inbound_address.requestFocus();

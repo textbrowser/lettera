@@ -152,12 +152,13 @@
                 android:background="@drawable/trash_folder"
                 android:gravity="center" />
 
-            <CheckBox
-                android:id="@+id/select_all_checkbox"
+            <Switch
+                android:id="@+id/select_all_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center" />
+                android:gravity="center"
+                android:layoutDirection="rtl" />
 
         </LinearLayout>
 
