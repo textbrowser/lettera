@@ -50,13 +50,13 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.sun.mail.smtp.SMTPTransport;
+import jakarta.mail.Session;
+import jakarta.mail.Store;
 import java.lang.ref.WeakReference;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javax.mail.Session;
-import javax.mail.Store;
 
 public class Settings
 {

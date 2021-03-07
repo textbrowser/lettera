@@ -30,15 +30,15 @@ package org.purple.lettera;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPTransport;
+import jakarta.mail.Folder;
+import jakarta.mail.Message;
+import jakarta.mail.Multipart;
+import jakarta.mail.Part;
+import jakarta.mail.Session;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.Session;
 
 public class Mail
 {

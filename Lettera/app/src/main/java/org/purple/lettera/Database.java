@@ -36,16 +36,16 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Base64;
 import android.util.Log;
 import com.sun.mail.imap.IMAPFolder;
+import jakarta.mail.Address;
+import jakarta.mail.FetchProfile;
+import jakarta.mail.Folder;
+import jakarta.mail.Message;
+import jakarta.mail.UIDFolder;
+import jakarta.mail.internet.InternetAddress;
 import java.lang.ref.WeakReference;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javax.mail.Address;
-import javax.mail.FetchProfile;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.UIDFolder;
-import javax.mail.internet.InternetAddress;
 
 public class Database extends SQLiteOpenHelper
 {
