@@ -131,7 +131,20 @@ public class MessageItem extends View
     {
 	if(message_element == null)
 	{
-	    m_view.setVisibility(View.GONE);
+	    m_attachment.setVisibility(View.GONE);
+	    m_date.setText("0000-00-00");
+	    m_date.setTextColor(Lettera.text_color());
+	    m_date.setTypeface(null, Typeface.BOLD);
+	    m_from.setText("e-mail@e-mail.org");
+	    m_from.setTextColor(Lettera.text_color());
+	    m_from.setTypeface(null, Typeface.BOLD);
+	    m_subject.setText("Invalid");
+	    m_subject.setTextColor(Lettera.text_color());
+	    m_subject.setTypeface(null, Typeface.BOLD);
+	    m_summary.setText("Invalid");
+	    m_summary.setTextColor(Lettera.text_color());
+	    m_summary.setTypeface(null, Typeface.BOLD);
+	    m_view.setVisibility(View.VISIBLE);
 	    return;
 	}
 
@@ -144,9 +157,13 @@ public class MessageItem extends View
 
 	String string = Utilities.formatted_email_date_for_messages
 	    (new Date(message_element.m_received_date_unix_epoch));
+	String subject = "";
 	String summary = "";
 	int length = 0;
 
+	length = Math.min
+	    (128, message_element.m_subject.trim().length());
+	subject = message_element.m_subject.trim().substring(0, length).trim();
 	length = Math.min
 	    (128, message_element.m_message_plain.trim().length());
 	summary = message_element.m_message_plain.trim().
@@ -180,7 +197,7 @@ public class MessageItem extends View
 	m_selected.setChecked
 	    (s_database.message_selected(message_element.m_oid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
-	m_subject.setText(message_element.m_subject);
+	m_subject.setText(subject);
 	m_subject.setTextColor(Lettera.text_color());
 	m_subject.setTypeface
 	    (null,

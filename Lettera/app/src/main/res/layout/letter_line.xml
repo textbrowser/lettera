@@ -70,7 +70,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.95"
                 android:ellipsize="end"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:singleLine="true" />
 
             <Space
                 android:layout_width="0dp"
