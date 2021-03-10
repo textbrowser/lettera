@@ -346,27 +346,20 @@ public class Database extends SQLiteOpenHelper
 		{
 		    String string = "SELECT " +
 			"content_downloaded, " +
-			"content_type, " +
-			"email_account, " +
-			"folder_name, " +
 			"from_email_account, " +
 			"from_name, " +
 			"has_been_read, " +
-			"message_html, " +
 			"message_plain, " +
-			"message_raw, " +
 			"oid, " +
 			"received_date, " +
 			"received_date_unix_epoch, " +
-			"sent_date, " +
-			"subject, " +
-			"to_folder_name, " +
-			"uid " +
+			"subject " +
 			"FROM messages " +
 			"INDEXED BY messages_received_date_unix_epoch " +
 			"WHERE email_account = ? AND " +
 			"LOWER(to_folder_name) = LOWER(?) " +
 			"ORDER BY received_date_unix_epoch";
+
 		    m_read_message_cursor = m_db.rawQuery
 			(string, new String[] {email_account, folder_name});
 		    m_read_message_cursor_email_account = email_account;
@@ -381,23 +374,13 @@ public class Database extends SQLiteOpenHelper
 
 		    message_element.m_content_downloaded =
 			m_read_message_cursor.getInt(i++) == 1;
-		    message_element.m_content_type =
-			m_read_message_cursor.getString(i++);
-		    message_element.m_email_account = m_read_message_cursor.
-			getString(i++);
-		    message_element.m_folder_name = m_read_message_cursor.
-			getString(i++);
 		    message_element.m_from_email_account =
 			m_read_message_cursor.getString(i++);
 		    message_element.m_from_name = m_read_message_cursor.
 			getString(i++);
 		    message_element.m_has_been_read = m_read_message_cursor.
 			getLong(i++) == 1L;
-		    message_element.m_message_html = m_read_message_cursor.
-			getString(i++).trim();
 		    message_element.m_message_plain = m_read_message_cursor.
-			getString(i++).trim();
-		    message_element.m_message_raw = m_read_message_cursor.
 			getString(i++).trim();
 		    message_element.m_oid = m_read_message_cursor.
 			getLong(i++);
@@ -405,13 +388,8 @@ public class Database extends SQLiteOpenHelper
 			getString(i++);
 		    message_element.m_received_date_unix_epoch =
 			m_read_message_cursor.getLong(i++);
-		    message_element.m_sent_date = m_read_message_cursor.
-			getString(i++);
 		    message_element.m_subject = m_read_message_cursor.
 			getString(i++).trim();
-		    message_element.m_to_folder_name = m_read_message_cursor.
-			getString(i++);
-		    message_element.m_uid = m_read_message_cursor.getLong(i++);
 		    return message_element;
 		}
 	    }
