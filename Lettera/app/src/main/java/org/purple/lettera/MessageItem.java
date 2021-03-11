@@ -144,7 +144,6 @@ public class MessageItem extends View
 	    m_summary.setText("Invalid");
 	    m_summary.setTextColor(Lettera.text_color());
 	    m_summary.setTypeface(null, Typeface.BOLD);
-	    m_view.setVisibility(View.VISIBLE);
 	    return;
 	}
 
@@ -157,21 +156,6 @@ public class MessageItem extends View
 
 	String string = Utilities.formatted_email_date_for_messages
 	    (new Date(message_element.m_received_date_unix_epoch));
-	String subject = "";
-	String summary = "";
-	int length = 0;
-
-	length = Math.min
-	    (128, message_element.m_subject.trim().length());
-	subject = message_element.m_subject.trim().substring(0, length).trim();
-	length = Math.min
-	    (128, message_element.m_message_plain.trim().length());
-	summary = message_element.m_message_plain.trim().
-	    substring(0, length).trim();
-
-	if(summary.isEmpty())
-	    summary = message_element.m_message_raw.trim().
-		substring(0, length).trim();
 
 	if(string.isEmpty())
 	    m_date.setText(message_element.m_received_date);
@@ -197,15 +181,17 @@ public class MessageItem extends View
 	m_selected.setChecked
 	    (s_database.message_selected(message_element.m_oid));
 	m_selected.setOnCheckedChangeListener(m_selected_listener);
-	m_subject.setText(subject);
+	m_subject.setText(message_element.m_subject.trim());
 	m_subject.setTextColor(Lettera.text_color());
 	m_subject.setTypeface
 	    (null,
 	     message_element.m_has_been_read ? Typeface.NORMAL : Typeface.BOLD);
-	m_summary.setText(message_element.m_content_downloaded ? summary : "");
+	m_summary.setText
+	    (message_element.m_content_downloaded ?
+	     message_element.m_message_plain.trim() : "");
 	m_summary.setTextColor(Lettera.text_color());
-	m_summary.setVisibility(length == 0 ? View.GONE : View.VISIBLE);
+	m_summary.setVisibility
+	    (m_summary.getText().length() == 0 ? View.GONE : View.VISIBLE);
 	m_view.setBackgroundColor(Lettera.background_color());
-	m_view.setVisibility(View.VISIBLE);
     }
 }

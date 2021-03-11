@@ -349,11 +349,11 @@ public class Database extends SQLiteOpenHelper
 			"from_email_account, " +
 			"from_name, " +
 			"has_been_read, " +
-			"message_plain, " +
+			"SUBSTR(message_plain, 0, 128), " +
 			"oid, " +
 			"received_date, " +
 			"received_date_unix_epoch, " +
-			"subject " +
+			"SUBSTR(subject, 0, 128) " +
 			"FROM messages " +
 			"INDEXED BY messages_received_date_unix_epoch " +
 			"WHERE email_account = ? AND " +
