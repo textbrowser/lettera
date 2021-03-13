@@ -1161,7 +1161,8 @@ public class Database extends SQLiteOpenHelper
 	    });
     }
 
-    public void delete_selected_messages(final Lettera lettera,
+    public void delete_selected_messages(final Dialog dialog,
+					 final Lettera lettera,
 					 final MessagesAdapter messages_adapter,
 					 final String email_account,
 					 final String folder_name)
@@ -1220,6 +1221,7 @@ public class Database extends SQLiteOpenHelper
 			    lettera.prepare_current_folder_text(folder_name);
 			    lettera.prepare_current_folder_widgets();
 			    lettera.update_folders_drawer();
+			    lettera.dismiss_dialog(dialog);
 			    messages_adapter.notifyDataSetChanged();
 			}
 		    });
@@ -1303,7 +1305,8 @@ public class Database extends SQLiteOpenHelper
 	thread.start();
     }
 
-    public void move_selected_messages(final Lettera lettera,
+    public void move_selected_messages(final Dialog dialog,
+				       final Lettera lettera,
 				       final MessagesAdapter messages_adapter,
 				       final String email_account,
 				       final String from_folder_name,
@@ -1366,6 +1369,7 @@ public class Database extends SQLiteOpenHelper
 				(from_folder_name);
 			    lettera.prepare_current_folder_widgets();
 			    lettera.update_folders_drawer();
+			    lettera.dismiss_dialog(dialog);
 			    messages_adapter.notifyDataSetChanged();
 			}
 		    });

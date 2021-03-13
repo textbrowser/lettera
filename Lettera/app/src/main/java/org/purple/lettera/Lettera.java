@@ -464,11 +464,21 @@ public class Lettera extends AppCompatActivity
 			public void onCancel(DialogInterface dialog)
 			{
 			    if(confirmed.get())
-				m_database.delete_selected_messages
+			    {
+				final Dialog d = new Dialog
 				    (Lettera.this,
+				     android.R.style.
+				     Theme_DeviceDefault_Dialog_NoActionBar);
+
+				Windows.show_progress_dialog
+				    (Lettera.this, d);
+				m_database.delete_selected_messages
+				    (d,
+				     Lettera.this,
 				     m_messages_adapter,
 				     email_account,
 				     folder_name);
+			    }
 			}
 		    };
 
@@ -971,7 +981,7 @@ public class Lettera extends AppCompatActivity
 	m_receiver = new LetteraBroadcastReceiver();
 
 	/*
-	** JavaMail may open sockets on the main thread. StrictMode
+	** JakartaMail may open sockets on the main thread. StrictMode
 	** is not available in older versions of Android.
 	*/
 
@@ -1294,8 +1304,14 @@ public class Lettera extends AppCompatActivity
 
     public void move_selected_messages(String to_folder_name)
     {
-	m_database.move_selected_messages
+	Dialog dialog = new Dialog
 	    (Lettera.this,
+	     android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
+
+	Windows.show_progress_dialog(Lettera.this, dialog);
+	m_database.move_selected_messages
+	    (dialog,
+	     Lettera.this,
 	     m_messages_adapter,
 	     email_account(),
 	     selected_folder_name(),
