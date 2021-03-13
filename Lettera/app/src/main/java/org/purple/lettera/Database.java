@@ -27,6 +27,7 @@
 
 package org.purple.lettera;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -1641,7 +1642,8 @@ public class Database extends SQLiteOpenHelper
 	}
     }
 
-    public void select_all_messages(final Lettera lettera,
+    public void select_all_messages(final Dialog dialog,
+				    final Lettera lettera,
 				    final MessagesAdapter messages_adapter,
 				    final String email_account,
 				    final String folder_name,
@@ -1687,6 +1689,7 @@ public class Database extends SQLiteOpenHelper
 			{
 			    lettera.prepare_current_folder_text(folder_name);
 			    lettera.prepare_current_folder_widgets();
+			    lettera.dismiss_dialog(dialog);
 			    messages_adapter.notifyDataSetChanged();
 			}
 		    });

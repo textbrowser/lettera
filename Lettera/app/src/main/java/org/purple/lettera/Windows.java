@@ -102,6 +102,39 @@ public abstract class Windows
 	}
     }
 
+    public static void show_progress_dialog(Context context, Dialog dialog)
+    {
+	if(context == null || dialog == null)
+	    return;
+
+	try
+	{
+	    if(((Activity) context).isFinishing())
+		return;
+
+	    LayoutInflater inflater = (LayoutInflater) context.getSystemService
+		(Context.LAYOUT_INFLATER_SERVICE);
+	    View view = inflater.inflate(R.layout.progress, null);
+
+	    dialog.setCancelable(false);
+	    dialog.setContentView(view);
+	    dialog.show();
+	    view.findViewById(R.id.interrupt).setVisibility(View.GONE);
+	    view.findViewById(R.id.text).setVisibility(View.GONE);
+	    view.setBackgroundColor(Lettera.background_color());
+	}
+	catch(Exception exception_1)
+	{
+	    try
+	    {
+		dialog.dismiss();
+	    }
+	    catch(Exception exception_2)
+	    {
+	    }
+	}
+    }
+
     public static void show_progress_dialog(Context context,
 					    final Dialog dialog,
 					    String text,

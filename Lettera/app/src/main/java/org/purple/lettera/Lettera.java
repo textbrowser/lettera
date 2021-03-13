@@ -375,7 +375,7 @@ public class Lettera extends AppCompatActivity
 	    Windows.show_progress_dialog
 		(Lettera.this,
 		 dialog,
-		 "Downloading e-mail folders and messages.\n" +
+		 "Downloading e-mail folders and messages. " +
 		 "Please be patient.",
 		 m_download_interrupted);
 
@@ -646,6 +646,12 @@ public class Lettera extends AppCompatActivity
 		public void onCheckedChanged
 		    (CompoundButton button_view, boolean is_checked)
 		{
+		    final Dialog dialog = new Dialog
+			(Lettera.this,
+			 android.R.style.
+			 Theme_DeviceDefault_Dialog_NoActionBar);
+
+		    Windows.show_progress_dialog(Lettera.this, dialog);
 		    m_all_selected.set(is_checked);
 
 		    new Handler
@@ -655,7 +661,8 @@ public class Lettera extends AppCompatActivity
 			public void run()
 			{
 			    m_database.select_all_messages
-				(Lettera.this,
+				(dialog,
+				 Lettera.this,
 				 m_messages_adapter,
 				 email_account(),
 				 selected_folder_name(),
@@ -1111,7 +1118,7 @@ public class Lettera extends AppCompatActivity
 		    Windows.show_progress_dialog
 			(Lettera.this,
 			 dialog,
-			 "Initializing Lettera.\nPlease be patient.",
+			 "Initializing Lettera. Please be patient.",
 			 null);
 
 		    Thread thread = new Thread(new PopulateContainers(dialog));
@@ -1223,6 +1230,18 @@ public class Lettera extends AppCompatActivity
     public static synchronized Lettera instance()
     {
 	return s_instance;
+    }
+
+    public void dismiss_dialog(Dialog dialog)
+    {
+	if(dialog != null)
+	    try
+	    {
+		dialog.dismiss();
+	    }
+	    catch(Exception exception)
+	    {
+	    }
     }
 
     public void email_account_deleted()
