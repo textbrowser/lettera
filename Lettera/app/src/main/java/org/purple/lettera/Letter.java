@@ -140,8 +140,6 @@ public class Letter
 				       message_element.m_from_email_account +
 				       ")");
 
-		    m_oid = message_element.m_oid;
-
 		    String string = Utilities.formatted_email_date_for_message
 			(new Date(message_element.m_received_date_unix_epoch));
 
@@ -470,6 +468,7 @@ public class Letter
 	m_folder_name = folder_name;
 	m_from.setText("e-mail@e-mail.org");
 	m_from.setTextColor(Lettera.text_color());
+	m_oid = oid;
 	m_received_date.setTextColor(Lettera.text_color());
 	m_subject.setText("Subject");
 	m_subject.setTextColor(Lettera.text_color());

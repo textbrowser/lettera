@@ -434,7 +434,7 @@ public class Database extends SQLiteOpenHelper
 		"to_folder_name, " +
 		"uid " +
 		"FROM messages " +
-		"WHERE oid = ?";
+		"WHERE OID = ?";
 	    cursor = m_db.rawQuery(string, new String[] {String.valueOf(oid)});
 
 	    if(cursor != null && cursor.moveToFirst())
