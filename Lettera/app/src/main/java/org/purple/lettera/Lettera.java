@@ -1519,10 +1519,10 @@ public class Lettera extends AppCompatActivity
 	*/
     }
 
-    public void show_email_dialog(int position)
+    public void show_email_dialog(long oid)
     {
 	initialize_letter_dialog();
-	m_letter_dialog.show(email_account(), selected_folder_name(), position);
+	m_letter_dialog.show(email_account(), selected_folder_name(), oid);
     }
 
     public void reactivate_schedules(int folders_drawer_interval)

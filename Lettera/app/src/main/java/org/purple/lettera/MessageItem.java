@@ -60,7 +60,7 @@ public class MessageItem extends View
     private WeakReference<Context> m_context = null;
     private final static Database s_database = Database.instance();
     private int m_position = -1;
-    private long m_oid = 0L;
+    private long m_oid = -1L;
 
     private void initialize_widget_members()
     {
@@ -85,7 +85,7 @@ public class MessageItem extends View
 		    if(m_lettera.isFinishing())
 			return;
 
-		    m_lettera.show_email_dialog(m_position);
+		    m_lettera.show_email_dialog(m_oid);
 		}
 	    });
 

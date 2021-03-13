@@ -405,6 +405,75 @@ public class Database extends SQLiteOpenHelper
 	return null;
     }
 
+    public MessageElement message(long oid)
+    {
+	if(m_db == null)
+	    return null;
+
+	Cursor cursor = null;
+
+	try
+	{
+	    String string = "SELECT " +
+		"content_downloaded, " +
+		"content_type, " +
+		"email_account, " +
+		"folder_name, " +
+		"from_email_account, " +
+		"from_name, " +
+		"has_been_read, " +
+		"message_html, " +
+		"message_plain, " +
+		"message_raw, " +
+		"oid, " +
+		"received_date, " +
+		"received_date_unix_epoch, " +
+		"sent_date, " +
+		"subject, " +
+		"to_folder_name, " +
+		"uid " +
+		"FROM messages " +
+		"WHERE oid = ?";
+	    cursor = m_db.rawQuery(string, new String[] {String.valueOf(oid)});
+
+	    if(cursor != null && cursor.moveToFirst())
+	    {
+		MessageElement message_element = new MessageElement();
+		int i = 0;
+
+		message_element.m_content_downloaded = cursor.getInt(i++) == 1;
+		message_element.m_content_type =cursor.getString(i++);
+		message_element.m_email_account = cursor.getString(i++);
+		message_element.m_folder_name = cursor.getString(i++);
+		message_element.m_from_email_account =cursor.getString(i++);
+		message_element.m_from_name = cursor.getString(i++);
+		message_element.m_has_been_read = cursor.getLong(i++) == 1L;
+		message_element.m_message_html = cursor.getString(i++).trim();
+		message_element.m_message_plain = cursor.getString(i++).trim();
+		message_element.m_message_raw = cursor.getString(i++).trim();
+		message_element.m_oid = cursor.getLong(i++);
+		message_element.m_received_date = cursor.getString(i++);
+		message_element.m_received_date_unix_epoch =
+		    cursor.getLong(i++);
+		message_element.m_sent_date = cursor.getString(i++);
+		message_element.m_subject = cursor.getString(i++).trim();
+		message_element.m_to_folder_name = cursor.getString(i++);
+		message_element.m_uid = cursor.getLong(i++);
+		return message_element;
+	    }
+	}
+	catch(Exception exception)
+	{
+	}
+	finally
+	{
+	    if(cursor != null)
+		cursor.close();
+	}
+
+	return null;
+    }
+
     public SettingsElement settings_element(String key)
     {
 	if(m_db == null)

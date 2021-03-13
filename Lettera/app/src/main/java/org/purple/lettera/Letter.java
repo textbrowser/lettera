@@ -56,24 +56,23 @@ public class Letter
 	private Dialog m_dialog = null;
 	private String m_email_account = "";
 	private String m_folder_name = "";
-	private int m_position = -1;
+	private long m_oid = -1L;
 
 	private PopulateContainers(Dialog dialog,
 				   String email_account,
 				   String folder_name,
-				   int position)
+				   long oid)
 	{
 	    m_dialog = dialog;
 	    m_email_account = email_account;
 	    m_folder_name = folder_name;
-	    m_position = position;
+	    m_oid = oid;
 	}
 
 	@Override
 	public void run()
 	{
-	    final MessageElement message_element = s_database.message
-		(m_email_account, m_folder_name, m_position);
+	    final MessageElement message_element = s_database.message(m_oid);
 
 	    if(message_element == null)
 	    {
@@ -458,7 +457,7 @@ public class Letter
 	}
     }
 
-    public void show(String email_account, String folder_name, int position)
+    public void show(String email_account, String folder_name, long oid)
     {
 	m_dialog.show();
 
@@ -497,7 +496,7 @@ public class Letter
 		(new PopulateContainers(dialog,
 					email_account,
 					folder_name,
-					position));
+					oid));
 
 	    thread.start();
 	}
