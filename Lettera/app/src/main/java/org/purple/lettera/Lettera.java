@@ -1372,7 +1372,7 @@ public class Lettera extends AppCompatActivity
 	** Order!
 	*/
 
-	Utilities.color_switch
+	Utilities.color_view
 	    (m_select_all_switch,
 	     background_color(),
 	     divider_color(),

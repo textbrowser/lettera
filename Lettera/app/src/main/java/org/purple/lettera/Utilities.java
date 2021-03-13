@@ -33,6 +33,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Switch;
 import android.widget.TextView;
 import java.util.Calendar;
@@ -153,12 +154,12 @@ public abstract class Utilities
 	return string_builder.toString();
     }
 
-    public static void color_switch(Switch switch1,
-				    int background_color,
-				    int divider_color,
-				    int text_color)
+    public static void color_view(View view,
+				  int background_color,
+				  int divider_color,
+				  int text_color)
     {
-	if(switch1 == null)
+	if(view == null)
 	    return;
 
 	int colors[] = new int[]
@@ -175,7 +176,10 @@ public abstract class Utilities
 
 	ColorStateList color_state_list = new ColorStateList(states, colors);
 
-	switch1.setButtonTintList(color_state_list);
+	if(view instanceof CheckBox)
+	    ((CheckBox) view).setButtonTintList(color_state_list);
+	else if(view instanceof Switch)
+	    ((Switch) view).setButtonTintList(color_state_list);
     }
 
     public static void color_children(View view,
@@ -192,10 +196,8 @@ public abstract class Utilities
 		((Button) view).setTextColor(text_color);
 
 		if(view instanceof Switch)
-		    color_switch((Switch) view,
-				 background_color,
-				 divider_color,
-				 text_color);
+		    color_view
+			(view, background_color, divider_color, text_color);
 	    }
 	    else if(view instanceof TextView)
 	    {

@@ -34,9 +34,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.Date;
@@ -44,13 +44,13 @@ import java.util.Date;
 public class MessageItem extends View
 {
     private Button m_open = null;
+    private CheckBox m_selected = null;
     private CompoundButton.OnCheckedChangeListener m_selected_listener = null;
     private ImageView m_attachment = null;
     private LayoutInflater m_inflater = null;
     private Lettera m_lettera = null;
     private String m_email_account = "";
     private String m_folder_name = "";
-    private Switch m_selected = null;
     private TextView m_date = null;
     private TextView m_from = null;
     private TextView m_subject = null;
@@ -69,7 +69,7 @@ public class MessageItem extends View
 	m_divider = m_view.findViewById(R.id.divider);
 	m_from = (TextView) m_view.findViewById(R.id.from);
 	m_open = (Button) m_view.findViewById(R.id.open);
-	m_selected = (Switch) m_view.findViewById(R.id.selected);
+	m_selected = (CheckBox) m_view.findViewById(R.id.selected);
 	m_subject = (TextView) m_view.findViewById(R.id.subject);
 	m_summary = (TextView) m_view.findViewById(R.id.summary);
     }
@@ -147,7 +147,7 @@ public class MessageItem extends View
 	    return;
 	}
 
-	Utilities.color_switch
+	Utilities.color_view
 	    (m_selected,
 	     Lettera.background_color(),
 	     Lettera.divider_color(),
