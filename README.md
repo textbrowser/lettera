@@ -4,8 +4,8 @@ Summary of Lettera
 <li>Folders drawer. Native.</li>
 <li>IMAP.</li>
 <li>Infinite scrolling.</li>
-<li>JavaMail. Single dependency.</li>
+<li>Jakarta Mail.</li>
 <li>Multiple e-mail accounts.</li>
-<li>OpenPGP.</li>
+<li>OpenPGP via Bouncy Castle.</li>
 <li>Simple interface.</li>
 </ul>
