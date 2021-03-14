@@ -560,8 +560,17 @@ public class Lettera extends AppCompatActivity
 		    if(Lettera.this.isFinishing())
 			return;
 
+		    final Dialog dialog = new Dialog
+			(Lettera.this,
+			 android.R.style.
+			 Theme_DeviceDefault_Dialog_NoActionBar);
+
+		    Windows.show_progress_dialog(Lettera.this, dialog);
 		    m_database.set_messages_unread
-			(Lettera.this, email_account(), selected_folder_name());
+			(dialog,
+			 Lettera.this,
+			 email_account(),
+			 selected_folder_name());
 		}
 	    });
 

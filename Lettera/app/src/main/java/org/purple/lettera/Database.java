@@ -1785,7 +1785,8 @@ public class Database extends SQLiteOpenHelper
 	thread.start();
     }
 
-    public void set_messages_unread(final Lettera lettera,
+    public void set_messages_unread(final Dialog dialog,
+				    final Lettera lettera,
 				    final String email_account,
 				    final String folder_name)
     {
@@ -1835,6 +1836,14 @@ public class Database extends SQLiteOpenHelper
 
 		Utilities.send_broadcast
 		    ("org.purple.lettera.set_messages_unread");
+		lettera.runOnUiThread(new Runnable()
+		{
+		    @Override
+		    public void run()
+		    {
+			lettera.dismiss_dialog(dialog);
+		    }
+		});
 	    }
 	});
 
