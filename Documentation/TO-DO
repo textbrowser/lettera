@@ -66,6 +66,7 @@ Completed Items
 
 Remaining Items
 
+- Activate Select All on correct counts.
 - Date distances (hours, minutes).
 - Deleted remote folders are also deleted locally.
 - Display a message's original folder.
@@ -73,7 +74,6 @@ Remaining Items
 - Display percent-downloaded in dialog.
 - Display recipients in letters.
 - Download incomplete content on opening of letter (getMessagesByUID()).
-- Encrypted database containers.
 - Initial installation does not launch retrieval task.
 - Letter navigation (next, previous).
 - New-message notifications. Optional scroll-to-top?
@@ -82,7 +82,7 @@ Remaining Items
 - Optional text instead of icons in Settings header.
 - Proceed to next letter on delete / move.
 - Reset of Network widgets in Settings.
-- Secure the public & private key pair. Activate the private key only
+- Secure the public and private key pair. Activate the private key only
   when a message is to be decrypted.
 - What's a deleted message?
   Do not display locally-deleted messages unless they're in Trash.
@@ -92,5 +92,6 @@ Remaining Items
 
 Unknown
 
+- Encrypted database containers.
 - McEliece key generation, exchange, etc. GPG does not include McEliece.
 - POP3.
