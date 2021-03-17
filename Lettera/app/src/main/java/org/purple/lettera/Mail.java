@@ -57,6 +57,8 @@ public class Mail
     private String m_proxy_port = "";
     private String m_proxy_type = "";
     private String m_proxy_user = "";
+    private boolean m_inbound_oauth = false;
+    private boolean m_outbound_oauth = false;
 
     private static void multipart_recursive
 	(Part part,
@@ -108,7 +110,9 @@ public class Mail
 		String proxy_password,
 		String proxy_port,
 		String proxy_type,
-		String proxy_user)
+		String proxy_user,
+		boolean m_inbound_oauth,
+		boolean m_outbound_oauth)
     {
 	m_inbound_address = inbound_address.trim();
 	m_inbound_email = inbound_email.trim();
@@ -212,7 +216,8 @@ public class Mail
 			    m_proxy_port,
 			    m_proxy_type,
 			    m_proxy_user,
-			    "10000")).getStore("imaps");
+			    "10000",
+			    m_inbound_oauth)).getStore("imaps");
 	}
 	catch(Exception exception)
 	{
@@ -278,7 +283,9 @@ public class Mail
 						m_proxy_port,
 						m_proxy_type,
 						m_proxy_user,
-						"10000"))).getTransport("smtp");
+						"10000",
+						m_outbound_oauth))).
+		getTransport("smtp");
 	}
 	catch(Exception exception)
 	{
@@ -316,7 +323,8 @@ public class Mail
 					String proxy_port,
 					String proxy_type,
 					String proxy_user,
-					String read_timeout)
+					String read_timeout,
+					boolean oauth)
     {
 	/*
 	** https://javaee.github.io/javamail/docs/api/com/sun/mail/imap/package-summary.html

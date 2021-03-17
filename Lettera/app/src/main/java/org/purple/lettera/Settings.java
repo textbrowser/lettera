@@ -214,6 +214,7 @@ public class Settings
 	private String m_proxy_port = "";
 	private String m_proxy_type = "";
 	private String m_proxy_user = "";
+	private boolean m_oauth = false;
 
 	private EmailTest(Dialog dialog,
 			  String email,
@@ -225,11 +226,13 @@ public class Settings
 			  String proxy_password,
 			  String proxy_port,
 			  String proxy_type,
-			  String proxy_user)
+			  String proxy_user,
+			  boolean oauth)
 	{
 	    m_dialog = dialog;
 	    m_email = email.trim();
 	    m_host = host.trim();
+	    m_oauth = oauth;
 	    m_password = password;
 	    m_port = port;
 	    m_protocol = protocol;
@@ -256,7 +259,8 @@ public class Settings
 		     m_proxy_port,
 		     m_proxy_type,
 		     m_proxy_user,
-		     "10000");
+		     "10000",
+		     m_oauth);
 		Session session = Session.getInstance(properties);
 
 		switch(m_protocol)
@@ -2073,7 +2077,8 @@ public class Settings
 			       m_proxy_port.getText().toString(),
 			       m_proxy_type_spinner.getSelectedItem().
 			       toString(),
-			       m_proxy_user.getText().toString()));
+			       m_proxy_user.getText().toString(),
+			       m_inbound_oauth.isChecked()));
 
 	    thread.start();
 	}
@@ -2117,7 +2122,8 @@ public class Settings
 			       m_proxy_port.getText().toString(),
 			       m_proxy_type_spinner.getSelectedItem().
 			       toString(),
-			       m_proxy_user.getText().toString()));
+			       m_proxy_user.getText().toString(),
+			       m_outbound_oauth.isChecked()));
 
 	    thread.start();
 	}

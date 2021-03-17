@@ -202,7 +202,9 @@ public class Lettera extends AppCompatActivity
 		     email_element.m_proxy_password,
 		     String.valueOf(email_element.m_proxy_port),
 		     email_element.m_proxy_type,
-		     email_element.m_proxy_user);
+		     email_element.m_proxy_user,
+		     email_element.m_inbound_oauth,
+		     email_element.m_outbound_oauth);
 		mail.connect_imap();
 
 		if((m_connected = mail.imap_connected()))
@@ -793,7 +795,9 @@ public class Lettera extends AppCompatActivity
 				 email_element.m_proxy_password,
 				 String.valueOf(email_element.m_proxy_port),
 				 email_element.m_proxy_type,
-				 email_element.m_proxy_user);
+				 email_element.m_proxy_user,
+				 email_element.m_inbound_oauth,
+				 email_element.m_outbound_oauth);
 			else
 			    m_mail.connect_imap();
 
