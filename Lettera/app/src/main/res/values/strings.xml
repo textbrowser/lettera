@@ -53,4 +53,5 @@
     <string name="top">Top</string>
     <string name="type">Type</string>
     <string name="user">User</string>
+    <string name="oauth">OAuth</string>
 </resources>

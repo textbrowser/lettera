@@ -507,7 +507,9 @@ public class Settings
     private Switch m_delete_account_verify_switch = null;
     private Switch m_delete_on_server_switch = null;
     private Switch m_generate_keys_switch = null;
+    private Switch m_inbound_oauth = null;
     private Switch m_outbound_as_inbound = null;
+    private Switch m_outbound_oauth = null;
     private Switch m_primary_account_switch = null;
     private Switch m_remove_local_content_verify_switch = null;
     private Switch m_show_status_bar = null;
@@ -912,6 +914,7 @@ public class Settings
 	m_inbound_address = (TextView) m_view.findViewById
 	    (R.id.inbound_address);
 	m_inbound_email = (TextView) m_view.findViewById(R.id.inbound_email);
+	m_inbound_oauth = (Switch) m_view.findViewById(R.id.inbound_oauth);
 	m_inbound_password = (TextView) m_view.findViewById
 	    (R.id.inbound_password);
 	m_inbound_port = (TextView) m_view.findViewById(R.id.inbound_port);
@@ -921,6 +924,7 @@ public class Settings
 	m_outbound_as_inbound = (Switch) m_view.findViewById
 	    (R.id.outbound_as_inbound);
 	m_outbound_email = (TextView) m_view.findViewById(R.id.outbound_email);
+	m_outbound_oauth = (Switch) m_view.findViewById(R.id.outbound_oauth);
 	m_outbound_password = (TextView) m_view.findViewById
 	    (R.id.outbound_password);
 	m_outbound_port = (TextView) m_view.findViewById(R.id.outbound_port);
