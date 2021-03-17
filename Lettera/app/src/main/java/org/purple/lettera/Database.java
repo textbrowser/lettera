@@ -181,83 +181,47 @@ public class Database extends SQLiteOpenHelper
 		("SELECT delete_on_server, " + // 0
 		 "email_account, " +           // 1
 		 "in_address, " +              // 2
-		 "in_password, " +             // 3
-		 "in_port, " +                 // 4
-		 "out_address, " +             // 5
-		 "out_email, " +               // 6
-		 "out_password, " +            // 7
-		 "out_port, " +                // 8
-		 "proxy_address, " +           // 9
-		 "proxy_password, " +          // 10
-		 "proxy_port, " +              // 11
-		 "proxy_type, " +              // 12
-		 "proxy_user, " +              // 13
-		 "query_interval, " +          // 14
-		 "OID " +                      // 15
+		 "in_oauth, " +                // 3
+		 "in_password, " +             // 4
+		 "in_port, " +                 // 5
+		 "out_address, " +             // 6
+		 "out_email, " +               // 7
+		 "out_oauth, " +               // 8
+		 "out_password, " +            // 9
+		 "out_port, " +                // 10
+		 "proxy_address, " +           // 11
+		 "proxy_password, " +          // 12
+		 "proxy_port, " +              // 13
+		 "proxy_type, " +              // 14
+		 "proxy_user, " +              // 15
+		 "query_interval, " +          // 16
+		 "OID " +                      // 17
 		 "FROM email_accounts WHERE email_account = ?",
 		 new String[] {email_account});
 
 	    if(cursor != null && cursor.moveToFirst())
 	    {
 		EmailElement email_element = new EmailElement();
-		int count = cursor.getColumnCount();
+		int i = 0;
 
-		for(int i = 0; i < count; i++)
-		    switch(i)
-		    {
-		    case 0:
-			email_element.m_delete_on_server =
-			    cursor.getInt(i) != 0;
-			break;
-		    case 1:
-			email_element.m_inbound_email = cursor.getString(i);
-			break;
-		    case 2:
-			email_element.m_inbound_address = cursor.getString(i);
-			break;
-		    case 3:
-			email_element.m_inbound_password = cursor.getString(i);
-			break;
-		    case 4:
-			email_element.m_inbound_port = cursor.getInt(i);
-			break;
-		    case 5:
-			email_element.m_outbound_address = cursor.getString(i);
-			break;
-		    case 6:
-			email_element.m_outbound_email = cursor.getString(i);
-			break;
-		    case 7:
-			email_element.m_outbound_password = cursor.getString(i);
-			break;
-		    case 8:
-			email_element.m_outbound_port = cursor.getInt(i);
-			break;
-		    case 9:
-			email_element.m_proxy_address = cursor.getString(i);
-			break;
-		    case 10:
-			email_element.m_proxy_password = cursor.getString(i);
-			break;
-		    case 11:
-			email_element.m_proxy_port = cursor.getInt(i);
-			break;
-		    case 12:
-			email_element.m_proxy_type = cursor.getString(i);
-			break;
-		    case 13:
-			email_element.m_proxy_user = cursor.getString(i);
-			break;
-		    case 14:
-			email_element.m_query_interval = cursor.getString(i);
-			break;
-		    case 15:
-			email_element.m_oid = cursor.getLong(i);
-			break;
-		    default:
-			break;
-		    }
-
+		email_element.m_delete_on_server = cursor.getInt(i++) != 0;
+		email_element.m_inbound_email = cursor.getString(i++);
+		email_element.m_inbound_address = cursor.getString(i++);
+		email_element.m_inbound_oauth = cursor.getInt(i++) != 0;
+		email_element.m_inbound_password = cursor.getString(i++);
+		email_element.m_inbound_port = cursor.getInt(i++);
+		email_element.m_outbound_address = cursor.getString(i++);
+		email_element.m_outbound_email = cursor.getString(i++);
+		email_element.m_outbound_oauth = cursor.getInt(i++) != 0;
+		email_element.m_outbound_password = cursor.getString(i++);
+		email_element.m_outbound_port = cursor.getInt(i++);
+		email_element.m_proxy_address = cursor.getString(i++);
+		email_element.m_proxy_password = cursor.getString(i++);
+		email_element.m_proxy_port = cursor.getInt(i++);
+		email_element.m_proxy_type = cursor.getString(i++);
+		email_element.m_proxy_user = cursor.getString(i++);
+		email_element.m_query_interval = cursor.getString(i++);
+		email_element.m_oid = cursor.getLong(i++);
 		return email_element;
 	    }
 	}
@@ -1430,10 +1394,12 @@ public class Database extends SQLiteOpenHelper
 	    "delete_on_server INTEGER DEFAULT 0 NOT NULL, " +
 	    "email_account TEXT NOT NULL PRIMARY KEY, " +
 	    "in_address TEXT NOT NULL, " +
+	    "in_oauth INTEGER DEFAULT 0 NOT NULL, " +
 	    "in_password TEXT NOT NULL, " +
 	    "in_port INTEGER NOT NULL, " +
 	    "out_address TEXT NOT NULL, " +
 	    "out_email TEXT NOT NULL, " +
+	    "out_oauth INTEGER DEFAULT 0 NOT NULL, " +
 	    "out_password TEXT NOT NULL, " +
 	    "out_port INTEGER NOT NULL, " +
 	    "proxy_address TEXT, " +

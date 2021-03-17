@@ -689,6 +689,7 @@ public class Settings
 	    else
 		content_values.put("email_account", string);
 
+	    content_values.put("in_oauth", m_inbound_oauth.isChecked() ? 1 :0);
 	    string = m_inbound_password.getText().toString();
 
 	    if(string.isEmpty())
@@ -738,6 +739,8 @@ public class Settings
 	    else
 		content_values.put("out_email", string);
 
+	    content_values.put
+		("out_oauth", m_outbound_oauth.isChecked() ? 1 :0);
 	    string = m_outbound_password.getText().toString();
 
 	    if(string.isEmpty())
@@ -1068,10 +1071,12 @@ public class Settings
 	    m_delete_on_server_switch.setChecked(false);
 	    m_inbound_address.setText("");
 	    m_inbound_email.setText("");
+	    m_inbound_oauth.setChecked(false);
 	    m_inbound_password.setText("");
 	    m_inbound_port.setText("993");
 	    m_outbound_address.setText("");
 	    m_outbound_email.setText("");
+	    m_outbound_oauth.setChecked(false);
 	    m_outbound_password.setText("");
 	    m_outbound_port.setText("587");
 	    m_primary_account_switch.setChecked(false);
@@ -1097,11 +1102,13 @@ public class Settings
 		(email_element.m_delete_on_server);
 	    m_inbound_address.setText(email_element.m_inbound_address);
 	    m_inbound_email.setText(email_element.m_inbound_email);
+	    m_inbound_oauth.setChecked(email_element.m_inbound_oauth);
 	    m_inbound_password.setText(email_element.m_inbound_password);
 	    m_inbound_port.setText
 		(String.valueOf(email_element.m_inbound_port));
 	    m_outbound_address.setText(email_element.m_outbound_address);
 	    m_outbound_email.setText(email_element.m_outbound_email);
+	    m_outbound_oauth.setChecked(email_element.m_outbound_oauth);
 	    m_outbound_password.setText(email_element.m_outbound_password);
 	    m_outbound_port.setText
 		(String.valueOf(email_element.m_outbound_port));

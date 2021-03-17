@@ -41,6 +41,8 @@ public class EmailElement
     public String m_proxy_user = "";
     public String m_query_interval = "";
     public boolean m_delete_on_server = false;
+    public boolean m_inbound_oauth = false;
+    public boolean m_outbound_oauth = false;
     public int m_inbound_port = 1;
     public int m_outbound_port = 1;
     public int m_proxy_port = 0;
