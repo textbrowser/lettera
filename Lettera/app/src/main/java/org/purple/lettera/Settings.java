@@ -866,7 +866,7 @@ public class Settings
 	    Windows.show_progress_dialog
 		(m_lettera.get(),
 		 dialog,
-		 "Generating key pairs.\nPlease be patient.",
+		 "Generating key pairs. Please be patient.",
 		 null);
 
 	    Thread thread = new Thread
