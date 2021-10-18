@@ -1952,7 +1952,9 @@ public class Settings
 
 	m_display_button.setBackgroundResource
 	    (R.drawable.default_display_pressed);
+	m_inbound_oauth.setVisibility(View.GONE);
 	m_network_layout.setVisibility(View.GONE);
+	m_outbound_oauth.setVisibility(View.GONE);
 	m_privacy_layout.setVisibility(View.GONE);
 
 	ArrayAdapter<String> array_adapter;
