@@ -1,3 +1,5 @@
+Scheduled for an initial release in late 2022!
+
 Summary of Lettera
 
 <ul>
