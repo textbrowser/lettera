@@ -6,6 +6,5 @@ Summary of Lettera
 <li>Infinite scrolling.</li>
 <li>Jakarta Mail.</li>
 <li>Multiple e-mail accounts.</li>
-<li>OpenPGP via Bouncy Castle.</li>
 <li>Simple interface.</li>
 </ul>
